@@ -31,7 +31,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -104,19 +104,23 @@ public class ConexionBase {
      * Ejecuta una sentencia en la base esta puede ser de INSERT, UPDATE O
      * DELETE
      * @param sql - Sentencias INSERT, UPDATE, DELETE
-     * @return boolean - confirmacion del resultado
+     * @return int - confirmacion del resultado 1 valido || 0 invalido
      */
-    public boolean ejecutarSentencia(String sql) {
-        boolean resultado = false;
+    public boolean ejecutarSentencia(String sql) {        
         try {
             System.out.println("Ejecutar: " + sql);
-            resultado = st.execute(sql);
+            int rta = st.executeUpdate(sql);
+            if (rta == 1){
+                return true;
+            }else{
+                return false;
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);            
+            return false;
         } finally {
             //CerrarConexion();
-        }
-        return resultado;
+        }        
     }
 
     /**
