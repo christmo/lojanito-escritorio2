@@ -5,9 +5,8 @@
  */
 package interfaz;
 
-import interfaz.comboBox.ColorCellRenderer;
-import interfaz.comboBox.ColorComboBoxEditor;
 import BaseDatos.ConexionBase;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -26,9 +25,12 @@ import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -50,12 +52,17 @@ public final class Principal extends javax.swing.JFrame {
     private int intUnidad;
     private int intAtraso;
     private String strNota;
-    ArrayList<String> strEncabezados;
+    private ArrayList<String> strEncabezados;
+    private Despachos despacho;
     /**
      * almacena los clientes Por Despachar
      */
-    ArrayList<Despachos> DespachosTemporales = new ArrayList<Despachos>();
-    Despachos despacho;
+    private ArrayList<Despachos> listaDespachosTemporales = new ArrayList<Despachos>();
+    private ArrayList<Despachos> listaDespachados = new ArrayList<Despachos>();
+    /**
+     * Encabezado de las tablas de despachos
+     */
+    private DefaultTableModel dtm;
 
     /** Creates new form Principal */
     public Principal() {
@@ -63,13 +70,13 @@ public final class Principal extends javax.swing.JFrame {
         this.setTitle("Despachos KRADAC || " + validarTurno() + " || " + sesion[2]);
         redimencionarTablaVehiculos();
         llenarComboEstados();
+        tiempo.start();
     }
 
     public Principal(String[] info) {
         setSession(info);
         initComponents();
         Principal.main(null);
-        llenarComboEstados();
     }
 
     /**
@@ -106,6 +113,7 @@ public final class Principal extends javax.swing.JFrame {
         for (String col : strEncColum) {
             TableColumn tc = jtVehiculos.getColumn(col);
             tc.setMinWidth(25);
+            jtVehiculos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             if (strEncColum.length > 40 && strEncColum.length <= 99) {
                 tc.setMaxWidth(25);
                 jtVehiculos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -118,6 +126,7 @@ public final class Principal extends javax.swing.JFrame {
         //Centrar el contenido de las Celdas
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
+
         for (int i = 0; i < strCabecerasColumnasVehiculos.length; i++) {
             jtVehiculos.getColumnModel().getColumn(i).setCellRenderer(tcr);
         }
@@ -125,7 +134,6 @@ public final class Principal extends javax.swing.JFrame {
         pintarEstadoTaxi(strEncabezados);
     }
 
-    
     /**
      * Devuelve un arreglo de string que contiene los numeros
      * para cada uno de los vehiculos que posee la empresa, para ponerlos
@@ -178,6 +186,29 @@ public final class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * Devuelve hora y minutos actuales del sistema
+     * @return String
+     */
+    public String getHora() {
+        Calendar calendario = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("k:m");
+        return sdf.format(calendario.getTime());
+    }
+
+    private void llenarComboEstados() {
+        //Extracción de la BD
+        colorCodigosBD();
+
+        //Carga de Codigos de Estado del Taxi
+        cbEstadosTaxi.setModel(new javax.swing.DefaultComboBoxModel(etiq.toArray()));
+
+        cbEstadosTaxi.setEditable(true);
+        cbEstadosTaxi.setRenderer(new ColorCellRenderer(codigo, color));
+        ColorComboBoxEditor editor = new ColorComboBoxEditor(etiqColor);
+        cbEstadosTaxi.setEditor(editor);
     }
 
     /** This method is called from within the constructor to
@@ -249,7 +280,15 @@ public final class Principal extends javax.swing.JFrame {
                 jtPorDespacharMousePressed(evt);
             }
         });
+        jtPorDespachar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jtPorDespacharPropertyChange(evt);
+            }
+        });
         jtPorDespachar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtPorDespacharKeyTyped(evt);
+            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtPorDespacharKeyPressed(evt);
             }
@@ -458,8 +497,9 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyPressed
         int cod = evt.getKeyCode();
-        //System.out.println(""+cod);
+        System.out.println("Pulsado: " + cod);
         AccionesBorrado(cod, jtPorDespachar);
+        //letras desde el 65 al 90
     }//GEN-LAST:event_jtPorDespacharKeyPressed
 
     /**
@@ -468,23 +508,98 @@ public final class Principal extends javax.swing.JFrame {
      * @param Tabla - tabla donde ejecutar la accion
      */
     private void AccionesBorrado(int cod, javax.swing.JTable Tabla) {
-        if (cod == 8) {
+        int intFila = Tabla.getSelectedRow();
+
+        if (cod == 127 || cod == 8) {
             /**
              * borrar la celda que se haya seleccionado, esto se debe
              * ejecutar cuando se presione (<-) BackSpace
              */
             Tabla.setValueAt("", Tabla.getSelectedRow(), Tabla.getSelectedColumn());
-        } else if (cod == 127) {
+        } else if (cod == 118) {
             /**
-             * borrar las celdas de la fila seleccionada con SUPRIMIR
+             * borrar las celdas de nombre, direccion, barrio y nota
+             * con F7
              */
-            int intFila = Tabla.getSelectedRow();
-            int intTotalColumnas = Tabla.getColumnCount();
+            /*int intTotalColumnas = Tabla.getColumnCount();
             for (int i = 0; i < intTotalColumnas; i++) {
-                Tabla.setValueAt("", intFila, i);
+            Tabla.setValueAt("", intFila, i);
+            }*/
+            Tabla.setValueAt("", intFila, 3);
+            Tabla.setValueAt("", intFila, 4);
+            Tabla.setValueAt("", intFila, 5);
+            Tabla.setValueAt("", intFila, 9);
+        } else if (cod == 119) {
+            /**
+             * F8 Para borra toda la fila
+             */
+            try {
+                DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+                model.removeRow(intFila);
+                listaDespachosTemporales.remove(intFila);
+            } catch (IndexOutOfBoundsException iex) {
+            }
+        } else if (cod == 123) {
+            /**
+             * F12 Para despachar
+             */
+            DespacharCliente(intFila);
+        }
+    }
+
+    public void DespacharCliente(int intFila) {
+        despacho = getDatosPorDespachar();
+
+        if (sePuedeDespachar(despacho, intFila)) {
+            boolean r = setDatosTablaDespachados(despacho, jtDespachados);
+            if (r) {
+                try {
+                    DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+                    model.removeRow(intFila);
+                    listaDespachosTemporales.remove(intFila);
+                } catch (IndexOutOfBoundsException iex) {
+                }
             }
         }
+    }
 
+    /**
+     * Borrar el cotenido de la celda antes de escribir algo
+     * TODO: implementar este metodo v2
+     */
+    private void BorrarParaEscribir(int cod, JTable tabla) {
+        //numeros 48/57 y del 96/105
+        int fila = tabla.getSelectedRow();
+        int col = tabla.getSelectedColumn();
+
+        tabla.setValueAt("", fila, col);
+    }
+
+    private boolean sePuedeDespachar(Despachos d, int fila) {
+        boolean resultado = false;
+        try {
+            if (d.getStrHora().equals("")) {
+                JOptionPane.showMessageDialog(this, "Se debe ingresar una hora de despacho...", "Error...", 0);
+                jtPorDespachar.setValueAt(getHora(), fila, 0);
+            } else if (d.getStrNombre().equals("")) {
+                JOptionPane.showMessageDialog(this, "Se debe ingresar un nombre de cliente...", "Error...", 0);
+            } else if (d.getStrDireccion().equals("")) {
+                JOptionPane.showMessageDialog(this, "Se debe ingresar una dirección del cliente...", "Error...", 0);
+            } else if (d.getStrBarrio().equals("")) {
+                JOptionPane.showMessageDialog(this, "Se debe ingresar un barrio donde vive el cliente...", "Error...", 0);
+            } else if (d.getIntMinutos() < 0) {
+                JOptionPane.showMessageDialog(this, "La estimación de tiempo de llegada a recojer al cliente es incorrecta, tiene que ser mayor a 0...", "Error...", 0);
+                int col = jtPorDespachar.getSelectedColumn();
+                jtPorDespachar.setValueAt("0", fila, 6);
+                jtPorDespachar.setValueAt("0", fila, 8);
+            } else if (!validarUnidad(d.getIntUnidad())) {
+                JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
+            } else {
+                resultado = true;
+            }
+        } catch (NullPointerException nex) {
+        }
+        return resultado;
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -503,12 +618,14 @@ public final class Principal extends javax.swing.JFrame {
         System.out.println("clc: " + intClicks + " bot: " + intBoton);
         VentanaDatos ventanaDatos = null;
         try {
-            ventanaDatos = new VentanaDatos(getDatosPorDespachar());
-
             if (intClicks == 1 && intBoton == 3) {
+                ventanaDatos = new VentanaDatos(getDatosPorDespachar());
                 if (!ventanaDatos.isVisible()) {
                     ventanaDatos.setVisible(true);
                 }
+            }
+            if (intClicks == 1 && intBoton == 1) {
+                despacho = getDatosPorDespachar();
             }
         } catch (NullPointerException npe) {
             System.err.println("No se puede mostrar la ventana, no hay datos...");
@@ -516,103 +633,12 @@ public final class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jtPorDespacharMousePressed
 
-    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefonoActionPerformed
-        jtCodigo.setText(getBuscarPorTelefono());
-    }//GEN-LAST:event_jtTelefonoActionPerformed
-
-    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
-        jtTelefono.setText(getBuscarPorCodigo());
-    }//GEN-LAST:event_jtCodigoActionPerformed
-
-    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
-        int[] numCol = jtVehiculos.getSelectedColumns();
-        JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
-        String etiqueta = editor.getText();
-
-        ArrayList<String> codVehiculo = new ArrayList();
-        if (numCol.length > 0) {
-
-
-            for (int i = 0; i < numCol.length; i++) {
-                codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
-            }
-        }else{
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una Unidad primero","ERROR",JOptionPane.ERROR_MESSAGE);
-        }
-        cambiarEstadoTaxi(etiqueta, codVehiculo);
-    }//GEN-LAST:event_btnColorActionPerformed
-
-    /**
-     * Obtener el código del usuario dependiendo del telefono ingresado
-     * @return String
-     */
-    private String getBuscarPorTelefono() {
-        strTelefono = jtTelefono.getText();
-        try {
-            String sql = "SELECT CODIGO,"
-                    + "NOMBRE_APELLIDO_CLI,"
-                    + "DIRECCION_CLI,"
-                    + "SECTOR"
-                    + " FROM CLIENTES WHERE TELEFONO='" + strTelefono + "'";
-            rs = bd.ejecutarConsultaUnDato(sql);
-            strCodigo = rs.getString("CODIGO");
-            strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
-            strDireccion = rs.getString("DIRECCION_CLI");
-            strBarrio = rs.getString("SECTOR");
-            strHora = getHora();
-            despacho = new Despachos(strHora, strTelefono, strCodigo, strNombre, strDireccion, strBarrio, "");
-            DespachosTemporales.add(despacho);
-            setDatosTablas(despacho, jtPorDespachar);
-        } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("No devuelve valores esa consulta...");
-        }
-        return strCodigo;
-    }
-
-    public void setDatosTablas(Despachos des, JTable tabla) {
-        tabla.setValueAt(des.getStrHora(), 0, 0);
-        tabla.setValueAt(des.getStrTelefono(), 0, 1);
-        tabla.setValueAt(des.getStrCodigo(), 0, 2);
-        tabla.setValueAt(des.getStrNombre(), 0, 3);
-        tabla.setValueAt(des.getStrDireccion(), 0, 4);
-        tabla.setValueAt(des.getStrBarrio(), 0, 5);
-    }
-
-    /**
-     * Devuelve hora y minutos actuales del sistema
-     * @return String
-     */
-    public String getHora() {
-        Calendar calendario = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("k:m");
-        return sdf.format(calendario.getTime());
-    }
-
-    /**
-     * Obtener el código del usuario dependiendo del telefono ingresado
-     * @return String
-     */
-    private String getBuscarPorCodigo() {
-        String tel = null;
-        try {
-            String sql = "SELECT TELEFONO FROM CLIENTES WHERE CODIGO='" + jtCodigo.getText() + "'";
-            rs = bd.ejecutarConsultaUnDato(sql);
-            tel = rs.getString("TELEFONO");
-        } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("No devuelve valores esa consulta...");
-        }
-        return tel;
-    }
-
     /**
      * Recoje los datos de las fila seleccionada y crea un objeto con todos esos datos
      * @return Despachos
      */
     private Despachos getDatosPorDespachar() {
         int fila = jtPorDespachar.getSelectedRow();
-        //int col = jtPorDespachar.getSelectedColumn();
         Despachos datos = null;
         try {
             strHora = (String) jtPorDespachar.getValueAt(fila, 0);
@@ -644,31 +670,95 @@ public final class Principal extends javax.swing.JFrame {
             datos = new Despachos(strHora, strTelefono, strCodigo, strNombre,
                     strDireccion, strBarrio, intMinutos, intUnidad, intAtraso, strNota);
         } catch (NullPointerException npe) {
-            System.err.println("Error de NULL -> No hay datos Seleccionados...");
+            //System.err.println("Error de NULL -> No hay datos Seleccionados...");
         } catch (ArrayIndexOutOfBoundsException aiobe) {
-            System.err.println("Error de NULL -> No hay datos Seleccionados...");
+            //System.err.println("Error de NULL -> No hay datos Seleccionados...");
         }
-
-
 
         return datos;
     }
 
+    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefonoActionPerformed
+        jtCodigo.setText(getBuscarPorTelefono());
+        jtTelefono.setText("");
+    }//GEN-LAST:event_jtTelefonoActionPerformed
+
     /**
-     * @param args the command line arguments
+     * Obtener el código del usuario dependiendo del telefono ingresado
+     * @return String
      */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    private String getBuscarPorTelefono() {
+        strTelefono = jtTelefono.getText();
+        try {
+            String sql = "SELECT CODIGO,"
+                    + "NOMBRE_APELLIDO_CLI,"
+                    + "DIRECCION_CLI,"
+                    + "SECTOR"
+                    + " FROM CLIENTES WHERE TELEFONO='" + strTelefono + "'";
+            rs = bd.ejecutarConsultaUnDato(sql);
+            strCodigo = rs.getString("CODIGO");
+            strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
+            strDireccion = rs.getString("DIRECCION_CLI");
+            strBarrio = rs.getString("SECTOR");
+            strHora = getHora();
+            despacho = new Despachos(strHora, strTelefono, strCodigo, strNombre, strDireccion, strBarrio, "");
 
-            public void run() {
-                new Principal().setVisible(true);
-
-
-            }
-        });
-
-
+            setDatosTablas(despacho, jtPorDespachar);
+        } catch (SQLException ex) {
+            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("No devuelve valores esa consulta...");
+        }
+        return strCodigo;
     }
+
+    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
+        jtTelefono.setText(getBuscarPorCodigo());
+        jtCodigo.setText("");
+    }//GEN-LAST:event_jtCodigoActionPerformed
+
+    /**
+     * Obtener el código del usuario dependiendo del telefono ingresado
+     * @return String
+     */
+    private String getBuscarPorCodigo() {
+        strCodigo = jtCodigo.getText();
+        try {
+            String sql = "SELECT TELEFONO,"
+                    + "NOMBRE_APELLIDO_CLI,"
+                    + "DIRECCION_CLI,"
+                    + "SECTOR"
+                    + " FROM CLIENTES WHERE CODIGO='" + strCodigo + "'";
+            rs = bd.ejecutarConsultaUnDato(sql);
+            strTelefono = rs.getString("TELEFONO");
+            strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
+            strDireccion = rs.getString("DIRECCION_CLI");
+            strBarrio = rs.getString("SECTOR");
+            strHora = getHora();
+            despacho = new Despachos(strHora, strTelefono, strCodigo, strNombre, strDireccion, strBarrio, "");
+
+            setDatosTablas(despacho, jtPorDespachar);
+        } catch (SQLException ex) {
+            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("No devuelve valores esa consulta...");
+        }
+        return strTelefono;
+    }
+
+    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+        int[] numCol = jtVehiculos.getSelectedColumns();
+        JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
+        String etiqueta = editor.getText();
+
+        ArrayList<String> codVehiculo = new ArrayList();
+        if (numCol.length > 0) {
+            for (int i = 0; i < numCol.length; i++) {
+                codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una Unidad primero", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        cambiarEstadoTaxi(etiqueta, codVehiculo);
+    }//GEN-LAST:event_btnColorActionPerformed
 
     /**
      * Cambia el estado de un TAXI en la BD
@@ -681,8 +771,6 @@ public final class Principal extends javax.swing.JFrame {
         String cod = codigo.get(et);
 
         for (String i : codVh) {
-
-
             String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + cod + "','" + sesion[0] + "','" + i + "')";
             bd.ejecutarSentencia(sql);
         }
@@ -705,42 +793,16 @@ public final class Principal extends javax.swing.JFrame {
             codigo.clear();
             color.clear();
             etiq.clear();
-
             do {
                 codigo.add(rs.getString(1));
                 color.add(rs.getString(2));
                 etiq.add(rs.getString(3));
-
                 etiqColor.put(rs.getString(3), rs.getString(2));
-
             } while (rs.next());
-
             cb.CerrarConexion();
-
-
-
-
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-    }
-
-    private void llenarComboEstados() {
-
-        //Extracción de la BD
-        colorCodigosBD();
-
-        //Carga de Codigos de Estado del Taxi
-        cbEstadosTaxi.setModel(new javax.swing.DefaultComboBoxModel(etiq.toArray()));
-
-        cbEstadosTaxi.setEditable(true);
-        cbEstadosTaxi.setRenderer(new ColorCellRenderer(codigo, color));
-        ColorComboBoxEditor editor = new ColorComboBoxEditor(etiqColor);
-        cbEstadosTaxi.setEditor(editor);
-
-
     }
 
     /**
@@ -753,41 +815,95 @@ public final class Principal extends javax.swing.JFrame {
         //[n_unidad]==>[id_codigo]
         Map unidadCodigoBD = new HashMap();
 
-
-
         try {
-
             String sql = "SELECT TAB1.N_UNIDAD, TAB1.ID_CODIGO FROM REGCODESTTAXI AS TAB1, (SELECT aux.ID_CODIGO, MAX(CONCAT(aux.FECHA,aux.HORA)) AS TMP FROM REGCODESTTAXI aux GROUP BY aux.N_UNIDAD) AS TAB2 WHERE CONCAT(TAB1.FECHA,TAB1.HORA) = TAB2.TMP";
-
             rs = bd.ejecutarConsulta(sql);
-
             while (rs.next()) {
                 unidadCodigoBD.put(rs.getString(1), rs.getString(2));
-
-
             } // ArrayList codigo color
             colorCodigosBD();
-
-
-
-
 
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
-
-        for (int i = 0, len = jtVehiculos.getColumnCount(); i
-                < len; i++) {
+        for (int i = 0, len = jtVehiculos.getColumnCount(); i < len; i++) {
             TableColumn column = jtVehiculos.getColumn(jtVehiculos.getColumnName(i));
             column.setCellRenderer(new formatoTabla(encab, unidadCodigoBD, codigo, color));
+        }
+        jtVehiculos.repaint();
+    }
 
+    private void jtPorDespacharKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyTyped
+//
+    }//GEN-LAST:event_jtPorDespacharKeyTyped
 
+    private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
+        int intFila = jtPorDespachar.getSelectedRow();
+        int intCol = jtPorDespachar.getSelectedColumn();
+        intMinutos = 0;
+        if (intCol == 6) {
+            try {
+                intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
+            } catch (NumberFormatException es) {
+                System.err.println("Solo Numeros en la columna de Minutos");
+            }
+
+            jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
         }
 
-        jtVehiculos.repaint();
+        Mayuculas(jtPorDespachar, intFila);
+    }//GEN-LAST:event_jtPorDespacharPropertyChange
 
+    /**
+     * Convierte a mayusculas todas las letras de una fila de la tabla
+     * @param Tabla
+     * @param intFila
+     */
+    public void Mayuculas(JTable Tabla, int intFila) {
+        int intTotalColumnas = Tabla.getColumnCount();
+        for (int i = 0; i < intTotalColumnas; i++) {
+            try {
+                Tabla.setValueAt(Tabla.getValueAt(intFila, i).toString().toUpperCase(), intFila, i);
+            } catch (NullPointerException npe) {
+            } catch (ArrayIndexOutOfBoundsException aex) {
+            }
+        }
+    }
+    /**
+     * Comprueba el tiempo en que se piensa recojer al cliente por cada minuto
+     * para saber si el taxista se atrasa o no
+     */
+    Timer tiempo = new Timer(60000, new ActionListener() {
+
+        public void actionPerformed(ActionEvent ae) {
+            int N_filas = jtPorDespachar.getRowCount();
+            for (int i = 0; i < N_filas; i++) {
+                String dato = (String) jtPorDespachar.getValueAt(i, 8);
+                String minuto = (String) jtPorDespachar.getValueAt(i, 6);
+                try {
+                    if (!dato.equals("") && !minuto.equals("")) {
+                        int atraso = Integer.parseInt(dato);
+                        if (!minuto.equals("0")) {
+                            jtPorDespachar.setValueAt("" + (atraso + 1), i, 8);
+                        }
+                    }
+                } catch (NullPointerException ex) {
+                }
+            }
+        }
+    });
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                new Principal().setVisible(true);
+            }
+        });
 
 
     }
@@ -814,4 +930,51 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField jtTelefono;
     private javax.swing.JTable jtVehiculos;
     // End of variables declaration//GEN-END:variables
+    TrabajoTablas trabajarTabla;
+
+    /**
+     * Ingresa un despacho en la tabla de clientes por Despachar en la
+     * Parte superior de la Ventana
+     * @param des
+     * @param tabla
+     */
+    public void setDatosTablas(Despachos des, JTable tabla) {
+        trabajarTabla = new TrabajoTablas();
+        listaDespachosTemporales.add(des);
+
+        dtm = (DefaultTableModel) tabla.getModel(); //modelo de la tabla PorDespachar
+
+        trabajarTabla.InsertarFilas(tabla, des, dtm);
+    }
+
+    /**
+     * Ingresa Un despacho a la Tabla de de Despachados en la parte inferior
+     * @param des
+     * @param tabla
+     * @return boolean -> truesi se pudo insertar en la base de datos
+     */
+    public boolean setDatosTablaDespachados(Despachos des, JTable tabla) {
+        boolean r = bd.InsertarDespachoCliente(des);
+        int fila = jtPorDespachar.getSelectedRow();
+
+        if (!r) {
+            JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...", "Error", 0);
+            jtPorDespachar.setValueAt("0", fila, 7);
+        } else {
+            trabajarTabla = new TrabajoTablas();
+            listaDespachados.add(des);
+            dtm = (DefaultTableModel) tabla.getModel(); ////modelo de la tabla Despachados
+            trabajarTabla.InsertarFilasDespachados(tabla, des, dtm);
+        }
+        return r;
+    }
+
+    /**
+     * Comprueba si una unidad existe
+     * @param intUnidad
+     * @return boolean -> true si existe
+     */
+    private boolean validarUnidad(int intUnidad) {
+        return bd.validarUnidad(intUnidad);
+    }
 }

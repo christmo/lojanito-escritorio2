@@ -98,7 +98,7 @@ public class modTurnos extends javax.swing.JPanel {
             null, Calendar.HOUR_OF_DAY));
     add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 68, -1));
 
-    jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+    jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
     jLabel1.setText("Hora de Inicio");
     add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
 
@@ -132,7 +132,7 @@ public class modTurnos extends javax.swing.JPanel {
         try {
             this.setVisible(false);
         } catch (Throwable ex) {
-            Logger.getLogger(TestSpinner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -189,7 +189,7 @@ public class modTurnos extends javax.swing.JPanel {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(TestSpinner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return turnos;
     }
