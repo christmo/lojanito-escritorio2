@@ -57,7 +57,8 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtLatitud.setText(lat);
             jtLongitud.setText(lon);
         } catch (SQLException ex) {
-            Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos.java :-)");
+            //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
