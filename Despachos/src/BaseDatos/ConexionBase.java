@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -33,7 +34,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -226,5 +227,53 @@ public class ConexionBase {
             System.err.println("Esta unidad no tiene estado en esta fecha...");
         }
         return "";
+    }
+
+    /**
+     * Devuelve todos los registros de conductores
+     * que coincidan con el parámetro enviado
+     * @param parametro Puede ser cédula o nombre
+     * @param id  Identifica si es cedula (0) o nombre (1)
+     * @return ArrayList<String[]> con los resultados encontrados
+     * null si no encuentrada ningull
+     */
+    public ArrayList<String[]> buscarConductores(String parametro, int id) {
+
+        ArrayList<String[]> rta = new ArrayList();
+
+        String sql;
+        if (id == 0) {
+            sql = "SELECT CEDULA_CONDUCTOR, NOMBRE_APELLIDO_CON, DIRECCION_CON,"
+                    + " NUM_CASA_CON, TIPO_SANGRE, ESTADO_CIVIL, CONYUGE,"
+                    + " MAIL, FOTO FROM CONDUCTORES WHERE CEDULA_CONDUCTOR "
+                    + "= '" + parametro + "'";
+        } else {
+            sql = "SELECT CEDULA_CONDUCTOR, NOMBRE_APELLIDO_CON, DIRECCION_CON,"
+                    + " NUM_CASA_CON, TIPO_SANGRE, ESTADO_CIVIL, CONYUGE, MAIL,"
+                    + " FOTO FROM CONDUCTORES WHERE NOMBRE_APELLIDO_CON LIKE "
+                    + "'%" + parametro.toUpperCase() + "%'";
+        }
+
+       ResultSet res = ejecutarConsulta(sql);
+        try {
+            while (res.next()) {              
+                String[] aux = new String[9];
+                aux[0] = res.getString("CEDULA_CONDUCTOR");
+                aux[1] = res.getString("NOMBRE_APELLIDO_CON");
+                aux[2] = res.getString("DIRECCION_CON");
+                aux[3] = res.getString("NUM_CASA_CON");
+                aux[4] = res.getString("TIPO_SANGRE");
+                aux[5] = res.getString("ESTADO_CIVIL");
+                aux[6] = res.getString("CONYUGE");
+                aux[7] = res.getString("MAIL");
+                aux[8] = res.getString("FOTO");
+                rta.add(aux);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rta;
+
     }
 }

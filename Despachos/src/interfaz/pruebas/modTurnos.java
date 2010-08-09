@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Usuario
+ * @author Kradac
  */
 public class modTurnos extends javax.swing.JPanel {
 
@@ -54,13 +54,14 @@ public class modTurnos extends javax.swing.JPanel {
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnCalcular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calcular.png"))); // NOI18N
         btnCalcular.setText("Calcular");
         btnCalcular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalcularActionPerformed(evt);
             }
         });
-        add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, -1, -1));
+        add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, 50));
 
         tblTurnos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,31 +103,29 @@ public class modTurnos extends javax.swing.JPanel {
     jLabel1.setText("Hora de Inicio");
     add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
 
+    btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
     btnGuardar.setText("Guardar");
     btnGuardar.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             btnGuardarActionPerformed(evt);
         }
     });
-    add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 80, -1));
+    add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 120, 50));
 
+    btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
     btnCancelar.setText("Cancelar");
     btnCancelar.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             btnCancelarActionPerformed(evt);
         }
     });
-    add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, -1, -1));
+    add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 120, 50));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
 
         colocarNuevosTurnos(tblTurnos, calcularTurnos(horaTurno));
     }//GEN-LAST:event_btnCalcularActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        grabarTurnos(tblTurnos);
-}//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         try {
@@ -135,6 +134,11 @@ public class modTurnos extends javax.swing.JPanel {
             Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        grabarTurnos(tblTurnos);
+}//GEN-LAST:event_btnGuardarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcular;
     private javax.swing.JButton btnCancelar;
