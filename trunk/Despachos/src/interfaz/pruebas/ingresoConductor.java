@@ -34,9 +34,9 @@ public class ingresoConductor extends javax.swing.JPanel {
         initComponents();
 
         leerProperties();
-        Icon fot = new ImageIcon(rb.getString("dirImgConductores") + "\\default.jpg");
+        Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
         lblFoto.setIcon(fot);
-        txtFoto.setText("default.jpg");
+        lblFotoEtiqueta.setText("defaultcon.jpg");
     }
 
     /** This method is called from within the constructor to
@@ -53,7 +53,6 @@ public class ingresoConductor extends javax.swing.JPanel {
         lblFoto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
-        txtFoto = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -71,6 +70,7 @@ public class ingresoConductor extends javax.swing.JPanel {
         txtDireccion = new javax.swing.JTextField();
         txtNomApe = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        lblFotoEtiqueta = new javax.swing.JLabel();
 
         btnCargarImagen.setText("Cargar");
         btnCargarImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -94,9 +94,6 @@ public class ingresoConductor extends javax.swing.JPanel {
                 btnGuardarActionPerformed(evt);
             }
         });
-
-        txtFoto.setEditable(false);
-        txtFoto.setToolTipText("Nombre del Archivo");
 
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -211,8 +208,9 @@ public class ingresoConductor extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(2, 2, 2)
+                                .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnCargarImagen))
                             .addComponent(txtEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -274,9 +272,9 @@ public class ingresoConductor extends javax.swing.JPanel {
                             .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)
-                            .addComponent(btnCargarImagen))
+                            .addComponent(btnCargarImagen)
+                            .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGuardar)
@@ -290,7 +288,7 @@ public class ingresoConductor extends javax.swing.JPanel {
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
        
-        Ffoto = utilidad.cargarImagen(txtFoto, lblFoto);
+        Ffoto = utilidad.cargarImagen(lblFotoEtiqueta, lblFoto);
 }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -308,7 +306,7 @@ public class ingresoConductor extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UNA DIRECCION",
                     "ERROR DIRECCION",
                     JOptionPane.ERROR_MESSAGE);
-        } else if (txtFoto.getText().length() == 0) {
+        } else if (lblFotoEtiqueta.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
                     "ERROR FOTOGRAFÍA",
                     JOptionPane.ERROR_MESSAGE);
@@ -414,11 +412,11 @@ public class ingresoConductor extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblFotoEtiqueta;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtConyuge;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtEstadoCivil;
-    private javax.swing.JTextField txtFoto;
     private javax.swing.JTextField txtNomApe;
     private javax.swing.JTextField txtNumCasa;
     private javax.swing.JTextField txtTipoSangre;
@@ -469,8 +467,8 @@ public class ingresoConductor extends javax.swing.JPanel {
             String mail) {
 
         String imgName;
-        if (txtFoto.getText().equals("default.jpg")) {
-            imgName = "default.jpg";
+        if (lblFotoEtiqueta.getText().equals("defaultcon.jpg")) {
+            imgName = "defaultcon.jpg";
         } else {
             imgName = utilidad.guardarImagen(Ffoto,rb.getString("dirImgConductores"));
         }
