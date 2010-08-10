@@ -79,7 +79,7 @@ public class funcionesUtilidad {
      * Carga una imagen a la aplicación presentando
      * su nombre en el campo Foto.
      */
-    public File cargarImagen(JTextField name, JLabel img) {
+    public File cargarImagen(JLabel name, JLabel img) {
         JFileChooser fileChooser = new JFileChooser();
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen",
@@ -157,11 +157,6 @@ public class funcionesUtilidad {
                     + String.valueOf(nombreUnico.get(Calendar.HOUR_OF_DAY))
                     + String.valueOf(nombreUnico.get(Calendar.MINUTE))
                     + String.valueOf(nombreUnico.get(Calendar.SECOND));
-
-            System.out.println(nombreFoto);
-            //ruta = rb.getString("dirImgConductores");
-
-            JOptionPane.showMessageDialog(null, ruta);
 
             FileOutputStream fos = new FileOutputStream(ruta + "\\" + nombreFoto + ".jpg");
             FileChannel canalFuente = fis.getChannel();

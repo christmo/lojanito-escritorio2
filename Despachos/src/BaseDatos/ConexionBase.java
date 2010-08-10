@@ -272,8 +272,27 @@ public class ConexionBase {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return rta;
+    }
 
+
+    /**
+     * Comprueba si la placa ya existe en la BD
+     * @param plc
+     * @return
+     */
+    public boolean placaExiste(String plc) {
+        try {
+            String sql = "SELECT COUNT(PLACA)  AS NUM FROM VEHICULOS WHERE PLACA = '" + plc + "'";
+
+            rs = ejecutarConsultaUnDato(sql);
+            int intNumero = Integer.parseInt(rs.getString("NUM"));
+
+            if (intNumero>0)
+                return true;
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }
