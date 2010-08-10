@@ -54,6 +54,7 @@ public final class Principal extends javax.swing.JFrame {
     private String strNota;
     private ArrayList<String> strEncabezados;
     private Despachos despacho;
+    private int intFilaSeleccionada;
     /**
      * almacena los clientes Por Despachar
      */
@@ -70,6 +71,7 @@ public final class Principal extends javax.swing.JFrame {
         this.setTitle("Despachos KRADAC || " + validarTurno() + " || " + sesion[2]);
         redimencionarTablaVehiculos();
         llenarComboEstados();
+        jtPorDespachar.setRowSelectionInterval(0, 0);
         tiempo.start();
     }
 
@@ -232,11 +234,15 @@ public final class Principal extends javax.swing.JFrame {
         jtTelefono = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jtCodigo = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         cbEstadosTaxi = new javax.swing.JComboBox();
         btnColor = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jbEliminarFila = new javax.swing.JButton();
+        jbLimpiarCampos = new javax.swing.JButton();
+        jbNuevoDespacho = new javax.swing.JButton();
+        jbDespachar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Despachos KRADAC");
@@ -286,9 +292,6 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         jtPorDespachar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jtPorDespacharKeyTyped(evt);
-            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtPorDespacharKeyPressed(evt);
             }
@@ -356,6 +359,7 @@ public final class Principal extends javax.swing.JFrame {
         jtDespachados.getColumnModel().getColumn(9).setMinWidth(100);
         jtDespachados.getColumnModel().getColumn(9).setMaxWidth(100);
 
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
         jbSalir.setText("Salir");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,13 +413,6 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jLabel3.setText("Cambiar Estado:");
 
         btnColor.setText("Cambiar");
@@ -446,6 +443,62 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jbEliminarFila.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/eliminar.png"))); // NOI18N
+        jbEliminarFila.setToolTipText("Eliminar Filas Seleccionada (F8)");
+        jbEliminarFila.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEliminarFilaActionPerformed(evt);
+            }
+        });
+
+        jbLimpiarCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/limpiar.png"))); // NOI18N
+        jbLimpiarCampos.setToolTipText("Limpia los campos de texto para hacer un cambio y despacho temporal (F7)");
+        jbLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbLimpiarCamposActionPerformed(evt);
+            }
+        });
+
+        jbNuevoDespacho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/mas.png"))); // NOI18N
+        jbNuevoDespacho.setToolTipText("Añade una fila para despachar...");
+        jbNuevoDespacho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNuevoDespachoActionPerformed(evt);
+            }
+        });
+
+        jbDespachar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/enviar.png"))); // NOI18N
+        jbDespachar.setToolTipText("Despachar (F12)");
+        jbDespachar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDespacharActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbEliminarFila, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbDespachar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbDespachar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(jbEliminarFila, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -453,17 +506,15 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbSalir)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
                     .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 510, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                    .addComponent(jbSalir))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -472,17 +523,17 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbSalir)
-                    .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, 0, 57, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addGap(70, 70, 70)
+                .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -513,7 +564,7 @@ public final class Principal extends javax.swing.JFrame {
         if (cod == 127 || cod == 8) {
             /**
              * borrar la celda que se haya seleccionado, esto se debe
-             * ejecutar cuando se presione (<-) BackSpace
+             * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
              */
             Tabla.setValueAt("", Tabla.getSelectedRow(), Tabla.getSelectedColumn());
         } else if (cod == 118) {
@@ -521,33 +572,61 @@ public final class Principal extends javax.swing.JFrame {
              * borrar las celdas de nombre, direccion, barrio y nota
              * con F7
              */
-            /*int intTotalColumnas = Tabla.getColumnCount();
-            for (int i = 0; i < intTotalColumnas; i++) {
-            Tabla.setValueAt("", intFila, i);
-            }*/
-            Tabla.setValueAt("", intFila, 3);
-            Tabla.setValueAt("", intFila, 4);
-            Tabla.setValueAt("", intFila, 5);
-            Tabla.setValueAt("", intFila, 9);
+            BorrarCamposFilaSeleccionadaPorDespachar(intFila);
         } else if (cod == 119) {
             /**
              * F8 Para borra toda la fila
              */
-            try {
-                DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-                model.removeRow(intFila);
-                listaDespachosTemporales.remove(intFila);
-            } catch (IndexOutOfBoundsException iex) {
-            }
+            BorrarFilaSeleccionadaPorDespachar(intFila);
         } else if (cod == 123) {
             /**
              * F12 Para despachar
              */
             DespacharCliente(intFila);
+        } else if (cod == 155) {
+            /**
+             * Insert Ingresa una nueva fila para el despacho
+             */
+            NuevaFilaDespacho();
         }
     }
 
-    public void DespacharCliente(int intFila) {
+    /**
+     * Elimina una Fila de la Tabla PorDespachar que se haya seleccionado
+     * @param intFila
+     */
+    private void BorrarFilaSeleccionadaPorDespachar(int intFila) {
+        try {
+            DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+            model.removeRow(intFila);
+            listaDespachosTemporales.remove(intFila);
+            jtPorDespachar.setRowSelectionInterval(0, 0);
+        } catch (IndexOutOfBoundsException iex) {
+        }
+    }
+
+    /**
+     * Limpia los campos de Nombre, Direccion, Barrio, Nota
+     * para que se realice un despacho temporal a un mismo
+     * telefono o codigo que los cambios no van a ser permanentes
+     * @param intFila
+     */
+    private void BorrarCamposFilaSeleccionadaPorDespachar(int intFila) {
+        try {
+            jtPorDespachar.setValueAt("", intFila, 3);
+            jtPorDespachar.setValueAt("", intFila, 4);
+            jtPorDespachar.setValueAt("", intFila, 5);
+            jtPorDespachar.setValueAt("", intFila, 9);
+        } catch (IndexOutOfBoundsException iex) {
+        }
+    }
+
+    /**
+     * Envia los datos de la tabla PorDespachar a la tabla de Despachados,
+     * guardando estos en la base de datos
+     * @param intFila
+     */
+    private void DespacharCliente(int intFila) {
         despacho = getDatosPorDespachar();
 
         if (sePuedeDespachar(despacho, intFila)) {
@@ -575,37 +654,36 @@ public final class Principal extends javax.swing.JFrame {
         tabla.setValueAt("", fila, col);
     }
 
+    /**
+     * Valida si los campos requeridos para el despacho estan ingresados
+     * @param d
+     * @param fila
+     * @return boolean -> true si se puede despachar
+     */
     private boolean sePuedeDespachar(Despachos d, int fila) {
         boolean resultado = false;
-        try {
-            if (d.getStrHora().equals("")) {
-                JOptionPane.showMessageDialog(this, "Se debe ingresar una hora de despacho...", "Error...", 0);
-                jtPorDespachar.setValueAt(getHora(), fila, 0);
-            } else if (d.getStrNombre().equals("")) {
-                JOptionPane.showMessageDialog(this, "Se debe ingresar un nombre de cliente...", "Error...", 0);
-            } else if (d.getStrDireccion().equals("")) {
-                JOptionPane.showMessageDialog(this, "Se debe ingresar una dirección del cliente...", "Error...", 0);
-            } else if (d.getStrBarrio().equals("")) {
-                JOptionPane.showMessageDialog(this, "Se debe ingresar un barrio donde vive el cliente...", "Error...", 0);
-            } else if (d.getIntMinutos() < 0) {
-                JOptionPane.showMessageDialog(this, "La estimación de tiempo de llegada a recojer al cliente es incorrecta, tiene que ser mayor a 0...", "Error...", 0);
-                int col = jtPorDespachar.getSelectedColumn();
-                jtPorDespachar.setValueAt("0", fila, 6);
-                jtPorDespachar.setValueAt("0", fila, 8);
-            } else if (!validarUnidad(d.getIntUnidad())) {
-                JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
-            } else {
-                resultado = true;
-            }
-        } catch (NullPointerException nex) {
+
+        if (d.getStrHora() == null) {
+            JOptionPane.showMessageDialog(this, "Se debe ingresar una hora de despacho...", "Error...", 0);
+            jtPorDespachar.setValueAt(getHora(), fila, 0);
+        } else if (d.getStrNombre() == null) {
+            JOptionPane.showMessageDialog(this, "Se debe ingresar un nombre de cliente...", "Error...", 0);
+        } else if (d.getStrDireccion() == null) {
+            JOptionPane.showMessageDialog(this, "Se debe ingresar una dirección del cliente...", "Error...", 0);
+        } else if (d.getStrBarrio() == null) {
+            JOptionPane.showMessageDialog(this, "Se debe ingresar un barrio donde vive el cliente...", "Error...", 0);
+        } else if (d.getIntMinutos() < 0) {
+            JOptionPane.showMessageDialog(this, "La estimación de tiempo de llegada a recojer al cliente es incorrecta, tiene que ser mayor a 0...", "Error...", 0);
+            jtPorDespachar.setValueAt("0", fila, 6);
+            jtPorDespachar.setValueAt("0", fila, 8);
+        } else if (!validarUnidad(d.getIntUnidad())) {
+            JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
+        } else {
+            resultado = true;
         }
+
         return resultado;
     }
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println(jtPorDespachar.getSelectedRow() + " " + jtPorDespachar.getSelectedColumn());
-
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jtDespachadosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtDespachadosKeyPressed
         int cod = evt.getKeyCode();
@@ -615,62 +693,117 @@ public final class Principal extends javax.swing.JFrame {
     private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
-        System.out.println("clc: " + intClicks + " bot: " + intBoton);
+        //System.out.println("clc: " + intClicks + " bot: " + intBoton);
         VentanaDatos ventanaDatos = null;
-        try {
-            if (intClicks == 1 && intBoton == 3) {
+        if (intClicks == 1 && intBoton == 3) {
+            try {
                 ventanaDatos = new VentanaDatos(getDatosPorDespachar());
+                ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
                 if (!ventanaDatos.isVisible()) {
                     ventanaDatos.setVisible(true);
                 }
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una fila...", "Error", 0);
             }
-            if (intClicks == 1 && intBoton == 1) {
-                despacho = getDatosPorDespachar();
-            }
-        } catch (NullPointerException npe) {
-            System.err.println("No se puede mostrar la ventana, no hay datos...");
         }
-
+        if (intClicks == 1 && intBoton == 1) {
+            despacho = getDatosPorDespachar();
+            PonerHoraParaDespachar();
+        }
     }//GEN-LAST:event_jtPorDespacharMousePressed
+
+    /**
+     * Pone la Hora en la columna de hora cuando no se hace un despacho auntomatico
+     */
+    public void PonerHoraParaDespachar() {
+        int fila = jtPorDespachar.getSelectedRow();
+        int col = jtPorDespachar.getSelectedColumn();
+
+        if (col == 0) {
+            jtPorDespachar.setValueAt(getHora(), fila, col);
+        }
+    }
 
     /**
      * Recoje los datos de las fila seleccionada y crea un objeto con todos esos datos
      * @return Despachos
      */
     private Despachos getDatosPorDespachar() {
-        int fila = jtPorDespachar.getSelectedRow();
         Despachos datos = null;
+
+        int fila = 0;
         try {
-            strHora = (String) jtPorDespachar.getValueAt(fila, 0);
-            strTelefono = (String) jtPorDespachar.getValueAt(fila, 1);
-            strCodigo = (String) jtPorDespachar.getValueAt(fila, 2);
-            strNombre = (String) jtPorDespachar.getValueAt(fila, 3);
-            strDireccion = (String) jtPorDespachar.getValueAt(fila, 4);
-            strBarrio = (String) jtPorDespachar.getValueAt(fila, 5);
+            fila = getIntFilaSeleccionada();
+            try {
+                strHora = (String) jtPorDespachar.getValueAt(fila, 0);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay Hora...");
+                strHora = "";
+            }
+            try {
+                strTelefono = (String) jtPorDespachar.getValueAt(fila, 1);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay tel...");
+                strTelefono = "";
+            }
+            try {
+                strCodigo = (String) jtPorDespachar.getValueAt(fila, 2);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay cod...");
+                strCodigo = "";
+            }
+            try {
+                strNombre = (String) jtPorDespachar.getValueAt(fila, 3);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay nombre...");
+                strNombre = "";
+            }
+            try {
+                strDireccion = (String) jtPorDespachar.getValueAt(fila, 4);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay dir...");
+                strDireccion = "";
+            }
+            try {
+                strBarrio = (String) jtPorDespachar.getValueAt(fila, 5);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay barrio...");
+                strBarrio = "";
+            }
             try {
                 intMinutos = Integer.parseInt(jtPorDespachar.getValueAt(fila, 6).toString());
             } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Minutos(MIN)...", "Error...", 0);
                 jtPorDespachar.setValueAt("0", fila, 6);
+            } catch (NullPointerException ex) {
+                intMinutos = 0;
             }
             try {
                 intUnidad = Integer.parseInt(jtPorDespachar.getValueAt(fila, 7).toString());
             } catch (NumberFormatException nfe) {
+                System.err.println("No hay Unidad...");
                 JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Unidad(UNI)...", "Error...", 0);
                 jtPorDespachar.setValueAt("0", fila, 7);
+            } catch (NullPointerException ex) {
+                intUnidad = 0;
             }
             try {
                 intAtraso = Integer.parseInt(jtPorDespachar.getValueAt(fila, 8).toString());
             } catch (NumberFormatException nfe) {
+                System.err.println("No hay Atraso...");
                 JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Atraso(ATR)...", "Error...", 0);
                 jtPorDespachar.setValueAt("0", fila, 8);
+            } catch (NullPointerException ex) {
+                intAtraso = 0;
             }
-            strNota = (String) jtPorDespachar.getValueAt(fila, 9);
-
+            try {
+                strNota = (String) jtPorDespachar.getValueAt(fila, 9);
+            } catch (NullPointerException ex) {
+                System.err.println("No hay Nota...");
+                strNota = "";
+            }
             datos = new Despachos(strHora, strTelefono, strCodigo, strNombre,
                     strDireccion, strBarrio, intMinutos, intUnidad, intAtraso, strNota);
-        } catch (NullPointerException npe) {
-            //System.err.println("Error de NULL -> No hay datos Seleccionados...");
         } catch (ArrayIndexOutOfBoundsException aiobe) {
             //System.err.println("Error de NULL -> No hay datos Seleccionados...");
         }
@@ -688,27 +821,55 @@ public final class Principal extends javax.swing.JFrame {
      * @return String
      */
     private String getBuscarPorTelefono() {
-        strTelefono = jtTelefono.getText();
+        strTelefono = validarTelefono(jtTelefono.getText());
         try {
-            String sql = "SELECT CODIGO,"
-                    + "NOMBRE_APELLIDO_CLI,"
-                    + "DIRECCION_CLI,"
-                    + "SECTOR"
-                    + " FROM CLIENTES WHERE TELEFONO='" + strTelefono + "'";
-            rs = bd.ejecutarConsultaUnDato(sql);
-            strCodigo = rs.getString("CODIGO");
-            strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
-            strDireccion = rs.getString("DIRECCION_CLI");
-            strBarrio = rs.getString("SECTOR");
-            strHora = getHora();
-            despacho = new Despachos(strHora, strTelefono, strCodigo, strNombre, strDireccion, strBarrio, "");
+            if (!strTelefono.equals("")) {
+                String sql = "SELECT CODIGO,"
+                        + "NOMBRE_APELLIDO_CLI,"
+                        + "DIRECCION_CLI,"
+                        + "SECTOR"
+                        + " FROM CLIENTES WHERE TELEFONO='" + strTelefono + "'";
+                rs = bd.ejecutarConsultaUnDato(sql);
+                strCodigo = rs.getString("CODIGO");
+                strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
+                strDireccion = rs.getString("DIRECCION_CLI");
+                strBarrio = rs.getString("SECTOR");
+                strHora = getHora();
+                despacho = new Despachos(strHora, strTelefono, strCodigo, strNombre, strDireccion, strBarrio, "");
 
-            setDatosTablas(despacho, jtPorDespachar);
+                setDatosTablas(despacho, jtPorDespachar);
+            } else {
+                JOptionPane.showMessageDialog(this, "Numero ingresado no valido...", "Error", 0);
+            }
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("No devuelve valores esa consulta...");
+
+
+            dtm = (DefaultTableModel) jtPorDespachar.getModel();
+            String[] inicial = {getHora(), validarTelefono(jtTelefono.getText()), "", "", "", "", "0", "0", "0", ""};
+            dtm.insertRow(0, inicial);
+            jtPorDespachar.setRowSelectionInterval(0, 0);
+
         }
         return strCodigo;
+    }
+
+    /**
+     * Comprueba si el numero de telefono ingresado tiene el 0 al inicio o si el
+     * el numero de telefono no tiene letras
+     * @param tel
+     * @return String
+     */
+    private String validarTelefono(String tel) {
+        int lon = tel.length();
+        if (lon == 9) {
+            return tel;
+        } else if (lon == 8) {
+            return "0" + tel;
+        } else {
+            return "";
+        }
     }
 
     private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
@@ -834,10 +995,6 @@ public final class Principal extends javax.swing.JFrame {
         jtVehiculos.repaint();
     }
 
-    private void jtPorDespacharKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyTyped
-//
-    }//GEN-LAST:event_jtPorDespacharKeyTyped
-
     private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
         int intFila = jtPorDespachar.getSelectedRow();
         int intCol = jtPorDespachar.getSelectedColumn();
@@ -847,6 +1004,7 @@ public final class Principal extends javax.swing.JFrame {
                 intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
             } catch (NumberFormatException es) {
                 System.err.println("Solo Numeros en la columna de Minutos");
+            } catch (ArrayIndexOutOfBoundsException ex) {
             }
 
             jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
@@ -854,6 +1012,35 @@ public final class Principal extends javax.swing.JFrame {
 
         Mayuculas(jtPorDespachar, intFila);
     }//GEN-LAST:event_jtPorDespacharPropertyChange
+
+    private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarFilaActionPerformed
+        int intFila = jtPorDespachar.getSelectedRow();
+        BorrarFilaSeleccionadaPorDespachar(intFila);
+    }//GEN-LAST:event_jbEliminarFilaActionPerformed
+
+    private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpiarCamposActionPerformed
+        int intFila = jtPorDespachar.getSelectedRow();
+        BorrarCamposFilaSeleccionadaPorDespachar(intFila);
+    }//GEN-LAST:event_jbLimpiarCamposActionPerformed
+
+    private void jbNuevoDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoDespachoActionPerformed
+        NuevaFilaDespacho();
+    }//GEN-LAST:event_jbNuevoDespachoActionPerformed
+
+    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
+        int intFila = jtPorDespachar.getSelectedRow();
+        DespacharCliente(intFila);
+    }//GEN-LAST:event_jbDespacharActionPerformed
+
+    /**
+     * Ingresa una nueva fila para despachar
+     */
+    private void NuevaFilaDespacho() {
+        dtm = (DefaultTableModel) jtPorDespachar.getModel();
+        String[] inicial = {getHora(), "", "", "", "", "", "0", "0", "0", ""};
+        dtm.insertRow(0, inicial);
+        jtPorDespachar.setRowSelectionInterval(0, 0);
+    }
 
     /**
      * Convierte a mayusculas todas las letras de una fila de la tabla
@@ -864,7 +1051,12 @@ public final class Principal extends javax.swing.JFrame {
         int intTotalColumnas = Tabla.getColumnCount();
         for (int i = 0; i < intTotalColumnas; i++) {
             try {
-                Tabla.setValueAt(Tabla.getValueAt(intFila, i).toString().toUpperCase(), intFila, i);
+                String txt = Tabla.getValueAt(intFila, i).toString().toUpperCase();
+                if (i == 1) {
+                    Tabla.setValueAt(validarTelefono(txt), intFila, i);
+                } else {
+                    Tabla.setValueAt(txt, intFila, i);
+                }
             } catch (NullPointerException npe) {
             } catch (ArrayIndexOutOfBoundsException aex) {
             }
@@ -914,14 +1106,18 @@ public final class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnColor;
     private javax.swing.JComboBox cbEstadosTaxi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jbDespachar;
+    private javax.swing.JButton jbEliminarFila;
+    private javax.swing.JButton jbLimpiarCampos;
+    private javax.swing.JButton jbNuevoDespacho;
     private javax.swing.JButton jbSalir;
     private javax.swing.JScrollPane jsVehiculos;
     private javax.swing.JTextField jtCodigo;
@@ -976,5 +1172,24 @@ public final class Principal extends javax.swing.JFrame {
      */
     private boolean validarUnidad(int intUnidad) {
         return bd.validarUnidad(intUnidad);
+    }
+
+    /**
+     * @return the intFilaSeleccionada
+     */
+    public int getIntFilaSeleccionada() {
+        try {
+            intFilaSeleccionada = jtPorDespachar.getSelectedRow();
+        } catch (NullPointerException ex) {
+            System.out.println("No hay fila");
+        }
+        return intFilaSeleccionada;
+    }
+
+    /**
+     * @param intFilaSeleccionada the intFilaSeleccionada to set
+     */
+    public void setIntFilaSeleccionada(int intFilaSeleccionada) {
+        this.intFilaSeleccionada = intFilaSeleccionada;
     }
 }
