@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -19,8 +21,11 @@ import java.util.logging.Logger;
 public class VentanaDatos extends javax.swing.JFrame {
 
     private Despachos datos = new Despachos();
-    ConexionBase bd = new ConexionBase();
-    ResultSet rs;
+    private ConexionBase bd = new ConexionBase();
+    private boolean accion = false;
+    private ResultSet rs;
+    private int filaSeleccionada;
+    private JTable tabla;
 
     /** Creates new form VentanaDatos */
     public VentanaDatos() {
@@ -34,12 +39,25 @@ public class VentanaDatos extends javax.swing.JFrame {
         cargarDatos(datos);
     }
 
+    public void setDatosFila(JTable tabla, int fila) {
+        this.filaSeleccionada = fila;
+        this.tabla = tabla;
+    }
+
     /**
      * Carga cada uno de los Datos en los cuadros de texto
      * @param despacho
      */
     private void cargarDatos(Despachos despacho) {
-        jtCodigo.setText(despacho.getStrCodigo());
+        String cod = despacho.getStrCodigo();
+        if (cod == null || cod.equals("")) {
+            jbCodigo.setVisible(true);
+            accion = true; //insertar
+        } else {
+            jbCodigo.setVisible(false);
+            accion = false; //actualizar
+        }
+        jtCodigo.setText(cod);
         jtTelefono.setText(despacho.getStrTelefono());
         jtNombre.setText(despacho.getStrNombre());
         jtDireccion.setText(despacho.getStrDireccion());
@@ -112,9 +130,12 @@ public class VentanaDatos extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtNota = new javax.swing.JTextArea();
+        jbCodigo = new javax.swing.JButton();
 
         jLabel1.setText("Código:");
 
+        jtCodigo.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtCodigo.setEnabled(false);
 
         jbAceptar.setText("Aceptar");
@@ -134,22 +155,62 @@ public class VentanaDatos extends javax.swing.JFrame {
 
         jLabel9.setText("Barrio:");
 
+        jtTelefono.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jtTelefono.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtTelefono.setEnabled(false);
+
+        jtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtNombreFocusLost(evt);
+            }
+        });
+
+        jtDireccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtDireccionFocusLost(evt);
+            }
+        });
+
+        jtNumeroCasa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtNumeroCasaFocusLost(evt);
+            }
+        });
+
+        jtBarrio.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtBarrioFocusLost(evt);
+            }
+        });
 
         jLabel7.setText("Latitud:");
 
         jLabel8.setText("Longitud:");
 
+        jtLatitud.setText("0.0");
+
+        jtLongitud.setText("0.0");
+
         jLabel5.setText("Referencia:");
 
         jtReferencia.setColumns(20);
         jtReferencia.setRows(5);
+        jtReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtReferenciaFocusLost(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtReferencia);
 
         jLabel11.setText("Nota:");
 
         jtNota.setColumns(20);
         jtNota.setRows(5);
+        jtNota.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtNotaFocusLost(evt);
+            }
+        });
         jScrollPane2.setViewportView(jtNota);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -174,9 +235,16 @@ public class VentanaDatos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
         );
+
+        jbCodigo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/codigo.png"))); // NOI18N
+        jbCodigo.setToolTipText("Generar Código");
+        jbCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbCodigoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpDatosLayout = new javax.swing.GroupLayout(jpDatos);
         jpDatos.setLayout(jpDatosLayout);
@@ -199,46 +267,49 @@ public class VentanaDatos extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
-                            .addGroup(jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(39, 39, 39)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
+                                .addComponent(jtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
+                                .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(jpDatosLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(28, 28, 28)
-                        .addComponent(jtNumeroCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
+                        .addComponent(jtNumeroCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                        .addComponent(jtBarrio, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(jtBarrio, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(26, 26, 26)
+                        .addComponent(jtLatitud, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
             .addGroup(jpDatosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addGap(26, 26, 26)
-                .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                .addGap(245, 245, 245)
+                .addGap(241, 241, 241)
                 .addComponent(jbAceptar, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                .addGap(242, 242, 242))
+                .addGap(246, 246, 246))
         );
         jpDatosLayout.setVerticalGroup(
             jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpDatosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6))
+                    .addComponent(jbCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -254,8 +325,8 @@ public class VentanaDatos extends javax.swing.JFrame {
                     .addComponent(jtBarrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,7 +334,7 @@ public class VentanaDatos extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbAceptar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -278,14 +349,122 @@ public class VentanaDatos extends javax.swing.JFrame {
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-600)/2, (screenSize.height-384)/2, 600, 384);
+        setBounds((screenSize.width-600)/2, (screenSize.height-400)/2, 600, 400);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarActionPerformed
+        GuardarDatos();
         bd.CerrarConexion();
         LimpiarCampos();
         this.setVisible(false);
     }//GEN-LAST:event_jbAceptarActionPerformed
+
+    /**
+     * Guarda los datos de nuevos o editados del cliente en la base de datos
+     */
+    private void GuardarDatos() {
+        boolean resultado = false;
+        datos = getDatosNuevos();
+        if (accion) {
+            resultado = bd.InsertarCliente(datos);
+            if (!resultado) {
+                JOptionPane.showMessageDialog(this, "No se pudo guardar el cliente...", "Error", 0);
+            }
+        } else {
+            resultado = bd.ActualziarCliente(datos, Integer.parseInt(datos.getStrCodigo()));
+            if (!resultado) {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
+            }
+        }
+    }
+
+    /**
+     * Inserta la cambios en la tabla de datos por despachar de la interfaz principal
+     * @param nota
+     */
+    private void insertarDatosTabla(String txt,int col) {
+        if (!txt.equals("")) {
+            tabla.setValueAt(txt, filaSeleccionada, col);
+        }
+    }
+
+    /**
+     * Obtiene los datos nuevos o editados del formulario
+     * @return Despachos
+     */
+    private Despachos getDatosNuevos() {
+        Despachos d = new Despachos();
+        try {
+            d.setStrCodigo(jtCodigo.getText());
+            d.setStrTelefono(jtTelefono.getText());
+            d.setStrNombre(jtNombre.getText());
+            d.setStrDireccion(jtDireccion.getText());
+            d.setStrBarrio(jtBarrio.getText());
+            d.setStrNota(jtNota.getText());
+            d.setStrNumeroCasa(jtNumeroCasa.getText());
+            d.setStrReferecia(jtReferencia.getText());
+            try {
+                d.setLatitud(Double.parseDouble(jtLatitud.getText()));
+                d.setLongitud(Double.parseDouble(jtLongitud.getText()));
+            } catch (NumberFormatException ex) {
+                d.setLatitud(0);
+                d.setLongitud(0);
+                System.err.println("Latitud o longitud mal");
+            }
+        } catch (NullPointerException ex) {
+            System.err.println("Null en la ventana de Datos");
+        }
+        return d;
+    }
+
+    private void jbCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCodigoActionPerformed
+        if (jtCodigo.getText() == null || jtCodigo.getText().equals("")) {
+            try {
+                int cod = Integer.parseInt(bd.generarCodigo()) + 1;
+                jtCodigo.setText("" + cod);
+                insertarDatosTabla(jtCodigo.getText(),2);
+            } catch (SQLException ex) {
+                Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jbCodigoActionPerformed
+
+    private void jtNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNombreFocusLost
+        jtNombre.setText(Mayusculas(jtNombre.getText()));
+        insertarDatosTabla(jtNombre.getText(),3);
+    }//GEN-LAST:event_jtNombreFocusLost
+
+    private void jtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtDireccionFocusLost
+        jtDireccion.setText(Mayusculas(jtDireccion.getText()));
+        insertarDatosTabla(jtDireccion.getText(),4);
+    }//GEN-LAST:event_jtDireccionFocusLost
+
+    private void jtBarrioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtBarrioFocusLost
+        jtBarrio.setText(Mayusculas(jtBarrio.getText()));
+        insertarDatosTabla(jtBarrio.getText(),5);
+    }//GEN-LAST:event_jtBarrioFocusLost
+
+    private void jtNumeroCasaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNumeroCasaFocusLost
+        jtNumeroCasa.setText(Mayusculas(jtNumeroCasa.getText()));
+    }//GEN-LAST:event_jtNumeroCasaFocusLost
+
+    private void jtReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtReferenciaFocusLost
+        jtReferencia.setText(Mayusculas(jtReferencia.getText()));
+    }//GEN-LAST:event_jtReferenciaFocusLost
+
+    private void jtNotaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNotaFocusLost
+        jtNota.setText(Mayusculas(jtNota.getText()));
+        insertarDatosTabla(jtNota.getText(),9);
+    }//GEN-LAST:event_jtNotaFocusLost
+
+    /**
+     * Convierete a mayusculas lo que se envie
+     * @param txt
+     * @return string
+     */
+    public String Mayusculas(String txt) {
+        return txt.toUpperCase();
+    }
 
     /**
      * @param args the command line arguments
@@ -313,6 +492,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbAceptar;
+    private javax.swing.JButton jbCodigo;
     private javax.swing.JPanel jpDatos;
     private javax.swing.JTextField jtBarrio;
     private javax.swing.JTextField jtCodigo;

@@ -165,7 +165,7 @@ public class funcionesUtilidad {
             fis.close();
             fos.close();
         } catch (IOException ex) {
-            Logger.getLogger(JFRAME_Conductor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
         return nombreFoto+".jpg";

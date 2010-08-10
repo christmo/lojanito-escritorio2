@@ -436,7 +436,7 @@ public class ingresoConductor extends javax.swing.JPanel {
                 return false;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(JFRAME_Conductor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ingresoConductor.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;

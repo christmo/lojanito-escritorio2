@@ -18,8 +18,9 @@ public class prueba {
         ResultSet rs = cb.ejecutarConsulta(sql);
         //System.out.println("ID: " + rs.getString(3));
 
-        for (int i=1; i<=45; i++)  {
-            String sql1 = "INSERT INTO VEHICULOS(PLACA,N_UNIDAD,ID_EMPRESA) VALUES('POI-"+i+"','"+i+"','LN')";
+        for (int i=15; i<=20; i++)  {
+            String sql1 = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI) VALUES('"+(7257917+i)+"','"+i+"','"+"Prueba "+i+"')";
+            //System.out.println(""+sql1);
             cb.ejecutarSentencia(sql1);
         }
 

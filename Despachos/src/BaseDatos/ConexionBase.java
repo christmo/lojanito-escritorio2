@@ -34,7 +34,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "";
+        this.pass = "kradac";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -189,10 +189,10 @@ public class ConexionBase {
     /**
      * Insertar Despacho Cliente
      * @param des
-     * @return
+     * @return boolean confirmacion del resultado 1 valido || 0 invalido
      */
     public boolean InsertarDespachoCliente(Despachos des) {
-        String estado = getEstadoUnidad(des.getIntUnidad(), getFechaActual());
+        String estado = getEstadoUnidad(des.getIntUnidad());
         if (estado.equals("AC")) {
             String sql = "INSERT INTO ASIGNADOS(TELEFONO,COD_CLIENTE,N_UNIDAD,FECHA, HORA, MINU,ATRASO,NOTA,ESTADO)"
                     + " VALUES("
@@ -211,14 +211,23 @@ public class ConexionBase {
         return false;
     }
 
+    /**
+     * Obtiene la fecha actual del sistema
+     * @return String
+     */
     public String getFechaActual() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(calendario.getTime());
     }
 
-    public String getEstadoUnidad(int unidad, String fecha) {
-        String sql = "SELECT ID_CODIGO FROM REGCODESTTAXI WHERE FECHA='" + fecha + "' AND N_UNIDAD=" + unidad;
+    /**
+     * Obtiene el ultimo estadod e la unidad que se le envie
+     * @param unidad
+     * @return String
+     */
+    public String getEstadoUnidad(int unidad) {
+        String sql = "SELECT ID_CODIGO FROM REGCODESTTAXI WHERE N_UNIDAD=" + unidad + " AND FECHA = (SELECT MAX(FECHA) FROM REGCODESTTAXI WHERE N_UNIDAD=" + unidad + ")";
         try {
             ResultSet r = ejecutarConsultaUnDato(sql);
             return r.getString("ID_CODIGO");
@@ -227,6 +236,59 @@ public class ConexionBase {
             System.err.println("Esta unidad no tiene estado en esta fecha...");
         }
         return "";
+    }
+
+    /**
+     * Retorna el ultimo codigo a utilizar para un cliente
+     * @return String
+     * @throws SQLException
+     */
+    public String generarCodigo() throws SQLException {
+        String sql = "SELECT MAX(CODIGO) AS COD FROM CLIENTES";
+        ejecutarConsultaUnDato(sql);
+        return rs.getString("COD");
+    }
+
+    /**
+     * Inserta un cliente
+     * @param Despachos
+     * @return confirmacion del resultado 1 valido || 0 invalido
+     */
+    public boolean InsertarCliente(Despachos des) {
+        String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
+                + " VALUES("
+                + "'" + des.getStrTelefono() + "',"
+                + "'" + des.getStrCodigo() + "',"
+                + "'" + des.getStrNombre() + "',"
+                + "'" + des.getStrDireccion() + "',"
+                + "'" + des.getStrBarrio() + "',"
+                + "'" + des.getStrNumeroCasa() + "',"
+                + des.getLatitud() + ","
+                + des.getLongitud() + ","
+                + "'" + des.getStrReferecia() + "'"
+                + ")";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Actualiza los campos de un cliente ingresado
+     * @param des
+     * @param codigo
+     * @return boolean
+     */
+    public boolean  ActualziarCliente(Despachos des,int codigo) {
+        String sql = "UPDATE CLIENTES SET "
+                + "TELEFONO="+ "'" + des.getStrTelefono() + "',"
+                + "NOMBRE_APELLIDO_CLI="+ "'" + des.getStrNombre() + "',"
+                + "DIRECCION_CLI="+ "'" + des.getStrDireccion() + "',"
+                + "SECTOR="+ "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI="+ "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD="+ des.getLatitud() + ","
+                + "LONGITUD="+ des.getLongitud() + ","
+                + "INFOR_ADICIONAL="+"'"+des.getStrReferecia()+"'"
+                + "WHERE CODIGO="+codigo;
+                
+        return ejecutarSentencia(sql);
     }
 
     /**
@@ -256,7 +318,7 @@ public class ConexionBase {
 
        ResultSet res = ejecutarConsulta(sql);
         try {
-            while (res.next()) {              
+            while (res.next()) {
                 String[] aux = new String[9];
                 aux[0] = res.getString("CEDULA_CONDUCTOR");
                 aux[1] = res.getString("NOMBRE_APELLIDO_CON");
