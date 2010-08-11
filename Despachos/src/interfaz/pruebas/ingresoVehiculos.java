@@ -34,6 +34,7 @@ public class ingresoVehiculos extends javax.swing.JPanel {
     ConexionBase bd = new ConexionBase();
     ResultSet rs;
     private String ID_EMPRESA;
+    Icon ic;
 
     /**
      * ENVIAR EL ID_EMPRESA POR EL CONSTRUCTOR
@@ -65,8 +66,6 @@ public class ingresoVehiculos extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txtColor = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtModelo = new javax.swing.JTextField();
@@ -83,6 +82,12 @@ public class ingresoVehiculos extends javax.swing.JPanel {
         btnCambiar = new javax.swing.JButton();
         btnguardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        txtMarca = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        txtNumMotor = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txtNumChasis = new javax.swing.JTextField();
 
         jLabel6.setText("jLabel6");
 
@@ -94,7 +99,7 @@ public class ingresoVehiculos extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setText("NUMERO UNIDAD :");
+        jLabel3.setText("NUM UNIDAD :");
 
         txtNUnidad.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -109,14 +114,6 @@ public class ingresoVehiculos extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("VEHICULOS");
-
-        jLabel8.setText("COLOR :");
-
-        txtColor.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtColorFocusLost(evt);
-            }
-        });
 
         jLabel9.setText("AÑO :");
 
@@ -155,7 +152,7 @@ public class ingresoVehiculos extends javax.swing.JPanel {
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204)));
         lblImagen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        spAño.setModel(new javax.swing.SpinnerNumberModel(2010, 1955, 2222, 1));
+        spAño.setModel(new javax.swing.SpinnerNumberModel(2010, 1999, 2222, 1));
 
         btnCambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cargar.png"))); // NOI18N
         btnCambiar.setText("CAMBIAR");
@@ -181,6 +178,30 @@ public class ingresoVehiculos extends javax.swing.JPanel {
             }
         });
 
+        jLabel13.setText("MARCA :");
+
+        txtMarca.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtMarcaFocusLost(evt);
+            }
+        });
+
+        jLabel14.setText("NUM MOTOR :");
+
+        txtNumMotor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNumMotorFocusLost(evt);
+            }
+        });
+
+        jLabel15.setText("NUM CHASIS :");
+
+        txtNumChasis.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNumChasisFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -191,41 +212,53 @@ public class ingresoVehiculos extends javax.swing.JPanel {
                         .addGap(240, 240, 240)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(6, 6, 6)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel3)
+                                .addGap(4, 4, 4)
+                                .addComponent(txtNUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(cmbConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbCondAux, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEtiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNumChasis, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
+                                .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9)
+                                .addGap(11, 11, 11)
+                                .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNumMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblEtiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(54, 54, 54)
                                 .addComponent(btnCambiar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(230, 230, 230)
+                        .addGap(213, 213, 213)
                         .addComponent(btnguardar)
                         .addGap(59, 59, 59)
                         .addComponent(btnCancelar)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,52 +268,61 @@ public class ingresoVehiculos extends javax.swing.JPanel {
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel3)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel4)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel5)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel8)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel10)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel9)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel11)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel12))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jLabel3))
+                            .addComponent(txtNUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(cmbConductor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jLabel5))
+                            .addComponent(cmbCondAux, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(txtNumMotor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(txtNumChasis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtNUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(cmbConductor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(cmbCondAux, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
                         .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblEtiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCambiar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnguardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -294,17 +336,14 @@ public class ingresoVehiculos extends javax.swing.JPanel {
 
     private void txtNUnidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNUnidadFocusLost
         if (!funciones.isNumeric(txtNUnidad.getText())) {
+            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
             JOptionPane.showMessageDialog(this, "NO ES UN NÚMERO VÁLIDO DE UNIDAD",
                     "ERROR NUMERO DE UNIDAD",
-                    JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE,
+                    ic);
+            txtNUnidad.setText("");
         }
     }//GEN-LAST:event_txtNUnidadFocusLost
-
-    private void txtColorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtColorFocusLost
-
-        txtColor.setText(txtColor.getText().toUpperCase());
-
-    }//GEN-LAST:event_txtColorFocusLost
 
     private void txtModeloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtModeloFocusLost
         txtModelo.setText(txtModelo.getText().toUpperCase());
@@ -321,6 +360,8 @@ public class ingresoVehiculos extends javax.swing.JPanel {
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
         String con = cmbConductor.getSelectedItem().toString();
         String conAux = "";
+
+        ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
 
         if (cmbCondAux.getSelectedIndex() != 0) {
             conAux = cmbCondAux.getSelectedItem().toString();
@@ -339,35 +380,48 @@ public class ingresoVehiculos extends javax.swing.JPanel {
 
                     String imgName = lblEtiquetaImagen.getText();
 
-                    if (!imgName.equals("defaultcon.jpg")) {
+                    if (!imgName.equals("defaultveh.png")) {
                         imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
                     }
 
                     guardarVehiculo(txtPlaca.getText(), Integer.valueOf(txtNUnidad.getText()),
                             ID_EMPRESA,
-                            con, conAux, txtColor.getText(), txtModelo.getText(),
+                            con, conAux, txtModelo.getText(),
                             Integer.valueOf(spAño.getValue().toString()),
                             txtPropietario.getText(), txtInformacion.getText(),
-                            imgName);
+                            imgName, txtMarca.getText(), txtNumMotor.getText(),
+                            txtNumChasis.getText());
                 } else {
                     JOptionPane.showMessageDialog(this, "CONDUCTOR Y AUXILIAR SON IGUALES",
-                        "ERROR CONDUCTOR",
-                        JOptionPane.ERROR_MESSAGE);
+                            "ERROR CONDUCTOR",
+                            JOptionPane.ERROR_MESSAGE,ic);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "REVISE EL NÚMERO DE UNIDAD !",
                         "ERROR NUM UNIDAD",
-                        JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE,ic);
             }
         } else {
             JOptionPane.showMessageDialog(this, "LA PLACA YA EXISTE O NO ES VÁLIDA !",
                     "ERROR PLACA",
-                    JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE,ic);
         }
     }//GEN-LAST:event_btnguardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMarcaFocusLost
+        txtMarca.setText(txtMarca.getText().toUpperCase());
+    }//GEN-LAST:event_txtMarcaFocusLost
+
+    private void txtNumMotorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumMotorFocusLost
+        txtNumMotor.setText(txtNumMotor.getText().toUpperCase());
+    }//GEN-LAST:event_txtNumMotorFocusLost
+
+    private void txtNumChasisFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumChasisFocusLost
+        txtNumChasis.setText(txtNumChasis.getText().toUpperCase());
+    }//GEN-LAST:event_txtNumChasisFocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnCancelar;
@@ -378,21 +432,25 @@ public class ingresoVehiculos extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEtiquetaImagen;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JSpinner spAño;
-    private javax.swing.JTextField txtColor;
     private javax.swing.JTextArea txtInformacion;
+    private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtNUnidad;
+    private javax.swing.JTextField txtNumChasis;
+    private javax.swing.JTextField txtNumMotor;
     private javax.swing.JTextField txtPlaca;
     private javax.swing.JTextField txtPropietario;
     // End of variables declaration//GEN-END:variables
@@ -432,9 +490,6 @@ public class ingresoVehiculos extends javax.swing.JPanel {
     private void cargarImgDefault() {
         leerProperties();
 
-
-        //Icon fot = new ImageIcon(rb.getString("dirImgVehiculos") + "\\default.png");
-
         Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultveh.png"));
         if (fot.getIconHeight() == -1) {
             lblEtiquetaImagen.setText("Imagen no Encontrada");
@@ -467,18 +522,35 @@ public class ingresoVehiculos extends javax.swing.JPanel {
             String emp,
             String con,
             String conAux,
-            String color,
             String modelo,
             int año,
             String pro,
             String infor,
-            String img) {
+            String img,
+            String mar,
+            String nummo,
+            String numcha) {
 
         String sql = "CALL SP_INSERT_VEHICULO('" + placa + "'," + nUnidad
-                + ",'" + emp + "','" + con + "','" + conAux + "','" + color + "','"
+                + ",'" + emp + "','" + con + "','" + conAux + "','"
                 + modelo + "'," + año + ",'" + pro + "','" + infor + "','"
-                + img + "')";
+                + img + "','" + mar + "','" + nummo + "','" + numcha + "')";
 
         System.out.println(sql);
+
+        if (!bd.ejecutarSentencia(sql)) {
+            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
+            JOptionPane.showMessageDialog(this, "NO SE PUDO GUARDAR EL REGISTRO",
+                    "ERROR",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    ic);
+        } else {
+            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
+            JOptionPane.showMessageDialog(this, "REGISTRO GUARDADO",
+                    "OK",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    ic);
+        }
+
     }
 }
