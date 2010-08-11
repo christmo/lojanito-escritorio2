@@ -19,10 +19,15 @@ import javax.swing.JDialog;
  */
 public class INICIO extends javax.swing.JFrame {
 
+    JDialog turnos = null;
+    JDialog nConductor = null;
+    JDialog editVehiculo = null;
+    JDialog beConductor = null;
+    JDialog newVehiculo = null;
+
     /** Creates new form INICIO */
     public INICIO() {
         initComponents();
-
 
         this.setLocationRelativeTo(null);
 
@@ -34,7 +39,7 @@ public class INICIO extends javax.swing.JFrame {
         btnDespacho.setText("<html>DESPACHO <BR> TAXIS</html>");
 
         //ICONO DE APLICACION
-        this.setIconImage (new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
 
     /** This method is called from within the constructor to
@@ -167,22 +172,25 @@ public class INICIO extends javax.swing.JFrame {
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         //ID DE EMPRESA DEBE SER ENVIADO POR EL CONSTRUCTOR
         //PARAMETROS DE SESION
-
-        JDialog newVehiculo = new ingresoVehiculos(this,"LN");
-        newVehiculo.setSize(680, 595);
-        newVehiculo.setLocationRelativeTo(this);
-        newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        newVehiculo.setResizable(false);
-        newVehiculo.setVisible(true);
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            newVehiculo = new ingresoVehiculos(this, "LN");
+            newVehiculo.setSize(680, 595);
+            newVehiculo.setLocationRelativeTo(this);
+            newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            newVehiculo.setResizable(false);
+            newVehiculo.setVisible(true);
+        }
     }//GEN-LAST:event_btnNewVehiculoActionPerformed
 
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
-        JDialog beConductor = new modConductor(this);
-        beConductor.setSize(705, 720);
-        beConductor.setLocationRelativeTo(this);
-        beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        beConductor.setResizable(false);
-        beConductor.setVisible(true);
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            beConductor = new modConductor(this);
+            beConductor.setSize(705, 720);
+            beConductor.setLocationRelativeTo(this);
+            beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            beConductor.setResizable(false);
+            beConductor.setVisible(true);
+        }
     }//GEN-LAST:event_btnEditConductorActionPerformed
 
     private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
@@ -194,42 +202,47 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDirector1ActionPerformed
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
-
     }//GEN-LAST:event_btnConfigActionPerformed
 
     private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
 
-        JDialog turnos = new modTurnos(this);
-        turnos.setSize(525, 250);
-        turnos.setLocationRelativeTo(this);
-        turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        turnos.setResizable(false);
-        turnos.setVisible(true);
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            turnos = new modTurnos(this);
+            turnos.setSize(525, 250);
+            turnos.setLocationRelativeTo(this);
+            turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            turnos.setResizable(false);
+            turnos.setVisible(true);
+        }
 
     }//GEN-LAST:event_btnTurnosActionPerformed
 
     private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
-        JDialog nConductor = new ingresoConductor(this);
-        nConductor.setSize(650, 500);
-        nConductor.setLocationRelativeTo(this);
-        nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        nConductor.setResizable(false);
-        nConductor.setVisible(true);
+        if ((nConductor == null) || (!nConductor.isDisplayable())) {
+            nConductor = new ingresoConductor(this);
+            nConductor.setSize(650, 500);
+            nConductor.setLocationRelativeTo(this);
+            nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            nConductor.setResizable(false);
+            nConductor.setVisible(true);
+        }
     }//GEN-LAST:event_btnNvConductorActionPerformed
 
     private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
 
         //PASAR VARIABLES DE SESION
         //POR EL CONSTRUCTOR
-        JDialog editVehiculo = new modVehiculo(this,"LN");
-        editVehiculo.setSize(725, 770);
-        editVehiculo.setLocationRelativeTo(this);
-        editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        editVehiculo.setVisible(true);
+        if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
+            editVehiculo = new modVehiculo(this, "LN");
+            editVehiculo.setSize(725, 770);
+            editVehiculo.setLocationRelativeTo(this);
+            editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            editVehiculo.setResizable(false);
+            editVehiculo.setVisible(true);
+        }
     }//GEN-LAST:event_btnEditVehiculoActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-
     }//GEN-LAST:event_formWindowClosed
 
     public static void main(String args[]) {
