@@ -34,7 +34,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -316,7 +316,7 @@ public class ConexionBase {
                     + "'%" + parametro.toUpperCase() + "%'";
         }
 
-       ResultSet res = ejecutarConsulta(sql);
+        ResultSet res = ejecutarConsulta(sql);
         try {
             while (res.next()) {
                 String[] aux = new String[9];
@@ -337,6 +337,53 @@ public class ConexionBase {
         return rta;
     }
 
+    /**
+     * Devuelve todos los registros de vehiculos
+     * que coincidan con el parámetro enviado
+     * @param parametro Puede ser cédula o nombre
+     * @param id  Identifica si es placa (0) o num unidad (1)
+     * @return ArrayList<String[]> con los resultados encontrados
+     * null si no encuentrada ningull
+     */
+    public ArrayList<String[]> buscarVehiculos(String parametro, int id) {
+
+        ArrayList<String[]> rta = new ArrayList();
+
+        String sql;
+        if (id == 0) {
+            sql = "SELECT PLACA, N_UNIDAD, ID_EMPRESA, ID_CON, CONDUCTOR_AUX, "
+                    + " MODELO, ANIO,PROPIETARIO, INF_ADICIONAL, "
+                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS FROM VEHICULOS WHERE PLACA LIKE '" + parametro + "%'";
+        } else {
+            sql = "SELECT PLACA, N_UNIDAD, ID_EMPRESA, ID_CON, CONDUCTOR_AUX, "
+                    + "MODELO, ANIO,PROPIETARIO, INF_ADICIONAL, "
+                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS FROM VEHICULOS WHERE N_UNIDAD = '" + parametro + "'";
+        }
+
+        ResultSet res = ejecutarConsulta(sql);
+        try {
+            while (res.next()) {
+                String[] aux = new String[14];
+                aux[0] = res.getString("PLACA");
+                aux[1] = res.getString("N_UNIDAD");
+                aux[2] = res.getString("ID_EMPRESA");
+                aux[3] = res.getString("ID_CON");
+                aux[4] = res.getString("CONDUCTOR_AUX");
+                aux[6] = res.getString("MODELO");
+                aux[7] = res.getString("ANIO");
+                aux[8] = res.getString("PROPIETARIO");
+                aux[9] = res.getString("INF_ADICIONAL");
+                aux[10] = res.getString("IMAGEN");
+                aux[11] = res.getString("MARCA");
+                aux[12] = res.getString("NUM_MOTOR");
+                aux[13] = res.getString("NUM_CHASIS");
+                rta.add(aux);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rta;
+    }
 
     /**
      * Comprueba si la placa ya existe en la BD
@@ -350,11 +397,51 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             int intNumero = Integer.parseInt(rs.getString("NUM"));
 
-            if (intNumero>0)
+            if (intNumero > 0) {
                 return true;
+            }
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    /**
+     * Elimina el conductor que coincida con el parámetro
+     * enviado
+     * @param ced  Cedula a buscar
+     * @return
+     */
+    public boolean eliminarConductor(String ced) {
+        String sql = "DELETE FROM CONDUCTORES WHERE CEDULA_CONDUCTOR = '" + ced + "'";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Elimina el vehiculo que coincida con el parámetro
+     * enviado
+     * @param placa  Placa que se buscará
+     * @return
+     */
+    public boolean eliminarVehiculo(String placa) {
+        String sql = "DELETE FROM VEHICULOS WHERE PLACA = '" + placa + "'";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Obtiene el numero de Vehiculos que tiene la empresa
+     * @return int
+     */
+    public String getNombreConductor(int id) {
+        try {
+            String sql = "SELECT NOMBRE_APELLIDO_CON FROM CONDUCTORES WHERE ID_CON = " + id + "";
+            rs = ejecutarConsultaUnDato(sql);
+            String nombre = rs.getString(1);            
+            return nombre;
+
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);            
+            return null;
+        }        
     }
 }
