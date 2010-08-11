@@ -15,24 +15,26 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 /**
  *
  * @author Kradac
  */
-public class ingresoConductor extends javax.swing.JPanel {
+public class ingresoConductor extends javax.swing.JDialog {
 
     private File Ffoto = null;
     private ResourceBundle rb;
     private funcionesUtilidad utilidad = new funcionesUtilidad();
-
     ConexionBase bd = new ConexionBase();
     ResultSet rs;
 
     /** Creates new form ingresoConductor */
-    public ingresoConductor() {
-        initComponents();
+    public ingresoConductor(JFrame padre) {
+        super(padre,"Ingreso de Conductores");
+        super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
+        initComponents();
         leerProperties();
         Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
         lblFoto.setIcon(fot);
@@ -154,7 +156,7 @@ public class ingresoConductor extends javax.swing.JPanel {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("CONDUCTOR");
 
@@ -185,103 +187,119 @@ public class ingresoConductor extends javax.swing.JPanel {
 
         jLabel6.setText("Estado Civil:");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
-                .addGap(588, 588, 588))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCargarImagen))
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jLabel1))
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(jLabel4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(jLabel6))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(jLabel7))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(60, 60, 60)
+                                .addComponent(jLabel8)))
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNomApe, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNumCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTipoSangre, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtNumCasa, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtConyuge, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtConyuge, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(173, 173, 173)
-                .addComponent(btnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelar)
-                .addContainerGap(197, Short.MAX_VALUE))
+                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel9)
+                        .addGap(6, 6, 6)
+                        .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(btnCargarImagen))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(173, 173, 173)
+                        .addComponent(btnGuardar)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnCancelar)))
+                .addContainerGap(518, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel2)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel3)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel4)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel5)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel6)
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel7)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel8))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNomApe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtNumCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtNomApe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTipoSangre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtConyuge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
+                        .addComponent(txtNumCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(txtTipoSangre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(txtEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(txtConyuge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addComponent(btnCargarImagen)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11))))
+                        .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(lblFotoEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCargarImagen))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(34, Short.MAX_VALUE))
@@ -289,75 +307,11 @@ public class ingresoConductor extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
-       
+
         Ffoto = utilidad.cargarImagen(lblFotoEtiqueta, lblFoto);
 }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        //Comprobar que los campos obligatorios tengan valor.
-
-        if (txtCedula.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "FALTA EL NUMERO DE CEDULA",
-                    "ERROR CEDULA",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if (txtNomApe.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UN NOMBRE",
-                    "ERROR NOMBRES",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if (txtDireccion.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UNA DIRECCION",
-                    "ERROR DIRECCION",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if (lblFotoEtiqueta.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
-                    "ERROR FOTOGRAFÍA",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-
-            boolean rta = guardarRegistro(txtCedula.getText(),
-                    txtNomApe.getText(),
-                    txtDireccion.getText(),
-                    txtNumCasa.getText(),
-                    txtTipoSangre.getText(),
-                    txtEstadoCivil.getText(),
-                    txtConyuge.getText(),
-                    txtemail.getText());
-
-            if (rta) {
-                JOptionPane.showMessageDialog(this, "NUEVO CHOFER GUARDADO",
-                        "LISTO",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-            } else {
-                JOptionPane.showMessageDialog(this, "NO SE PUDO GUARDAR EL CHOFER",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-}//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-}//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost
-        txtConyuge.setText(txtConyuge.getText().toUpperCase());
-}//GEN-LAST:event_txtConyugeFocusLost
-
-    private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
-        funcionesUtilidad objFun = new funcionesUtilidad();
-        
-        if (!objFun.isEmail(txtemail.getText()) && (txtemail.getText().length() > 0)) {
-            JOptionPane.showMessageDialog(this, "SINTAXIS INCORRECTA EN CAMPO E-MAIL",
-                    "ERROR E-MAIL",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-}//GEN-LAST:event_txtemailFocusLost
-
-    private void txtTipoSangreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoSangreFocusLost
-        txtTipoSangre.setText(txtTipoSangre.getText().toUpperCase());
-}//GEN-LAST:event_txtTipoSangreFocusLost
-
-    private void txtCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCedulaFocusLost
 
         funcionesUtilidad objFun = new funcionesUtilidad();
 
@@ -372,8 +326,79 @@ public class ingresoConductor extends javax.swing.JPanel {
                         "ERROR CEDULA",
                         JOptionPane.ERROR_MESSAGE);
                 txtCedula.setText("");
+            } else {
+
+                //Comprobar que los campos obligatorios tengan valor.
+
+                if (txtCedula.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(this, "FALTA EL NUMERO DE CEDULA",
+                            "ERROR CEDULA",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (txtNomApe.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UN NOMBRE",
+                            "ERROR NOMBRES",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (txtDireccion.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UNA DIRECCION",
+                            "ERROR DIRECCION",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (lblFotoEtiqueta.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
+                            "ERROR FOTOGRAFÍA",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+
+                    boolean rta = guardarRegistro(txtCedula.getText(),
+                            txtNomApe.getText(),
+                            txtDireccion.getText(),
+                            txtNumCasa.getText(),
+                            txtTipoSangre.getText(),
+                            txtEstadoCivil.getText(),
+                            txtConyuge.getText(),
+                            txtemail.getText());
+
+                    if (rta) {
+                        JOptionPane.showMessageDialog(this, "NUEVO CHOFER GUARDADO",
+                                "LISTO",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "NO SE PUDO GUARDAR EL CHOFER",
+                                "ERROR",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         }
+
+
+
+
+}//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        super.dispose();
+}//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost
+        txtConyuge.setText(txtConyuge.getText().toUpperCase());
+}//GEN-LAST:event_txtConyugeFocusLost
+
+    private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
+        funcionesUtilidad objFun = new funcionesUtilidad();
+
+        if (!objFun.isEmail(txtemail.getText()) && (txtemail.getText().length() > 0)) {
+            JOptionPane.showMessageDialog(this, "SINTAXIS INCORRECTA EN CAMPO E-MAIL",
+                    "ERROR E-MAIL",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+}//GEN-LAST:event_txtemailFocusLost
+
+    private void txtTipoSangreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoSangreFocusLost
+        txtTipoSangre.setText(txtTipoSangre.getText().toUpperCase());
+}//GEN-LAST:event_txtTipoSangreFocusLost
+
+    private void txtCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCedulaFocusLost
     }//GEN-LAST:event_txtCedulaFocusLost
 
     private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
@@ -472,7 +497,7 @@ public class ingresoConductor extends javax.swing.JPanel {
         if (lblFotoEtiqueta.getText().equals("defaultcon.jpg")) {
             imgName = "defaultcon.jpg";
         } else {
-            imgName = utilidad.guardarImagen(Ffoto,rb.getString("dirImgConductores"));
+            imgName = utilidad.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
         }
 
 

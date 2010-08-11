@@ -10,6 +10,9 @@
  */
 package interfaz.pruebas;
 
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+
 /**
  *
  * @author Usuario
@@ -20,14 +23,18 @@ public class INICIO extends javax.swing.JFrame {
     public INICIO() {
         initComponents();
 
-        btnNvConductor.setText("<html>NUEVO<br>CONDUCTOR</html>");
-        
 
-        btnNvUsuario.setText("<html>NUEVO<br>USUARIO</html>");
+        this.setLocationRelativeTo(null);
+
+        btnNvConductor.setText("<html>NUEVO<br>CONDUCTOR</html>");
+        btnEditVehiculo.setText("<html>BUSCAR / EDITAR<br>VEHICULO</html>");
         btnEditConductor.setText("<html>BUSCAR / EDITAR<br>CONDUCTOR</html>");
-        btnBuscarUsuario.setText("<html>BUSCAR / EDITAR<br>USUARIO</html>");
+        btnNewVehiculo.setText("<html>NUEVO<br>VEHICULO</html>");
         btnEstados.setText("<html>ESTADOS<br>TAXI</html>");
         btnDespacho.setText("<html>DESPACHO <BR> TAXIS</html>");
+
+        //ICONO DE APLICACION
+        this.setIconImage (new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
 
     /** This method is called from within the constructor to
@@ -41,9 +48,9 @@ public class INICIO extends javax.swing.JFrame {
 
         btnNvConductor = new javax.swing.JButton();
         btnEstados = new javax.swing.JButton();
-        btnNvUsuario = new javax.swing.JButton();
+        btnEditVehiculo = new javax.swing.JButton();
         btnDespacho = new javax.swing.JButton();
-        btnBuscarUsuario = new javax.swing.JButton();
+        btnNewVehiculo = new javax.swing.JButton();
         btnTurnos = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
         btnDirector = new javax.swing.JButton();
@@ -52,12 +59,26 @@ public class INICIO extends javax.swing.JFrame {
         btnConfig = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("MENU PRINCIPAL");
+        setIconImages(null);
+        setName("frmInicio"); // NOI18N
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnNvConductor.setText("NUEVO CONDUCTOR");
+        btnNvConductor.setText("New Conductor");
+        btnNvConductor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNvConductorActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnNvConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 110, 85));
 
-        btnEstados.setText("ESTADOS DEL TAXI");
+        btnEstados.setText("Estados Taxi");
         btnEstados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEstadosActionPerformed(evt);
@@ -65,8 +86,13 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 330, 110, 85));
 
-        btnNvUsuario.setText("NUEVO USUARIO");
-        getContentPane().add(btnNvUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 200, 110, 85));
+        btnEditVehiculo.setText("B/E Vehiculos");
+        btnEditVehiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditVehiculoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 200, 110, 85));
 
         btnDespacho.setText("DESPACHO TAXIS");
         btnDespacho.addActionListener(new java.awt.event.ActionListener() {
@@ -76,16 +102,21 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnDespacho, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 110, 85));
 
-        btnBuscarUsuario.setText("BUSCAR / EDITAR USUARIOS");
-        btnBuscarUsuario.addActionListener(new java.awt.event.ActionListener() {
+        btnNewVehiculo.setText("New Vehiculo");
+        btnNewVehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarUsuarioActionPerformed(evt);
+                btnNewVehiculoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBuscarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 110, 85));
+        getContentPane().add(btnNewVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 110, 85));
 
         btnTurnos.setText("TURNOS");
         btnTurnos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTurnos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTurnosActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 110, 85));
 
         btnReportes.setText("REPORTES");
@@ -99,7 +130,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnDirector, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 450, 110, 50));
 
-        btnEditConductor.setText("BUSCAR / EDITAR  CONDUCTOR");
+        btnEditConductor.setText("B/E  conductor");
         btnEditConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditConductorActionPerformed(evt);
@@ -131,15 +162,27 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDirectorActionPerformed
 
     private void btnDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespachoActionPerformed
-
     }//GEN-LAST:event_btnDespachoActionPerformed
 
-    private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
+    private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
+        //ID DE EMPRESA DEBE SER ENVIADO POR EL CONSTRUCTOR
+        //PARAMETROS DE SESION
+
+        JDialog newVehiculo = new ingresoVehiculos(this,"LN");
+        newVehiculo.setSize(680, 595);
+        newVehiculo.setLocationRelativeTo(this);
+        newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        newVehiculo.setResizable(false);
+        newVehiculo.setVisible(true);
+    }//GEN-LAST:event_btnNewVehiculoActionPerformed
 
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
-        // TODO add your handling code here:
+        JDialog beConductor = new modConductor(this);
+        beConductor.setSize(705, 720);
+        beConductor.setLocationRelativeTo(this);
+        beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        beConductor.setResizable(false);
+        beConductor.setVisible(true);
     }//GEN-LAST:event_btnEditConductorActionPerformed
 
     private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
@@ -151,30 +194,63 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDirector1ActionPerformed
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnConfigActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
+
+        JDialog turnos = new modTurnos(this);
+        turnos.setSize(525, 250);
+        turnos.setLocationRelativeTo(this);
+        turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        turnos.setResizable(false);
+        turnos.setVisible(true);
+
+    }//GEN-LAST:event_btnTurnosActionPerformed
+
+    private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
+        JDialog nConductor = new ingresoConductor(this);
+        nConductor.setSize(650, 500);
+        nConductor.setLocationRelativeTo(this);
+        nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        nConductor.setResizable(false);
+        nConductor.setVisible(true);
+    }//GEN-LAST:event_btnNvConductorActionPerformed
+
+    private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
+
+        //PASAR VARIABLES DE SESION
+        //POR EL CONSTRUCTOR
+        JDialog editVehiculo = new modVehiculo(this,"LN");
+        editVehiculo.setSize(725, 770);
+        editVehiculo.setLocationRelativeTo(this);
+        editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        editVehiculo.setVisible(true);
+    }//GEN-LAST:event_btnEditVehiculoActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+    }//GEN-LAST:event_formWindowClosed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 new INICIO().setVisible(true);
+
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscarUsuario;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDespacho;
     private javax.swing.JButton btnDirector;
     private javax.swing.JButton btnDirector1;
     private javax.swing.JButton btnEditConductor;
+    private javax.swing.JButton btnEditVehiculo;
     private javax.swing.JButton btnEstados;
+    private javax.swing.JButton btnNewVehiculo;
     private javax.swing.JButton btnNvConductor;
-    private javax.swing.JButton btnNvUsuario;
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnTurnos;
     // End of variables declaration//GEN-END:variables
