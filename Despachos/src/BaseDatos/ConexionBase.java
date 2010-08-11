@@ -276,18 +276,18 @@ public class ConexionBase {
      * @param codigo
      * @return boolean
      */
-    public boolean  ActualziarCliente(Despachos des,int codigo) {
+    public boolean ActualziarCliente(Despachos des, int codigo) {
         String sql = "UPDATE CLIENTES SET "
-                + "TELEFONO="+ "'" + des.getStrTelefono() + "',"
-                + "NOMBRE_APELLIDO_CLI="+ "'" + des.getStrNombre() + "',"
-                + "DIRECCION_CLI="+ "'" + des.getStrDireccion() + "',"
-                + "SECTOR="+ "'" + des.getStrBarrio() + "',"
-                + "NUM_CASA_CLI="+ "'" + des.getStrNumeroCasa() + "',"
-                + "LATITUD="+ des.getLatitud() + ","
-                + "LONGITUD="+ des.getLongitud() + ","
-                + "INFOR_ADICIONAL="+"'"+des.getStrReferecia()+"'"
-                + "WHERE CODIGO="+codigo;
-                
+                + "TELEFONO=" + "'" + des.getStrTelefono() + "',"
+                + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
+                + "DIRECCION_CLI=" + "'" + des.getStrDireccion() + "',"
+                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD=" + des.getLatitud() + ","
+                + "LONGITUD=" + des.getLongitud() + ","
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "'"
+                + "WHERE CODIGO=" + codigo;
+
         return ejecutarSentencia(sql);
     }
 
@@ -436,12 +436,96 @@ public class ConexionBase {
         try {
             String sql = "SELECT NOMBRE_APELLIDO_CON FROM CONDUCTORES WHERE ID_CON = " + id + "";
             rs = ejecutarConsultaUnDato(sql);
-            String nombre = rs.getString(1);            
+            String nombre = rs.getString(1);
             return nombre;
 
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);            
             return null;
-        }        
+        }
+    }
+
+    /**
+     * Determina si existe una unidad diferente a la actual
+     * asignada a una placa.
+     * @param placa
+     * @param nUnidad
+     * @return true si existe de lo contrario false
+     */
+    public boolean existeUnidad(String placa, int nUnidad) {
+        try {
+            String sql = "SELECT COUNT(PLACA) AS CANTIDAD FROM VEHICULOS "
+                    + "WHERE N_UNIDAD = " + nUnidad + " AND PLACA <>'" + placa + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            int existe = rs.getInt("CANTIDAD");
+            if (existe > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifica si un conductor ya posee una unidad asignada
+     * diferente a la propia
+     * 
+     * @param nameCond  Nombre de Conductor
+     * @param placa
+     * @return
+     */
+    public boolean conductorAsignado(String nameCond, String placa) {
+        try {
+            String sql = "SELECT SF_CONDUCTOR_ASIGNADO('" + nameCond + "','" + placa + "') AS VALOR";
+            rs = ejecutarConsultaUnDato(sql);
+            int existe = rs.getInt("VALOR");
+            if (existe > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @param pl
+     * @param numi
+     * @param emp
+     * @param con
+     * @param conaux
+     * @param model
+     * @param an
+     * @param pro
+     * @param inf
+     * @param img
+     * @param mar
+     * @param mot
+     * @param cha
+     * @return
+     */
+    public boolean actualizarVehiculo(String pl,
+            int numi,
+            String emp,
+            String con,
+            String conaux,
+            String model,
+            int an,
+            String pro,
+            String inf,
+            String img,
+            String mar,
+            String mot,
+            String cha) {
+
+        String sql = "CALL SP_UPDATE_VEHICULO('" + pl + "'," + numi
+                + ",'" + emp + "','" + con + "','" + conaux + "','" + model + "'," + an + ",'" + pro
+                + "','" + inf + "','" + img + "','" + mar + "','" + mot + "','" + cha + "')";
+
+        return ejecutarSentencia(sql);
+
     }
 }

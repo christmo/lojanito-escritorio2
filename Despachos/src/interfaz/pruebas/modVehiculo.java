@@ -29,15 +29,21 @@ public class modVehiculo extends javax.swing.JPanel {
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
+    private String imgOriginal;
+    private String idEmpresa;
     ConexionBase bd = new ConexionBase();
     ResultSet rs;
-    Icon ic;
+    Icon icError;
+    Icon icOk;
 
-    public modVehiculo() {
+    public modVehiculo(String emp) {
         initComponents();
         leerProperties();
         cargarConductores(cmbConductor);
         cargarConductores(cmbConductorAux);
+        icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
+        icOk = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
+        this.idEmpresa = emp;
     }
 
     @SuppressWarnings("unchecked")
@@ -79,6 +85,7 @@ public class modVehiculo extends javax.swing.JPanel {
         txtNumMotor = new javax.swing.JTextField();
         txtMarca = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
+        lblBorrar = new javax.swing.JLabel();
 
         tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
@@ -200,11 +207,14 @@ public class modVehiculo extends javax.swing.JPanel {
         txtInfor.setRows(5);
         jScrollPane2.setViewportView(txtInfor);
 
+        cmbConductor.setEnabled(false);
         cmbConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbConductorActionPerformed(evt);
             }
         });
+
+        cmbConductorAux.setEnabled(false);
 
         lblEtiquetaImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
@@ -277,36 +287,29 @@ public class modVehiculo extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbConductorAux, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cmbConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbConductorAux, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(jLabel9)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(spAño, 0, 0, Short.MAX_VALUE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNumMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNumChasis, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(spAño, 0, 0, Short.MAX_VALUE))
+                            .addComponent(txtNumChasis, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNumMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -322,6 +325,9 @@ public class modVehiculo extends javax.swing.JPanel {
                         .addGap(60, 60, 60)
                         .addComponent(btnGuardar)))
                 .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(468, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,17 +384,19 @@ public class modVehiculo extends javax.swing.JPanel {
                                 .addGap(11, 11, 11)
                                 .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(11, 11, 11)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(3, 3, 3)
-                                        .addComponent(jLabel9))
+                                    .addComponent(jLabel9)
                                     .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel16)
-                            .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(3, 3, 3)
@@ -407,7 +415,8 @@ public class modVehiculo extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51))
+                .addGap(18, 18, 18)
+                .addComponent(lblBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -467,6 +476,92 @@ public class modVehiculo extends javax.swing.JPanel {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 //Comprobar que los campos obligatorios tengan valor.
+
+        icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
+        String nunidad = txtNUnidad.getText();
+
+        if (!(nunidad.equals("")) || (funciones.isNumeric(nunidad))) {
+            if (!conec.existeUnidad(lblPlaca.getText(), Integer.parseInt(nunidad))) {
+
+                String nomConductor = cmbConductor.getSelectedItem().toString();
+                if (!nomConductor.equals("< NO ASIGNADO >")) {
+
+                    boolean canCoincidencias = conec.conductorAsignado(nomConductor, lblPlaca.getText());
+                    if (!canCoincidencias) {
+
+                        String nomConductorAux = cmbConductorAux.getSelectedItem().toString();
+                        if (!nomConductorAux.equals(nomConductor)) {
+
+                            String imgActual = lblEtiquetaImagen.getText();
+
+                            System.out.println("[" + imgOriginal + "]");
+                            System.out.println("[" + imgActual + "]");
+
+                            if (!imgOriginal.equals(imgActual) && !(imgActual.equals("defaultveh.png"))) {
+                                imgActual = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
+                            }
+
+                            if (nomConductorAux.equals("< NO ASIGNADO >")) {
+                                nomConductorAux = "";
+                            }
+                            boolean salida = conec.actualizarVehiculo(lblPlaca.getText(),
+                                    Integer.parseInt(nunidad),
+                                    idEmpresa,
+                                    nomConductor,
+                                    nomConductorAux,
+                                    txtModelo.getText(),
+                                    Integer.parseInt(spAño.getValue().toString()),
+                                    txtPropietario.getText(),
+                                    txtInfor.getText(),
+                                    imgActual,
+                                    txtMarca.getText(),
+                                    txtNumMotor.getText(),
+                                    txtNumChasis.getText());
+
+                            if (salida) {
+                                JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
+                                        "OK",
+                                        JOptionPane.ERROR_MESSAGE,
+                                        icOk);
+                                limpiarCajas();
+                                limpiarTabla(tblResultado);
+                            } else {
+                                JOptionPane.showMessageDialog(this, "NO SE PUDO ACTUALIZAR LOS DATOS",
+                                        "ACTUALIZAR",
+                                        JOptionPane.ERROR_MESSAGE,
+                                        icError);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "CONDUCTOR Y CONDUCTOR AUXILIAR \n NO PUEDEN SER IGUALES",
+                                    "ERROR COINCIDENCIA",
+                                    JOptionPane.ERROR_MESSAGE,
+                                    icError);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "EL CONDUCTOR YA PERTENECE A OTRO VEHÍCULO",
+                                "ERROR CONDUCTOR",
+                                JOptionPane.ERROR_MESSAGE,
+                                icError);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "DEBE ESPECIFICAR UN CONDUCTOR",
+                            "ERROR NOM CONDUCTOR",
+                            JOptionPane.ERROR_MESSAGE,
+                            icError);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "EL NUMERO DE UNIDAD YA EXISTE",
+                        "ERROR NUM UNIDAD",
+                        JOptionPane.ERROR_MESSAGE,
+                        icError);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "REVISE EL NUMERO DE UNIDAD",
+                    "ERROR NUM UNIDAD",
+                    JOptionPane.ERROR_MESSAGE,
+                    icError);
+        }
+
 //        if (txtCedula.getText().length() == 0) {
 //            JOptionPane.showMessageDialog(this, "FALTA EL NUMERO DE CEDULA",
 //                    "ERROR CEDULA",
@@ -507,24 +602,21 @@ public class modVehiculo extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-//        if (conec.eliminarConductor(txtCedula.getText())) {
-//
-//            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
-//
-//            JOptionPane.showMessageDialog(this, "CONDUCTOR ELIMINADO",
-//                    "OK",
-//                    JOptionPane.INFORMATION_MESSAGE,
-//                    ic);
-//            limpiarCajas();
-//            limpiarTabla(tblResultado);
-//
-//        } else {
-//            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/incorrecto.png"));
-//            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
-//                    "OK",
-//                    JOptionPane.INFORMATION_MESSAGE,
-//                    ic);
-//        }
+        if (conec.eliminarVehiculo(lblPlaca.getText())) {
+
+            JOptionPane.showMessageDialog(this, "VEHICULO ELIMINADO",
+                    "OK",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    icOk);
+            limpiarCajas();
+            limpiarTabla(tblResultado);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
+                    "OK",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    icError);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtModeloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtModeloFocusLost
@@ -545,7 +637,6 @@ public class modVehiculo extends javax.swing.JPanel {
     private void txtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMarcaFocusLost
         txtMarca.setText(txtMarca.getText().toUpperCase());
 }//GEN-LAST:event_txtMarcaFocusLost
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCargarImagen;
@@ -568,6 +659,7 @@ public class modVehiculo extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblBorrar;
     private javax.swing.JLabel lblEtiquetaImagen;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblNumCoincidencias;
@@ -606,6 +698,8 @@ public class modVehiculo extends javax.swing.JPanel {
             btnCargarImagen.setEnabled(false);
             btnGuardar.setEnabled(false);
             btnEliminar.setEnabled(false);
+            cmbConductor.setEnabled(false);
+            cmbConductorAux.setEnabled(false);
 
             msj = "Se encontraron 0 coincidencias para [" + param + "]";
         } else {
@@ -633,6 +727,8 @@ public class modVehiculo extends javax.swing.JPanel {
         btnCargarImagen.setEnabled(true);
         btnGuardar.setEnabled(true);
         btnEliminar.setEnabled(true);
+        cmbConductor.setEnabled(true);
+        cmbConductorAux.setEnabled(true);
 
         String[] aux = vehiculos.get(id);
 
@@ -641,7 +737,7 @@ public class modVehiculo extends javax.swing.JPanel {
         txtModelo.setText(aux[6]);
         txtPropietario.setText(aux[8]);
         txtInfor.setText(aux[9]);
-        
+
         txtNumChasis.setText(aux[13]);
         txtNumMotor.setText(aux[12]);
         txtMarca.setText(aux[11]);
@@ -649,14 +745,13 @@ public class modVehiculo extends javax.swing.JPanel {
         //Año
         if (aux[7] != null) {
             spAño.setValue(Integer.valueOf(aux[7]));
-        }else{
-            spAño.setValue(1955);
+        } else {
+            spAño.setValue(1999);
         }
 
 
-        img = aux[10];
+        //CONDUCTORES
         String name;
-
         if (aux[3] == null || aux[3].equals("")) {
             cmbConductor.setSelectedItem("< NO ASIGNADO >");
         } else {
@@ -668,6 +763,7 @@ public class modVehiculo extends javax.swing.JPanel {
             }
         }
 
+        //CONDUCTORES AUXILIARES
         if (aux[4] == null || aux[4].equals("")) {
             cmbConductorAux.setSelectedItem("< NO ASIGNADO >");
         } else {
@@ -680,8 +776,14 @@ public class modVehiculo extends javax.swing.JPanel {
 
         }
 
+        //CARGA DE IMÁGENES
+        img = aux[10];
+        imgOriginal = img;
+
         if (aux[10] == null || aux[10].equals("") || aux[10].equals("defaultveh.png")) {
 
+            img = "defaultveh.png";
+            imgOriginal = img;
             Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultveh.png"));
             lblEtiquetaImagen.setText(img);
             lblFoto.setIcon(fot);
@@ -690,13 +792,16 @@ public class modVehiculo extends javax.swing.JPanel {
         } else {
 
             Icon fot = new ImageIcon(rb.getString("dirImgVehiculos") + "\\" + aux[10]);
-
+            img = aux[10];
+            imgOriginal = img;
             if (fot.getIconWidth() == -1) {
-                lblEtiquetaImagen.setText(aux[10]);
+
+                lblEtiquetaImagen.setText(img);
                 lblFoto.setText("IMAGEN NO ENCONTRADA");
                 lblFoto.setIcon(null);
+                lblEtiquetaImagen.setText("defaultveh.png");
             } else {
-                lblEtiquetaImagen.setText(aux[10]);
+                lblEtiquetaImagen.setText(img);
                 lblFoto.setIcon(fot);
                 lblFoto.setText("");
             }
@@ -718,6 +823,8 @@ public class modVehiculo extends javax.swing.JPanel {
         btnCargarImagen.setEnabled(false);
         btnGuardar.setEnabled(false);
         btnEliminar.setEnabled(false);
+        cmbConductor.setEnabled(false);
+        cmbConductorAux.setEnabled(false);
 
         lblPlaca.setText("");
         lblNumCoincidencias.setText("");
@@ -725,7 +832,15 @@ public class modVehiculo extends javax.swing.JPanel {
         txtInfor.setText("");
         txtPropietario.setText("");
 
+        txtMarca.setText("");
+        txtNumChasis.setText("");
+        txtNumMotor.setText("");
+        txtModelo.setText("");
+        spAño.setValue(1995);
+
         lblFoto.setIcon(null);
+        lblFoto.setText("");
+        lblEtiquetaImagen.setText("");
     }
 
     /**
@@ -744,11 +859,10 @@ public class modVehiculo extends javax.swing.JPanel {
 
         } else {
 
-            ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
             JOptionPane.showMessageDialog(this, "REVISE EL NUMERO DE UNIDAD",
                     "ERROR NUM UNIDAD",
                     JOptionPane.INFORMATION_MESSAGE,
-                    ic);
+                    icError);
 
         }
     }
