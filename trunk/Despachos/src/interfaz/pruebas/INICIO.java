@@ -24,6 +24,7 @@ public class INICIO extends javax.swing.JFrame {
     JDialog editVehiculo = null;
     JDialog beConductor = null;
     JDialog newVehiculo = null;
+    JDialog multas = null;
 
     /** Creates new form INICIO */
     public INICIO() {
@@ -60,8 +61,9 @@ public class INICIO extends javax.swing.JFrame {
         btnReportes = new javax.swing.JButton();
         btnDirector = new javax.swing.JButton();
         btnEditConductor = new javax.swing.JButton();
-        btnDirector1 = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
+        btnMultas = new javax.swing.JButton();
+        btnDirectorio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -89,7 +91,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnEstadosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 330, 110, 85));
+        getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 410, 110, 85));
 
         btnEditVehiculo.setText("B/E Vehiculos");
         btnEditVehiculo.addActionListener(new java.awt.event.ActionListener() {
@@ -125,7 +127,12 @@ public class INICIO extends javax.swing.JFrame {
         getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 110, 85));
 
         btnReportes.setText("REPORTES");
-        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 370, 110, 85));
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 410, 110, 85));
 
         btnDirector.setText("AYUDA");
         btnDirector.addActionListener(new java.awt.event.ActionListener() {
@@ -143,14 +150,6 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnEditConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 110, 85));
 
-        btnDirector1.setText("DIRECTORIO");
-        btnDirector1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDirector1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDirector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 110, 85));
-
         btnConfig.setText("CONFIG");
         btnConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,6 +157,22 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 110, 50));
+
+        btnMultas.setText("MULTAS");
+        btnMultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMultasActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 310, 110, 85));
+
+        btnDirectorio.setText("DIRECOTORIO");
+        btnDirectorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDirectorioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 110, 85));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -196,10 +211,6 @@ public class INICIO extends javax.swing.JFrame {
     private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEstadosActionPerformed
-
-    private void btnDirector1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirector1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDirector1ActionPerformed
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
     }//GEN-LAST:event_btnConfigActionPerformed
@@ -245,6 +256,25 @@ public class INICIO extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
 
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            multas = new Multas(this);
+            multas.setSize(525, 250);
+            multas.setLocationRelativeTo(this);
+            multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            multas.setResizable(false);
+            multas.setVisible(true);
+        }
+    }//GEN-LAST:event_btnMultasActionPerformed
+
+    private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDirectorioActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -257,10 +287,11 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDespacho;
     private javax.swing.JButton btnDirector;
-    private javax.swing.JButton btnDirector1;
+    private javax.swing.JButton btnDirectorio;
     private javax.swing.JButton btnEditConductor;
     private javax.swing.JButton btnEditVehiculo;
     private javax.swing.JButton btnEstados;
+    private javax.swing.JButton btnMultas;
     private javax.swing.JButton btnNewVehiculo;
     private javax.swing.JButton btnNvConductor;
     private javax.swing.JButton btnReportes;
