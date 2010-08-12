@@ -551,8 +551,6 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                 + modelo + "'," + año + ",'" + pro + "','" + infor + "','"
                 + img + "','" + mar + "','" + nummo + "','" + numcha + "')";
 
-        System.out.println(sql);
-
         if (!bd.ejecutarSentencia(sql)) {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
             JOptionPane.showMessageDialog(this, "NO SE PUDO GUARDAR EL REGISTRO",
@@ -565,6 +563,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                     "OK",
                     JOptionPane.INFORMATION_MESSAGE,
                     ic);
+            super.dispose();
         }
 
     }

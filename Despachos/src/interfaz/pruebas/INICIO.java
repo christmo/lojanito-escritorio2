@@ -220,7 +220,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
             nConductor = new ingresoConductor(this);
-            nConductor.setSize(650, 500);
+            nConductor.setSize(650, 550);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             nConductor.setResizable(false);
@@ -250,7 +250,6 @@ public class INICIO extends javax.swing.JFrame {
 
             public void run() {
                 new INICIO().setVisible(true);
-
             }
         });
     }

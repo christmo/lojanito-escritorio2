@@ -472,6 +472,7 @@ public class modConductor extends javax.swing.JDialog {
                         "LISTO",
                         JOptionPane.INFORMATION_MESSAGE);
                 limpiarCajas();
+                super.dispose();
 
             } else {
                 JOptionPane.showMessageDialog(this, "NO SE PUEDO ACTUALIZAR LOS DATOS",
