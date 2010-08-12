@@ -26,14 +26,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Kradac
  */
-public class modTurnos extends javax.swing.JDialog{
+public class modTurnos extends javax.swing.JDialog {
 
     ConexionBase bd = new ConexionBase();
-    ResultSet rs;    
+    ResultSet rs;
 
     /** Creates new form modTurnos */
     public modTurnos(JFrame padre) {
-        super(padre,"Modificar Turnos");
+        super(padre, "Modificar Turnos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         initComponents();
@@ -130,7 +130,7 @@ public class modTurnos extends javax.swing.JDialog{
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        try {            
+        try {
             super.dispose();
         } catch (Throwable ex) {
             Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,6 +139,7 @@ public class modTurnos extends javax.swing.JDialog{
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         grabarTurnos(tblTurnos);
+
 }//GEN-LAST:event_btnGuardarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcular;
@@ -292,7 +293,6 @@ public class modTurnos extends javax.swing.JDialog{
 
         if (tblTur.getRowCount() > 0) {
 
-
             DefaultTableModel model = (DefaultTableModel) tblTur.getModel();
 
             bd.ejecutarSentencia("TRUNCATE TURNOS");
@@ -304,7 +304,12 @@ public class modTurnos extends javax.swing.JDialog{
                         + ",'" + model.getValueAt(i, 1) + "','" + model.getValueAt(i, 2)
                         + "')";
                 bd.ejecutarSentencia(sql);
+
             }
+            JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
+                    "LISTO",
+                    JOptionPane.INFORMATION_MESSAGE);
+            super.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "DEBE CREAR TURNOS ANTES DE GUARDAR");
         }
