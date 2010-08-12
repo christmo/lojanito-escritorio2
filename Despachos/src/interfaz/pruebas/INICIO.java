@@ -261,6 +261,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
+
         if ((turnos == null) || (!turnos.isDisplayable())) {
             multas = new Multas(this);
             multas.setSize(525, 250);
