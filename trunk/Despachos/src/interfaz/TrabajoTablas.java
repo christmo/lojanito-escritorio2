@@ -56,13 +56,13 @@ public class TrabajoTablas {
             String[] datos = {
                 listaPorDespacharTMP.get(i).getStrHora(),
                 listaPorDespacharTMP.get(i).getStrTelefono(),
-                listaPorDespacharTMP.get(i).getStrCodigo(),
+                ""+listaPorDespacharTMP.get(i).getIntCodigo(),
                 listaPorDespacharTMP.get(i).getStrNombre(),
                 listaPorDespacharTMP.get(i).getStrDireccion(),
                 listaPorDespacharTMP.get(i).getStrBarrio(),
-                "" + listaPorDespacharTMP.get(i).getIntMinutos(),
-                "" + listaPorDespacharTMP.get(i).getIntUnidad(),
-                "" + listaPorDespacharTMP.get(i).getIntAtraso(),
+                "",
+                "",
+                "0",
                 listaPorDespacharTMP.get(i).getStrNota()
             };
             dtm.insertRow(0, datos);
@@ -89,7 +89,7 @@ public class TrabajoTablas {
                 String[] datos = {
                     listaDespachados.get(i).getStrHora(),
                     listaDespachados.get(i).getStrTelefono(),
-                    listaDespachados.get(i).getStrCodigo(),
+                    ""+listaDespachados.get(i).getIntCodigo(),
                     listaDespachados.get(i).getStrNombre(),
                     listaDespachados.get(i).getStrDireccion(),
                     listaDespachados.get(i).getStrBarrio(),
@@ -103,22 +103,21 @@ public class TrabajoTablas {
         } catch (NullPointerException ex) {
         }
     }
-
     /**
      * Configura los anchos de las columnas de las tablas
      * @param tabla
      */
     /*public void AjustarAnchoColumnasTabla(JTable tabla) {
-        tcm = tabla.getColumnModel();
-        TableColumn columnaTabla;
-        for (int i = 0; i < tabla.getColumnCount(); i++) {
-            columnaTabla = tcm.getColumn(i);
-            if (i != 3 || i != 4) {
-                columnaTabla.setMinWidth(anchosColunas[i]);
-                columnaTabla.setMaxWidth(anchosColunas[i]);
-            } else {
-                columnaTabla.setPreferredWidth(anchosColunas[i]);
-            }
-        }
+    tcm = tabla.getColumnModel();
+    TableColumn columnaTabla;
+    for (int i = 0; i < tabla.getColumnCount(); i++) {
+    columnaTabla = tcm.getColumn(i);
+    if (i != 3 || i != 4) {
+    columnaTabla.setMinWidth(anchosColunas[i]);
+    columnaTabla.setMaxWidth(anchosColunas[i]);
+    } else {
+    columnaTabla.setPreferredWidth(anchosColunas[i]);
+    }
+    }
     }*/
 }

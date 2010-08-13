@@ -1,4 +1,3 @@
-
 package interfaz.subVentanas;
 
 /**
@@ -9,7 +8,7 @@ public class Despachos {
 
     private String strHora;
     private String strTelefono;
-    private String strCodigo;
+    private int intCodigo;
     private String strNombre;
     private String strDireccion;
     private String strBarrio;
@@ -19,18 +18,56 @@ public class Despachos {
     private int intUnidad;
     private int intAtraso;
     private String strNota;
-
+    private int intID_Turno;
+    private String strEstado;
+    private String strUsuario;
+    private String strFecha;
     private double latitud;
     private double longitud;
 
     public Despachos() {
     }
 
-    public Despachos(String hora, String tel, String cod, String nom, String dir,
-            String barrio, int minutos, int unidad, int atraso, String nota) {
+    /*public Despachos(String hora,
+    String tel,
+    String cod,
+    String nom,
+    String dir,
+    String barrio,
+    String minutos,
+    String unidad,
+    String atraso,
+    String nota) {
+    this.strHora = hora;
+    this.strTelefono = tel;
+    this.intCodigo = Integer.parseInt(cod);
+    this.strNombre = nom;
+    this.strDireccion = dir;
+    this.strBarrio = barrio;
+    this.intMinutos = Integer.parseInt(minutos);
+    this.intUnidad = Integer.parseInt(unidad);
+    this.intAtraso = Integer.parseInt(atraso);
+    this.strNota = nota;
+    }*/
+    public Despachos(String hora,
+            String tel,
+            String cod,
+            String nom,
+            String dir,
+            String barrio,
+            int minutos,
+            int unidad,
+            int atraso,
+            String nota,
+            int id_turno,
+            String usuario) {
         this.strHora = hora;
         this.strTelefono = tel;
-        this.strCodigo = cod;
+        try {
+            this.intCodigo = Integer.parseInt(cod);
+        } catch (NumberFormatException ex) {
+            this.intCodigo = 0;
+        }
         this.strNombre = nom;
         this.strDireccion = dir;
         this.strBarrio = barrio;
@@ -38,25 +75,70 @@ public class Despachos {
         this.intUnidad = unidad;
         this.intAtraso = atraso;
         this.strNota = nota;
+        this.intID_Turno = id_turno;
+        this.strUsuario = usuario;
     }
 
-    public Despachos(String tel, String cod, String nom, String dir, String barrio, String nota) {
-        this.strTelefono = tel;
-        this.strCodigo = cod;
-        this.strNombre = nom;
-        this.strDireccion = dir;
-        this.strBarrio = barrio;
-        this.strNota = nota;
+    /*public Despachos(String tel, String cod, String nom, String dir, String barrio, String nota) {
+    this.strTelefono = tel;
+    try {
+    this.intCodigo = Integer.parseInt(cod);
+    } catch (NumberFormatException ex) {
+    this.intCodigo = 0;
     }
+    this.strNombre = nom;
+    this.strDireccion = dir;
+    this.strBarrio = barrio;
+    this.strNota = nota;
+    }*/
 
     public Despachos(String hora, String tel, String cod, String nom, String dir, String barrio, String nota) {
         this.strHora = hora;
         this.strTelefono = tel;
-        this.strCodigo = cod;
+        try {
+            this.intCodigo = Integer.parseInt(cod);
+        } catch (NumberFormatException ex) {
+            this.intCodigo = 0;
+        }
         this.strNombre = nom;
         this.strDireccion = dir;
         this.strBarrio = barrio;
         this.strNota = nota;
+    }
+
+    public Despachos(String cod_cliente,
+            String fecha,
+            String hora,
+            String tel,
+            //String cod,
+            String nom,
+            String dir,
+            String barrio,
+            String min,
+            String unidad,
+            String atraso,
+            String nota,
+            String estado,
+            String id_turno,
+            String usuario) {
+        try {
+            this.intCodigo = Integer.parseInt(cod_cliente);
+        } catch (NumberFormatException ex) {
+            this.intCodigo = 0;
+        }
+        this.strFecha = fecha;
+        this.strHora = hora;
+        this.strTelefono = tel;
+        this.strNombre = nom;
+        this.strDireccion = dir;
+        this.strBarrio = barrio;
+        this.intMinutos = Integer.parseInt(min);
+        this.intUnidad = Integer.parseInt(unidad);
+        this.intAtraso = Integer.parseInt(atraso);
+        this.strNota = nota;
+        this.strEstado = estado;
+        this.intID_Turno = Integer.parseInt(id_turno);
+        this.strUsuario = usuario;
     }
 
     /**
@@ -88,17 +170,17 @@ public class Despachos {
     }
 
     /**
-     * @return the strCodigo
+     * @return the intCodigo
      */
-    public String getStrCodigo() {
-        return strCodigo;
+    public int getIntCodigo() {
+        return intCodigo;
     }
 
     /**
-     * @param strCodigo the strCodigo to set
+     * @param intCodigo the intCodigo to set
      */
-    public void setStrCodigo(String strCodigo) {
-        this.strCodigo = strCodigo;
+    public void setIntCodigo(int intCodigo) {
+        this.intCodigo = intCodigo;
     }
 
     /**
@@ -253,5 +335,61 @@ public class Despachos {
      */
     public void setLatitud(double latitud) {
         this.latitud = latitud;
+    }
+
+    /**
+     * @return the intID_Turno
+     */
+    public int getIntID_Turno() {
+        return intID_Turno;
+    }
+
+    /**
+     * @param intID_Turno the intID_Turno to set
+     */
+    public void setIntID_Turno(int intID_Turno) {
+        this.intID_Turno = intID_Turno;
+    }
+
+    /**
+     * @return the strUsuario
+     */
+    public String getStrUsuario() {
+        return strUsuario;
+    }
+
+    /**
+     * @param strUsuario the strUsuario to set
+     */
+    public void setStrUsuario(String strUsuario) {
+        this.strUsuario = strUsuario;
+    }
+
+    /**
+     * @return the strFecha
+     */
+    public String getStrFecha() {
+        return strFecha;
+    }
+
+    /**
+     * @param strFecha the strFecha to set
+     */
+    public void setStrFecha(String strFecha) {
+        this.strFecha = strFecha;
+    }
+
+    /**
+     * @return the strEstado
+     */
+    public String getStrEstado() {
+        return strEstado;
+    }
+
+    /**
+     * @param strEstado the strEstado to set
+     */
+    public void setStrEstado(String strEstado) {
+        this.strEstado = strEstado;
     }
 }

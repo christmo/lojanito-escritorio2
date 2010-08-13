@@ -34,7 +34,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "";
+        this.pass = "kradac";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -102,6 +102,24 @@ public class ConexionBase {
         }
         return rs;
     }
+    ResultSet rsAux;
+
+    /**
+     * Ejecuta una consulta en la base de datos, que devuelve valores
+     * no es necesario recorrer el resultset
+     * @param sql - debe ser Select
+     * @return ResultSet
+     */
+    public ResultSet ejecutarConsultaUnDatoAux(String sql) {
+        System.out.println("Consultar: " + sql);
+        try {
+            rsAux = st.executeQuery(sql);
+            rsAux.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rsAux;
+    }
 
     /**
      * Ejecuta una sentencia en la base esta puede ser de INSERT, UPDATE O
@@ -130,16 +148,17 @@ public class ConexionBase {
      * Obtiene el numero de Vehiculos que tiene la empresa
      * @return int
      */
-    private int getNumeroVehiculos(String strEmpresa) {
+    public int getNumeroCarerasPorVehiculo(String n_unidad, int id_turno, String user) {
         try {
-            String sql = "SELECT COUNT(*) FROM VEHICULOS WHERE ID_EMPRESA = '" + strEmpresa + "'";
+            int unidad = Integer.parseInt(n_unidad);
+            String sql = "SELECT SF_OBTENER_CARRERAS_TAXI('" + unidad + "'," + id_turno + ",'" + user + "')";
             rs = ejecutarConsultaUnDato(sql);
             int intNumero = Integer.parseInt(rs.getString(1));
             return intNumero;
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return 1;
+        return 0;
     }
 
     /**
@@ -185,30 +204,55 @@ public class ConexionBase {
         }
         return false;
     }
+    private String estadoUnidad;
 
     /**
      * Insertar Despacho Cliente
      * @param des
      * @return boolean confirmacion del resultado 1 valido || 0 invalido
      */
-    public boolean InsertarDespachoCliente(Despachos des) {
-        String estado = getEstadoUnidad(des.getIntUnidad());
-        if (estado.equals("AC")) {
-            String sql = "INSERT INTO ASIGNADOS(TELEFONO,COD_CLIENTE,N_UNIDAD,FECHA, HORA, MINU,ATRASO,NOTA,ESTADO)"
-                    + " VALUES("
-                    + "'" + des.getStrTelefono() + "',"
-                    + "'" + des.getStrCodigo() + "',"
-                    + des.getIntUnidad() + ","
+    public boolean InsertarDespachoCliente(Despachos des, boolean estadoDespacho) {
+        estadoUnidad = getEstadoUnidad(des.getIntUnidad());
+
+        if (des.getIntUnidad() == 0) {
+            estadoUnidad = "C"; //cancelado
+        }
+
+        if (estadoUnidad.equals("AC") || estadoUnidad.equals("C")) {
+            String sql = "CALL SP_INSERTAR_DESPACHOS("
+                    + des.getIntCodigo() + ","
                     + "'" + getFechaActual() + "',"
                     + "'" + des.getStrHora() + "',"
-                    + "'" + des.getIntMinutos() + "',"
-                    + "'" + des.getIntAtraso() + "',"
+                    + "'" + des.getStrTelefono() + "',"
+                    + "'" + des.getStrNombre() + "',"
+                    + "'" + des.getStrDireccion() + "',"
+                    + "'" + des.getStrBarrio() + "',"
+                    + des.getIntMinutos() + ","
+                    + des.getIntUnidad() + ","
+                    + des.getIntAtraso() + ","
                     + "'" + des.getStrNota() + "',"
-                    + "'" + estado + "'"
+                    + "'" + des.getStrEstado() + "',"
+                    + des.getIntID_Turno() + ","
+                    + "'" + des.getStrUsuario() + "'"
                     + ")";
             return ejecutarSentencia(sql);
         }
         return false;
+    }
+
+    /**
+     * Retorna el estado de la ultima unidad intentada despachar
+     * @return String
+     */
+    public String getEstadoUnidad() {
+        try {
+            String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("ETIQUETA");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -227,10 +271,10 @@ public class ConexionBase {
      * @return String
      */
     public String getEstadoUnidad(int unidad) {
-        String sql = "SELECT ID_CODIGO FROM REGCODESTTAXI WHERE N_UNIDAD=" + unidad + " AND FECHA = (SELECT MAX(FECHA) FROM REGCODESTTAXI WHERE N_UNIDAD=" + unidad + ")";
+        String sql = "SELECT SF_ESTADO_UNIDAD(" + unidad + ")";
         try {
             ResultSet r = ejecutarConsultaUnDato(sql);
-            return r.getString("ID_CODIGO");
+            return r.getString(1);
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Esta unidad no tiene estado en esta fecha...");
@@ -258,7 +302,7 @@ public class ConexionBase {
         String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                 + " VALUES("
                 + "'" + des.getStrTelefono() + "',"
-                + "'" + des.getStrCodigo() + "',"
+                + des.getIntCodigo() + ","
                 + "'" + des.getStrNombre() + "',"
                 + "'" + des.getStrDireccion() + "',"
                 + "'" + des.getStrBarrio() + "',"
@@ -276,7 +320,7 @@ public class ConexionBase {
      * @param codigo
      * @return boolean
      */
-    public boolean ActualziarCliente(Despachos des, int codigo) {
+    public boolean ActualizarCliente(Despachos des, int codigo) {
         String sql = "UPDATE CLIENTES SET "
                 + "TELEFONO=" + "'" + des.getStrTelefono() + "',"
                 + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
@@ -527,5 +571,220 @@ public class ConexionBase {
 
         return ejecutarSentencia(sql);
 
+    }
+
+    /**
+     * Trae el Id de turno actual
+     * @param validarTurno
+     * @return int
+     */
+    public int getIdTurno(String validarTurno) {
+        String[] hora = validarTurno.trim().split("-");
+        try {
+            String sql = "SELECT ID_TURNO FROM TURNOS WHERE HORA_INI ='" + hora[0] + "' AND HORA_FIN='" + hora[1] + "'";
+
+            rs = ejecutarConsultaUnDato(sql);
+            return Integer.parseInt(rs.getString("ID_TURNO"));
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+
+    /**
+     * Recoje los datos de los datos depachados
+     * @param usuario
+     * @param id_turno
+     * @param fecha
+     * @return ArrayList<Despachos>
+     */
+    public ArrayList<Despachos> getDespachados(String usuario, int id_turno, String fecha) {
+        ArrayList<Despachos> datos = new ArrayList<Despachos>();
+
+        try {
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+                    + "TELEFONO, "
+                    + "COD_CLIENTE, "
+                    + "NOMBRE_APELLIDO_CLI, "
+                    + "DIRECCION_CLI, "
+                    + "SECTOR, "
+                    + "MINUTOS,N_UNIDAD,ATRASO,"
+                    + "NOTA "
+                    + "FROM ASIGNADOS "
+                    + "WHERE FECHA='" + fecha + "' AND ESTADO='F' AND USUARIO='" + usuario + "' AND ID_TURNO=" + id_turno;
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Despachos d = new Despachos();
+                d.setStrHora(rs.getString("HORA"));
+                d.setStrTelefono(rs.getString("TELEFONO"));
+                d.setIntCodigo(rs.getInt("COD_CLIENTE"));
+                d.setStrNombre(rs.getString("NOMBRE_APELLIDO_CLI"));
+                d.setStrDireccion(rs.getString("DIRECCION_CLI"));
+                d.setStrBarrio(rs.getString("SECTOR"));
+                d.setIntMinutos(rs.getInt("MINUTOS"));
+                d.setIntUnidad(rs.getInt("N_UNIDAD"));
+                d.setIntAtraso(rs.getInt("ATRASO"));
+                d.setStrNota(rs.getString("NOTA"));
+                datos.add(d);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene la lista de despachados a partir de un numero de telefono
+     * @param telefono
+     * @param usuario
+     * @param id_turno
+     * @param fecha
+     * @return ArrayList<Despachos>
+     */
+    public ArrayList<Despachos> buscarDespachadosPorTelefono(String telefono,
+            String usuario,
+            int id_turno,
+            String fecha) {
+        ArrayList<Despachos> datos = new ArrayList<Despachos>();
+
+        try {
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+                    + "TELEFONO, "
+                    + "COD_CLIENTE, "
+                    + "NOMBRE_APELLIDO_CLI, "
+                    + "DIRECCION_CLI, "
+                    + "SECTOR, "
+                    + "MINUTOS,N_UNIDAD,ATRASO,"
+                    + "NOTA "
+                    + "FROM ASIGNADOS "
+                    + "WHERE FECHA='" + fecha
+                    + "' AND ESTADO='F' AND USUARIO='" + usuario
+                    + "' AND ID_TURNO=" + id_turno
+                    + " AND TELEFONO LIKE '" + telefono + "%'";
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Despachos d = new Despachos();
+                d.setStrHora(rs.getString("HORA"));
+                d.setStrTelefono(rs.getString("TELEFONO"));
+                d.setIntCodigo(rs.getInt("COD_CLIENTE"));
+                d.setStrNombre(rs.getString("NOMBRE_APELLIDO_CLI"));
+                d.setStrDireccion(rs.getString("DIRECCION_CLI"));
+                d.setStrBarrio(rs.getString("SECTOR"));
+                d.setIntMinutos(rs.getInt("MINUTOS"));
+                d.setIntUnidad(rs.getInt("N_UNIDAD"));
+                d.setIntAtraso(rs.getInt("ATRASO"));
+                d.setStrNota(rs.getString("NOTA"));
+                datos.add(d);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene la lista de despachados a partir de un nombre
+     * @param telefono
+     * @param usuario
+     * @param id_turno
+     * @param fecha
+     * @return ArrayList<Despachos>
+     */
+    public ArrayList<Despachos> buscarDespachadosPorNombre(String nombre,
+            String usuario,
+            int id_turno,
+            String fecha) {
+        ArrayList<Despachos> datos = new ArrayList<Despachos>();
+
+        try {
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+                    + "TELEFONO, "
+                    + "COD_CLIENTE, "
+                    + "NOMBRE_APELLIDO_CLI, "
+                    + "DIRECCION_CLI, "
+                    + "SECTOR, "
+                    + "MINUTOS,N_UNIDAD,ATRASO,"
+                    + "NOTA "
+                    + "FROM ASIGNADOS "
+                    + "WHERE FECHA='" + fecha
+                    + "' AND ESTADO='F' AND USUARIO='" + usuario
+                    + "' AND ID_TURNO=" + id_turno
+                    + " AND NOMBRE_APELLIDO_CLI LIKE '" + nombre + "%'";
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Despachos d = new Despachos();
+                d.setStrHora(rs.getString("HORA"));
+                d.setStrTelefono(rs.getString("TELEFONO"));
+                d.setIntCodigo(rs.getInt("COD_CLIENTE"));
+                d.setStrNombre(rs.getString("NOMBRE_APELLIDO_CLI"));
+                d.setStrDireccion(rs.getString("DIRECCION_CLI"));
+                d.setStrBarrio(rs.getString("SECTOR"));
+                d.setIntMinutos(rs.getInt("MINUTOS"));
+                d.setIntUnidad(rs.getInt("N_UNIDAD"));
+                d.setIntAtraso(rs.getInt("ATRASO"));
+                d.setStrNota(rs.getString("NOTA"));
+                datos.add(d);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene la lista de despachados a partir de un codigo
+     * @param telefono
+     * @param usuario
+     * @param id_turno
+     * @param fecha
+     * @return ArrayList<Despachos>
+     */
+    public ArrayList<Despachos> buscarDespachadosPorCodigo(String codigo,
+            String usuario,
+            int id_turno,
+            String fecha) {
+        ArrayList<Despachos> datos = new ArrayList<Despachos>();
+
+        try {
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+                    + "TELEFONO, "
+                    + "COD_CLIENTE, "
+                    + "NOMBRE_APELLIDO_CLI, "
+                    + "DIRECCION_CLI, "
+                    + "SECTOR, "
+                    + "MINUTOS,N_UNIDAD,ATRASO,"
+                    + "NOTA "
+                    + "FROM ASIGNADOS "
+                    + "WHERE FECHA='" + fecha
+                    + "' AND ESTADO='F' AND USUARIO='" + usuario
+                    + "' AND ID_TURNO=" + id_turno
+                    + " AND COD_CLIENTE LIKE '" + codigo + "%'";
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Despachos d = new Despachos();
+                d.setStrHora(rs.getString("HORA"));
+                d.setStrTelefono(rs.getString("TELEFONO"));
+                d.setIntCodigo(rs.getInt("COD_CLIENTE"));
+                d.setStrNombre(rs.getString("NOMBRE_APELLIDO_CLI"));
+                d.setStrDireccion(rs.getString("DIRECCION_CLI"));
+                d.setStrBarrio(rs.getString("SECTOR"));
+                d.setIntMinutos(rs.getInt("MINUTOS"));
+                d.setIntUnidad(rs.getInt("N_UNIDAD"));
+                d.setIntAtraso(rs.getInt("ATRASO"));
+                d.setStrNota(rs.getString("NOTA"));
+                datos.add(d);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
