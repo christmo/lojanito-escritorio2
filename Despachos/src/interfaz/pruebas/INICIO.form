@@ -55,7 +55,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="370" y="410" width="110" height="85"/>
+          <AbsoluteConstraints x="260" y="410" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -68,7 +68,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="500" y="200" width="110" height="85"/>
+          <AbsoluteConstraints x="550" y="180" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -81,7 +81,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="290" y="190" width="110" height="85"/>
+          <AbsoluteConstraints x="260" y="210" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -121,7 +121,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="230" y="410" width="110" height="85"/>
+          <AbsoluteConstraints x="130" y="370" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -147,7 +147,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="70" y="200" width="110" height="85"/>
+          <AbsoluteConstraints x="30" y="150" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -164,16 +164,16 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="btnMultas">
+    <Component class="javax.swing.JButton" name="btnAsignarM">
       <Properties>
-        <Property name="text" type="java.lang.String" value="MULTAS"/>
+        <Property name="text" type="java.lang.String" value="ASIGNAR MULTAS"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMultasActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignarMActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="460" y="310" width="110" height="85"/>
+          <AbsoluteConstraints x="400" y="390" width="130" height="85"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -186,7 +186,20 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="100" y="310" width="110" height="85"/>
+          <AbsoluteConstraints x="30" y="260" width="110" height="85"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnMultas1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CREAR MULTAS"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMultas1ActionPerformed"/>
+      </Events>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="490" y="280" width="110" height="85"/>
         </Constraint>
       </Constraints>
     </Component>

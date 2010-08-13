@@ -28,23 +28,23 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Multas extends javax.swing.JDialog {
 
+    funcionesUtilidad objUtilidad = new funcionesUtilidad();
     ConexionBase bd = new ConexionBase();
     ResultSet rs;
 
     /** Creates new form modTurnos */
     public Multas(JFrame padre) {
-        super(padre, "Modificar Turnos");
+        super(padre, "Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         initComponents();
-        
+
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -55,17 +55,12 @@ public class Multas extends javax.swing.JDialog {
         txtCodMulta = new javax.swing.JTextField();
         txtValor = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnBuscar2 = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnGuardar1 = new javax.swing.JButton();
+        btnEliminar1 = new javax.swing.JButton();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 130, 50));
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -74,23 +69,23 @@ public class Multas extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 130, 50));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 130, 50));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("MULTAS");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
+        jLabel1.setText("INGRESAR MULTAS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel3.setText("Código Multa:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Valor:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, 20));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Descripción:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, 20));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, 20));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(3);
@@ -101,13 +96,49 @@ public class Multas extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(txtDescripcion);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 300, 60));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 300, 60));
         getContentPane().add(txtCodMulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 80, -1));
-        getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 50, -1));
+        getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 50, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("$");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 10, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 10, -1));
+
+        btnBuscar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
+        btnBuscar2.setText("BUSCAR");
+        btnBuscar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBuscar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, -1, -1));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modificar.png"))); // NOI18N
+        btnModificar.setText("MODIFICAR");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
+
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
+        btnGuardar1.setText("GUARDAR");
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
+
+        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/rojo.png"))); // NOI18N
+        btnEliminar1.setText("ELIMINAR");
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -118,27 +149,103 @@ public class Multas extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        //grabarTurnos(tblTurnos);
-        if(!txtCodMulta.getText().equals("")){
-
-        }else{
-            JOptionPane.showMessageDialog(this, "INGRESE CODIGO DE LA MULTA",
-                            "FALTAN CAMPOS OBLIGATORIOS",
-                            JOptionPane.ERROR_MESSAGE);
-        }
-
-
-
-}//GEN-LAST:event_btnGuardarActionPerformed
-
     private void txtDescripcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescripcionFocusLost
         //txtInformacion.setText(txtInformacion.getText().toUpperCase());
 }//GEN-LAST:event_txtDescripcionFocusLost
 
+    private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
+        if (!txtCodMulta.getText().equals("")) {
+            buscarMulta(txtCodMulta.getText());
+        } else {
+            JOptionPane.showMessageDialog(this, "INGRESE UN CODIGO DE MULTA PARA BUSCAR",
+                    "FALTA INFORMACION",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+}//GEN-LAST:event_btnBuscar2ActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        if (!txtCodMulta.getText().equals("") && objUtilidad.isNumeric(txtValor.getText())) {
+            if (verificarCodMulta(txtCodMulta.getText())) {
+
+                if (modificarRegistro(txtCodMulta.getText(), txtDescripcion.getText(), Double.parseDouble(txtValor.getText()))) {
+                    JOptionPane.showMessageDialog(this, "EL REGISTRO SE MODIFICO EXITOSAMENTE",
+                            "REGISTRO MODIFICADO",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                } else {
+                    JOptionPane.showMessageDialog(this, "EL REGISTRO NO SE PUDO GUARDAR EN LA BASE DE DATOS",
+                            "ERROR AL MODIFICAR EL REGISTRO",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "PARA MODIFICAR UN REGISTRO, ÉSTE DEBE ESTAR GUARDADO PREVIAMENTE",
+                        "REGISTRO NO MODIFICADO",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        if (!txtCodMulta.getText().equals("")) {
+
+            if (objUtilidad.isNumeric(txtValor.getText())) {
+
+                if (!verificarCodMulta(txtCodMulta.getText())) {
+
+                    if (guardarRegistro(txtCodMulta.getText(), txtDescripcion.getText(), Double.parseDouble(txtValor.getText()))) {
+                        JOptionPane.showMessageDialog(this, "REGISTRO GUARDADO",
+                                "TRANSACCION EXITOSA",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        limpiar();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "EL REGISTRO NO SE PUDO GUARDAR EN LA BASE DE DATOS",
+                                "ERROR AL GUARDAR REGISTRO",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "EL CODIGO DE MULTA QUE INGRESO YA EXISTE",
+                            "EL REGISTRO NO SE PUDO GUARDAR",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "INGRESE CODIGO DE LA MULTA",
+                    "FALTAN CAMPOS OBLIGATORIOS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+        if (!txtCodMulta.getText().equals("")) {
+
+            if (verificarCodMulta(txtCodMulta.getText())) {
+                if (eliminarRegistro(txtCodMulta.getText())) {
+                    JOptionPane.showMessageDialog(this, "REGISTRO ELIMINADO EXITOSAMENTE",
+                            "REGISTRO ELIMINADO",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }else
+                JOptionPane.showMessageDialog(this, "EL CODIGO DE MULTA INGRESADO NO EXISTE",
+                    "NO SE PUDO ELIMINAR EL REGISTRO",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "DEBE INGRESAR UN CODIGO DE MULTA PARA ELIMINAR REGISTRO",
+                    "NO SE PUDO ELIMINAR EL REGISTRO",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+}//GEN-LAST:event_btnEliminar1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
+    private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminar1;
+    private javax.swing.JButton btnGuardar1;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -150,5 +257,85 @@ public class Multas extends javax.swing.JDialog {
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
+    private void limpiar() {
+        txtCodMulta.setText("");
+        txtDescripcion.setText("");
+        txtValor.setText("");
+    }
 
+    private boolean guardarRegistro(String codMulta, String strDescripcion, double dblValor) {
+        String sql = "INSERT INTO COD_MULTAS(COD_MULTA,DESCRIPCION,VALOR) "
+                + "VALUES('" + codMulta + "','" + strDescripcion + "'," + dblValor + ")";
+        System.out.println("consulta realizada");
+        if (bd.ejecutarSentencia(sql)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean modificarRegistro(String codMulta, String strDescripcion, double dblValor) {
+        String sql = "UPDATE COD_MULTAS SET DESCRIPCION='" + strDescripcion + "', VALOR=" + dblValor + " WHERE COD_MULTA='" + codMulta + "'";
+        System.out.println("consulta realizada");
+        if (bd.ejecutarSentencia(sql)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean eliminarRegistro(String strCodMulta) {
+
+        String sql = "delete from cod_multas where cod_multa='" + strCodMulta + "'";
+        System.out.println("consulta realizada");
+        if (bd.ejecutarSentencia(sql)) {
+            return true;
+        } else {
+
+            JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO DE LA BASE DE DATOS",
+                    "NO SE PUDO ELIMINAR EL REGISTRO",
+                    JOptionPane.ERROR_MESSAGE);
+
+            return false;
+        }
+    }
+
+    private void buscarMulta(String strCodMulta) {
+        String sql = "select * from cod_multas where cod_multa='" + strCodMulta + "' ";
+        System.out.println("consulta realizada");
+        try {
+            rs = bd.ejecutarConsultaUnDato(sql);
+            if (rs != null) {
+                txtCodMulta.setText(rs.getString(2));
+                txtDescripcion.setText(rs.getString(3));
+                txtValor.setText(rs.getString(4));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "EL CODIGO DE MULTA INGRESADO NO EXISTE",
+                    "REGISTRO NO ENCONTRADO",
+                    JOptionPane.ERROR_MESSAGE);
+            limpiar();
+        }
+    }
+
+    private boolean verificarCodMulta(String strCodMulta) {
+        String strCod_multa = null;
+        try {
+            String sql = "select COD_MULTA from cod_multas where cod_multa='" + strCodMulta + "'";
+            System.out.println("consulta realizada");
+            rs = bd.ejecutarConsultaUnDato(sql);
+            strCod_multa = rs.getString(1);
+            System.out.println("el codigo de la multa obtenido es: " + strCod_multa);
+        } catch (SQLException ex) {
+            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try{
+            if (strCod_multa.equals(strCodMulta)) {
+                return true;
+            }
+        }catch(NullPointerException ex){         
+
+        }
+        return false;
+    }
 }
