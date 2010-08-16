@@ -27,6 +27,7 @@ public class INICIO extends javax.swing.JFrame {
     JDialog newVehiculo = null;
     JDialog multas = null;
     JDialog asignarMulta = null;
+    JDialog beasignarMulta = null;
 
     public static String strSesion[]=null;
 
@@ -45,6 +46,7 @@ public class INICIO extends javax.swing.JFrame {
         btnEditConductor.setText("<html>BUSCAR / EDITAR<br>CONDUCTOR</html>");
         btnNewVehiculo.setText("<html>NUEVO<br>VEHICULO</html>");
         btnEstados.setText("<html>ESTADOS<br>TAXI</html>");
+        btnBEMultas.setText("<html>BUSCAR / EDITAR<br>ASIGNACION MULTAS</html>");
 
         //ICONO DE APLICACION
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
@@ -69,9 +71,10 @@ public class INICIO extends javax.swing.JFrame {
         btnDirector = new javax.swing.JButton();
         btnEditConductor = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
-        btnAsignarM = new javax.swing.JButton();
+        btnBEMultas = new javax.swing.JButton();
         btnDirectorio = new javax.swing.JButton();
-        btnMultas1 = new javax.swing.JButton();
+        btnMultas = new javax.swing.JButton();
+        btnAsignarM = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -91,7 +94,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnNvConductorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnNvConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 110, 85));
+        getContentPane().add(btnNvConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 110, 85));
 
         btnEstados.setText("Estados Taxi");
         btnEstados.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +102,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnEstadosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 410, 110, 85));
+        getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, 110, 85));
 
         btnEditVehiculo.setText("B/E Vehiculos");
         btnEditVehiculo.addActionListener(new java.awt.event.ActionListener() {
@@ -107,7 +110,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnEditVehiculoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 110, 85));
+        getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, 110, 85));
 
         btnNewVehiculo.setText("New Vehiculo");
         btnNewVehiculo.addActionListener(new java.awt.event.ActionListener() {
@@ -115,7 +118,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnNewVehiculoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnNewVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 110, 85));
+        getContentPane().add(btnNewVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 110, 85));
 
         btnTurnos.setText("TURNOS");
         btnTurnos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -124,7 +127,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnTurnosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 110, 85));
+        getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 85));
 
         btnReportes.setText("REPORTES");
         btnReportes.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +135,7 @@ public class INICIO extends javax.swing.JFrame {
                 btnReportesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 370, 110, 85));
+        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 110, 85));
 
         btnDirector.setText("AYUDA");
         btnDirector.addActionListener(new java.awt.event.ActionListener() {
@@ -158,13 +161,13 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 110, 50));
 
-        btnAsignarM.setText("ASIGNAR MULTAS");
-        btnAsignarM.addActionListener(new java.awt.event.ActionListener() {
+        btnBEMultas.setText("B/E ASIGNACION DE MULTAS");
+        btnBEMultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAsignarMActionPerformed(evt);
+                btnBEMultasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAsignarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 390, 130, 85));
+        getContentPane().add(btnBEMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, 130, 85));
 
         btnDirectorio.setText("DIRECOTORIO");
         btnDirectorio.addActionListener(new java.awt.event.ActionListener() {
@@ -172,15 +175,23 @@ public class INICIO extends javax.swing.JFrame {
                 btnDirectorioActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 110, 85));
+        getContentPane().add(btnDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 110, 85));
 
-        btnMultas1.setText("CREAR MULTAS");
-        btnMultas1.addActionListener(new java.awt.event.ActionListener() {
+        btnMultas.setText("CREAR MULTAS");
+        btnMultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMultas1ActionPerformed(evt);
+                btnMultasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMultas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 280, 110, 85));
+        getContentPane().add(btnMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 270, 110, 85));
+
+        btnAsignarM.setText("ASIGNAR MULTAS");
+        btnAsignarM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarMActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAsignarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, 130, 85));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -265,22 +276,22 @@ public class INICIO extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnReportesActionPerformed
 
-    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
+    private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            asignarMulta = new asignarMultas(this,strSesion);
-            asignarMulta.setSize(525, 400);
-            asignarMulta.setLocationRelativeTo(this);
-            asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            asignarMulta.setResizable(false);
-            asignarMulta.setVisible(true);
+            beasignarMulta = new modAsignarMultas(this);
+            beasignarMulta.setSize(700, 700);
+            beasignarMulta.setLocationRelativeTo(this);
+            beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            beasignarMulta.setResizable(false);
+            beasignarMulta.setVisible(true);
         }
-    }//GEN-LAST:event_btnAsignarMActionPerformed
+    }//GEN-LAST:event_btnBEMultasActionPerformed
 
     private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDirectorioActionPerformed
 
-    private void btnMultas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultas1ActionPerformed
+    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
         // TODO add your handling code here:
         if ((turnos == null) || (!turnos.isDisplayable())) {
             multas = new Multas(this);
@@ -290,7 +301,21 @@ public class INICIO extends javax.swing.JFrame {
             multas.setResizable(false);
             multas.setVisible(true);
         }
-    }//GEN-LAST:event_btnMultas1ActionPerformed
+        
+    }//GEN-LAST:event_btnMultasActionPerformed
+
+    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
+        // TODO add your handling code here:
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            asignarMulta = new asignarMultas(this,strSesion);
+            asignarMulta.setSize(350, 450);
+            asignarMulta.setLocationRelativeTo(this);
+            asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            asignarMulta.setResizable(false);
+            asignarMulta.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_btnAsignarMActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -302,13 +327,14 @@ public class INICIO extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarM;
+    private javax.swing.JButton btnBEMultas;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDirector;
     private javax.swing.JButton btnDirectorio;
     private javax.swing.JButton btnEditConductor;
     private javax.swing.JButton btnEditVehiculo;
     private javax.swing.JButton btnEstados;
-    private javax.swing.JButton btnMultas1;
+    private javax.swing.JButton btnMultas;
     private javax.swing.JButton btnNewVehiculo;
     private javax.swing.JButton btnNvConductor;
     private javax.swing.JButton btnReportes;
