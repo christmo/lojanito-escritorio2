@@ -10,6 +10,7 @@
  */
 package interfaz.pruebas;
 
+import interfaz.Principal;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
@@ -27,8 +28,14 @@ public class INICIO extends javax.swing.JFrame {
     JDialog multas = null;
     JDialog asignarMulta = null;
 
+    public static String strSesion[]=null;
+
     /** Creates new form INICIO */
-    public INICIO() {
+    public INICIO(){
+        initComponents();
+    }
+    public INICIO(String strSesion[]) {
+        INICIO.strSesion=strSesion;
         initComponents();
 
         this.setLocationRelativeTo(null);
@@ -38,10 +45,10 @@ public class INICIO extends javax.swing.JFrame {
         btnEditConductor.setText("<html>BUSCAR / EDITAR<br>CONDUCTOR</html>");
         btnNewVehiculo.setText("<html>NUEVO<br>VEHICULO</html>");
         btnEstados.setText("<html>ESTADOS<br>TAXI</html>");
-        btnDespacho.setText("<html>DESPACHO <BR> TAXIS</html>");
 
         //ICONO DE APLICACION
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        this.setVisible(true);
     }
 
     /** This method is called from within the constructor to
@@ -56,7 +63,6 @@ public class INICIO extends javax.swing.JFrame {
         btnNvConductor = new javax.swing.JButton();
         btnEstados = new javax.swing.JButton();
         btnEditVehiculo = new javax.swing.JButton();
-        btnDespacho = new javax.swing.JButton();
         btnNewVehiculo = new javax.swing.JButton();
         btnTurnos = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
@@ -102,14 +108,6 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 110, 85));
-
-        btnDespacho.setText("DESPACHO TAXIS");
-        btnDespacho.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDespachoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDespacho, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 110, 85));
 
         btnNewVehiculo.setText("New Vehiculo");
         btnNewVehiculo.addActionListener(new java.awt.event.ActionListener() {
@@ -191,9 +189,6 @@ public class INICIO extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDirectorActionPerformed
 
-    private void btnDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespachoActionPerformed
-    }//GEN-LAST:event_btnDespachoActionPerformed
-
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         //ID DE EMPRESA DEBE SER ENVIADO POR EL CONSTRUCTOR
         //PARAMETROS DE SESION
@@ -271,9 +266,8 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
-
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            asignarMulta = new asignarMulta(this);
+            asignarMulta = new asignarMultas(this,strSesion);
             asignarMulta.setSize(525, 400);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -288,6 +282,14 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnMultas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultas1ActionPerformed
         // TODO add your handling code here:
+        if ((turnos == null) || (!turnos.isDisplayable())) {
+            multas = new Multas(this);
+            multas.setSize(500, 400);
+            multas.setLocationRelativeTo(this);
+            multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            multas.setResizable(false);
+            multas.setVisible(true);
+        }
     }//GEN-LAST:event_btnMultas1ActionPerformed
 
     public static void main(String args[]) {
@@ -301,7 +303,6 @@ public class INICIO extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarM;
     private javax.swing.JButton btnConfig;
-    private javax.swing.JButton btnDespacho;
     private javax.swing.JButton btnDirector;
     private javax.swing.JButton btnDirectorio;
     private javax.swing.JButton btnEditConductor;
