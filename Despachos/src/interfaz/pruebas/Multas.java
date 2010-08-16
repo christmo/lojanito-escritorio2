@@ -222,6 +222,7 @@ public class Multas extends javax.swing.JDialog {
 
             if (verificarCodMulta(txtCodMulta.getText())) {
                 if (eliminarRegistro(txtCodMulta.getText())) {
+                    limpiar();
                     JOptionPane.showMessageDialog(this, "REGISTRO ELIMINADO EXITOSAMENTE",
                             "REGISTRO ELIMINADO",
                             JOptionPane.INFORMATION_MESSAGE);
