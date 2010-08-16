@@ -22,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
+import interfaz.pruebas.INICIO;
 import interfaz.pruebas.funcionesUtilidad;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
@@ -722,7 +723,10 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         bd.CerrarConexion();
-        System.exit(0);
+        this.setVisible(false);
+        INICIO menu = new INICIO();
+        menu.setVisible(true);
+        //System.exit(0);
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyPressed
