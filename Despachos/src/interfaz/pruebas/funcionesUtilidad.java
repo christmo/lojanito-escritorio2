@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ public class funcionesUtilidad {
      * @param cedula
      * @return
      */
-    public  boolean esCedulaValida(String cedula) {
+    public boolean esCedulaValida(String cedula) {
 
         int NUMERO_DE_PROVINCIAS = 24;
         if (!((cedula.length() == 10) && cedula.matches("^[0-9]{10}$"))) {
@@ -72,7 +73,6 @@ public class funcionesUtilidad {
         return d10 == d[9];
     }
 
-
     /**
      * Carga una imagen a la aplicación presentando
      * su nombre en el campo Foto.
@@ -101,7 +101,7 @@ public class funcionesUtilidad {
         return null;
     }
 
-   /**
+    /**
      * Valida si una entrada es un correo válido
      * @param correo Valor a comparar
      * @return
@@ -125,7 +125,7 @@ public class funcionesUtilidad {
      * @param cadena
      * @return
      */
-    public  boolean isNumeric(String cadena) {
+    public boolean isNumeric(String cadena) {
         try {
             Integer.parseInt(cadena);
             return true;
@@ -134,13 +134,13 @@ public class funcionesUtilidad {
         }
     }
 
-     /**
+    /**
      * Guarda la imagen en un directorio predeterminado
      * con un nombre único generado automaticamente.
      * @param ruta Origen de la foto
      * @param foto Destino de la foto
      */
-    public String guardarImagen(File foto,String ruta) {
+    public String guardarImagen(File foto, String ruta) {
         String nombreFoto = null;
         try {
             FileInputStream fis = null;
@@ -166,6 +166,26 @@ public class funcionesUtilidad {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        return nombreFoto+".jpg";
+        return nombreFoto + ".jpg";
+    }
+
+    /**
+     * Devuelve hora y minutos actuales del sistema
+     * @return String
+     */
+    public String getHora() {
+        Calendar calendario = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("k:m");
+        return sdf.format(calendario.getTime());
+    }
+
+    /**
+     * Trae la fecha actual
+     * @return String
+     */
+    public String getFecha() {
+        Calendar calendario = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(calendario.getTime());
     }
 }
