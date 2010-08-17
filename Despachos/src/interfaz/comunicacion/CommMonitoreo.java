@@ -224,7 +224,8 @@ public class CommMonitoreo extends Thread {
             sPuerto = (SerialPort) id_Puerto.open("MonitoreoKradac", 60000); //tiempo de bloqueo 1m
             return true;
         } catch (PortInUseException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Puerto del modem está en uso por otra apicación...\nModificar los paramatros de inicio si no quiere usar el identificador de llamadas.","error", 0);
         } catch (NoSuchPortException ex) {
             Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
         }
