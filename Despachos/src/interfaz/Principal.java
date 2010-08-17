@@ -62,7 +62,7 @@ public final class Principal extends javax.swing.JFrame {
      * Variables Privadas
      */
     private static ConexionBase bd = new ConexionBase();
-    private ResultSet rs;
+    private static ResultSet rs;
     private String[] strCabecerasColumnasVehiculos = null;
     private String strHora;
     private String strTelefono;
@@ -1244,12 +1244,12 @@ public final class Principal extends javax.swing.JFrame {
     //Matriz de Relacion CODIGO - COLOR
     //Cada Elemento de codColor
     //[1][ID_CODIGO]  [2][COLOR]
-    ArrayList<String> codigo = new ArrayList();
-    ArrayList<String> color = new ArrayList();
-    ArrayList<String> etiq = new ArrayList();
-    Map etiqColor = new HashMap();
+    private static ArrayList<String> codigo = new ArrayList();
+    private static ArrayList<String> color = new ArrayList();
+    private static ArrayList<String> etiq = new ArrayList();
+    private static Map etiqColor = new HashMap();
 
-    private void colorCodigosBD() {
+    private static void colorCodigosBD() {
         try {
             ConexionBase cb = new ConexionBase();
             String sql = "SELECT ID_CODIGO,COLOR,ETIQUETA  FROM CODESTTAXI";
@@ -1275,7 +1275,7 @@ public final class Principal extends javax.swing.JFrame {
      * especificadas según el estado del taxi.
      * @param encab  columnas a pintar
      */
-    private void pintarEstadoTaxi(ArrayList<String> encab) {
+    private static void pintarEstadoTaxi(ArrayList<String> encab) {
         //Clave valor
         //[n_unidad]==>[id_codigo]
         Map unidadCodigoBD = new HashMap();
@@ -1716,7 +1716,7 @@ public final class Principal extends javax.swing.JFrame {
     private static javax.swing.JTable jtDespachados;
     private javax.swing.JTable jtPorDespachar;
     private javax.swing.JTextField jtTelefono;
-    private javax.swing.JTable jtVehiculos;
+    private static javax.swing.JTable jtVehiculos;
     private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblReloj;
     // End of variables declaration//GEN-END:variables
