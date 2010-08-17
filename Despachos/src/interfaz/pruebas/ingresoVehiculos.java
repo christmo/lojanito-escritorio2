@@ -11,6 +11,7 @@
 package interfaz.pruebas;
 
 import BaseDatos.ConexionBase;
+import interfaz.Principal;
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -565,6 +566,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                     "OK",
                     JOptionPane.INFORMATION_MESSAGE,
                     ic);
+            Principal.redimencionarTablaVehiculos();
             super.dispose();
         }
 
