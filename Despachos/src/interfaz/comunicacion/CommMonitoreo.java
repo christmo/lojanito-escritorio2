@@ -221,11 +221,13 @@ public class CommMonitoreo extends Thread {
     private boolean AbrirPuerto(String comm) {
         try {
             id_Puerto = CommPortIdentifier.getPortIdentifier(comm);
-            sPuerto = (SerialPort) id_Puerto.open("MonitoreoKradac", 60000); //tiempo de bloqueo 1m
+            sPuerto = (SerialPort) id_Puerto.open("MonitoreoKradac", 5000); //tiempo de bloqueo 1m
             return true;
         } catch (PortInUseException ex) {
             //Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,"Puerto del modem está en uso por otra apicación...\nModificar los paramatros de inicio si no quiere usar el identificador de llamadas.","error", 0);
+            System.err.println("Cerrar Apicación - puerto en uso o no hay puerto serial disponible...");
+            System.exit(0);
         } catch (NoSuchPortException ex) {
             Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -246,6 +248,8 @@ public class CommMonitoreo extends Thread {
             return true;
         } catch (UnsupportedCommOperationException ex) {
             Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Cerrar Apicación");
+            System.exit(0);
         }
         return false;
     }
