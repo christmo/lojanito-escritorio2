@@ -80,7 +80,7 @@ public class modConductor extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -167,11 +167,6 @@ public class modConductor extends javax.swing.JDialog {
         jLabel6.setText("Estado Civil:");
 
         txtemail.setToolTipText("Si no posee dejar en blanco");
-        txtemail.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtemailFocusLost(evt);
-            }
-        });
 
         jLabel8.setText("E-mail: ");
 
@@ -281,7 +276,7 @@ public class modConductor extends javax.swing.JDialog {
                             .addComponent(txtNomApe))
                         .addGap(18, 18, 18)
                         .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(168, 168, 168)
                 .addComponent(btnEliminar)
@@ -458,7 +453,11 @@ public class modConductor extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
                     "ERROR FOTOGRAFÍA",
                     JOptionPane.ERROR_MESSAGE);
-        } else {
+        } else if (!funciones.isEmail(txtemail.getText()) && txtemail.getText().length()>0){
+                    JOptionPane.showMessageDialog(this, "e-Mail no válido",
+                            "e-mail",
+                            JOptionPane.ERROR_MESSAGE);
+                }else {
             boolean rta = guardarRegistro(txtCedula.getText(),
                     txtNomApe.getText(),
                     txtDireccion.getText(),
@@ -481,15 +480,6 @@ public class modConductor extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
-        if (!funciones.isEmail(txtemail.getText())) {
-            JOptionPane.showMessageDialog(this, "E-MAIL NO VALIDO",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-
-    }//GEN-LAST:event_txtemailFocusLost
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
 

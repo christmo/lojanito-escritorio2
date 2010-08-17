@@ -73,7 +73,7 @@
                       <Component id="lblFoto" min="-2" pref="208" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="10" max="32767" attributes="0"/>
+              <EmptySpace pref="43" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="168" pref="168" max="168" attributes="0"/>
@@ -335,9 +335,6 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Si no posee dejar en blanco"/>
       </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtemailFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>

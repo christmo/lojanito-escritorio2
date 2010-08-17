@@ -31,7 +31,7 @@ public class ingresoConductor extends javax.swing.JDialog {
 
     /** Creates new form ingresoConductor */
     public ingresoConductor(JFrame padre) {
-        super(padre,"Ingreso de Conductores");
+        super(padre, "Ingreso de Conductores");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         initComponents();
@@ -121,11 +121,6 @@ public class ingresoConductor extends javax.swing.JDialog {
         jLabel8.setText("E-mail: ");
 
         txtemail.setToolTipText("Si no posee dejar en blanco");
-        txtemail.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtemailFocusLost(evt);
-            }
-        });
 
         jLabel9.setText("Foto:");
 
@@ -235,7 +230,7 @@ public class ingresoConductor extends javax.swing.JDialog {
                 .addComponent(btnGuardar)
                 .addGap(6, 6, 6)
                 .addComponent(btnCancelar)
-                .addContainerGap(698, Short.MAX_VALUE))
+                .addContainerGap(723, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,7 +334,12 @@ public class ingresoConductor extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
                             "ERROR FOTOGRAFÍA",
                             JOptionPane.ERROR_MESSAGE);
-                } else {
+                } else if (!objFun.isEmail(txtemail.getText()) && txtemail.getText().length()>0){
+                    JOptionPane.showMessageDialog(this, "e-Mail no válido",
+                            "e-mail",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else {
 
                     boolean rta = guardarRegistro(txtCedula.getText(),
                             txtNomApe.getText(),
@@ -371,22 +371,21 @@ public class ingresoConductor extends javax.swing.JDialog {
 }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        super.dispose();
+        funcionesUtilidad objFun = new funcionesUtilidad();
+        
+        String mail = txtemail.getText();
+
+        System.out.println(objFun.isEmail(mail));
+        
+ 
+
+
+        //        super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost
         txtConyuge.setText(txtConyuge.getText().toUpperCase());
 }//GEN-LAST:event_txtConyugeFocusLost
-
-    private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
-        funcionesUtilidad objFun = new funcionesUtilidad();
-
-        if (!objFun.isEmail(txtemail.getText()) && (txtemail.getText().length() > 0)) {
-            JOptionPane.showMessageDialog(this, "SINTAXIS INCORRECTA EN CAMPO E-MAIL",
-                    "ERROR E-MAIL",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-}//GEN-LAST:event_txtemailFocusLost
 
     private void txtTipoSangreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoSangreFocusLost
         txtTipoSangre.setText(txtTipoSangre.getText().toUpperCase());

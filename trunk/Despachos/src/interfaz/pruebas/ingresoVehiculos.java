@@ -35,13 +35,14 @@ public class ingresoVehiculos extends javax.swing.JDialog {
     ConexionBase bd = new ConexionBase();
     ResultSet rs;
     private String ID_EMPRESA;
+    private String id_usuario;
     Icon ic;
 
     /**
      * ENVIAR EL ID_EMPRESA POR EL CONSTRUCTOR
      * @param id_empresa
      */
-    public ingresoVehiculos(JFrame padre, String id_empresa) {
+    public ingresoVehiculos(JFrame padre, String sesion[]) {
         super(padre,"Ingreso de Vehiculos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
@@ -49,7 +50,8 @@ public class ingresoVehiculos extends javax.swing.JDialog {
         cargarConductores(cmbConductor, 0);
         cargarConductores(cmbCondAux, 1);
         cargarImgDefault();
-        this.ID_EMPRESA = id_empresa;
+        this.ID_EMPRESA = sesion[1];
+        this.id_usuario = sesion[0];
 
     }
 
@@ -549,7 +551,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
         String sql = "CALL SP_INSERT_VEHICULO('" + placa + "'," + nUnidad
                 + ",'" + emp + "','" + con + "','" + conAux + "','"
                 + modelo + "'," + año + ",'" + pro + "','" + infor + "','"
-                + img + "','" + mar + "','" + nummo + "','" + numcha + "')";
+                + img + "','" + mar + "','" + nummo + "','" + numcha + "','"+this.id_usuario+"')";
 
         if (!bd.ejecutarSentencia(sql)) {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));

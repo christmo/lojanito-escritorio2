@@ -28,14 +28,14 @@ public class INICIO extends javax.swing.JFrame {
     JDialog asignarMulta = null;
     JDialog beasignarMulta = null;
 
-    public static String strSesion[]=null;
+    public static String sesion[]=null;
 
     /** Creates new form INICIO */
     public INICIO(){
         initComponents();
     }
     public INICIO(String strSesion[]) {
-        INICIO.strSesion=strSesion;
+        INICIO.sesion=strSesion;
         initComponents();
 
         //this.setLocationRelativeTo(null);
@@ -203,7 +203,7 @@ public class INICIO extends javax.swing.JFrame {
         //ID DE EMPRESA DEBE SER ENVIADO POR EL CONSTRUCTOR
         //PARAMETROS DE SESION
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            newVehiculo = new ingresoVehiculos(this, "LN");
+            newVehiculo = new ingresoVehiculos(this, this.sesion);
             newVehiculo.setSize(680, 595);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -306,7 +306,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
         // TODO add your handling code here:
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            asignarMulta = new asignarMultas(this,strSesion);
+            asignarMulta = new asignarMultas(this,sesion);
             asignarMulta.setSize(350, 450);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
