@@ -85,7 +85,7 @@ public class asignarMultas extends javax.swing.JDialog {
         getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
-        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 110, -1));
+        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 110, -1));
 
         jLabel7.setText("ESTADO:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
@@ -99,7 +99,7 @@ public class asignarMultas extends javax.swing.JDialog {
                 cmbCodigoMActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 120, -1));
+        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 120, -1));
 
         txtHora.setEditable(false);
         getContentPane().add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 70, -1));
@@ -117,7 +117,7 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel3.setText("Nro. UNIDAD:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("ASIGNAR MULTA");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, -1));
     }// </editor-fold>//GEN-END:initComponents

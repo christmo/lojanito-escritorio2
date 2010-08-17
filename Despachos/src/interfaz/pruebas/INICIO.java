@@ -10,7 +10,6 @@
  */
 package interfaz.pruebas;
 
-import interfaz.Principal;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
@@ -39,7 +38,7 @@ public class INICIO extends javax.swing.JFrame {
         INICIO.strSesion=strSesion;
         initComponents();
 
-        this.setLocationRelativeTo(null);
+        //this.setLocationRelativeTo(null);
 
         btnNvConductor.setText("<html>NUEVO<br>CONDUCTOR</html>");
         btnEditVehiculo.setText("<html>BUSCAR / EDITAR<br>VEHICULO</html>");
