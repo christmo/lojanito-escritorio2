@@ -36,7 +36,7 @@ public class Reloj {
             lblReloj.setText(sdfHora.format(c.getTime()));
             lblFecha.setText(sdfFecha.format(c.getTime()));
 
-            System.out.println(""+Principal.sesion[0] + " "+Principal.horaSalida);
+            //System.out.println(""+Principal.sesion[0] + " "+Principal.horaSalida);
             
             if(Principal.horaSalida.equals(sdfHora.format(c.getTime()))){
                Principal.ReiniciarTurno(Principal.sesion);

@@ -22,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
+import interfaz.comunicacion.CommMonitoreo;
 import interfaz.pruebas.INICIO;
 import interfaz.pruebas.funcionesUtilidad;
 import interfaz.subVentanas.VentanaDatos;
@@ -29,6 +30,8 @@ import interfaz.subVentanas.Despachos;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.Timer;
@@ -79,7 +82,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * almacena los clientes Por Despachar
      */
-    private ArrayList<Despachos> listaDespachosTemporales = new ArrayList<Despachos>();
+    public static ArrayList<Despachos> listaDespachosTemporales = new ArrayList<Despachos>();
     private static ArrayList<Despachos> listaDespachados = new ArrayList<Despachos>();
     /**
      * Encabezado de las tablas de despachos
@@ -88,6 +91,9 @@ public final class Principal extends javax.swing.JFrame {
     private String turno;
     private static int id_Turno;
     private static funcionesUtilidad funciones = new funcionesUtilidad();
+
+    /*Leer archivo de configuraciones*/
+    private ResourceBundle rb;
 
     /**
      * Constructor para recibir los datos de sesion desde el menu principal
@@ -124,10 +130,21 @@ public final class Principal extends javax.swing.JFrame {
         redimencionarTablaVehiculos();
         llenarComboEstados();
         CargarTablaDespachados();
-        //jtPorDespachar.setRowSelectionInterval(0, 0);
+        IdentificadorLlamadas();
         jtTelefono.requestFocus();
         tiempo.start();
         Reloj();
+    }
+
+    /**
+     * Abre la comunicación serial para leer el numero de telefono del cliente
+     */
+    public void IdentificadorLlamadas() {
+        rb = ResourceBundle.getBundle("configuracion.configsystem");
+        String puerto = rb.getString("comm");
+        CommMonitoreo comm = new CommMonitoreo(puerto);
+        comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
+        comm.start();
     }
 
     /**
@@ -367,6 +384,7 @@ public final class Principal extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jtBuscarPorCodigo = new javax.swing.JTextField();
         jbMenu = new javax.swing.JButton();
+        jlIndicadorLlamada = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Despachos KRADAC");
@@ -549,8 +567,8 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -581,7 +599,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnColor))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jbEliminarFila.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/eliminar.png"))); // NOI18N
@@ -633,10 +651,10 @@ public final class Principal extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jbDespachar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jbEliminarFila, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
+                    .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbDespachar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbEliminarFila, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -687,7 +705,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -720,6 +738,8 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
+        jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -727,11 +747,13 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 347, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlIndicadorLlamada)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(44, 44, 44)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -739,12 +761,12 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 707, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -756,20 +778,21 @@ public final class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, 0, 57, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(11, 11, 11))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(lblReloj)
-                        .addGap(18, 18, 18)))
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(11, 11, 11)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -942,7 +965,10 @@ public final class Principal extends javax.swing.JFrame {
 
         if (d.getStrHora() == null || d.getStrHora().equals("")) {
             JOptionPane.showMessageDialog(this, "Se debe ingresar una hora de despacho...", "Error...", 0);
-            jtPorDespachar.setValueAt(funciones.getHora(), fila, 0);
+            try {
+                jtPorDespachar.setValueAt(funciones.getHora(), fila, 0);
+            } catch (IndexOutOfBoundsException iex) {
+            }
         } else if (d.getStrNombre() == null || d.getStrNombre().equals("")) {
             JOptionPane.showMessageDialog(this, "Se debe ingresar un nombre de cliente...", "Error...", 0);
         } else if (d.getStrDireccion() == null || d.getStrDireccion().equals("")) {
@@ -1082,15 +1108,10 @@ public final class Principal extends javax.swing.JFrame {
      * @return String
      */
     private String getBuscarPorTelefono() {
-        strTelefono = validarTelefono(jtTelefono.getText());
+        strTelefono = funciones.validarTelefono(jtTelefono.getText());
         try {
             if (!strTelefono.equals("")) {
-                String sql = "SELECT CODIGO,"
-                        + "NOMBRE_APELLIDO_CLI,"
-                        + "DIRECCION_CLI,"
-                        + "SECTOR"
-                        + " FROM CLIENTES WHERE TELEFONO='" + strTelefono + "'";
-                rs = bd.ejecutarConsultaUnDato(sql);
+                rs = bd.getClientePorTelefono(strTelefono);
                 intCodigo = rs.getString("CODIGO");
                 strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
                 strDireccion = rs.getString("DIRECCION_CLI");
@@ -1120,8 +1141,8 @@ public final class Principal extends javax.swing.JFrame {
                         "",
                         "",
                         "",
-                        "0",
-                        "0",
+                        "",
+                        "",
                         "0",
                         "",
                         "",
@@ -1132,7 +1153,7 @@ public final class Principal extends javax.swing.JFrame {
                 dtm = (DefaultTableModel) jtPorDespachar.getModel();
                 String[] inicial = {
                     funciones.getHora(),
-                    validarTelefono(jtTelefono.getText()),
+                    funciones.validarTelefono(jtTelefono.getText()),
                     "",
                     "",
                     "",
@@ -1146,27 +1167,6 @@ public final class Principal extends javax.swing.JFrame {
             }
         }
         return intCodigo;
-    }
-
-    /**
-     * Comprueba si el numero de telefono ingresado tiene el 0 al inicio o si el
-     * el numero de telefono no tiene letras
-     * @param tel
-     * @return String
-     */
-    private String validarTelefono(String tel) {
-        int lon = tel.length();
-        if (lon == 9) {
-            if (funciones.isNumeric(tel)) {
-                return tel;
-            } else {
-                return "";
-            }
-        } else if (lon == 8) {
-            return "0" + tel;
-        } else {
-            return "";
-        }
     }
 
     private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
@@ -1301,6 +1301,11 @@ public final class Principal extends javax.swing.JFrame {
         int intFila = jtPorDespachar.getSelectedRow();
         int intCol = jtPorDespachar.getSelectedColumn();
         if (intCol == 6) { //Cuando cambie la celda de Munitos
+            //------
+            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+            jlIndicadorLlamada.setIcon(img);
+            jtTelefono.setText("");
+            //------
             jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
             jtPorDespachar.setValueAt("0", intFila, 8);
             try {
@@ -1626,7 +1631,7 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 String txt = Tabla.getValueAt(intFila, i).toString().toUpperCase();
                 if (i == 1) {
-                    Tabla.setValueAt(validarTelefono(txt), intFila, i);
+                    Tabla.setValueAt(funciones.validarTelefono(txt), intFila, i);
                 } else {
                     Tabla.setValueAt(txt, intFila, i);
                 }
@@ -1699,6 +1704,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jbMenu;
     private javax.swing.JButton jbNuevoDespacho;
     private javax.swing.JButton jbSalir;
+    private javax.swing.JLabel jlIndicadorLlamada;
     private javax.swing.JScrollPane jsVehiculos;
     private javax.swing.JTextField jtBuscarPorCodigo;
     private javax.swing.JTextField jtBuscarPorNombre;
@@ -1769,7 +1775,12 @@ public final class Principal extends javax.swing.JFrame {
         int fila = jtPorDespachar.getSelectedRow();
 
         if (!r) {
-            JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...\nEstado de la unidad: " + bd.getEstadoUnidad(), "Error", 0);
+            String estado = bd.getEstadoUnidad();
+            if (estado != null) {
+                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...\nEstado de la unidad: " + estado, "Error", 0);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+            }
             jtPorDespachar.setValueAt("0", fila, 7);
         } else {
             trabajarTabla = new TrabajoTablas();

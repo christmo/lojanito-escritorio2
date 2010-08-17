@@ -4,9 +4,16 @@
  */
 package interfaz.comunicacion;
 
+import BaseDatos.ConexionBase;
+import interfaz.Principal;
+import interfaz.TrabajoTablas;
+import interfaz.pruebas.funcionesUtilidad;
+import interfaz.subVentanas.Despachos;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +24,10 @@ import javax.comm.SerialPort;
 import javax.comm.UnsupportedCommOperationException;
 import javax.swing.Icon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -30,6 +40,20 @@ public class CommMonitoreo extends Thread {
     public Enumeration listaPuertos;
     private JLabel indicador;
     private JTextField jtTelefono;
+    private JTable jtPorDespachar;
+    /*Llenar campos en la tabla*/
+    private ConexionBase bd = new ConexionBase();
+    private ResultSet rs;
+    private funcionesUtilidad funciones = new funcionesUtilidad();
+    private DefaultTableModel dtm;
+    private TrabajoTablas trabajarTabla;
+    /*Despacho*/
+    private Despachos despacho;
+    private String strHora;
+    private String intCodigo;
+    private String strNombre;
+    private String strDireccion;
+    private String strBarrio;
 
     public CommMonitoreo() {
     }
@@ -65,84 +89,101 @@ public class CommMonitoreo extends Thread {
         int cod = 0;
         String tel = "";
 
-        boolean fecha = false;
-        boolean hora = false;
         boolean numero = false;
-
-        String strFecha = "";
-        String strHora = "";
         String strNumero = "";
 
         while (true) {
-            //System.out.println("" + i++);
-
             cod = leerDatosCode();
 
-            //System.out.println("cod: "+cod);
-
             if (cod == 13) {
-                //System.out.println("Fecha: " + strFecha);
-                if (strFecha.length() == 4) {
-                    enviarDatos(strFecha);
-                }
-                //System.out.println("Hora: " + strHora);
-                if (strHora.length() == 4) {
-                    enviarDatos(strHora);
-                }
-                //System.out.println("Numero: " + strNumero);
                 if (strNumero.length() == 8) {
-                    enviarDatos(strNumero);
+                    strNumero = "0" + strNumero;
                     timbrar(true, strNumero);
+                    setDespachoCliente(strNumero);
+                } else if (strNumero.length() == 9) {
+                    timbrar(true, strNumero);
+                    setDespachoCliente(strNumero);
                 }
-                //puerto.enviarDatos("\n");
             }
 
             if (cod == 10) {
                 tel = "";
-                fecha = false;
-                hora = false;
                 numero = false;
-                timbrar(false,"");
             } else {
                 tel += "" + (char) cod;
-                System.out.println(tel);
             }
 
             if (tel.equals("RING")) {
                 System.out.println("timbre");
-                timbrar(true,strNumero);
-                strNumero="";
+                timbrar(true, strNumero);
+                strNumero = "";
                 tel = "";
-            } else if (tel.equals("DATE=")) {
-                tel = "";
-                fecha = true;
-                hora = false;
-                numero = false;
-            } else if (tel.equals("TIME=")) {
-                tel = "";
-                hora = true;
-                fecha = false;
-                numero = false;
-            } else if (tel.equals("NMBR=")) {
+            } else if (tel.equals("NMBR = ")) {
                 tel = "";
                 numero = true;
-                hora = false;
-                fecha = false;
             }
 
-            if (fecha) {
-                strFecha = tel;
-                System.out.println("Fecha: " + strFecha);
-            } else if (hora) {
-                strHora = tel;
-                System.out.println("Hora: " + strHora);
-            } else if (numero) {
+            if (numero) {
                 strNumero = tel;
-                System.out.println("Numero: " + strNumero);
                 timbrar(true, strNumero);
             }
+        }
+    }
+
+    private String setDespachoCliente(String strTelefono) {
+
+        try {
+            if (!strTelefono.equals("")) {
+                rs = bd.getClientePorTelefono(strTelefono);
+                intCodigo = rs.getString("CODIGO");
+                strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
+                strDireccion = rs.getString("DIRECCION_CLI");
+                strBarrio = rs.getString("SECTOR");
+                strHora = funciones.getHora();
+                despacho = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
+
+
+                setDatosTablas(despacho, jtPorDespachar);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Numero ingresado no valido...", "Error", 0);
+                jtTelefono.setText("");
+            }
+        } catch (SQLException ex) {
+            System.err.println("No hay ningún cliente con ese Teléfono...");
+
+            dtm = (DefaultTableModel) jtPorDespachar.getModel();
+            String[] inicial = {
+                funciones.getHora(),
+                funciones.validarTelefono(jtTelefono.getText()),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "0",
+                ""};
+            dtm.insertRow(0, inicial);
+            jtPorDespachar.setRowSelectionInterval(0, 0);
 
         }
+        return intCodigo;
+    }
+
+    /**
+     * Ingresa un despacho en la tabla de clientes por Despachar en la
+     * Parte superior de la Ventana
+     * @param des
+     * @param tabla
+     */
+    private void setDatosTablas(Despachos des, JTable tabla) {
+        trabajarTabla = new TrabajoTablas();
+        Principal.listaDespachosTemporales.add(des);
+
+        dtm = (DefaultTableModel) tabla.getModel(); //modelo de la tabla PorDespachar
+
+        trabajarTabla.InsertarFilas(tabla, des, dtm);
     }
 
     /**
@@ -150,22 +191,23 @@ public class CommMonitoreo extends Thread {
      * este tiene que ser un JLabel
      * @param indicador
      */
-    public void setIndicadorLlamada(JTextField jtTelefono,JLabel indicador) {
+    public void setIndicadorLlamada(JTextField jtTelefono, JLabel indicador, JTable jtPorDespachar) {
         this.jtTelefono = jtTelefono;
         this.indicador = indicador;
+        this.jtPorDespachar = jtPorDespachar;
     }
 
     /**
      * Recibe true para activar el icono de llama entrante o sin llamada
      * @param timbre boolean
      */
-    public void timbrar(boolean timbre,String strNumero) {
+    private void timbrar(boolean timbre, String strNumero) {
         if (timbre) {
-            Icon img = new javax.swing.ImageIcon(getClass().getResource("/puertocomm/icons/t1.png"));
+            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/llamada.png"));
             this.indicador.setIcon(img);
             jtTelefono.setText(strNumero);
         } else {
-            Icon img = new javax.swing.ImageIcon(getClass().getResource("/puertocomm/icons/1.png"));
+            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
             this.indicador.setIcon(img);
             jtTelefono.setText("");
         }
