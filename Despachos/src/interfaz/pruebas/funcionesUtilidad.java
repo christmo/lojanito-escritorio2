@@ -147,6 +147,7 @@ public class funcionesUtilidad {
             return false;
         }
     }
+
     /**
      * Guarda la imagen en un directorio predeterminado
      * con un nombre único generado automaticamente.
@@ -200,5 +201,26 @@ public class funcionesUtilidad {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(calendario.getTime());
+    }
+
+    /**
+     * Comprueba si el numero de telefono ingresado tiene el 0 al inicio o si el
+     * el numero de telefono no tiene letras
+     * @param tel
+     * @return String
+     */
+    public String validarTelefono(String tel) {
+        int lon = tel.length();
+        if (lon == 9) {
+            if (isNumeric(tel)) {
+                return tel;
+            } else {
+                return "";
+            }
+        } else if (lon == 8) {
+            return "0" + tel;
+        } else {
+            return "";
+        }
     }
 }

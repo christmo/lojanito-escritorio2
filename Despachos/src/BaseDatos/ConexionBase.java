@@ -34,7 +34,7 @@ public class ConexionBase {
         this.ip = "localhost";
         this.bd = "rastreosatelital";
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
@@ -212,38 +212,42 @@ public class ConexionBase {
      * @return boolean confirmacion del resultado 1 valido || 0 invalido
      */
     public boolean InsertarDespachoCliente(Despachos des, boolean estadoDespacho) {
+
         estadoUnidad = getEstadoUnidad(des.getIntUnidad());
 
-        if (des.getIntUnidad() == 0) {
-            estadoUnidad = "C"; //cancelado
+        if (estadoUnidad != null) {
+            if (des.getIntUnidad() == 0) {
+                estadoUnidad = "C"; //cancelado
+            }
+
+            if (des.getStrTelefono() == null) {
+                des.setStrTelefono("");
+            }
+            if (des.getStrNota() == null) {
+                des.setStrNota("");
+            }
+
+            if (estadoUnidad.equals("AC") || estadoUnidad.equals("C")) {
+                String sql = "CALL SP_INSERTAR_DESPACHOS("
+                        + des.getIntCodigo() + ","
+                        + "'" + getFechaActual() + "',"
+                        + "'" + des.getStrHora() + "',"
+                        + "'" + des.getStrTelefono() + "',"
+                        + "'" + des.getStrNombre() + "',"
+                        + "'" + des.getStrDireccion() + "',"
+                        + "'" + des.getStrBarrio() + "',"
+                        + des.getIntMinutos() + ","
+                        + des.getIntUnidad() + ","
+                        + des.getIntAtraso() + ","
+                        + "'" + des.getStrNota() + "',"
+                        + "'" + des.getStrEstado() + "',"
+                        + des.getIntID_Turno() + ","
+                        + "'" + des.getStrUsuario() + "'"
+                        + ")";
+                return ejecutarSentencia(sql);
+            }
         }
 
-        if (des.getStrTelefono() == null) {
-            des.setStrTelefono("");
-        }
-        if (des.getStrNota() == null) {
-            des.setStrNota("");
-        }
-
-        if (estadoUnidad.equals("AC") || estadoUnidad.equals("C")) {
-            String sql = "CALL SP_INSERTAR_DESPACHOS("
-                    + des.getIntCodigo() + ","
-                    + "'" + getFechaActual() + "',"
-                    + "'" + des.getStrHora() + "',"
-                    + "'" + des.getStrTelefono() + "',"
-                    + "'" + des.getStrNombre() + "',"
-                    + "'" + des.getStrDireccion() + "',"
-                    + "'" + des.getStrBarrio() + "',"
-                    + des.getIntMinutos() + ","
-                    + des.getIntUnidad() + ","
-                    + des.getIntAtraso() + ","
-                    + "'" + des.getStrNota() + "',"
-                    + "'" + des.getStrEstado() + "',"
-                    + des.getIntID_Turno() + ","
-                    + "'" + des.getStrUsuario() + "'"
-                    + ")";
-            return ejecutarSentencia(sql);
-        }
         return false;
     }
 
@@ -257,7 +261,7 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("ETIQUETA");
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -810,5 +814,19 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * Obtiene los datos de un cliente a partir de un numero de telefono
+     * @param telefono
+     * @return
+     */
+    public ResultSet getClientePorTelefono(String telefono) {
+        String sql = "SELECT CODIGO,"
+                + "NOMBRE_APELLIDO_CLI,"
+                + "DIRECCION_CLI,"
+                + "SECTOR"
+                + " FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
+        return ejecutarConsultaUnDato(sql);
     }
 }
