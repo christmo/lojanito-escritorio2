@@ -73,7 +73,7 @@
               <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="6" pref="6" max="6" attributes="0"/>
               <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="698" max="32767" attributes="0"/>
+              <EmptySpace pref="723" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -242,9 +242,6 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Si no posee dejar en blanco"/>
       </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtemailFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
