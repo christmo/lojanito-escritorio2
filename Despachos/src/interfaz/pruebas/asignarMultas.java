@@ -41,6 +41,7 @@ public class asignarMultas extends javax.swing.JDialog {
         initComponents();
         txtFecha.setText(objUtilidad.getFecha());
         txtHora.setText(objUtilidad.getHora());
+        consultarNrosUnidad();
         consultarCodigoMultas();
         cmbEstado.setSelectedIndex(0); 
         cmbCodigoM.setSelectedIndex(0);
@@ -60,9 +61,9 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
-        txtNroUnidad = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        cmbNroUnidad = new javax.swing.JComboBox();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -85,7 +86,7 @@ public class asignarMultas extends javax.swing.JDialog {
         getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
-        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 110, -1));
+        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 110, -1));
 
         jLabel7.setText("ESTADO:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
@@ -99,7 +100,7 @@ public class asignarMultas extends javax.swing.JDialog {
                 cmbCodigoMActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 120, -1));
+        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 120, -1));
 
         txtHora.setEditable(false);
         getContentPane().add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 70, -1));
@@ -112,7 +113,6 @@ public class asignarMultas extends javax.swing.JDialog {
 
         txtFecha.setEditable(false);
         getContentPane().add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 70, -1));
-        getContentPane().add(txtNroUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 90, -1));
 
         jLabel3.setText("Nro. UNIDAD:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
@@ -120,6 +120,14 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("ASIGNAR MULTA");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, -1));
+
+        cmbNroUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
+        cmbNroUnidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNroUnidadActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbNroUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 120, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -131,10 +139,10 @@ public class asignarMultas extends javax.swing.JDialog {
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if(!txtNroUnidad.getText().equals("") && cmbCodigoM.getSelectedIndex()>0 && cmbEstado.getSelectedIndex()>0)
-            if(objUtilidad.isNumeric(txtNroUnidad.getText())){
+        if(cmbNroUnidad.getSelectedIndex()>=0 && cmbCodigoM.getSelectedIndex()>0 && cmbEstado.getSelectedIndex()>0)
+            if(objUtilidad.isNumeric(cmbNroUnidad.getSelectedItem().toString())){
                 if(cmbEstado.getSelectedItem().equals("Pendiente")){
-                    if(guardarRegistro(Integer.parseInt(txtNroUnidad.getText()),txtFecha.getText(),txtHora.getText(),cmbCodigoM.getSelectedItem().toString(), cmbEstado.getSelectedIndex())){
+                    if(guardarRegistro(Integer.parseInt(cmbNroUnidad.getSelectedItem().toString()),txtFecha.getText(),txtHora.getText(),cmbCodigoM.getSelectedItem().toString(), cmbEstado.getSelectedIndex())){
                         JOptionPane.showMessageDialog(this, "REGISTRO GUARDADO EXITOSAMENTE",
                             "REGISTRO GUARDADO",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -160,11 +168,16 @@ public class asignarMultas extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbCodigoMActionPerformed
 
+    private void cmbNroUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNroUnidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbNroUnidadActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox cmbCodigoM;
     private javax.swing.JComboBox cmbEstado;
+    private javax.swing.JComboBox cmbNroUnidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -173,11 +186,10 @@ public class asignarMultas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtHora;
-    private javax.swing.JTextField txtNroUnidad;
     // End of variables declaration//GEN-END:variables
 
     private void limpiar() {
-        txtNroUnidad.setText("");
+        cmbNroUnidad.setSelectedIndex(-1);
         cmbEstado.setSelectedIndex(-1);
         cmbCodigoM.setSelectedIndex(-1);
     }
@@ -207,6 +219,25 @@ public class asignarMultas extends javax.swing.JDialog {
             //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "NO EXISTEN AUN MULTAS REGISTRADAS",
                     "NO EXISTEN MULTAS",
+                    JOptionPane.ERROR_MESSAGE);
+            limpiar();
+        }
+    }
+
+    private void consultarNrosUnidad() {
+        String sql = "SELECT N_UNIDAD FROM VEHICULOS";
+        System.out.println("consulta realizada");
+        //ArrayList arrayCodigos= new ArrayList();
+        try {
+            rs = bd.ejecutarConsulta(sql);
+            while (rs.next()) {
+                cmbNroUnidad.addItem(rs.getString("N_UNIDAD"));
+            }
+            //return arrayCodigos;
+        } catch (SQLException ex) {
+            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "NO EXISTEN UNIDADES INGRESADAS",
+                    "ERROR",
                     JOptionPane.ERROR_MESSAGE);
             limpiar();
         }

@@ -509,6 +509,8 @@ public class modAsignarMultas extends javax.swing.JDialog {
         return false;
     }
 
+
+
     /**
      * Realiza una busqueda de las multas asignadas, recibe como parametros dos criterios de busqueda
      *
