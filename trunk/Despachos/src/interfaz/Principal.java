@@ -63,7 +63,7 @@ public final class Principal extends javax.swing.JFrame {
      */
     private static ConexionBase bd = new ConexionBase();
     private static ResultSet rs;
-    private String[] strCabecerasColumnasVehiculos = null;
+    private static String[] strCabecerasColumnasVehiculos = null;
     private String strHora;
     private String strTelefono;
     private String intCodigo;
@@ -74,7 +74,7 @@ public final class Principal extends javax.swing.JFrame {
     private int intUnidad;
     private int intAtraso;
     private String strNota;
-    private ArrayList<String> strEncabezados;
+    private static ArrayList<String> strEncabezados;
     private Despachos despacho;
     private int intFilaSeleccionada;
     private int cod; //codigo de la tecla presionada
@@ -205,7 +205,7 @@ public final class Principal extends javax.swing.JFrame {
      * Redimenciona la tabla de unidades segun el numero de vehiculos que estan
      * en la base de datos para cada empresa
      */
-    private void redimencionarTablaVehiculos() {
+    public static void redimencionarTablaVehiculos() {
         TableModel tm = new AbstractTableModel() {
 
             String headers[] = getEncabezadosTablaVehiculos();
@@ -284,7 +284,7 @@ public final class Principal extends javax.swing.JFrame {
      * unidades String[]
      * @return
      */
-    public String[] getFilasNumeroDespachos() {
+    public static String[] getFilasNumeroDespachos() {
         String[] cant = new String[strCabecerasColumnasVehiculos.length];
 
         for (int i = 0; i < strCabecerasColumnasVehiculos.length; i++) {
@@ -299,7 +299,7 @@ public final class Principal extends javax.swing.JFrame {
      * como encabezado de la tabla de unidades
      * @return String[]
      */
-    private String[] getEncabezadosTablaVehiculos() {
+    private static String[] getEncabezadosTablaVehiculos() {
         strEncabezados = new ArrayList<String>();
         String[] datosCast;
         try {
@@ -314,7 +314,7 @@ public final class Principal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(this, "No se pudo recuperar las cabeceras de las unidades para este usuario!!!", "Error", 0);
+            JOptionPane.showMessageDialog(null, "No se pudo recuperar las cabeceras de las unidades para este usuario!!!", "Error", 0);
             System.err.println("No se pudo recuperar el número de unidades para este usuario!!!");
         }
 
