@@ -194,13 +194,13 @@ public class asignarMultas extends javax.swing.JDialog {
 
 
     private void consultarCodigoMultas() {
-        String sql = "select cod_multa from COD_MULTAS";
+        String sql = "select COD_MULTA from COD_MULTAS";
         System.out.println("consulta realizada");
         //ArrayList arrayCodigos= new ArrayList();
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
-                cmbCodigoM.addItem(rs.getString("cod_multa"));
+                cmbCodigoM.addItem(rs.getString("COD_MULTA"));
             }
             //return arrayCodigos;
         } catch (SQLException ex) {
@@ -211,53 +211,5 @@ public class asignarMultas extends javax.swing.JDialog {
             limpiar();
         }
     }
-    /*
-    private boolean modificarRegistro(String codMulta, String strDescripcion, double dblValor) {
-        String sql = "UPDATE COD_MULTAS SET DESCRIPCION='" + strDescripcion + "', VALOR=" + dblValor + " WHERE COD_MULTA='" + codMulta + "'";
-        System.out.println("consulta realizada");
-        if (bd.ejecutarSentencia(sql)) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean eliminarRegistro(String strCodMulta) {
-
-        String sql = "delete from cod_multas where cod_multa='" + strCodMulta + "'";
-        System.out.println("consulta realizada");
-        if (bd.ejecutarSentencia(sql)) {
-            return true;
-        } else {
-
-            JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO DE LA BASE DE DATOS",
-                    "NO SE PUDO ELIMINAR EL REGISTRO",
-                    JOptionPane.ERROR_MESSAGE);
-
-            return false;
-        }
-    }
-
-
-    private boolean verificarCodMulta(String strCodMulta) {
-        String strCod_multa = null;
-        try {
-            String sql = "select COD_MULTA from cod_multas where cod_multa='" + strCodMulta + "'";
-            System.out.println("consulta realizada");
-            rs = bd.ejecutarConsultaUnDato(sql);
-            strCod_multa = rs.getString(1);
-            System.out.println("el codigo de la multa obtenido es: " + strCod_multa);
-        } catch (SQLException ex) {
-            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try{
-            if (strCod_multa.equals(strCodMulta)) {
-                return true;
-            }
-        }catch(NullPointerException ex){         
-
-        }
-        return false;
-    }
-*/
+   
 }

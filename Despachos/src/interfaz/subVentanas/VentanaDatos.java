@@ -65,6 +65,8 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtNota.setEditable(estado);
         jbAceptar.setEnabled(estado);
         jbCodigo.setEnabled(estado);
+        jtLatitud.setEditable(estado);
+        jtLongitud.setEditable(estado);
         jbSalir.setVisible(true);
     }
 
@@ -563,14 +565,14 @@ public class VentanaDatos extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 new VentanaDatos().setVisible(true);
             }
         });
-    }
+    }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

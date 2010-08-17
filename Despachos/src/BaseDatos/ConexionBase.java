@@ -218,6 +218,13 @@ public class ConexionBase {
             estadoUnidad = "C"; //cancelado
         }
 
+        if (des.getStrTelefono() == null) {
+            des.setStrTelefono("");
+        }
+        if (des.getStrNota() == null) {
+            des.setStrNota("");
+        }
+
         if (estadoUnidad.equals("AC") || estadoUnidad.equals("C")) {
             String sql = "CALL SP_INSERTAR_DESPACHOS("
                     + des.getIntCodigo() + ","
@@ -288,7 +295,7 @@ public class ConexionBase {
      * @throws SQLException
      */
     public String generarCodigo() throws SQLException {
-        String sql = "SELECT MAX(CODIGO) AS COD FROM CLIENTES";
+        String sql = "SELECT IFNULL(MAX(CODIGO),0) AS COD FROM CLIENTES";
         ejecutarConsultaUnDato(sql);
         return rs.getString("COD");
     }
@@ -782,6 +789,23 @@ public class ConexionBase {
                 datos.add(d);
             }
             return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene la hora de salida del turno actual
+     * @param id_Turno
+     * @return String
+     */
+    public String getHoraSalida(int id_Turno) {
+        try {
+            String sql = "SELECT HORA_FIN FROM TURNOS WHERE ID_TURNO=" + id_Turno;
+
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("HORA_FIN");
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }

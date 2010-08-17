@@ -81,7 +81,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
-        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -398,12 +398,25 @@ public class modAsignarMultas extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbParametroActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if(modificarRegistro(Integer.parseInt(txtNroUnidad.getText()),cmbCodigoM.getSelectedItem().toString(),cmbEstado.getSelectedIndex())){
-            JOptionPane.showMessageDialog(this, "MULTA MODIFICADA SATISFACTORIAMENTE",
-                    "OK",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-        super.dispose();
+       if(funciones.isNumeric(txtNroUnidad.getText())){
+           if(cmbCodigoM.getSelectedIndex()>0 && cmbEstado.getSelectedIndex()>0){
+               if(modificarRegistro(Integer.parseInt(txtNroUnidad.getText()),cmbCodigoM.getSelectedItem().toString(),cmbEstado.getSelectedIndex())){
+                  JOptionPane.showMessageDialog(this, "MULTA MODIFICADA SATISFACTORIAMENTE",
+                        "OK",
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+                super.dispose();
+            }else
+                JOptionPane.showMessageDialog(this, "FALTA SELECCIONAR EL CODIGO DE MULTA O EL ESTADO",
+                        "FALTAN VALORES",
+                        JOptionPane.ERROR_MESSAGE);
+
+        }else
+            JOptionPane.showMessageDialog(this, "EL NUMERO DE VEHICULO ASIGNADO ES INCORRECTO",
+                        "NUMERO DE VEHICULO INCORRECTO",
+                        JOptionPane.ERROR_MESSAGE);
+
+    
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -416,8 +429,8 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
        }
        else {
-            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
-                    "OK",
+            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR EL REGISTRO",
+                    "ERROR",
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -479,7 +492,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
             sql="SELECT USUARIO FROM USUARIOS;";
         }else if(strCriterioBusqueda.equals("ESTADO")){
             cmb2Parametro.addItem("Pendiente");
-            cmb2Parametro.addItem("Pagado");
+            cmb2Parametro.addItem("Pagada");
             return true;
         }
         try {
@@ -506,7 +519,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
         String sql=null;
         ArrayList<String[]> rta = new ArrayList();
         if(!strCriterio.equals("ESTADO")){
-            sql="SELECT * FROM MULTAS WHERE "+ strCriterio + " = "+strValor;
+            sql="SELECT * FROM MULTAS WHERE "+ strCriterio + " = '"+strValor+"'";
         }else{
             int intEstado=0;
             if(strValor.equals("Pendiente"))
@@ -527,7 +540,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
                 if(rs.getString("ESTADO").equals("1"))
                    aux[5] = "Pendiente";
                 else
-                   aux[5] = "Pagado"; 
+                   aux[5] = "Pagada";
                 rta.add(aux);
             }
             return rta;
@@ -598,30 +611,30 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private void limpiar(){
         txtNroUnidad.setText("");
         txtFechaB.setText("");
+        txtHora.setText("");
         cmbCodigoM.setSelectedIndex(0);
         cmbEstado.setSelectedIndex(0);
     }
 
     private boolean eliminarRegistro() {
-        int intNroU=Integer.parseInt(auxItemFila[0]);
-        String strCodM=auxItemFila[2];
+        String strFecha=auxItemFila[2];
+        String strHora=auxItemFila[3];
+        String strCodM=auxItemFila[4];
 
-        String sql = "delete from multas where cod_multa='" + strCodM + "'";
+        String sql = "delete from MULTAS where COD_MULTA='" + strCodM + "' AND FECHA = '"+strFecha+"' AND HORA ='"+strHora+"'";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
-        } else {
-
-            JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO DE LA BASE DE DATOS",
-                    "NO SE PUDO ELIMINAR EL REGISTRO",
-                    JOptionPane.ERROR_MESSAGE); 
         }
         return false;
     }
 
-    private boolean modificarRegistro(int intNroU, String strCodM, int intEstado) {
-        String sql = "UPDATE MULTAS SET N_UNIDAD=" + intNroU + ", COD_MULTA='" + strCodM + "', ESTADO="+ intEstado +""
-                + "WHERE COD_MULTA='" + strCodM + "'";
+    private boolean modificarRegistro(int intNroU, String strCodMulta, int intEstado) {
+        String strFecha=auxItemFila[2];
+        String strHora=auxItemFila[3];
+        String strCodM=auxItemFila[4];
+        String sql = "UPDATE MULTAS SET N_UNIDAD=" + intNroU + ", COD_MULTA='" + strCodMulta + "', ESTADO="+ intEstado +""
+                + " WHERE COD_MULTA='" + strCodM + "' AND FECHA = '"+strFecha+"' AND HORA ='"+strHora+"'";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
@@ -630,13 +643,13 @@ public class modAsignarMultas extends javax.swing.JDialog {
     }
 
     private void consultarCodigoMultas() {
-        String sql = "select cod_multa from COD_MULTAS";
+        String sql = "select COD_MULTA from COD_MULTAS";
         System.out.println("consulta realizada");
         //ArrayList arrayCodigos= new ArrayList();
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
-                cmbCodigoM.addItem(rs.getString("cod_multa"));
+                cmbCodigoM.addItem(rs.getString("COD_MULTA"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "NO EXISTEN AUN MULTAS REGISTRADAS",
