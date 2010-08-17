@@ -142,7 +142,7 @@ public final class Principal extends javax.swing.JFrame {
     public void IdentificadorLlamadas() {
         rb = ResourceBundle.getBundle("configuracion.configsystem");
         String puerto = rb.getString("comm");
-        System.out.println("puerto: "+puerto);
+        System.out.println("puerto: " + puerto);
         if (!puerto.equals("0")) {
             CommMonitoreo comm = new CommMonitoreo(puerto);
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
