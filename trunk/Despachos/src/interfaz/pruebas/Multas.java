@@ -38,6 +38,9 @@ public class Multas extends javax.swing.JDialog {
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         initComponents();
+        consultarCodigoMultas();
+        cmbCodigoM.setVisible(false);
+        cmbCodigoM.setSelectedIndex(0);
 
     }
 
@@ -59,6 +62,7 @@ public class Multas extends javax.swing.JDialog {
         btnModificar = new javax.swing.JButton();
         btnGuardar1 = new javax.swing.JButton();
         btnEliminar1 = new javax.swing.JButton();
+        cmbCodigoM = new javax.swing.JComboBox();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -69,9 +73,9 @@ public class Multas extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 130, 50));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 290, 160, 50));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("INGRESAR MULTAS");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
@@ -79,11 +83,11 @@ public class Multas extends javax.swing.JDialog {
         jLabel3.setText("Código Multa:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel4.setText("Valor:");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, 20));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("Descripción:");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, 20));
 
@@ -100,7 +104,7 @@ public class Multas extends javax.swing.JDialog {
         getContentPane().add(txtCodMulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 80, -1));
         getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 50, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("$");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 10, -1));
 
@@ -111,7 +115,7 @@ public class Multas extends javax.swing.JDialog {
                 btnBuscar2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBuscar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, -1, -1));
+        getContentPane().add(btnBuscar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, -1, -1));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modificar.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
@@ -139,6 +143,19 @@ public class Multas extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, 40));
+
+        cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
+        cmbCodigoM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbCodigoMMouseClicked(evt);
+            }
+        });
+        cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCodigoMActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -154,6 +171,7 @@ public class Multas extends javax.swing.JDialog {
 }//GEN-LAST:event_txtDescripcionFocusLost
 
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
+        cmbCodigoM.setVisible(true);
         if (!txtCodMulta.getText().equals("")) {
             buscarMulta(txtCodMulta.getText());
         } else {
@@ -164,7 +182,7 @@ public class Multas extends javax.swing.JDialog {
 }//GEN-LAST:event_btnBuscar2ActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (!txtCodMulta.getText().equals("") && objUtilidad.isNumeric(txtValor.getText())) {
+       if (!txtCodMulta.getText().equals("") && objUtilidad.isDouble(txtValor.getText())) {
             if (verificarCodMulta(txtCodMulta.getText())) {
 
                 if (modificarRegistro(txtCodMulta.getText(), txtDescripcion.getText(), Double.parseDouble(txtValor.getText()))) {
@@ -190,7 +208,7 @@ public class Multas extends javax.swing.JDialog {
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         if (!txtCodMulta.getText().equals("")) {
 
-            if (objUtilidad.isNumeric(txtValor.getText())) {
+            if (objUtilidad.isDouble(txtValor.getText())) {
 
                 if (!verificarCodMulta(txtCodMulta.getText())) {
 
@@ -238,15 +256,31 @@ public class Multas extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE);
         }
 }//GEN-LAST:event_btnEliminar1ActionPerformed
+
+    private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
+        
+}//GEN-LAST:event_cmbCodigoMActionPerformed
+
+    private void cmbCodigoMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCodigoMMouseClicked
+        // TODO add your handling code here:
+        if(cmbCodigoM.getSelectedIndex()>0){
+            txtCodMulta.setText(cmbCodigoM.getSelectedItem().toString());
+            buscarMulta(txtCodMulta.getText());
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "SELECCIONE UN CODIGO DE MULTA PARA BUSCAR",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cmbCodigoMMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminar1;
     private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JComboBox cmbCodigoM;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -285,7 +319,7 @@ public class Multas extends javax.swing.JDialog {
 
     private boolean eliminarRegistro(String strCodMulta) {
 
-        String sql = "delete from cod_multas where cod_multa='" + strCodMulta + "'";
+        String sql = "delete from COD_MULTAS where COD_MULTA='" + strCodMulta + "'";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
@@ -300,7 +334,7 @@ public class Multas extends javax.swing.JDialog {
     }
 
     private void buscarMulta(String strCodMulta) {
-        String sql = "select * from cod_multas where cod_multa='" + strCodMulta + "' ";
+        String sql = "select * from COD_MULTAS where COD_MULTA='" + strCodMulta + "' ";
         System.out.println("consulta realizada");
         try {
             rs = bd.ejecutarConsultaUnDato(sql);
@@ -321,7 +355,7 @@ public class Multas extends javax.swing.JDialog {
     private boolean verificarCodMulta(String strCodMulta) {
         String strCod_multa = null;
         try {
-            String sql = "select COD_MULTA from cod_multas where cod_multa='" + strCodMulta + "'";
+            String sql = "select COD_MULTA from COD_MULTAS where COD_MULTA='" + strCodMulta + "'";
             System.out.println("consulta realizada");
             rs = bd.ejecutarConsultaUnDato(sql);
             strCod_multa = rs.getString(1);
@@ -338,5 +372,21 @@ public class Multas extends javax.swing.JDialog {
 
         }
         return false;
+    }
+
+    private void consultarCodigoMultas() {
+        String sql = "select COD_MULTA from COD_MULTAS";
+        System.out.println("consulta realizada");
+        //ArrayList arrayCodigos= new ArrayList();
+        try {
+            rs = bd.ejecutarConsulta(sql);
+            while (rs.next()) {
+                cmbCodigoM.addItem(rs.getString("COD_MULTA"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "NO EXISTEN AUN MULTAS REGISTRADAS",
+                    "NO EXISTEN MULTAS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

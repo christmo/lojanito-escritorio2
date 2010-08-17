@@ -135,6 +135,19 @@ public class funcionesUtilidad {
     }
 
     /**
+     * Comprueba si una cadena es un número válido
+     * @param cadena
+     * @return
+     */
+    public boolean isDouble(String cadena) {
+        try {
+            Double.parseDouble(cadena);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+    /**
      * Guarda la imagen en un directorio predeterminado
      * con un nombre único generado automaticamente.
      * @param ruta Origen de la foto

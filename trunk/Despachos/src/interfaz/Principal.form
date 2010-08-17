@@ -46,7 +46,9 @@
                   <Component id="jScrollPane2" alignment="0" pref="1002" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="811" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jbMenu" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="684" max="32767" attributes="0"/>
                       <Component id="lblFecha" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -82,8 +84,9 @@
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               <Component id="jScrollPane3" pref="292" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jbSalir" min="-2" pref="50" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jbMenu" max="32767" attributes="1"/>
+                  <Component id="jbSalir" alignment="0" pref="50" max="32767" attributes="1"/>
                   <Component id="lblFecha" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -325,6 +328,9 @@
           <Events>
             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jtDespachadosMousePressed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -648,5 +654,16 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="jbMenu">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/menu.jpg"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Men&#xfa;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbMenuActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
