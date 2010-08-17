@@ -172,13 +172,13 @@ public class Multas extends javax.swing.JDialog {
 
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
         cmbCodigoM.setVisible(true);
-        if (!txtCodMulta.getText().equals("")) {
+        /*if (!txtCodMulta.getText().equals("")) {
             buscarMulta(txtCodMulta.getText());
         } else {
             JOptionPane.showMessageDialog(this, "INGRESE UN CODIGO DE MULTA PARA BUSCAR",
                     "FALTA INFORMACION",
                     JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
 }//GEN-LAST:event_btnBuscar2ActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -258,20 +258,15 @@ public class Multas extends javax.swing.JDialog {
 }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
-        
+    if(cmbCodigoM.getSelectedIndex()>0){
+            txtCodMulta.setText(cmbCodigoM.getSelectedItem().toString());
+            buscarMulta(txtCodMulta.getText());
+    }
 }//GEN-LAST:event_cmbCodigoMActionPerformed
 
     private void cmbCodigoMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCodigoMMouseClicked
         // TODO add your handling code here:
-        if(cmbCodigoM.getSelectedIndex()>0){
-            txtCodMulta.setText(cmbCodigoM.getSelectedItem().toString());
-            buscarMulta(txtCodMulta.getText());
-        }
-        else {
-            JOptionPane.showMessageDialog(this, "SELECCIONE UN CODIGO DE MULTA PARA BUSCAR",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+        
     }//GEN-LAST:event_cmbCodigoMMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
