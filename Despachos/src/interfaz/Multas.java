@@ -22,7 +22,7 @@ public class Multas extends javax.swing.JDialog {
     /** Creates new form modTurnos */
     public Multas(JFrame padre, ConexionBase con) {
 
-        super(padre, "Multas");
+        super(padre, "Creacion de Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         this.bd = con;
