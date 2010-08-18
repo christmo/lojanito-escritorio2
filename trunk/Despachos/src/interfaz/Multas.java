@@ -63,7 +63,7 @@ public class Multas extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 290, 160, 50));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, 140, 40));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("INGRESAR MULTAS");
@@ -75,7 +75,7 @@ public class Multas extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel4.setText("Valor:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, 20));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("Descripción:");
@@ -90,13 +90,13 @@ public class Multas extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(txtDescripcion);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 300, 60));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 300, 60));
         getContentPane().add(txtCodMulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 80, -1));
-        getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 50, -1));
+        getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("$");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 10, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 20, 20));
 
         btnBuscar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
         btnBuscar2.setText("BUSCAR");
