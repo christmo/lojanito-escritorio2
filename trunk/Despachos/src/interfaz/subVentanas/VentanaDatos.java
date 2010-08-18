@@ -39,6 +39,30 @@ public class VentanaDatos extends javax.swing.JDialog {
     }
 
     /**
+     * Permite setear los valores a presentarse en la ventana para la tabla
+     * PorDespachar lo que permitira la edicion de la informacions
+     * @param despacho
+     */
+    public void setPorDespachar(Despachos despacho){
+        this.datos=despacho;
+        cargarDatos(datos);
+        estadoCampos(true);
+    }
+
+    /**
+     * Permite setear los valores de la ventana para la tabla despachados,
+     * esto no permitira editar los campos y no creara un objeto nuevo de la
+     * ventana para la presentacion de la informacion
+     * @param despacho
+     * @param estado
+     */
+    public void setDespachados(Despachos despacho,boolean estado){
+        this.datos=despacho;
+        cargarDatos(datos);
+        estadoCampos(estado);
+    }
+
+    /**
      * Enviar en el estado false, para mostrar la ventana en modo de lectura de
      * información, no permitir cambiar los datos
      * @param datosDespachados
@@ -128,7 +152,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtLatitud.setText("");
         jtLongitud.setText("");
         jbAceptar.setEnabled(true);
-        jbSalir.setVisible(false);
+        jbSalir.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -266,7 +290,7 @@ public class VentanaDatos extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(499, Short.MAX_VALUE))
+                .addContainerGap(524, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel11)
@@ -313,9 +337,9 @@ public class VentanaDatos extends javax.swing.JDialog {
                         .addComponent(jLabel1)
                         .addGap(28, 28, 28)
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
+                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                                .addComponent(jtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -327,15 +351,15 @@ public class VentanaDatos extends javax.swing.JDialog {
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jpDatosLayout.createSequentialGroup()
+                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel9)
                                 .addGap(23, 23, 23)
                                 .addComponent(jtBarrio, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
+                            .addComponent(jtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(jpDatosLayout.createSequentialGroup()
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -352,7 +376,7 @@ public class VentanaDatos extends javax.swing.JDialog {
                                     .addGroup(jpDatosLayout.createSequentialGroup()
                                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(6, 6, 6)
-                                        .addComponent(jtLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
+                                        .addComponent(jtLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap())))
         );
@@ -418,6 +442,7 @@ public class VentanaDatos extends javax.swing.JDialog {
             this.setVisible(false);
         } else {
             GuardarDatos();
+            this.dispose();
         }
     }//GEN-LAST:event_jbAceptarActionPerformed
 
@@ -439,7 +464,6 @@ public class VentanaDatos extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
                 }
             }
-            bd.CerrarConexion();
             LimpiarCampos();
             this.setVisible(false);
         } else {
@@ -530,9 +554,9 @@ public class VentanaDatos extends javax.swing.JDialog {
     }//GEN-LAST:event_jtNotaFocusLost
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-        bd.CerrarConexion();
         LimpiarCampos();
-        this.setVisible(false);
+        //this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jtReferenciaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtReferenciaKeyPressed
@@ -561,17 +585,16 @@ public class VentanaDatos extends javax.swing.JDialog {
     public String Mayusculas(String txt) {
         return txt.toUpperCase();
     }
-
     /**
      * @param args the command line arguments
      */
     /*public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    java.awt.EventQueue.invokeLater(new Runnable() {
 
-            public void run() {
-                new VentanaDatos().setVisible(true);
-            }
-        });
+    public void run() {
+    new VentanaDatos().setVisible(true);
+    }
+    });
     }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
