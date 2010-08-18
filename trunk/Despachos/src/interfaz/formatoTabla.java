@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class formatoTabla extends DefaultTableCellRenderer {
@@ -43,6 +44,8 @@ public class formatoTabla extends DefaultTableCellRenderer {
             if (ind != -1) {
                 String colRGB = color.get(ind);
                 Color cl = new Color(Integer.parseInt(colRGB));
+                setHorizontalAlignment(SwingConstants.CENTER);
+                setVerticalAlignment(SwingConstants.CENTER);
                 setBackground(cl);
             }
         }
