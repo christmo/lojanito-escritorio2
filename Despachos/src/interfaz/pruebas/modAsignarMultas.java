@@ -6,14 +6,10 @@
 package interfaz.pruebas;
 
 import BaseDatos.ConexionBase;
-import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -24,20 +20,20 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class modAsignarMultas extends javax.swing.JDialog {
-
-    ConexionBase conec = new ConexionBase();
+    
     ArrayList<String[]> multas;
     private static String[] auxItemFila;
     private funcionesUtilidad funciones = new funcionesUtilidad();
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
 
 
-    public modAsignarMultas(JFrame padre) {
+    public modAsignarMultas(JFrame padre, ConexionBase conec) {
 
         super(padre,"Busqueda de Vehículos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
+        this.bd = conec;
 
         initComponents();
         cmb2Parametro.setVisible(false);

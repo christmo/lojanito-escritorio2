@@ -3,24 +3,11 @@ package interfaz.pruebas;
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.SpinnerDateModel;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -29,13 +16,16 @@ import javax.swing.table.DefaultTableModel;
 public class Multas extends javax.swing.JDialog {
 
     funcionesUtilidad objUtilidad = new funcionesUtilidad();
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
 
     /** Creates new form modTurnos */
-    public Multas(JFrame padre) {
+    public Multas(JFrame padre, ConexionBase con) {
+
         super(padre, "Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+
+        this.bd = con;
 
         initComponents();
         consultarCodigoMultas();

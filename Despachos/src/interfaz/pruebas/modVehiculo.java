@@ -24,32 +24,34 @@ import javax.swing.table.DefaultTableModel;
  */
 public class modVehiculo extends javax.swing.JDialog {
 
-    ConexionBase conec = new ConexionBase();
+    ConexionBase bd;
     ArrayList<String[]> vehiculos;
     private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
     private String imgOriginal;
-    private String idEmpresa;
-    ConexionBase bd = new ConexionBase();
+    private String idEmpresa;    
     ResultSet rs;
     Icon icError;
     Icon icOk;
+    private String[] sesion;
 
-    public modVehiculo(JFrame padre, String emp) {
-
+    public modVehiculo(JFrame padre, String[] ses, ConexionBase con) {
         super(padre,"Busqueda de Vehículos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
 
+        this.sesion = ses;
+        this.bd = con;
+        
         initComponents();
         leerProperties();
         cargarConductores(cmbConductor);
         cargarConductores(cmbConductorAux);
         icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
         icOk = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
-        this.idEmpresa = emp;
+        this.idEmpresa = ses[1];
     }
 
     @SuppressWarnings("unchecked")
@@ -502,12 +504,12 @@ public class modVehiculo extends javax.swing.JDialog {
         String nunidad = txtNUnidad.getText();
 
         if (!(nunidad.equals("")) || (funciones.isNumeric(nunidad))) {
-            if (!conec.existeUnidad(lblPlaca.getText(), Integer.parseInt(nunidad))) {
+            if (!bd.existeUnidad(lblPlaca.getText(), Integer.parseInt(nunidad))) {
 
                 String nomConductor = cmbConductor.getSelectedItem().toString();
                 if (!nomConductor.equals("< NO ASIGNADO >")) {
 
-                    boolean canCoincidencias = conec.conductorAsignado(nomConductor, lblPlaca.getText());
+                    boolean canCoincidencias = bd.conductorAsignado(nomConductor, lblPlaca.getText());
                     if (!canCoincidencias) {
 
                         String nomConductorAux = cmbConductorAux.getSelectedItem().toString();
@@ -525,7 +527,7 @@ public class modVehiculo extends javax.swing.JDialog {
                             if (nomConductorAux.equals("< NO ASIGNADO >")) {
                                 nomConductorAux = "";
                             }
-                            boolean salida = conec.actualizarVehiculo(lblPlaca.getText(),
+                            boolean salida = bd.actualizarVehiculo(lblPlaca.getText(),
                                     Integer.parseInt(nunidad),
                                     idEmpresa,
                                     nomConductor,
@@ -583,48 +585,10 @@ public class modVehiculo extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE,
                     icError);
         }
-
-//        if (txtCedula.getText().length() == 0) {
-//            JOptionPane.showMessageDialog(this, "FALTA EL NUMERO DE CEDULA",
-//                    "ERROR CEDULA",
-//                    JOptionPane.ERROR_MESSAGE);
-//        } else if (txtNomApe.getText().length() == 0) {
-//            JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UN NOMBRE",
-//                    "ERROR NOMBRES",
-//                    JOptionPane.ERROR_MESSAGE);
-//        } else if (txtDireccion.getText().length() == 0) {
-//            JOptionPane.showMessageDialog(this, "NO HA ESPECIFICADO UNA DIRECCION",
-//                    "ERROR DIRECCION",
-//                    JOptionPane.ERROR_MESSAGE);
-//        } else if (lblEtiquetaImagen.getText().length() == 0) {
-//            JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
-//                    "ERROR FOTOGRAFÍA",
-//                    JOptionPane.ERROR_MESSAGE);
-//        } else {
-//            boolean rta = guardarRegistro(txtCedula.getText(),
-//                    txtNomApe.getText(),
-//                    txtDireccion.getText(),
-//                    txtNumCasa.getText(),
-//                    txtTipoSangre.getText(),
-//                    txtEstadoCivil.getText(),
-//                    txtConyuge.getText(),
-//                    txtemail.getText());
-//            if (rta) {
-//                JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
-//                        "LISTO",
-//                        JOptionPane.INFORMATION_MESSAGE);
-//                limpiarCajas();
-//
-//            } else {
-//                JOptionPane.showMessageDialog(this, "NO SE PUEDO ACTUALIZAR LOS DATOS",
-//                        "ERROR",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (conec.eliminarVehiculo(lblPlaca.getText())) {
+        if (bd.eliminarVehiculo(lblPlaca.getText())) {
 
             JOptionPane.showMessageDialog(this, "VEHICULO ELIMINADO",
                     "OK",
@@ -717,7 +681,7 @@ public class modVehiculo extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) resultado.getModel();
         limpiarTabla(resultado);
 
-        vehiculos = conec.buscarVehiculos(param, id);
+        vehiculos = bd.buscarVehiculos(param, id);
         int numConductores = vehiculos.size();
         String msj;
 
@@ -783,7 +747,7 @@ public class modVehiculo extends javax.swing.JDialog {
         if (aux[3] == null || aux[3].equals("")) {
             cmbConductor.setSelectedItem("< NO ASIGNADO >");
         } else {
-            name = conec.getNombreConductor(Integer.parseInt(aux[3]));
+            name = bd.getNombreConductor(Integer.parseInt(aux[3]));
             if (name != null) {
                 cmbConductor.setSelectedItem(name);
             } else {
@@ -795,7 +759,7 @@ public class modVehiculo extends javax.swing.JDialog {
         if (aux[4] == null || aux[4].equals("")) {
             cmbConductorAux.setSelectedItem("< NO ASIGNADO >");
         } else {
-            name = conec.getNombreConductor(Integer.parseInt(aux[4]));
+            name = bd.getNombreConductor(Integer.parseInt(aux[4]));
             if (name != null) {
                 cmbConductorAux.setSelectedItem(name);
             } else {
@@ -966,7 +930,7 @@ public class modVehiculo extends javax.swing.JDialog {
      */
     private void cargarConductores(JComboBox condu) {
 
-        ArrayList<String[]> conductores = conec.buscarConductores("", 1);
+        ArrayList<String[]> conductores = bd.buscarConductores("", 1);
         String[] nomConductores = new String[conductores.size() + 1];
         int i = 1;
 

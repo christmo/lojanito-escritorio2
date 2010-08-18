@@ -22,21 +22,21 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class modConductor extends javax.swing.JDialog {
-
-    ConexionBase conec = new ConexionBase();
+    
     ArrayList<String[]> conductores;
     private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
 
     /** Creates new form NewJPanel */
-    public modConductor(JFrame padre) {
+    public modConductor(JFrame padre, ConexionBase con) {
         super(padre,"Búsqueda de Conductores");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
+        this.bd = con;
         initComponents();
     }
 
@@ -485,7 +485,7 @@ public class modConductor extends javax.swing.JDialog {
 
         Icon ic;
 
-        if (conec.eliminarConductor(txtCedula.getText())) {
+        if (bd.eliminarConductor(txtCedula.getText())) {
 
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
 
@@ -553,7 +553,7 @@ public class modConductor extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) resultado.getModel();
         limpiarTabla(resultado);
 
-        conductores = conec.buscarConductores(param, id);
+        conductores = bd.buscarConductores(param, id);
         int numConductores = conductores.size();
         String msj;
 

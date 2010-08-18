@@ -27,13 +27,12 @@ import javax.swing.JOptionPane;
  * @author Usuario
  */
 public class ingresoVehiculos extends javax.swing.JDialog {
-
-    ConexionBase conec = new ConexionBase();
+    
     private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
     private String ID_EMPRESA;
     private String id_usuario;
@@ -43,9 +42,10 @@ public class ingresoVehiculos extends javax.swing.JDialog {
      * ENVIAR EL ID_EMPRESA POR EL CONSTRUCTOR
      * @param id_empresa
      */
-    public ingresoVehiculos(JFrame padre, String sesion[]) {
+    public ingresoVehiculos(JFrame padre, String sesion[], ConexionBase conec) {
         super(padre,"Ingreso de Vehiculos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        this.bd = conec;
 
         initComponents();
         cargarConductores(cmbConductor, 0);
@@ -384,11 +384,11 @@ public class ingresoVehiculos extends javax.swing.JDialog {
             conAux = cmbCondAux.getSelectedItem().toString();
         }
 
-        if ((txtPlaca.getText().length() > 0) && !conec.placaExiste(txtPlaca.getText())) {
+        if ((txtPlaca.getText().length() > 0) && !bd.placaExiste(txtPlaca.getText())) {
 
             if ((txtNUnidad.getText().length() > 0)
                     && (funciones.isNumeric(txtNUnidad.getText()))
-                    && !conec.validarUnidad(Integer.parseInt(txtNUnidad.getText()))) {
+                    && !bd.validarUnidad(Integer.parseInt(txtNUnidad.getText()))) {
 
                 if (!con.equals(conAux)) {
 
@@ -481,7 +481,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
      * @id Identificar del combo a llenar
      */
     private void cargarConductores(JComboBox condu, int id) {
-        ArrayList<String[]> conductores = conec.buscarConductores("", 1);
+        ArrayList<String[]> conductores = bd.buscarConductores("", 1);
         String[] nomConductores = new String[conductores.size() + id];
         int i = 0 + id;
 
