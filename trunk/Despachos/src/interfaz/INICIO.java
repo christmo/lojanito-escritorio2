@@ -8,7 +8,7 @@
  *
  * Created on 09/08/2010, 04:04:21 PM
  */
-package interfaz.pruebas;
+package interfaz;
 
 import BaseDatos.ConexionBase;
 import javax.swing.ImageIcon;
@@ -167,7 +167,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnBEMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, 130, 85));
 
-        btnDirectorio.setText("DIRECOTORIO");
+        btnDirectorio.setText("DIRECTORIO");
         btnDirectorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDirectorioActionPerformed(evt);
@@ -199,7 +199,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDirectorActionPerformed
 
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
-        if ((turnos == null) || (!turnos.isDisplayable())) {
+        if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
             newVehiculo = new ingresoVehiculos(this, this.sesion,this.conec);
             newVehiculo.setSize(680, 595);
             newVehiculo.setLocationRelativeTo(this);
@@ -210,7 +210,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewVehiculoActionPerformed
 
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
-        if ((turnos == null) || (!turnos.isDisplayable())) {
+        if ((beConductor == null) || (!beConductor.isDisplayable())) {
             beConductor = new modConductor(this, this.conec);
             beConductor.setSize(705, 720);
             beConductor.setLocationRelativeTo(this);
@@ -273,7 +273,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
-        if ((turnos == null) || (!turnos.isDisplayable())) {
+        if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
             beasignarMulta = new modAsignarMultas(this,this.conec);
             beasignarMulta.setSize(700, 700);
             beasignarMulta.setLocationRelativeTo(this);
@@ -289,7 +289,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
         // TODO add your handling code here:
-        if ((turnos == null) || (!turnos.isDisplayable())) {
+        if ((multas == null) || (!multas.isDisplayable())) {
             multas = new Multas(this, this.conec);
             multas.setSize(500, 400);
             multas.setLocationRelativeTo(this);
@@ -302,7 +302,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
         // TODO add your handling code here:
-        if ((turnos == null) || (!turnos.isDisplayable())) {
+        if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
             asignarMulta = new asignarMultas(this,sesion, this.conec);
             asignarMulta.setSize(350, 450);
             asignarMulta.setLocationRelativeTo(this);

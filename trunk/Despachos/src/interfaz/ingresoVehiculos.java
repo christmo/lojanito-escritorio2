@@ -8,7 +8,7 @@
  *
  * Created on 09/08/2010, 06:07:39 PM
  */
-package interfaz.pruebas;
+package interfaz;
 
 import BaseDatos.ConexionBase;
 import interfaz.Principal;

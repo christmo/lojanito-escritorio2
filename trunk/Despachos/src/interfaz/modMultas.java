@@ -9,7 +9,7 @@
  * Created on 12/08/2010, 09:26:12 AM
  */
 
-package interfaz.pruebas;
+package interfaz;
 
 /**
  *

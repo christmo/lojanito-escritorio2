@@ -3,7 +3,7 @@
  *
  * Created on 09/08/2010, 08:38:49 AM
  */
-package interfaz.pruebas;
+package interfaz;
 
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
@@ -77,7 +77,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
-        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

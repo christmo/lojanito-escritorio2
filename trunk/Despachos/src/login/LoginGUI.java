@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -34,7 +35,6 @@ public class LoginGUI extends javax.swing.JFrame {
         initComponents();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -99,10 +99,10 @@ public class LoginGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpPass, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                    .addComponent(jtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpPass)
+                    .addComponent(jtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,11 +128,14 @@ public class LoginGUI extends javax.swing.JFrame {
                 .addGap(148, 148, 148)
                 .addComponent(jbtIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 .addGap(124, 124, 124))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(88, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,7 +182,7 @@ public class LoginGUI extends javax.swing.JFrame {
             boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
             boolean boolClave = (claveBase.toUpperCase().equals(strPass.toUpperCase()));
 
-            System.out.println("Usuario: "+boolUsuario+" Clave: "+boolClave);
+            System.out.println("Usuario: " + boolUsuario + " Clave: " + boolClave);
 
             if (boolUsuario) {
                 if (boolClave) {
@@ -189,9 +192,9 @@ public class LoginGUI extends javax.swing.JFrame {
                      */
                     String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
 
-                    Principal pantalla = new Principal(sesion,cb);
+                    Principal pantalla = new Principal(sesion, cb);
 
-                   // cb.CerrarConexion();
+                    // cb.CerrarConexion();
                     this.setVisible(false);
                     System.out.println("Ingresar a Principal");
                 } else {
@@ -243,6 +246,19 @@ public class LoginGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+                try {
+                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel");
+//2                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel");
+//3                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel");
+//4                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel");
+//5                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
+
+                } catch (Exception e) {
+                    System.out.println("Problemas al cargar Temas Substance");
+                }
+
+
+
                 new LoginGUI().setVisible(true);
             }
         });

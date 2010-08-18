@@ -7,7 +7,7 @@ package interfaz.comunicacion;
 import BaseDatos.ConexionBase;
 import interfaz.Principal;
 import interfaz.TrabajoTablas;
-import interfaz.pruebas.funcionesUtilidad;
+import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
 import java.io.IOException;
 import java.io.InputStream;

@@ -23,8 +23,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.CommMonitoreo;
-import interfaz.pruebas.INICIO;
-import interfaz.pruebas.funcionesUtilidad;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
 import java.awt.event.ActionListener;
@@ -39,7 +37,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author christmo
+ * @author kradac
  */
 public final class Principal extends javax.swing.JFrame {
 
@@ -61,7 +59,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Variables Privadas
      */
-    private static ConexionBase bd = new ConexionBase();
+    private static ConexionBase bd;
     private static ResultSet rs;
     private static String[] strCabecerasColumnasVehiculos = null;
     private String strHora;
@@ -79,6 +77,9 @@ public final class Principal extends javax.swing.JFrame {
     private int intFilaSeleccionada;
     private int cod; //codigo de la tecla presionada
     private boolean desPorTabla_Campo = false; //false es un despacho por campo, true es un despacho por tabla
+    private INICIO menu ;
+
+
     /**
      * almacena los clientes Por Despachar
      */
@@ -99,9 +100,10 @@ public final class Principal extends javax.swing.JFrame {
      * Constructor para recibir los datos de sesion desde el menu principal
      * @param String[] sesion -> (0)=nickUsuario,(1)=id_empresa,(2)=NombreUsuario
      */
-    public Principal(String[] info) {
+    public Principal(String[] info, ConexionBase conec) {
         setSession(info);
         Principal.main(null);
+        this.bd = conec;
     }
 
     /**
@@ -151,7 +153,7 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
-     * Actializa la barra de titulo del frame
+     * Actualiza la barra de titulo del frame
      */
     public void BarraTitulo() {
         this.setTitle("Despachos KRADAC || " + turno + " || " + sesion[2]);
@@ -1435,7 +1437,10 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jtVehiculosMousePressed
 
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
-        INICIO menu = new INICIO(sesion);
+        if ((menu == null) || (!menu.isDisplayable())) {
+            menu = new INICIO(sesion,this.bd);
+            menu.setLocationRelativeTo(this);
+        }
     }//GEN-LAST:event_jbMenuActionPerformed
 
     /**

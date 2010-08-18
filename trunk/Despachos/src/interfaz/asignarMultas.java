@@ -1,4 +1,4 @@
-package interfaz.pruebas;
+package interfaz;
 
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;

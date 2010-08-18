@@ -3,7 +3,7 @@
  *
  * Created on 09/08/2010, 08:38:49 AM
  */
-package interfaz.pruebas;
+package interfaz;
 
 import BaseDatos.ConexionBase;
 import java.io.File;
