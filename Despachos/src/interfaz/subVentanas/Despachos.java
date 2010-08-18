@@ -91,7 +91,6 @@ public class Despachos {
     this.strBarrio = barrio;
     this.strNota = nota;
     }*/
-
     public Despachos(String hora, String tel, String cod, String nom, String dir, String barrio, String nota) {
         this.strHora = hora;
         this.strTelefono = tel;
@@ -132,12 +131,28 @@ public class Despachos {
         this.strNombre = nom;
         this.strDireccion = dir;
         this.strBarrio = barrio;
-        this.intMinutos = Integer.parseInt(min);
-        this.intUnidad = Integer.parseInt(unidad);
-        this.intAtraso = Integer.parseInt(atraso);
+        try {
+            this.intMinutos = Integer.parseInt(min);
+        } catch (NumberFormatException ex) {
+            this.intMinutos = 0;
+        }
+        try {
+            this.intUnidad = Integer.parseInt(unidad);
+        } catch (NumberFormatException ex) {
+            this.intUnidad = 0;
+        }
+        try {
+            this.intAtraso = Integer.parseInt(atraso);
+        } catch (NumberFormatException ex) {
+            this.intAtraso = 0;
+        }
         this.strNota = nota;
         this.strEstado = estado;
-        this.intID_Turno = Integer.parseInt(id_turno);
+        try {
+            this.intID_Turno = Integer.parseInt(id_turno);
+        } catch (NumberFormatException ex) {
+            this.intID_Turno = 0;
+        }
         this.strUsuario = usuario;
     }
 
