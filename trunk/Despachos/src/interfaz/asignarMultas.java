@@ -22,7 +22,7 @@ public class asignarMultas extends javax.swing.JDialog {
 
     /** Creates new form modTurnos */
     public asignarMultas(JFrame padre,String strSesion[], ConexionBase con) {
-        super(padre, "Multas");
+        super(padre, "Asignacion de Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         this.bd = con;

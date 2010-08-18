@@ -30,7 +30,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
     public modAsignarMultas(JFrame padre, ConexionBase conec) {
 
-        super(padre,"Busqueda de Vehículos");
+        super(padre,"Busqueda de Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         this.bd = conec;
