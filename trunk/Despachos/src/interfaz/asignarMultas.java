@@ -75,7 +75,7 @@ public class asignarMultas extends javax.swing.JDialog {
         getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
-        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 110, -1));
+        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 120, -1));
 
         jLabel7.setText("ESTADO:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
@@ -92,7 +92,7 @@ public class asignarMultas extends javax.swing.JDialog {
         getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 120, -1));
 
         txtHora.setEditable(false);
-        getContentPane().add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 70, -1));
+        getContentPane().add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 80, -1));
 
         jLabel5.setText("HORA:");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
@@ -101,7 +101,7 @@ public class asignarMultas extends javax.swing.JDialog {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         txtFecha.setEditable(false);
-        getContentPane().add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 70, -1));
+        getContentPane().add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 100, -1));
 
         jLabel3.setText("Nro. UNIDAD:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
@@ -116,7 +116,7 @@ public class asignarMultas extends javax.swing.JDialog {
                 cmbNroUnidadActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbNroUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 120, -1));
+        getContentPane().add(cmbNroUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 120, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -147,7 +147,7 @@ public class asignarMultas extends javax.swing.JDialog {
                         "VALOR DEL CAMPO INCORRECTO",
                         JOptionPane.ERROR_MESSAGE);
         else
-            JOptionPane.showMessageDialog(this, "FALTAN INGRESAR O SELECCIONAR ALGUNOS CAMPOS",
+            JOptionPane.showMessageDialog(this, "FALTAN SELECCIONAR ALGUNOS CAMPOS",
                         "FALTAN DATOS",
                         JOptionPane.ERROR_MESSAGE);
 
