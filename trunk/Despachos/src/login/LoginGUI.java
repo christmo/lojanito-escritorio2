@@ -189,9 +189,9 @@ public class LoginGUI extends javax.swing.JFrame {
                      */
                     String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
 
-                    Principal pantalla = new Principal(sesion);
+                    Principal pantalla = new Principal(sesion,cb);
 
-                    cb.CerrarConexion();
+                   // cb.CerrarConexion();
                     this.setVisible(false);
                     System.out.println("Ingresar a Principal");
                 } else {

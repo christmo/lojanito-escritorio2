@@ -26,13 +26,15 @@ public class ingresoConductor extends javax.swing.JDialog {
     private File Ffoto = null;
     private ResourceBundle rb;
     private funcionesUtilidad utilidad = new funcionesUtilidad();
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
 
     /** Creates new form ingresoConductor */
-    public ingresoConductor(JFrame padre) {
+    public ingresoConductor(JFrame padre, ConexionBase con) {
         super(padre, "Ingreso de Conductores");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+
+        this.bd = con;
 
         initComponents();
         leerProperties();
@@ -371,16 +373,7 @@ public class ingresoConductor extends javax.swing.JDialog {
 }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        funcionesUtilidad objFun = new funcionesUtilidad();
-        
-        String mail = txtemail.getText();
-
-        System.out.println(objFun.isEmail(mail));
-        
- 
-
-
-        //        super.dispose();
+        super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost

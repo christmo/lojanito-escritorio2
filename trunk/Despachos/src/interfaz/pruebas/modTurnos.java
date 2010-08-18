@@ -17,7 +17,6 @@ import javax.swing.text.DefaultFormatterFactory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,12 +27,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class modTurnos extends javax.swing.JDialog {
 
-    ConexionBase bd = new ConexionBase();
+    ConexionBase bd;
     ResultSet rs;
 
     /** Creates new form modTurnos */
-    public modTurnos(JFrame padre) {
+    public modTurnos(JFrame padre, ConexionBase conec) {
         super(padre, "Modificar Turnos");
+        this.bd = conec;
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         initComponents();
@@ -55,7 +55,7 @@ public class modTurnos extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnCalcular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calcular.png"))); // NOI18N
         btnCalcular.setText("Calcular");
@@ -64,7 +64,7 @@ public class modTurnos extends javax.swing.JDialog {
                 btnCalcularActionPerformed(evt);
             }
         });
-        add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, 50));
+        getContentPane().add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, 50));
 
         tblTurnos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -88,23 +88,25 @@ public class modTurnos extends javax.swing.JDialog {
         tblTurnos.setUpdateSelectionOnSort(false);
         jScrollPane1.setViewportView(tblTurnos);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 170, 120));
-        add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 40, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 170, 120));
+
+        cantidad.setModel(new javax.swing.SpinnerNumberModel(4, 1, 23, 1));
+        getContentPane().add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 40, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("Cantidad de Turnos");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 22));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 22));
 
         jLabel3.setText("Primer Turno");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 80, 22));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 80, 22));
 
         horaTurno.setModel(new SpinnerDateModel(new Date(), null,
             null, Calendar.HOUR_OF_DAY));
-    add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 68, -1));
+    getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 68, -1));
 
     jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
     jLabel1.setText("Hora de Inicio");
-    add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
+    getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
 
     btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
     btnGuardar.setText("Guardar");
@@ -113,7 +115,7 @@ public class modTurnos extends javax.swing.JDialog {
             btnGuardarActionPerformed(evt);
         }
     });
-    add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
+    getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
 
     btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
     btnCancelar.setText("Cancelar");
@@ -122,7 +124,7 @@ public class modTurnos extends javax.swing.JDialog {
             btnCancelarActionPerformed(evt);
         }
     });
-    add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
+    getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
