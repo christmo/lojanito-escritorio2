@@ -34,6 +34,7 @@ public class LoginGUI extends javax.swing.JFrame {
     public LoginGUI() {
         initComponents();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+
     }
 
     /** This method is called from within the constructor to
@@ -257,9 +258,10 @@ public class LoginGUI extends javax.swing.JFrame {
                     System.out.println("Problemas al cargar Temas Substance");
                 }
 
-
-
                 new LoginGUI().setVisible(true);
+
+
+
             }
         });
     }
