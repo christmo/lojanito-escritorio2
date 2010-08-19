@@ -48,17 +48,19 @@ public class INICIO extends javax.swing.JFrame {
         btnEditVehiculo.setText("<html><center>EDITAR<br>VEHICULO</center></html>");
         btnEditConductor.setText("<html><center>EDITAR<br>CONDUCTOR</center></html>");
         btnNewVehiculo.setText("<html><center>NUEVO<br>VEHICULO</center></html>");
-        btnEstados.setText("<html><center>ESTADOS<br>TAXI</center></html>");
-        btnBEMultas.setText("<html><center>EDITAR<br>ASIGNACION MULTAS</center></html>");
+        btnEstados.setText("<html><center>ESTADOS<br>DEL TAXI</center></html>");
+        btnBEMultas.setText("<html><center>EDITAR<br> MULTAS</center></html>");
         btnTurnos.setText("<html><center>TURNOS</center></html>");
         btnDirectorio.setText("<html><center>DIRECTORIO</center></html>");
         btnReportes.setText("<html><center>REPORTES</center></html>");
-        btnAsignarM.setText("<html><center>HISTORIAL DE <BR> MULTAS </center></html>");
-        btnMultas.setText("<html><center>CREAR <BR> MULTAS </center></html>");
+        btnAsignarM.setText("<html><center>ASIGNAR <BR> MULTA</center></html>");
+        btnMultas.setText("<html><center> MULTAS </center></html>");
+
+        btnConfig.setText("<html><center>CONFIG</center></html>");
+        btnSalir.setText("<html><center>CERRAR</center></html>");
 
         btnNvConductor.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNvConductor.setHorizontalTextPosition(SwingConstants.CENTER);
-
 
         btnEditVehiculo.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnEditVehiculo.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -90,6 +92,12 @@ public class INICIO extends javax.swing.JFrame {
         btnMultas.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnMultas.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        btnConfig.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnConfig.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
+
 
         //ICONO DE APLICACION
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
@@ -106,13 +114,15 @@ public class INICIO extends javax.swing.JFrame {
         btnNewVehiculo = new javax.swing.JButton();
         btnTurnos = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
-        btnDirector = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
         btnEditConductor = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
         btnBEMultas = new javax.swing.JButton();
         btnDirectorio = new javax.swing.JButton();
         btnMultas = new javax.swing.JButton();
         btnAsignarM = new javax.swing.JButton();
+        lblNombreAplicacion = new javax.swing.JLabel();
+        lblEmpresa = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -124,16 +134,15 @@ public class INICIO extends javax.swing.JFrame {
                 formWindowClosed(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnNvConductor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/chofer.png"))); // NOI18N
         btnNvConductor.setText("New Conductor");
+        btnNvConductor.setPreferredSize(new java.awt.Dimension(186, 58));
         btnNvConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNvConductorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnNvConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 110, 85));
 
         btnEstados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/estados.png"))); // NOI18N
         btnEstados.setText("Estados Taxi");
@@ -142,25 +151,22 @@ public class INICIO extends javax.swing.JFrame {
                 btnEstadosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, 110, 85));
 
-        btnEditVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bevehiculo.png"))); // NOI18N
+        btnEditVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modauto.png"))); // NOI18N
         btnEditVehiculo.setText("B/E Vehiculos");
         btnEditVehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditVehiculoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, 110, 85));
 
-        btnNewVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png"))); // NOI18N
+        btnNewVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/auto.png"))); // NOI18N
         btnNewVehiculo.setText("New Vehiculo");
         btnNewVehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewVehiculoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnNewVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 110, 85));
 
         btnTurnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/turnos.png"))); // NOI18N
         btnTurnos.setText("TURNOS");
@@ -170,7 +176,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnTurnosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 85));
 
         btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/reporte.png"))); // NOI18N
         btnReportes.setText("REPORTES");
@@ -179,16 +184,14 @@ public class INICIO extends javax.swing.JFrame {
                 btnReportesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 110, 85));
 
-        btnDirector.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
-        btnDirector.setText("SALIR");
-        btnDirector.addActionListener(new java.awt.event.ActionListener() {
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
+        btnSalir.setText("SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDirectorActionPerformed(evt);
+                btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDirector, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 440, 130, 60));
 
         btnEditConductor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bechofer.png"))); // NOI18N
         btnEditConductor.setText("B/E  conductor");
@@ -197,7 +200,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnEditConductorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEditConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 110, 85));
 
         btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/configuracion.png"))); // NOI18N
         btnConfig.setText("CONFIG");
@@ -206,7 +208,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnConfigActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 110, 50));
 
         btnBEMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bemulta.png"))); // NOI18N
         btnBEMultas.setText("B/E ASIGNACION DE MULTAS");
@@ -215,7 +216,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnBEMultasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBEMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, 130, 85));
 
         btnDirectorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/directorio.png"))); // NOI18N
         btnDirectorio.setText("DIRECTORIO");
@@ -224,7 +224,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnDirectorioActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 110, 85));
 
         btnMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/multas.png"))); // NOI18N
         btnMultas.setText("CREAR MULTAS");
@@ -233,7 +232,6 @@ public class INICIO extends javax.swing.JFrame {
                 btnMultasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 270, 110, 85));
 
         btnAsignarM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/amulta.png"))); // NOI18N
         btnAsignarM.setText("ASIGNAR MULTAS");
@@ -242,14 +240,91 @@ public class INICIO extends javax.swing.JFrame {
                 btnAsignarMActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAsignarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, 130, 85));
+
+        lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 24)); // NOI18N
+        lblNombreAplicacion.setText("SIETE v1.0");
+
+        lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        lblEmpresa.setText("LOJA NORTE ");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 403, Short.MAX_VALUE)
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnEditVehiculo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnNewVehiculo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnReportes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEstados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAsignarM, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnTurnos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(99, 99, 99)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(lblNombreAplicacion)
+                            .addGap(215, 215, 215)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblEmpresa)
+                        .addGap(201, 201, 201))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblEmpresa)
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConfig, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDirectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnDirectorActionPerformed
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
@@ -327,7 +402,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
-            beasignarMulta = new modAsignarMultas(this, this.conec);
+            beasignarMulta = new modAsignarMultas(this, this.conec,sesion);
             beasignarMulta.setSize(700, 700);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -344,7 +419,7 @@ public class INICIO extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ((multas == null) || (!multas.isDisplayable())) {
             multas = new Multas(this, this.conec);
-            multas.setSize(500, 400);
+            multas.setSize(496, 400);
             multas.setLocationRelativeTo(this);
             multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             multas.setResizable(false);
@@ -357,13 +432,12 @@ public class INICIO extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
             asignarMulta = new asignarMultas(this, sesion, this.conec);
-            asignarMulta.setSize(350, 450);
+            asignarMulta.setSize(350, 354);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             asignarMulta.setResizable(false);
             asignarMulta.setVisible(true);
         }
-        btnAsignarM.setVerticalTextPosition(PROPERTIES);
 
     }//GEN-LAST:event_btnAsignarMActionPerformed
 
@@ -379,7 +453,6 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnAsignarM;
     private javax.swing.JButton btnBEMultas;
     private javax.swing.JButton btnConfig;
-    private javax.swing.JButton btnDirector;
     private javax.swing.JButton btnDirectorio;
     private javax.swing.JButton btnEditConductor;
     private javax.swing.JButton btnEditVehiculo;
@@ -388,6 +461,9 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnNewVehiculo;
     private javax.swing.JButton btnNvConductor;
     private javax.swing.JButton btnReportes;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
+    private javax.swing.JLabel lblEmpresa;
+    private javax.swing.JLabel lblNombreAplicacion;
     // End of variables declaration//GEN-END:variables
 }

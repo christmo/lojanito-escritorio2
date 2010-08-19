@@ -21,7 +21,7 @@ public class asignarMultas extends javax.swing.JDialog {
     public static String strUsuario;
 
     /** Creates new form modTurnos */
-    public asignarMultas(JFrame padre,String strSesion[], ConexionBase con) {
+    public asignarMultas(JFrame padre, String strSesion[], ConexionBase con) {
         super(padre, "Asignacion de Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
@@ -32,7 +32,6 @@ public class asignarMultas extends javax.swing.JDialog {
         txtHora.setText(objUtilidad.getHora());
         consultarNrosUnidad();
         consultarCodigoMultas();
-        cmbEstado.setSelectedIndex(0); 
         cmbCodigoM.setSelectedIndex(0);
     }
 
@@ -42,8 +41,6 @@ public class asignarMultas extends javax.swing.JDialog {
 
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        cmbEstado = new javax.swing.JComboBox();
-        jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cmbCodigoM = new javax.swing.JComboBox();
         txtHora = new javax.swing.JTextField();
@@ -54,8 +51,6 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         cmbNroUnidad = new javax.swing.JComboBox();
 
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cerrar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -63,7 +58,6 @@ public class asignarMultas extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, -1, -1));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -72,16 +66,8 @@ public class asignarMultas extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
-        getContentPane().add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 120, -1));
-
-        jLabel7.setText("ESTADO:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
 
         jLabel6.setText("CODIGO MULTA:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
         cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
@@ -89,26 +75,19 @@ public class asignarMultas extends javax.swing.JDialog {
                 cmbCodigoMActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 120, -1));
 
         txtHora.setEditable(false);
-        getContentPane().add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 80, -1));
 
         jLabel5.setText("HORA:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabel4.setText("FECHA:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         txtFecha.setEditable(false);
-        getContentPane().add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 100, -1));
 
         jLabel3.setText("Nro. UNIDAD:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("ASIGNAR MULTA");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, -1));
 
         cmbNroUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
         cmbNroUnidad.addActionListener(new java.awt.event.ActionListener() {
@@ -116,7 +95,68 @@ public class asignarMultas extends javax.swing.JDialog {
                 cmbNroUnidadActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbNroUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 120, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(107, 107, 107)
+                .addComponent(jLabel1)
+                .addContainerGap(119, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(cmbNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -128,28 +168,32 @@ public class asignarMultas extends javax.swing.JDialog {
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if(cmbNroUnidad.getSelectedIndex()>=0 && cmbCodigoM.getSelectedIndex()>0 && cmbEstado.getSelectedIndex()>0)
-            if(objUtilidad.isNumeric(cmbNroUnidad.getSelectedItem().toString())){
-                if(cmbEstado.getSelectedItem().equals("Pendiente")){
-                    if(guardarRegistro(Integer.parseInt(cmbNroUnidad.getSelectedItem().toString()),txtFecha.getText(),txtHora.getText(),cmbCodigoM.getSelectedItem().toString(), cmbEstado.getSelectedIndex())){
-                        JOptionPane.showMessageDialog(this, "REGISTRO GUARDADO EXITOSAMENTE",
+        if (cmbNroUnidad.getSelectedIndex() >= 0
+                && cmbCodigoM.getSelectedIndex() > 0) {
+
+            if (objUtilidad.isNumeric(cmbNroUnidad.getSelectedItem().toString())) {
+
+                if (guardarRegistro(Integer.parseInt(
+                        cmbNroUnidad.getSelectedItem().toString()),
+                        txtFecha.getText(), txtHora.getText(),
+                        cmbCodigoM.getSelectedItem().toString()
+                        )) {
+                    JOptionPane.showMessageDialog(this, "REGISTRO GUARDADO EXITOSAMENTE",
                             "REGISTRO GUARDADO",
                             JOptionPane.INFORMATION_MESSAGE);
-                        limpiar();
-                    }
-                }else
-                    JOptionPane.showMessageDialog(this,"EL ESTADO DE LA MULTA ES INCORRECTO",
-                            "VERIFIQUE EL ESTADO DE LA MULTA",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                }
 
-            }else
+            } else {
                 JOptionPane.showMessageDialog(this, "EL NUMERO DE UNIDAD DEBE SER NUMERICO",
                         "VALOR DEL CAMPO INCORRECTO",
                         JOptionPane.ERROR_MESSAGE);
-        else
+            }
+        } else {
             JOptionPane.showMessageDialog(this, "FALTAN SELECCIONAR ALGUNOS CAMPOS",
-                        "FALTAN DATOS",
-                        JOptionPane.ERROR_MESSAGE);
+                    "FALTAN DATOS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
 }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -160,39 +204,34 @@ public class asignarMultas extends javax.swing.JDialog {
     private void cmbNroUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNroUnidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbNroUnidadActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox cmbCodigoM;
-    private javax.swing.JComboBox cmbEstado;
     private javax.swing.JComboBox cmbNroUnidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtHora;
     // End of variables declaration//GEN-END:variables
 
     private void limpiar() {
         cmbNroUnidad.setSelectedIndex(-1);
-        cmbEstado.setSelectedIndex(-1);
         cmbCodigoM.setSelectedIndex(-1);
     }
 
-    private boolean guardarRegistro(int intNroUnidad, String strFecha, String strHora, String strCodMulta, int intEstado ) {
+    private boolean guardarRegistro(int intNroUnidad, String strFecha, String strHora, String strCodMulta) {
         String sql = "INSERT INTO MULTAS(USUARIO, N_UNIDAD, FECHA, HORA, COD_MULTA,ESTADO)"
-                   + "VALUES('"+ strUsuario +"',"+ intNroUnidad +",'"+ strFecha +"','"+ strHora +"','"+ strCodMulta +"',"+intEstado+")";
+                + "VALUES('" + strUsuario + "'," + intNroUnidad + ",'" + strFecha + "','" + strHora + "','" + strCodMulta + "'," + 1 + ")";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
         }
         return false;
     }
-
 
     private void consultarCodigoMultas() {
         String sql = "select COD_MULTA from COD_MULTAS";
@@ -231,5 +270,4 @@ public class asignarMultas extends javax.swing.JDialog {
             limpiar();
         }
     }
-   
 }
