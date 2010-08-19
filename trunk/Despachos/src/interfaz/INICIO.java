@@ -45,15 +45,15 @@ public class INICIO extends javax.swing.JFrame {
         //this.setLocationRelativeTo(null);
 
         btnNvConductor.setText("<html><center>NUEVO<br>CONDUCTOR</center></html>");
-        btnEditVehiculo.setText("<html><center>BUSCAR / EDITAR<br>VEHICULO</center></html>");
-        btnEditConductor.setText("<html><center>BUSCAR / EDITAR<br>CONDUCTOR</center></html>");
+        btnEditVehiculo.setText("<html><center>EDITAR<br>VEHICULO</center></html>");
+        btnEditConductor.setText("<html><center>EDITAR<br>CONDUCTOR</center></html>");
         btnNewVehiculo.setText("<html><center>NUEVO<br>VEHICULO</center></html>");
         btnEstados.setText("<html><center>ESTADOS<br>TAXI</center></html>");
-        btnBEMultas.setText("<html><center>BUSCAR / EDITAR<br>ASIGNACION MULTAS</center></html>");
+        btnBEMultas.setText("<html><center>EDITAR<br>ASIGNACION MULTAS</center></html>");
         btnTurnos.setText("<html><center>TURNOS</center></html>");
         btnDirectorio.setText("<html><center>DIRECTORIO</center></html>");
         btnReportes.setText("<html><center>REPORTES</center></html>");
-        btnAsignarM.setText("<html><center>ASIGNAR <BR> MULTA </center></html>");
+        btnAsignarM.setText("<html><center>HISTORIAL DE <BR> MULTAS </center></html>");
         btnMultas.setText("<html><center>CREAR <BR> MULTAS </center></html>");
 
         btnNvConductor.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -144,6 +144,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, 110, 85));
 
+        btnEditVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bevehiculo.png"))); // NOI18N
         btnEditVehiculo.setText("B/E Vehiculos");
         btnEditVehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,14 +181,16 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 110, 85));
 
+        btnDirector.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
         btnDirector.setText("SALIR");
         btnDirector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDirectorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDirector, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 450, 110, 50));
+        getContentPane().add(btnDirector, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 440, 130, 60));
 
+        btnEditConductor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bechofer.png"))); // NOI18N
         btnEditConductor.setText("B/E  conductor");
         btnEditConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
