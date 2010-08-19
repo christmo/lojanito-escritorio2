@@ -35,6 +35,9 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnNvConductor">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/chofer.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="New Conductor"/>
       </Properties>
       <Events>
@@ -48,6 +51,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEstados">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/estados.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Estados Taxi"/>
       </Properties>
       <Events>
@@ -74,6 +80,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnNewVehiculo">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/vehiculo.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="New Vehiculo"/>
       </Properties>
       <Events>
@@ -87,6 +96,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTurnos">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/turnos.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="TURNOS"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
@@ -101,6 +113,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnReportes">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/reporte.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="REPORTES"/>
       </Properties>
       <Events>
@@ -140,6 +155,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnConfig">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/configuracion.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="CONFIG"/>
       </Properties>
       <Events>
@@ -153,6 +171,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnBEMultas">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/bemulta.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="B/E ASIGNACION DE MULTAS"/>
       </Properties>
       <Events>
@@ -166,6 +187,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDirectorio">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/directorio.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="DIRECTORIO"/>
       </Properties>
       <Events>
@@ -179,6 +203,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnMultas">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/multas.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="CREAR MULTAS"/>
       </Properties>
       <Events>
@@ -192,6 +219,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnAsignarM">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/amulta.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="ASIGNAR MULTAS"/>
       </Properties>
       <Events>

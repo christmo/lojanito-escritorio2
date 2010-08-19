@@ -13,6 +13,7 @@ package interfaz;
 import BaseDatos.ConexionBase;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -28,28 +29,67 @@ public class INICIO extends javax.swing.JFrame {
     JDialog multas = null;
     JDialog asignarMulta = null;
     JDialog beasignarMulta = null;
-
-    public static String sesion[]=null;
+    public static String sesion[] = null;
     private ConexionBase conec;
-    
 
     /** Creates new form INICIO */
-    public INICIO(){
+    public INICIO() {
         initComponents();
     }
+
     public INICIO(String strSesion[], ConexionBase bd) {
         this.conec = bd;
-        INICIO.sesion=strSesion;
+        INICIO.sesion = strSesion;
         initComponents();
 
         //this.setLocationRelativeTo(null);
 
-        btnNvConductor.setText("<html>NUEVO<br>CONDUCTOR</html>");
-        btnEditVehiculo.setText("<html>BUSCAR / EDITAR<br>VEHICULO</html>");
-        btnEditConductor.setText("<html>BUSCAR / EDITAR<br>CONDUCTOR</html>");
-        btnNewVehiculo.setText("<html>NUEVO<br>VEHICULO</html>");
-        btnEstados.setText("<html>ESTADOS<br>TAXI</html>");
-        btnBEMultas.setText("<html>BUSCAR / EDITAR<br>ASIGNACION MULTAS</html>");
+        btnNvConductor.setText("<html><center>NUEVO<br>CONDUCTOR</center></html>");
+        btnEditVehiculo.setText("<html><center>BUSCAR / EDITAR<br>VEHICULO</center></html>");
+        btnEditConductor.setText("<html><center>BUSCAR / EDITAR<br>CONDUCTOR</center></html>");
+        btnNewVehiculo.setText("<html><center>NUEVO<br>VEHICULO</center></html>");
+        btnEstados.setText("<html><center>ESTADOS<br>TAXI</center></html>");
+        btnBEMultas.setText("<html><center>BUSCAR / EDITAR<br>ASIGNACION MULTAS</center></html>");
+        btnTurnos.setText("<html><center>TURNOS</center></html>");
+        btnDirectorio.setText("<html><center>DIRECTORIO</center></html>");
+        btnReportes.setText("<html><center>REPORTES</center></html>");
+        btnAsignarM.setText("<html><center>ASIGNAR <BR> MULTA </center></html>");
+        btnMultas.setText("<html><center>CREAR <BR> MULTAS </center></html>");
+
+        btnNvConductor.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnNvConductor.setHorizontalTextPosition(SwingConstants.CENTER);
+
+
+        btnEditVehiculo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnEditVehiculo.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnEditConductor.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnEditConductor.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnNewVehiculo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnNewVehiculo.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnEstados.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnEstados.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnBEMultas.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnBEMultas.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnTurnos.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnTurnos.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnDirectorio.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnDirectorio.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnReportes.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnReportes.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnAsignarM.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnAsignarM.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btnMultas.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnMultas.setHorizontalTextPosition(SwingConstants.CENTER);
+
 
         //ICONO DE APLICACION
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
@@ -86,6 +126,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnNvConductor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/chofer.png"))); // NOI18N
         btnNvConductor.setText("New Conductor");
         btnNvConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,6 +135,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnNvConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 110, 85));
 
+        btnEstados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/estados.png"))); // NOI18N
         btnEstados.setText("Estados Taxi");
         btnEstados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,6 +152,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnEditVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, 110, 85));
 
+        btnNewVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png"))); // NOI18N
         btnNewVehiculo.setText("New Vehiculo");
         btnNewVehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +161,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnNewVehiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 110, 85));
 
+        btnTurnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/turnos.png"))); // NOI18N
         btnTurnos.setText("TURNOS");
         btnTurnos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnTurnos.addActionListener(new java.awt.event.ActionListener() {
@@ -127,6 +171,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 85));
 
+        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/reporte.png"))); // NOI18N
         btnReportes.setText("REPORTES");
         btnReportes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,6 +196,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnEditConductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 110, 85));
 
+        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/configuracion.png"))); // NOI18N
         btnConfig.setText("CONFIG");
         btnConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +205,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 110, 50));
 
+        btnBEMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bemulta.png"))); // NOI18N
         btnBEMultas.setText("B/E ASIGNACION DE MULTAS");
         btnBEMultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,6 +214,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnBEMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, 130, 85));
 
+        btnDirectorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/directorio.png"))); // NOI18N
         btnDirectorio.setText("DIRECTORIO");
         btnDirectorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,6 +223,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 110, 85));
 
+        btnMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/multas.png"))); // NOI18N
         btnMultas.setText("CREAR MULTAS");
         btnMultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,6 +232,7 @@ public class INICIO extends javax.swing.JFrame {
         });
         getContentPane().add(btnMultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 270, 110, 85));
 
+        btnAsignarM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/amulta.png"))); // NOI18N
         btnAsignarM.setText("ASIGNAR MULTAS");
         btnAsignarM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,7 +250,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
-            newVehiculo = new ingresoVehiculos(this, this.sesion,this.conec);
+            newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec);
             newVehiculo.setSize(680, 595);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -230,7 +280,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
 
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            turnos = new modTurnos(this,this.conec);
+            turnos = new modTurnos(this, this.conec);
             turnos.setSize(525, 250);
             turnos.setLocationRelativeTo(this);
             turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -242,7 +292,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
-            nConductor = new ingresoConductor(this,this.conec);
+            nConductor = new ingresoConductor(this, this.conec);
             nConductor.setSize(650, 550);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -274,7 +324,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
-            beasignarMulta = new modAsignarMultas(this,this.conec);
+            beasignarMulta = new modAsignarMultas(this, this.conec);
             beasignarMulta.setSize(700, 700);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -297,20 +347,21 @@ public class INICIO extends javax.swing.JFrame {
             multas.setResizable(false);
             multas.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_btnMultasActionPerformed
 
     private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
         // TODO add your handling code here:
         if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
-            asignarMulta = new asignarMultas(this,sesion, this.conec);
+            asignarMulta = new asignarMultas(this, sesion, this.conec);
             asignarMulta.setSize(350, 450);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             asignarMulta.setResizable(false);
             asignarMulta.setVisible(true);
         }
-        
+        btnAsignarM.setVerticalTextPosition(PROPERTIES);
+
     }//GEN-LAST:event_btnAsignarMActionPerformed
 
     public static void main(String args[]) {
