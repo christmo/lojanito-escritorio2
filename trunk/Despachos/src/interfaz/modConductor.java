@@ -609,21 +609,17 @@ public class modConductor extends javax.swing.JDialog {
 
         leerProperties();
 
-        if (aux[8] == null || aux[8].equals("")) {
-
-            //Icon fot = new ImageIcon(rb.getString("dirImgConductores") + "\\default.jpg");
+        if (aux[8] == null || aux[8].equals("")) {           
 
             Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
             lblFoto.setIcon(fot);
-            lblEtiquetaImagen.setText("default.jpg");
+            lblEtiquetaImagen.setText("defaultcon.jpg");
             lblFoto.setText("");
         } else {
 
             Icon fot = new ImageIcon(rb.getString("dirImgConductores") + "\\" + aux[8]);
 
             if (fot.getIconWidth() == -1) {
-                //fot = new ImageIcon(rb.getString("dirImgConductores") + "\\default.jpg");
-                //fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
                 lblFoto.setText("IMAGEN NO ENCONTRADA");
                 lblFoto.setIcon(null);
             } else {
