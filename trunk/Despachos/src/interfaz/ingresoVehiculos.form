@@ -94,8 +94,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblImagen" min="-2" pref="208" max="-2" attributes="0"/>
                   <Component id="lblEtiquetaImagen" min="-2" pref="210" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="44" pref="44" max="44" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                       <Component id="btnCambiar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -169,8 +169,8 @@
                       <Component id="lblImagen" min="-2" pref="248" max="-2" attributes="0"/>
                       <EmptySpace min="6" pref="6" max="6" attributes="0"/>
                       <Component id="lblEtiquetaImagen" min="-2" pref="20" max="-2" attributes="0"/>
-                      <EmptySpace min="6" pref="6" max="6" attributes="0"/>
-                      <Component id="btnCambiar" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnCambiar" min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="29" pref="29" max="29" attributes="0"/>

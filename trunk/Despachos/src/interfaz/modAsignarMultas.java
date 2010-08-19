@@ -8,6 +8,7 @@ package interfaz;
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,31 +21,37 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class modAsignarMultas extends javax.swing.JDialog {
-    
+
     ArrayList<String[]> multas;
     private static String[] auxItemFila;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     ConexionBase bd;
     ResultSet rs;
+    public static String strUsuario;
 
+    public modAsignarMultas(JFrame padre, ConexionBase conec, String strSesion[]) {
 
-    public modAsignarMultas(JFrame padre, ConexionBase conec) {
-
-        super(padre,"Busqueda de Multas");
+        super(padre, "Busqueda de Multas");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         this.bd = conec;
+        strUsuario = strSesion[0];
 
         initComponents();
         cmb2Parametro.setVisible(false);
-        txtFecha.setVisible(false);
+        dpFechaIni.setVisible(false);
+        dpFechaFin.setVisible(false);
         lblFecha.setVisible(false);
+        lblFecha1.setVisible(false);
 
         consultarCodigoMultas();
         cmbEstado.setSelectedIndex(0);
         cmbCodigoM.setSelectedIndex(0);
 
         this.setVisible(true);
+
+        bloquearArea(false);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -59,23 +66,24 @@ public class modAsignarMultas extends javax.swing.JDialog {
         lblNumCoincidencias = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
-        lblEtiquetaImagen = new javax.swing.JLabel();
-        lblBorrar = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         cmb2Parametro = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JTextField();
-        txtNroUnidad = new javax.swing.JTextField();
+        lblFecha = new javax.swing.JLabel();
+        pnlDatos = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox();
+        cmbCodigoM = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        cmbCodigoM = new javax.swing.JComboBox();
-        cmbEstado = new javax.swing.JComboBox();
-        jLabel7 = new javax.swing.JLabel();
-        lblFecha = new javax.swing.JLabel();
+        txtNroUnidad = new javax.swing.JTextField();
         txtFechaB = new javax.swing.JTextField();
         txtHora = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        dpFechaIni = new org.jdesktop.swingx.JXDatePicker();
+        dpFechaFin = new org.jdesktop.swingx.JXDatePicker();
+        lblFecha1 = new javax.swing.JLabel();
 
         tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
@@ -147,7 +155,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("ASIGNACION DE MULTAS");
+        jLabel10.setText("MULTAS");
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/rojo.png"))); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -157,8 +165,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
                 btnEliminarActionPerformed(evt);
             }
         });
-
-        lblEtiquetaImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
         btnCancelar.setText("CERRAR");
@@ -177,9 +183,13 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
         jLabel2.setText("BUSCAR POR:");
 
-        jLabel3.setText("Nro. UNIDAD:");
+        lblFecha.setText("DESDE EL :");
 
-        jLabel6.setText("CODIGO MULTA:");
+        pnlDatos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel7.setText("ESTADO:");
+
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
         cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
@@ -188,11 +198,9 @@ public class modAsignarMultas extends javax.swing.JDialog {
             }
         });
 
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Pendiente", "Pagada" }));
+        jLabel3.setText("Nro. UNIDAD:");
 
-        jLabel7.setText("ESTADO:");
-
-        lblFecha.setText("FECHA:");
+        jLabel6.setText("CODIGO MULTA:");
 
         txtFechaB.setEditable(false);
 
@@ -202,143 +210,169 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
         jLabel8.setText("FECHA:");
 
+        javax.swing.GroupLayout pnlDatosLayout = new javax.swing.GroupLayout(pnlDatos);
+        pnlDatos.setLayout(pnlDatosLayout);
+        pnlDatosLayout.setHorizontalGroup(
+            pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDatosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaB, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        pnlDatosLayout.setVerticalGroup(
+            pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDatosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlDatosLayout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel7))
+                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtFechaB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+                    .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
+        );
+
+        lblFecha1.setText("HASTA EL :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(279, 279, 279)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(126, 126, 126)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(186, 186, 186)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addComponent(lblNumCoincidencias, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(lblFecha))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmbParametro, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmb2Parametro, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBuscar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(33, 33, 33)
-                                        .addComponent(txtNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel6)
-                                            .addComponent(jLabel7)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                        .addGap(9, 9, 9)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtFechaB, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(180, 180, 180)
-                                .addComponent(lblEtiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(345, 345, 345)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(60, 60, 60)
-                                .addComponent(btnGuardar)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cmbParametro, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmb2Parametro, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56)
+                .addComponent(btnBuscar))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(146, 146, 146)
+                .addComponent(lblFecha)
+                .addGap(18, 18, 18)
+                .addComponent(dpFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(lblFecha1)
+                .addGap(12, 12, 12)
+                .addComponent(dpFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(lblNumCoincidencias, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(194, 194, 194)
+                .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60)
+                .addComponent(btnGuardar)
+                .addGap(29, 29, 29)
+                .addComponent(btnCancelar))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(cmbParametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmb2Parametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblFecha)))
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cmbParametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(cmb2Parametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(lblFecha))
+                    .addComponent(dpFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(lblFecha1))
+                    .addComponent(dpFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
                 .addComponent(lblNumCoincidencias, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(lblEtiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtNroUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(cmbCodigoM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jLabel7))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtFechaB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
-                            .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(41, 41, 41)
+                .addGap(6, 6, 6)
+                .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancelar)))
-                .addGap(252, 252, 252)
-                .addComponent(lblBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         limpiar();
-        if(cmbParametro.getSelectedIndex()>0){
-            if(!cmbParametro.getSelectedItem().equals("FECHA") && !cmb2Parametro.getSelectedItem().equals("")){
-                BuscarMultas(cmbParametro.getSelectedItem().toString(), cmb2Parametro.getSelectedItem().toString(), tblResultado);
-            }else if(cmbParametro.getSelectedItem().equals("FECHA") && !txtFecha.getText().equals("")){
-                BuscarMultas(cmbParametro.getSelectedItem().toString(), txtFecha.getText(), tblResultado);
-            }else
-                JOptionPane.showMessageDialog(this, "NO HA SELECCIONADO UN CRITERIO DE BUSQUEDA",
-                    "SELECCIONE UN CRITERIO DE BUSQUEDA",
-                    JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(this, "NO HA SELECCIONADO UN CRITERIO DE BUSQUEDA",
+        if (cmbParametro.getSelectedIndex() > 0) {
+            if (!cmbParametro.getSelectedItem().equals("FECHA")
+                    && !cmb2Parametro.getSelectedItem().equals("")) {
+
+                BuscarMultas(cmbParametro.getSelectedItem().toString(),
+                        cmb2Parametro.getSelectedItem().toString(),
+                        tblResultado, null, null);
+
+            } else if (cmbParametro.getSelectedItem().equals("FECHA")
+                    && dpFechaFin != null
+                    && dpFechaIni != null) {
+
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaIni = formato.format(dpFechaIni.getDate());
+                String fechaFin = formato.format(dpFechaFin.getDate());
+
+                BuscarMultas(cmbParametro.getSelectedItem().toString(),
+                        "", tblResultado,
+                        fechaIni, fechaFin);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "FALTAN PARÁMETROS DE  "
+                        + "BUSQUEDA",
+                        "SELECCIONE CRITERIO",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "NO HA SELECCIONADO UN "
+                    + "CRITERIO DE BUSQUEDA",
                     "SELECCIONE UN CRITERIO DE BUSQUEDA",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -361,7 +395,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
             } else {
                 fila = tblResultado.getSelectedRow();
             }
-           cargarAsignacionDeMultaSeleccionada(fila);
+            cargarAsignacionDeMultaSeleccionada(fila);
         }
 
         if (evt.getKeyCode() == 40) {
@@ -375,53 +409,63 @@ public class modAsignarMultas extends javax.swing.JDialog {
     }//GEN-LAST:event_tblResultadoKeyPressed
 
     private void cmbParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbParametroActionPerformed
-        //txtValorABuscar.setText("");
-        //limpiarCajas();
-        //limpiarTabla(tblResultado);
-        if(!cmbParametro.getSelectedItem().equals("FECHA")){
+
+        if (!cmbParametro.getSelectedItem().equals("FECHA")) {
             preConsultaDeDatos(cmbParametro.getSelectedItem().toString());
             cmb2Parametro.setVisible(true);
-            txtFecha.setVisible(false);
+            dpFechaIni.setVisible(false);
+            dpFechaFin.setVisible(false);
             lblFecha.setVisible(false);
-        } else{
-            txtFecha.setVisible(true);
+            lblFecha1.setVisible(false);
+        } else {
+            dpFechaIni.setVisible(true);
+            dpFechaFin.setVisible(true);
             lblFecha.setVisible(true);
             cmb2Parametro.setVisible(false);
+            lblFecha1.setVisible(true);
         }
     }//GEN-LAST:event_cmbParametroActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-       if(funciones.isNumeric(txtNroUnidad.getText())){
-           if(cmbCodigoM.getSelectedIndex()>0 && cmbEstado.getSelectedIndex()>0){
-               if(modificarRegistro(Integer.parseInt(txtNroUnidad.getText()),cmbCodigoM.getSelectedItem().toString(),cmbEstado.getSelectedIndex())){
-                  JOptionPane.showMessageDialog(this, "MULTA MODIFICADA SATISFACTORIAMENTE",
-                        "OK",
-                        JOptionPane.INFORMATION_MESSAGE);
+        if (funciones.isNumeric(txtNroUnidad.getText())) {
+            if (cmbCodigoM.getSelectedIndex() > 0 && cmbEstado.getSelectedIndex() > 0) {
+                if (modificarRegistro(strUsuario, Integer.parseInt(txtNroUnidad.getText()),
+                        cmbCodigoM.getSelectedItem().toString(),
+                        cmbEstado.getSelectedIndex())) {
+                    JOptionPane.showMessageDialog(this, "MULTA MODIFICADA SATISFACTORIAMENTE",
+                            "OK",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                    limpiarTabla(tblResultado);
+                } else {
+                    JOptionPane.showMessageDialog(this, "NO SE PUEDO MODIFICAR EL REGISTRO",
+                            "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-                super.dispose();
-            }else
+            } else {
                 JOptionPane.showMessageDialog(this, "FALTA SELECCIONAR EL CODIGO DE MULTA O EL ESTADO",
                         "FALTAN VALORES",
                         JOptionPane.ERROR_MESSAGE);
+            }
 
-        }else
+        } else {
             JOptionPane.showMessageDialog(this, "EL NUMERO DE VEHICULO ASIGNADO ES INCORRECTO",
-                        "NUMERO DE VEHICULO INCORRECTO",
-                        JOptionPane.ERROR_MESSAGE);
+                    "NUMERO DE VEHICULO INCORRECTO",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
-    
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-       if(eliminarRegistro()){
+        if (eliminarRegistro()) {
             JOptionPane.showMessageDialog(this, "MULTA ELIMINADA SATISFACTORIAMENTE",
                     "OK",
                     JOptionPane.INFORMATION_MESSAGE);
             limpiar();
             limpiarTabla(tblResultado);
 
-       }
-       else {
+        } else {
             JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR EL REGISTRO",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE);
@@ -439,7 +483,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
         // TODO add your handling code here:
 }//GEN-LAST:event_cmbCodigoMActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
@@ -449,6 +492,8 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private javax.swing.JComboBox cmbCodigoM;
     private javax.swing.JComboBox cmbEstado;
     private javax.swing.JComboBox cmbParametro;
+    private org.jdesktop.swingx.JXDatePicker dpFechaFin;
+    private org.jdesktop.swingx.JXDatePicker dpFechaIni;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -457,12 +502,11 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBorrar;
-    private javax.swing.JLabel lblEtiquetaImagen;
     private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblFecha1;
     private javax.swing.JLabel lblNumCoincidencias;
+    private javax.swing.JPanel pnlDatos;
     private javax.swing.JTable tblResultado;
-    private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtFechaB;
     private javax.swing.JTextField txtHora;
     private javax.swing.JTextField txtNroUnidad;
@@ -475,15 +519,15 @@ public class modAsignarMultas extends javax.swing.JDialog {
      * @param strCriterioBusqueda
      */
     private boolean preConsultaDeDatos(String strCriterioBusqueda) {
-        String sql=null;
+        String sql = null;
         cmb2Parametro.removeAllItems();
-        if(strCriterioBusqueda.equals("N_UNIDAD")){
+        if (strCriterioBusqueda.equals("N_UNIDAD")) {
             sql = "SELECT N_UNIDAD FROM VEHICULOS";
-        }else if(strCriterioBusqueda.equals("COD_MULTA")){
-            sql="SELECT COD_MULTA FROM COD_MULTAS";
-        }else if(strCriterioBusqueda.equals("USUARIO")){
-            sql="SELECT USUARIO FROM USUARIOS;";
-        }else if(strCriterioBusqueda.equals("ESTADO")){
+        } else if (strCriterioBusqueda.equals("COD_MULTA")) {
+            sql = "SELECT COD_MULTA FROM COD_MULTAS";
+        } else if (strCriterioBusqueda.equals("USUARIO")) {
+            sql = "SELECT USUARIO FROM USUARIOS;";
+        } else if (strCriterioBusqueda.equals("ESTADO")) {
             cmb2Parametro.addItem("Pendiente");
             cmb2Parametro.addItem("Pagada");
             return true;
@@ -502,27 +546,38 @@ public class modAsignarMultas extends javax.swing.JDialog {
         return false;
     }
 
-
-
     /**
      * Realiza una busqueda de las multas asignadas, recibe como parametros dos criterios de busqueda
      *
      * @param nroUnidad
      * @param nroUnidad
      */
-    private ArrayList<String[]> consultaDeMultasAsignadas(String strCriterio, String strValor) {
-        String sql=null;
+    private ArrayList<String[]> consultaDeMultasAsignadas(String strCriterio, String strValor, String fi, String ff) {
+
+        String sql = null;
+
         ArrayList<String[]> rta = new ArrayList();
-        if(!strCriterio.equals("ESTADO")){
-            sql="SELECT * FROM MULTAS WHERE "+ strCriterio + " = '"+strValor+"'";
-        }else{
-            int intEstado=0;
-            if(strValor.equals("Pendiente"))
-                intEstado=1;
-            else
-                intEstado=2;
-            sql="SELECT * FROM MULTAS WHERE "+ strCriterio + " = "+intEstado;
+
+
+        if (strCriterio.equals("ESTADO")) {
+
+            int intEstado = 0;
+            if (strValor.equals("Pendiente")) {
+                intEstado = 1;
+            } else {
+                intEstado = 2;
+            }
+            sql = "SELECT * FROM MULTAS WHERE " + strCriterio + " = " + intEstado;
+
+        } else if (strCriterio.equals("FECHA")) {
+
+            sql = "SELECT * FROM MULTAS WHERE FECHA BETWEEN '" + fi + "' AND '" + ff + "'";
+
+        } else {
+            sql = "SELECT * FROM MULTAS WHERE " + strCriterio + " = '" + strValor + "'";
         }
+
+
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
@@ -532,10 +587,11 @@ public class modAsignarMultas extends javax.swing.JDialog {
                 aux[2] = rs.getString("FECHA");
                 aux[3] = rs.getString("HORA");
                 aux[4] = rs.getString("COD_MULTA");
-                if(rs.getString("ESTADO").equals("1"))
-                   aux[5] = "Pendiente";
-                else
-                   aux[5] = "Pagada";
+                if (rs.getString("ESTADO").equals("1")) {
+                    aux[5] = "Pendiente";
+                } else {
+                    aux[5] = "Pagada";
+                }
                 rta.add(aux);
             }
             return rta;
@@ -547,11 +603,11 @@ public class modAsignarMultas extends javax.swing.JDialog {
         return null;
     }
 
-    public void BuscarMultas(String strCriterio, String strValor,JTable resultado){
+    public void BuscarMultas(String strCriterio, String strValor, JTable resultado, String fi, String ff) {
         limpiarTabla(tblResultado);
 
         DefaultTableModel model = (DefaultTableModel) resultado.getModel();
-        multas = consultaDeMultasAsignadas(strCriterio, strValor);
+        multas = consultaDeMultasAsignadas(strCriterio, strValor, fi, ff);
         int numMultas = multas.size();
         String msj;
 
@@ -559,9 +615,10 @@ public class modAsignarMultas extends javax.swing.JDialog {
             //Deshabilitar botones de accion
             btnGuardar.setEnabled(false);
             btnEliminar.setEnabled(false);
-            msj = "Se encontraron 0 coincidencias para [" + strCriterio + "]";
+            msj = "Se encontraron 0 coincidencias para [" + strValor + "]";
+            
         } else {
-            msj = "Se encontraron " + numMultas + " coincidencias para [" + strCriterio + "]";
+            msj = "Se encontraron " + numMultas + " coincidencias para el valor de [" + strCriterio + "]";
             //Recorrer resultados y añadir filas
 
             for (String[] con : multas) {
@@ -592,6 +649,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
         //Habilitar botones de accion
         btnGuardar.setEnabled(true);
         btnEliminar.setEnabled(true);
+        bloquearArea(true);
 
 
         auxItemFila = multas.get(intFila);
@@ -602,21 +660,23 @@ public class modAsignarMultas extends javax.swing.JDialog {
         cmbCodigoM.setSelectedItem(auxItemFila[4]);
         cmbEstado.setSelectedItem(auxItemFila[5]);
     }
-    
-    private void limpiar(){
+
+    private void limpiar() {
         txtNroUnidad.setText("");
         txtFechaB.setText("");
         txtHora.setText("");
         cmbCodigoM.setSelectedIndex(0);
         cmbEstado.setSelectedIndex(0);
+        lblNumCoincidencias.setText("");
+        bloquearArea(false);
     }
 
     private boolean eliminarRegistro() {
-        String strFecha=auxItemFila[2];
-        String strHora=auxItemFila[3];
-        String strCodM=auxItemFila[4];
+        String strFecha = auxItemFila[2];
+        String strHora = auxItemFila[3];
+        String strCodM = auxItemFila[4];
 
-        String sql = "delete from MULTAS where COD_MULTA='" + strCodM + "' AND FECHA = '"+strFecha+"' AND HORA ='"+strHora+"'";
+        String sql = "delete from MULTAS where COD_MULTA='" + strCodM + "' AND FECHA = '" + strFecha + "' AND HORA ='" + strHora + "'";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
@@ -624,12 +684,14 @@ public class modAsignarMultas extends javax.swing.JDialog {
         return false;
     }
 
-    private boolean modificarRegistro(int intNroU, String strCodMulta, int intEstado) {
-        String strFecha=auxItemFila[2];
-        String strHora=auxItemFila[3];
-        String strCodM=auxItemFila[4];
-        String sql = "UPDATE MULTAS SET N_UNIDAD=" + intNroU + ", COD_MULTA='" + strCodMulta + "', ESTADO="+ intEstado +""
-                + " WHERE COD_MULTA='" + strCodM + "' AND FECHA = '"+strFecha+"' AND HORA ='"+strHora+"'";
+    private boolean modificarRegistro(String nomUsuario, int intNroU, String strCodMulta, int intEstado) {
+        String strFecha = auxItemFila[2];
+        String strHora = auxItemFila[3];
+        String strCodM = auxItemFila[4];
+        String sql = "UPDATE MULTAS SET USUARIO= '" + nomUsuario + "', N_UNIDAD=" + intNroU
+                + ", COD_MULTA='" + strCodMulta + "', ESTADO=" + intEstado
+                + " WHERE COD_MULTA='" + strCodM + "' AND FECHA = '"
+                + strFecha + "' AND HORA ='" + strHora + "'";
         System.out.println("consulta realizada");
         if (bd.ejecutarSentencia(sql)) {
             return true;
@@ -651,5 +713,14 @@ public class modAsignarMultas extends javax.swing.JDialog {
                     "NO EXISTEN MULTAS",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void bloquearArea(boolean est) {
+        txtNroUnidad.setEnabled(est);
+        cmbCodigoM.setEnabled(est);
+        cmbEstado.setEnabled(est);
+        btnEliminar.setEnabled(est);
+        btnGuardar.setEnabled(est);
+
     }
 }

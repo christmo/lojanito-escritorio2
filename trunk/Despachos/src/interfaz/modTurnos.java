@@ -102,7 +102,7 @@ public class modTurnos extends javax.swing.JDialog {
 
         horaTurno.setModel(new SpinnerDateModel(new Date(), null,
             null, Calendar.HOUR_OF_DAY));
-    getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 68, -1));
+    getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 68, -1));
 
     jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
     jLabel1.setText("Hora de Inicio");
