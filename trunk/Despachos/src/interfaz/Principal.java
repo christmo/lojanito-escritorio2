@@ -32,7 +32,10 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -55,7 +58,7 @@ public final class Principal extends javax.swing.JFrame {
      * Mantiene la hora de salida para hacer el cambio de turno al terminar la
      * jornada laboral
      */
-    public static String horaSalida = null;
+    public static String horaNuevoTurno = null;
     /**
      * Variables Privadas
      */
@@ -77,9 +80,7 @@ public final class Principal extends javax.swing.JFrame {
     private int intFilaSeleccionada;
     private int cod; //codigo de la tecla presionada
     private boolean desPorTabla_Campo = false; //false es un despacho por campo, true es un despacho por tabla
-    private INICIO menu ;
-
-
+    private INICIO menu;
     /**
      * almacena los clientes Por Despachar
      */
@@ -89,12 +90,13 @@ public final class Principal extends javax.swing.JFrame {
      * Encabezado de las tablas de despachos
      */
     private static DefaultTableModel dtm;
-    private String turno;
+    public static String turno;
     private static int id_Turno;
     private static funcionesUtilidad funciones = new funcionesUtilidad();
 
     /*Leer archivo de configuraciones*/
     private ResourceBundle rb;
+    public static Principal gui;
 
     /**
      * Constructor para recibir los datos de sesion desde el menu principal
@@ -131,11 +133,14 @@ public final class Principal extends javax.swing.JFrame {
         BarraTitulo();
         redimencionarTablaVehiculos();
         llenarComboEstados();
-        CargarTablaDespachados();
+        LimpiarCargarTablaDespachados();
         IdentificadorLlamadas();
         jtTelefono.requestFocus();
         tiempo.start();
         Reloj();
+        jLabel7.setVisible(false);
+        jtPuerto.setVisible(false);
+        jButton1.setVisible(false);
     }
 
     /**
@@ -144,6 +149,7 @@ public final class Principal extends javax.swing.JFrame {
     public void IdentificadorLlamadas() {
         rb = ResourceBundle.getBundle("configuracion.configsystem");
         String puerto = rb.getString("comm");
+        //String puerto = jtPuerto.getText();
         System.out.println("puerto: " + puerto);
         if (!puerto.equals("0")) {
             CommMonitoreo comm = new CommMonitoreo(puerto);
@@ -156,8 +162,8 @@ public final class Principal extends javax.swing.JFrame {
      * Actualiza la barra de titulo del frame
      */
     public void BarraTitulo() {
-        this.setTitle("Despachos KRADAC || " + turno + " || " + sesion[2]);
-        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        setTitle("Despachos KRADAC || " + turno + " || " + sesion[2]);
+        setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
 
     /**
@@ -168,9 +174,18 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
+     * Limpia y carga con todos los valores pord efecto en la tabla de despachados
+     */
+    private static void LimpiarCargarTablaDespachados() {
+        limpiarTablaDespachados();
+        CargarTablaDespachados();
+    }
+
+    /**
      * Carga los clientes despachados en el turno actual
      */
     private static void CargarTablaDespachados() {
+        listaDespachados.clear();
         try {
             listaDespachados = bd.getDespachados(sesion[0], id_Turno, funciones.getFecha());
             dtm = (DefaultTableModel) jtDespachados.getModel();
@@ -195,12 +210,27 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
+     * Limpia las filas de la tabla despachados
+     */
+    private static void limpiarTablaDespachados() {
+        dtm = (DefaultTableModel) jtDespachados.getModel();
+        int n_filas = jtDespachados.getRowCount();
+        for (int i = 0; i < n_filas; i++) {
+            dtm.removeRow(0);
+        }
+    }
+
+    /**
      * setea el string del turno y el id del turno actual
      */
-    private void ActualizarTurno() {
+    public static void ActualizarTurno() {
         turno = validarTurno();
         id_Turno = bd.getIdTurno(validarTurno());
-        horaSalida = bd.getHoraSalida(id_Turno);
+        try {
+            horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -257,16 +287,6 @@ public final class Principal extends javax.swing.JFrame {
                 jtVehiculos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             }
         }
-
-        //Centrar el contenido de las Celdas
-        /*DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        tcr.setVerticalAlignment(SwingConstants.CENTER);
-
-
-        for (int i = 0; i < strCabecerasColumnasVehiculos.length; i++) {
-        jtVehiculos.getColumnModel().getColumn(i).setCellRenderer(tcr);
-        }*/
 
         pintarEstadoTaxi(strEncabezados);
     }
@@ -327,7 +347,7 @@ public final class Principal extends javax.swing.JFrame {
      * Retorna el turno que corresponde dependiendo de la hora del sistema
      * @return String
      */
-    private String validarTurno() {
+    private static String validarTurno() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("k:m:s");
 
@@ -390,15 +410,18 @@ public final class Principal extends javax.swing.JFrame {
         jtBuscarPorCodigo = new javax.swing.JTextField();
         jbMenu = new javax.swing.JButton();
         jlIndicadorLlamada = new javax.swing.JLabel();
+        jtPuerto = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Despachos KRADAC");
 
         jsVehiculos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsVehiculos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         jsVehiculos.setAutoscrolls(true);
         jsVehiculos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        jtVehiculos.setFont(new java.awt.Font("Tahoma", 1, 12));
         jtVehiculos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}
@@ -531,6 +554,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Teléfono:");
 
         jtTelefono.setFont(new java.awt.Font("Arial", 1, 20));
@@ -541,6 +565,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("Código:");
 
         jtCodigo.setFont(new java.awt.Font("Arial", 1, 20));
@@ -572,11 +597,14 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel3.setText("Cambiar Estado:");
 
         btnColor.setText("Cambiar");
@@ -590,21 +618,26 @@ public final class Principal extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(btnColor))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnColor)
+                        .addContainerGap())
+                    .addComponent(jLabel3)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnColor))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(btnColor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jbEliminarFila.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/eliminar.png"))); // NOI18N
@@ -663,7 +696,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        lblFecha.setFont(new java.awt.Font("Arial", 1, 18));
+        lblFecha.setFont(new java.awt.Font("Arial", 1, 20));
         lblFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calendario.png"))); // NOI18N
         lblFecha.setText("Fecha");
 
@@ -675,6 +708,7 @@ public final class Principal extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel4.setText("Nombre:");
 
         jtBuscarPorNombre.setColumns(15);
@@ -684,6 +718,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("Teléfono:");
 
         jtBuscarPorTelefono.setColumns(15);
@@ -693,6 +728,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel6.setText("Código:");
 
         jtBuscarPorCodigo.setColumns(15);
@@ -710,7 +746,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -745,6 +781,17 @@ public final class Principal extends javax.swing.JFrame {
 
         jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
 
+        jtPuerto.setText("0");
+
+        jLabel7.setText("puerto");
+
+        jButton1.setText("prueba");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -752,26 +799,32 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
                         .addComponent(lblReloj)
-                        .addGap(44, 44, 44)
+                        .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 707, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 531, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -779,35 +832,40 @@ public final class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblReloj)
-                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(11, 11, 11)))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(11, 11, 11))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblReloj)
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(lblFecha))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(lblFecha))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(jtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-1026)/2, (screenSize.height-800)/2, 1026, 800);
+        setBounds((screenSize.width-1037)/2, (screenSize.height-800)/2, 1037, 800);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
@@ -992,19 +1050,25 @@ public final class Principal extends javax.swing.JFrame {
 
         return resultado;
     }
+    VentanaDatos ventanaDatos = null;
 
     private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
         //System.out.println("clc: " + intClicks + " bot: " + intBoton);
-        VentanaDatos ventanaDatos = null;
+
         if (intClicks == 1 && intBoton == 3) {
             try {
                 if (!jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 1).equals("")) {
-                    ventanaDatos = new VentanaDatos(getDatosPorDespachar());
-                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
-                    if (!ventanaDatos.isVisible()) {
+                    if (ventanaDatos == null) {
+                        ventanaDatos = new VentanaDatos(getDatosPorDespachar());
+                        ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
                         ventanaDatos.setVisible(true);
+                    } else {
+                        ventanaDatos.setPorDespachar(getDatosPorDespachar());
+                        ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                        ventanaDatos.setVisible(true);
+                        ventanaDatos.setLocationRelativeTo(this);
                     }
                 }
             } catch (NullPointerException ex) {
@@ -1294,6 +1358,10 @@ public final class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        tcr.setVerticalAlignment(SwingConstants.CENTER);
+
         for (int i = 0, len = jtVehiculos.getColumnCount(); i < len; i++) {
             TableColumn column = jtVehiculos.getColumn(jtVehiculos.getColumnName(i));
             column.setCellRenderer(new formatoTabla(encab, unidadCodigoBD, codigo, color));
@@ -1303,71 +1371,78 @@ public final class Principal extends javax.swing.JFrame {
     private int intMinutoAnt = 0;
 
     private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
-        int intFila = jtPorDespachar.getSelectedRow();
-        int intCol = jtPorDespachar.getSelectedColumn();
-        if (intCol == 6) { //Cuando cambie la celda de Munitos
-            //------
-            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
-            jlIndicadorLlamada.setIcon(img);
-            jtTelefono.setText("");
-            //------
-            jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
-            jtPorDespachar.setValueAt("0", intFila, 8);
-            try {
-                intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
-                intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
+        if (evt.getPropertyName().equals("tableCellEditor")) {
+            int intFila = jtPorDespachar.getSelectedRow();
+            int intCol = jtPorDespachar.getSelectedColumn();
 
-                if (intAtraso != 0) {
-                    int res = (intMinutoAnt - intMinutos) + intAtraso;
-                    jtPorDespachar.setValueAt("" + res, intFila, 8);
-                    intMinutoAnt = intMinutos;
-                } else {
-                    jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
-                    intMinutoAnt = intMinutos;
-                }
-            } catch (NumberFormatException nfe) {
-                jtPorDespachar.setValueAt("", intFila, 6);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-            }
-        }
-
-        if (intCol == 1) { //Cuando cambie la celda de telefono
-            try {
-                if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
-                    actualizarFilaCampoTelefono(intFila, intCol);
-                }
-            } catch (NullPointerException nex) {
-                System.err.println("No hay telefono recuperado de la celda...");
-            }
-            filaAnt = intFila;
-            System.out.println("Columna Tel fila: " + intFilaSeleccionada);
-        }
-
-        if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 7 || intCol == 9) {
-            try {
+            if (intCol == 6) { //Cuando cambie la celda de Munitos
+                //------
+                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+                jlIndicadorLlamada.setIcon(img);
+                jtTelefono.setText("");
+                //------
                 jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
-            } catch (NullPointerException ex) {
-            } catch (ArrayIndexOutOfBoundsException aex) {
-            }
-        }
+                jtPorDespachar.setValueAt("0", intFila, 8);
+                try {
+                    intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
+                    intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
 
-        Mayuculas(jtPorDespachar, intFila);
+                    if (intAtraso != 0) {
+                        int res = (intMinutoAnt - intMinutos) + intAtraso;
+                        jtPorDespachar.setValueAt("" + res, intFila, 8);
+                        intMinutoAnt = intMinutos;
+                    } else {
+                        jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
+                        intMinutoAnt = intMinutos;
+                    }
+                } catch (NumberFormatException nfe) {
+                    jtPorDespachar.setValueAt("", intFila, 6);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                }
+            }
+
+            if (intCol == 1) { //Cuando cambie la celda de telefono
+                try {
+                    if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
+                        if (!actualizarFilaCampoTelefono(intFila, intCol)) {
+                            JOptionPane.showMessageDialog(this, "Número no válido...", "Error...", 0);
+                        }
+                    }
+                } catch (NullPointerException nex) {
+                    System.err.println("No hay telefono recuperado de la celda...");
+                }
+                filaAnt = intFila;
+            }
+
+            if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 7 || intCol == 9) {
+                try {
+                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
+                } catch (NullPointerException ex) {
+                } catch (ArrayIndexOutOfBoundsException aex) {
+                }
+            }
+
+            Mayuculas(jtPorDespachar, intFila);
+        }
     }//GEN-LAST:event_jtPorDespacharPropertyChange
     int filaAnt = -1;
 
-    private void actualizarFilaCampoTelefono(int intFila, int intCol) {
+    private boolean actualizarFilaCampoTelefono(int intFila, int intCol) {
         try {
             String tel = jtPorDespachar.getValueAt(intFila, 1).toString();
             if (funciones.isNumeric(tel)) {
                 jtTelefono.setText(tel);
                 desPorTabla_Campo = true; //despachar por la tabla de despachos
                 getBuscarPorTelefono();
+                return true;
             } else {
                 JOptionPane.showMessageDialog(this, "Número no válido...", "Error...", 0);
                 jtPorDespachar.setValueAt("", intFila, intCol);
                 jtTelefono.setText("");
+                return false;
             }
         } catch (NullPointerException ne) {
+            return false;
         }
     }
 
@@ -1393,17 +1468,22 @@ public final class Principal extends javax.swing.JFrame {
     private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDespachadosMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
-        //System.out.println("clc: " + intClicks + " bot: " + intBoton);
-        VentanaDatos ventanaDatos = null;
 
         if (intClicks == 1 && intBoton == 1) {
             try {
                 if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespacachos(), 1).equals("")) {
-                    ventanaDatos = new VentanaDatos(getDatosDespachados(), false);
 
-                    if (!ventanaDatos.isVisible()) {
+                    if (ventanaDatos == null) {
+                        ventanaDatos = new VentanaDatos(getDatosDespachados(), false);
+                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespacachos());
                         ventanaDatos.setVisible(true);
+                    } else {
+                        ventanaDatos.setDespachados(getDatosDespachados(), false);
+                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespacachos());
+                        ventanaDatos.setVisible(true);
+                        ventanaDatos.setLocationRelativeTo(this);
                     }
+
                 }
             } catch (NullPointerException ex) {
                 JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
@@ -1438,10 +1518,14 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
         if ((menu == null) || (!menu.isDisplayable())) {
-            menu = new INICIO(sesion,this.bd);
+            menu = new INICIO(sesion, this.bd);
             menu.setLocationRelativeTo(this);
         }
     }//GEN-LAST:event_jbMenuActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        IdentificadorLlamadas();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -1475,14 +1559,6 @@ public final class Principal extends javax.swing.JFrame {
             LimpiarCargarTablaDespachados();
         }
 
-    }
-
-    /**
-     * Limpia y carga con todos los valores pord efecto en la tabla de despachados
-     */
-    private void LimpiarCargarTablaDespachados() {
-        limpiarTablaDespachados();
-        CargarTablaDespachados();
     }
 
     /**
@@ -1566,17 +1642,6 @@ public final class Principal extends javax.swing.JFrame {
                 dtm.insertRow(0, datos);
             }
         } catch (NullPointerException nex) {
-        }
-    }
-
-    /**
-     * Limpia las filas de la tabla despachados
-     */
-    private void limpiarTablaDespachados() {
-        dtm = (DefaultTableModel) jtDespachados.getModel();
-        int n_filas = jtDespachados.getRowCount();
-        for (int i = 0; i < n_filas; i++) {
-            dtm.removeRow(0);
         }
     }
 
@@ -1679,7 +1744,8 @@ public final class Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new Principal().setVisible(true);
+                gui = new Principal();
+                gui.setVisible(true);
             }
         });
     }
@@ -1688,18 +1754,23 @@ public final class Principal extends javax.swing.JFrame {
      * Permite iniciar los controles con los datos del nuevo turno y el mismo
      * usuario
      */
-    public static void ReiniciarTurno(String[] datos) {
-        CargarTablaDespachados();
+    public static void ReiniciarTurno() {
+        ActualizarTurno();
+        LimpiarCargarTablaDespachados();
+        redimencionarTablaVehiculos();
+        gui.setTitle("Despachos KRADAC || " + turno + " || " + sesion[2]);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnColor;
     private javax.swing.JComboBox cbEstadosTaxi;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1719,7 +1790,8 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField jtBuscarPorTelefono;
     private javax.swing.JTextField jtCodigo;
     private static javax.swing.JTable jtDespachados;
-    private javax.swing.JTable jtPorDespachar;
+    private static javax.swing.JTable jtPorDespachar;
+    private javax.swing.JTextField jtPuerto;
     private javax.swing.JTextField jtTelefono;
     private static javax.swing.JTable jtVehiculos;
     private javax.swing.JLabel lblFecha;
@@ -1827,8 +1899,34 @@ public final class Principal extends javax.swing.JFrame {
         this.intFilaSeleccionada = intFilaSeleccionada;
     }
 
+    /**
+     * Pone valores por defecto al objeto despacho para su posterior llenado
+     * esto se usa cuando se elimina una columna que tambiens e registra en la
+     * base para que no vaya con valores null y cause problemas.
+     */
     private void resetValDespacho() {
         despacho = new Despachos("", "", "", "", "", "", 0, 0, 0, "", id_Turno, sesion[0]);
         intMinutos = 0;
+    }
+
+    /**
+     * Saber los codigos que estan listos para despachar para la generación
+     * de un nuevo codigo se deberia tomar en cuenta esto, por ahora no da problemas
+     * si llegara a suceder algun error en la generacion del los codigos se debe
+     * usar este metodo
+     * @return String[] codigos por despachar
+     */
+    public static String[] getCodigosPorDespachar() {
+        ArrayList<String> codigosLista = new ArrayList<String>();
+        Object c = null;
+        String[] datosCast;
+        for (int i = 0; i < jtPorDespachar.getRowCount(); i++) {
+            c = jtPorDespachar.getValueAt(i, 2);
+            if (c != null) {
+                codigosLista.add(c.toString());
+            }
+        }
+        datosCast = new String[codigosLista.size()];
+        return codigosLista.toArray(datosCast);
     }
 }
