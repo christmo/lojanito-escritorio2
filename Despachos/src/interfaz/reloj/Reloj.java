@@ -19,16 +19,23 @@ public class Reloj {
     SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
     JLabel lblReloj;
     JLabel lblFecha;
+    /*public Reloj(JLabel lblReloj, JLabel lblFecha) {
+    this.lblReloj = lblReloj;
+    this.lblFecha = lblFecha;
+    Timer timer = new Timer();
 
+    timer.schedule(new DoTick(), 0, 1000);	// do it every second
+    }*/
 
-    public Reloj(JLabel lblReloj,JLabel lblFecha) {
-        this.lblReloj=lblReloj;
+    public Reloj(JLabel lblReloj, JLabel lblFecha) {
+        this.lblReloj = lblReloj;
         this.lblFecha = lblFecha;
+        Cronometro c = new Cronometro();
         Timer timer = new Timer();
-        timer.schedule(new DoTick(), 0, 1000);	// do it every second
+        timer.schedule(c, 0, 1000);	// do it every second
     }
 
-    class DoTick extends TimerTask {
+    class Cronometro extends TimerTask {
 
         public void run() {
             GregorianCalendar c = new GregorianCalendar();
@@ -36,10 +43,10 @@ public class Reloj {
             lblReloj.setText(sdfHora.format(c.getTime()));
             lblFecha.setText(sdfFecha.format(c.getTime()));
 
-            //System.out.println(""+Principal.sesion[0] + " "+Principal.horaSalida);
-            
-            if(Principal.horaSalida.equals(sdfHora.format(c.getTime()))){
-               Principal.ReiniciarTurno(Principal.sesion);
+            if (Principal.horaNuevoTurno.equals(sdfHora.format(c.getTime()))) {
+                if (Principal.gui != null) {
+                    Principal.ReiniciarTurno();
+                }
             }
         }
     }
