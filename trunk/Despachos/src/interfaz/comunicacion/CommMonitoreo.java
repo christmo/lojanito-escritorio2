@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.pushingpixels.lafwidget.UiThreadingViolationException;
 
 /**
  *
@@ -102,7 +103,10 @@ public class CommMonitoreo extends Thread {
                     setDespachoCliente(strNumero);
                 } else if (strNumero.length() == 9) {
                     timbrar(true, strNumero);
-                    setDespachoCliente(strNumero);
+                    try {
+                        setDespachoCliente(strNumero);
+                    } catch (UiThreadingViolationException a) {
+                    }
                 }
             }
 
@@ -225,7 +229,7 @@ public class CommMonitoreo extends Thread {
             return true;
         } catch (PortInUseException ex) {
             //Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null,"Puerto del modem está en uso por otra apicación...\nModificar los paramatros de inicio si no quiere usar el identificador de llamadas.","error", 0);
+            JOptionPane.showMessageDialog(null, "Puerto del modem está en uso por otra apicación...\nModificar los paramatros de inicio si no quiere usar el identificador de llamadas.", "error", 0);
             System.err.println("Cerrar Apicación - puerto en uso o no hay puerto serial disponible...");
             System.exit(0);
         } catch (NoSuchPortException ex) {
