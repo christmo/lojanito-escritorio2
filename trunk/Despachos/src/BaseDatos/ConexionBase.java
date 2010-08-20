@@ -804,16 +804,20 @@ public class ConexionBase {
      * @param id_Turno
      * @return String
      */
-    public String getHoraSalida(int id_Turno) {
+    public String getHoraNuevoTurno(int id_Turno) throws SQLException {
+        String turno;
         try {
-            String sql = "SELECT HORA_FIN FROM TURNOS WHERE ID_TURNO=" + id_Turno;
-
+            String sql = "SELECT HORA_INI FROM TURNOS WHERE ID_TURNO=" + (id_Turno + 1);
             rs = ejecutarConsultaUnDato(sql);
-            return rs.getString("HORA_FIN");
+            turno = rs.getString("HORA_INI");
+            System.out.println("Turno:" + turno);
+            return turno;
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("El turno que sigue es el primero...");
+            String sql1 = "SELECT HORA_INI FROM TURNOS WHERE ID_TURNO=" + (1);
+            rs = ejecutarConsultaUnDato(sql1);
+            return rs.getString("HORA_INI");
         }
-        return null;
     }
 
     /**
