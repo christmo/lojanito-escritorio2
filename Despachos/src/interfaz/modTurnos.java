@@ -311,6 +311,7 @@ public class modTurnos extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
                     "LISTO",
                     JOptionPane.INFORMATION_MESSAGE);
+            Principal.ReiniciarTurno();
             super.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "DEBE CREAR TURNOS ANTES DE GUARDAR");
