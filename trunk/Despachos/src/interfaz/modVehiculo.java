@@ -603,7 +603,7 @@ public class modVehiculo extends javax.swing.JDialog {
             limpiarTabla(tblResultado);
             Principal.redimencionarTablaVehiculos();
         } else {
-            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
+            JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR",
                     "OK",
                     JOptionPane.INFORMATION_MESSAGE,
                     icError);

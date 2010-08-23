@@ -474,7 +474,7 @@ public class modConductor extends javax.swing.JDialog {
                 super.dispose();
 
             } else {
-                JOptionPane.showMessageDialog(this, "NO SE PUEDO ACTUALIZAR LOS DATOS",
+                JOptionPane.showMessageDialog(this, "NO SE PUDO ACTUALIZAR LOS DATOS",
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -498,7 +498,7 @@ public class modConductor extends javax.swing.JDialog {
 
         } else {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/incorrecto.png"));
-            JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
+            JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR",
                     "OK",
                     JOptionPane.INFORMATION_MESSAGE,
                     ic);

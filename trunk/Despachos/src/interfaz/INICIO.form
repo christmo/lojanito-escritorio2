@@ -50,10 +50,11 @@
                                   <Component id="btnMultas" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="btnEditVehiculo" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
                                   <Component id="btnNewVehiculo" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
                                   <Component id="btnReportes" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnDespacho" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -106,7 +107,10 @@
               <EmptySpace min="25" pref="25" max="25" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btnBEMultas" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
-                  <Component id="btnMultas" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="btnMultas" alignment="3" min="-2" pref="85" max="-2" attributes="0"/>
+                      <Component id="btnDespacho" alignment="3" min="-2" pref="85" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -281,6 +285,17 @@
         </Property>
         <Property name="text" type="java.lang.String" value="LOJA NORTE "/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnDespacho">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/reporte.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Despacho"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDespachoActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

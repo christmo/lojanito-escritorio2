@@ -38,6 +38,9 @@ public class modTurnos extends javax.swing.JDialog {
 
         initComponents();
         modIntervaloSpinner(horaTurno);
+
+        //cargar turnos existentes
+        extraerTurnos(tblTurnos);
     }
 
     @SuppressWarnings("unchecked")
@@ -100,31 +103,30 @@ public class modTurnos extends javax.swing.JDialog {
         jLabel3.setText("Primer Turno");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 80, 22));
 
-        horaTurno.setModel(new SpinnerDateModel(new Date(), null,
-            null, Calendar.HOUR_OF_DAY));
-    getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 68, -1));
+        horaTurno.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1282603115156L), null, null, java.util.Calendar.HOUR));
+        getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 68, -1));
 
-    jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
-    jLabel1.setText("Hora de Inicio");
-    getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setText("Hora de Inicio");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
 
-    btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
-    btnGuardar.setText("Guardar");
-    btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnGuardarActionPerformed(evt);
-        }
-    });
-    getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
 
-    btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
-    btnCancelar.setText("Cancelar");
-    btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnCancelarActionPerformed(evt);
-        }
-    });
-    getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
@@ -162,12 +164,12 @@ public class modTurnos extends javax.swing.JDialog {
      * @param obj JSpinner
      */
     private void modIntervaloSpinner(JSpinner obj) {
-        JFormattedTextField textField =
-                ((JSpinner.DefaultEditor) obj.getEditor()).getTextField();
-        DefaultFormatterFactory dff =
-                (DefaultFormatterFactory) textField.getFormatterFactory();
+        JFormattedTextField textField = ((JSpinner.DefaultEditor) obj.getEditor()).getTextField();
+        DefaultFormatterFactory dff = (DefaultFormatterFactory) textField.getFormatterFactory();
         DateFormatter formatter = (DateFormatter) dff.getDefaultFormatter();
         formatter.setFormat(new SimpleDateFormat("kk:mm "));
+
+        obj.setValue((new GregorianCalendar()).getTime());
     }
 
     /**
