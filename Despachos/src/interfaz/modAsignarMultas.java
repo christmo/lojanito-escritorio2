@@ -438,7 +438,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
                     limpiar();
                     limpiarTabla(tblResultado);
                 } else {
-                    JOptionPane.showMessageDialog(this, "NO SE PUEDO MODIFICAR EL REGISTRO",
+                    JOptionPane.showMessageDialog(this, "NO SE PUDO MODIFICAR EL REGISTRO",
                             "ERROR",
                             JOptionPane.ERROR_MESSAGE);
                 }

@@ -104,8 +104,8 @@
     </Component>
     <Component class="javax.swing.JSpinner" name="horaTurno">
       <Properties>
-        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new SpinnerDateModel(new Date(), null,&#xa;                null, Calendar.HOUR_OF_DAY)" type="code"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="1282603115156" stepSize="10" type="date"/>
         </Property>
       </Properties>
       <Constraints>
