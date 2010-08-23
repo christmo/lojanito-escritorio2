@@ -28,13 +28,13 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jsVehiculos" alignment="1" pref="1009" max="32767" attributes="0"/>
-                  <Component id="jScrollPane3" alignment="1" pref="1009" max="32767" attributes="0"/>
+                  <Component id="jsVehiculos" alignment="1" pref="1011" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="1" pref="1011" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jlIndicadorLlamada" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="272" max="32767" attributes="0"/>
+                      <EmptySpace pref="249" max="32767" attributes="0"/>
                       <Component id="lblReloj" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -44,7 +44,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" alignment="0" pref="1009" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="0" pref="1011" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -55,7 +55,7 @@
                       <Component id="jtPuerto" min="-2" pref="56" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="531" max="32767" attributes="0"/>
+                      <EmptySpace pref="464" max="32767" attributes="0"/>
                       <Component id="lblFecha" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -90,7 +90,7 @@
                   <Component id="jPanel4" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="260" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" pref="258" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -396,8 +396,8 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jtTelefono" alignment="1" pref="40" max="32767" attributes="1"/>
-                      <Component id="jtCodigo" alignment="1" pref="40" max="32767" attributes="1"/>
+                      <Component id="jtTelefono" alignment="1" pref="41" max="32767" attributes="1"/>
+                      <Component id="jtCodigo" alignment="1" pref="41" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -629,7 +629,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                  <Component id="jtBuscarPorNombre" pref="378" max="32767" attributes="0"/>
+                  <Component id="jtBuscarPorNombre" pref="253" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
