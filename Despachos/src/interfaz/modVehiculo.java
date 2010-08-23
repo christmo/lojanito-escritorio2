@@ -31,20 +31,20 @@ public class modVehiculo extends javax.swing.JDialog {
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
     private String imgOriginal;
-    private String idEmpresa;    
+    private String idEmpresa;
     ResultSet rs;
     Icon icError;
     Icon icOk;
     private String[] sesion;
 
     public modVehiculo(JFrame padre, String[] ses, ConexionBase con) {
-        super(padre,"Busqueda de Vehículos");
+        super(padre, "Busqueda de Vehículos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
 
         this.sesion = ses;
         this.bd = con;
-        
+
         initComponents();
         leerProperties();
         cargarConductores(cmbConductor);
@@ -52,6 +52,9 @@ public class modVehiculo extends javax.swing.JDialog {
         icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
         icOk = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
         this.idEmpresa = ses[1];
+
+        limpiarCajas();
+        preBuscar(cmbParametro.getSelectedIndex(), txtCoincidencia.getText().toUpperCase());
     }
 
     @SuppressWarnings("unchecked")
@@ -598,7 +601,7 @@ public class modVehiculo extends javax.swing.JDialog {
                     icOk);
             limpiarCajas();
             limpiarTabla(tblResultado);
-
+            Principal.redimencionarTablaVehiculos();
         } else {
             JOptionPane.showMessageDialog(this, "NO SE PUEDO ELIMINAR",
                     "OK",
@@ -629,7 +632,6 @@ public class modVehiculo extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
