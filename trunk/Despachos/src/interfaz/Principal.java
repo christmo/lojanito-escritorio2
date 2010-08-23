@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -105,7 +104,7 @@ public final class Principal extends javax.swing.JFrame {
     public Principal(String[] info, ConexionBase conec) {
         setSession(info);
         Principal.main(null);
-        this.bd = conec;
+        Principal.bd = conec;
     }
 
     /**
@@ -138,6 +137,7 @@ public final class Principal extends javax.swing.JFrame {
         jtTelefono.requestFocus();
         tiempo.start();
         Reloj();
+        this.setExtendedState(MAXIMIZED_BOTH);
         jLabel7.setVisible(false);
         jtPuerto.setVisible(false);
         jButton1.setVisible(false);
@@ -1518,7 +1518,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
         if ((menu == null) || (!menu.isDisplayable())) {
-            menu = new INICIO(sesion, this.bd);
+            menu = new INICIO(sesion, Principal.bd);
             menu.setLocationRelativeTo(this);
         }
     }//GEN-LAST:event_jbMenuActionPerformed
