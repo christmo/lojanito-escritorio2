@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ public class ConexionBase {
     private Connection conexion;
     private Statement st;
     private ResultSet rs;
+    private ResourceBundle rb;
 
     /**
      * Crea la conexion directamente a la base de datos de rastreosatelital
@@ -30,11 +32,13 @@ public class ConexionBase {
      * maquina local
      */
     public ConexionBase() {
+        rb = ResourceBundle.getBundle("configuracion.configsystem");
         driver = "com.mysql.jdbc.Driver";
-        this.ip = "localhost";
-        this.bd = "rastreosatelital";
+        this.ip = rb.getString("ip_base");
+        this.bd = rb.getString("base");
         this.usr = "root";
         this.pass = "";
+
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
             Class.forName(driver).newInstance();
