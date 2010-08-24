@@ -37,7 +37,7 @@ public class ConexionBase {
         this.ip = rb.getString("ip_base");
         this.bd = rb.getString("base");
         this.usr = "root";
-        this.pass = "";
+        this.pass = "kradac";
 
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
@@ -231,7 +231,7 @@ public class ConexionBase {
                 des.setStrNota("");
             }
 
-            if (estadoUnidad.equals("AC") || estadoUnidad.equals("C")) {
+            if (estadoUnidad.equals("ASI") || estadoUnidad.equals("C")) {
                 String sql = "CALL SP_INSERTAR_DESPACHOS("
                         + des.getIntCodigo() + ","
                         + "'" + getFechaActual() + "',"
@@ -260,6 +260,21 @@ public class ConexionBase {
      * @return String
      */
     public String getEstadoUnidad() {
+        try {
+            String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("ETIQUETA");
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+        /**
+     * Retorna el estado de la ultima unidad intentada despachar
+     * @return String
+     */
+    public String getEtiquetaEstadoUnidad(String estadoUnidad) {
         try {
             String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
             rs = ejecutarConsultaUnDato(sql);
@@ -836,5 +851,20 @@ public class ConexionBase {
                 + "SECTOR"
                 + " FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
         return ejecutarConsultaUnDato(sql);
+    }
+
+    /**
+     * Obtiene el color de estado de un taxi para cuando esta despachado
+     * @return String
+     */
+    public String getColorEstadoDespachado() {
+        String sql = "SELECT COLOR FROM CODESTTAXI WHERE ID_CODIGO = 'ASI'";
+        rs = ejecutarConsultaUnDato(sql);
+        try {
+            return rs.getString("COLOR");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
