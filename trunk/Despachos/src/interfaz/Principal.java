@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -26,7 +25,6 @@ import interfaz.comboBox.*;
 import interfaz.comunicacion.CommMonitoreo;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
-import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +34,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -141,6 +138,9 @@ public final class Principal extends javax.swing.JFrame {
         tiempo.start();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
+        /**
+         * TODO: borrar esto en la liberacion
+         */
         jLabel7.setVisible(false);
         jtPuerto.setVisible(false);
         jButton1.setVisible(false);
@@ -901,6 +901,9 @@ public final class Principal extends javax.swing.JFrame {
             } else {
                 Tabla.setValueAt("", intFila, intCol);
             }
+            if (intCol == 7) {
+                BorrarColorDespachoVehiculo(Tabla);
+            }
         } else if (cod == 118) {
             /**
              * borrar las celdas de nombre, direccion, barrio y nota
@@ -941,6 +944,22 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
+     * Pone el estado de activo a la unidad que se quiera borrar esto se da cuando
+     * se asigna una unidad y luego se la quier quitar, en la tabla de clientes
+     * pord espachar
+     */
+    private void BorrarColorDespachoVehiculo(JTable Tabla) {
+        int intFila = jtPorDespachar.getSelectedRow();
+        int intCol = jtPorDespachar.getSelectedColumn();
+        try {
+            String unidad = Tabla.getCellEditor(intFila, intCol).getCellEditorValue().toString();
+            AsignarColorDespachoVehiculo(unidad, "ACTIVO");
+        } catch (NumberFormatException nfex) {
+        } catch (NullPointerException ex) {
+        }
+    }
+
+    /**
      * Elimina una Fila de la Tabla PorDespachar que se haya seleccionado
      * @param intFila
      */
@@ -969,6 +988,10 @@ public final class Principal extends javax.swing.JFrame {
                 despacho = getDatosPorDespachar();
                 despacho.setStrEstado("C");//cancelada
                 bd.InsertarDespachoCliente(despacho, false);
+            }
+
+            if (despacho.getIntUnidad() != 0) {
+                AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), "ACTIVO");
             }
 
             DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
@@ -1002,19 +1025,24 @@ public final class Principal extends javax.swing.JFrame {
      * @param intFila
      */
     private void DespacharCliente(int intFila) {
-        despacho = getDatosPorDespachar();
-        despacho.setStrEstado("F"); //finalizado
+        if (jtPorDespachar.isEditing()) {
+            jtPorDespachar.getCellEditor().stopCellEditing();
+        } else {
+            despacho = getDatosPorDespachar();
+            despacho.setStrEstado("F"); //finalizado
 
-        if (sePuedeDespachar(despacho, intFila)) {
-            boolean r = setDatosTablaDespachados(despacho, jtDespachados);
-            if (r) {
-                try {
-                    setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
-                    DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-                    model.removeRow(intFila);
-                    listaDespachosTemporales.remove(intFila);
-                    InicializarVariables();
-                } catch (IndexOutOfBoundsException iex) {
+            if (sePuedeDespachar(despacho, intFila)) {
+                boolean r = setDatosTablaDespachados(despacho, jtDespachados);
+                if (r) {
+                    try {
+                        AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), "ACTIVO");
+                        setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
+                        DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+                        model.removeRow(intFila);
+                        listaDespachosTemporales.remove(intFila);
+                        InicializarVariables();
+                    } catch (IndexOutOfBoundsException iex) {
+                    }
                 }
             }
         }
@@ -1316,10 +1344,8 @@ public final class Principal extends javax.swing.JFrame {
      * @param codVh
      */
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
-
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
-
         for (String i : codVh) {
             String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
             bd.ejecutarSentencia(sql);
@@ -1431,7 +1457,7 @@ public final class Principal extends javax.swing.JFrame {
                 filaAnt = intFila;
             }
 
-            if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 7 || intCol == 9) {
+            if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 9) {
                 try {
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                 } catch (NullPointerException ex) {
@@ -1439,11 +1465,81 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
 
+            if (intCol == 7) {
+                if (jtPorDespachar.isEditing()) {
+                    jtPorDespachar.getCellEditor().cancelCellEditing();
+                } else {
+                    try {
+                        String unidad = "0";
+                        try {
+                            unidad = jtPorDespachar.getValueAt(intFila, intCol).toString();
+                        } catch (NullPointerException ex) {
+                        }
+                        String strEstadoUnidad = "";
+                        try {
+                            strEstadoUnidad = bd.getEstadoUnidad(Integer.parseInt(unidad));
+                        } catch (NumberFormatException nfex) {
+                        }
+
+                        if (strEstadoUnidad.equals("AC")) {
+
+                            jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
+                            AsignarColorDespachoVehiculo(unidad, "ASIGNADO");
+
+                        } else {
+                            String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
+                            if (estado != null) {
+                                JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+                            } else {
+                                JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad no está Activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+                            }
+                            jtPorDespachar.setValueAt("", intFila, intCol);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException aex) {
+                    } catch (NullPointerException ex) {
+                    }
+                }
+            }
+
             Mayuculas(jtPorDespachar, intFila);
         }
     }//GEN-LAST:event_jtPorDespacharPropertyChange
-    int filaAnt = -1;
 
+    /**
+     * Permite asignar el color de despachado a los taxis que esten en la espera
+     * de la finalización de la carrera en la tabla de clientes por despachar
+     * @param unidad
+     */
+    private void AsignarColorDespachoVehiculo(String unidad, String estado) {
+        int col = -1;
+        for (int i = 0; i < jtVehiculos.getColumnCount(); i++) {
+            if (jtVehiculos.getColumnName(i).equals(unidad)) {
+                col = i;
+            }
+        }
+        try {
+            int[] numCol = {col};
+            String etiqueta = estado;
+
+            ArrayList<String> codVehiculo = new ArrayList();
+
+            for (int i = 0; i < numCol.length; i++) {
+                codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
+            }
+
+            cambiarEstadoTaxi(etiqueta, codVehiculo);
+        } catch (IllegalArgumentException iae) {
+        } catch (ArrayIndexOutOfBoundsException iex) {
+        }
+    }
+    private int filaAnt = -1;
+
+    /**
+     * Actualiza la fila de clientes pord espachar cuandos se ingresa un telefono
+     * directamente en la tabla
+     * @param intFila
+     * @param intCol
+     */
     private void actualizarFilaCampoTelefono(int intFila, int intCol) {
         try {
             String tel = jtPorDespachar.getValueAt(intFila, 1).toString();
@@ -1771,7 +1867,7 @@ public final class Principal extends javax.swing.JFrame {
     public static void ReiniciarTurno() {
         ActualizarTurno();
         LimpiarCargarTablaDespachados();
-        redimencionarTablaVehiculos();
+        //redimencionarTablaVehiculos();
         gui.setTitle("Despachos KRADAC || " + turno + " || " + sesion[2]);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1871,9 +1967,9 @@ public final class Principal extends javax.swing.JFrame {
         if (!r) {
             String estado = bd.getEstadoUnidad();
             if (estado != null) {
-                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...\nEstado de la unidad: " + estado, "Error", 0);
+                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + estado, "Error", 0);
             } else {
-                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
             }
             jtPorDespachar.setValueAt("0", fila, 7);
         } else {
