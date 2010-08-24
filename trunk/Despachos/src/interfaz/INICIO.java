@@ -57,10 +57,7 @@ public class INICIO extends javax.swing.JFrame {
         btnMultas.setText("<html><center> MULTAS </center></html>");
         btnConfig.setText("<html><center>CONFIG</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
-        btnDespacho.setText("<html><center>DESPACHOS</center></html>");
 
-        btnDespacho.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnDespacho.setHorizontalTextPosition(SwingConstants.CENTER);
 
         btnNvConductor.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNvConductor.setHorizontalTextPosition(SwingConstants.CENTER);
