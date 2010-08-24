@@ -219,7 +219,7 @@ public class LoginGUI extends javax.swing.JFrame {
                     + "Los dos campos son requeridos...", "Error", 0);
             jpPass.setFocusCycleRoot(true);
         } catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(this, "No se puede conectar a la base de datos...", "Error", 0);
+            JOptionPane.showMessageDialog(this, "Usuario no existe...", "Error", 0);
         }
     }
 
