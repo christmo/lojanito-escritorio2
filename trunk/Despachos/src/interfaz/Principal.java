@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -25,6 +26,7 @@ import interfaz.comboBox.*;
 import interfaz.comunicacion.CommMonitoreo;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
+import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +36,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -460,7 +463,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, false, true, true, true, true, true, false, true
+                false, true, false, true, true, true, true, true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -597,8 +600,8 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -746,7 +749,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -799,13 +802,13 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -813,7 +816,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
@@ -824,7 +827,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 531, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -850,7 +853,7 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -893,7 +896,7 @@ public final class Principal extends javax.swing.JFrame {
              * borrar la celda que se haya seleccionado, esto se debe
              * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
              */
-            if (intCol == 8 || intCol == 2) {
+            if (intCol == 0 || intCol == 2 || intCol == 8) {
                 System.out.println("No borrar esos campos...");
             } else {
                 Tabla.setValueAt("", intFila, intCol);
@@ -943,14 +946,27 @@ public final class Principal extends javax.swing.JFrame {
      */
     private void BorrarFilaSeleccionadaPorDespachar(int intFila) {
         try {
-            if (!despacho.getStrHora().equals("") || jtPorDespachar.getValueAt(intFila, 0).equals("")) {
-                despacho = getDatosPorDespachar();
-                despacho.setStrHora(funciones.getHora());
-                despacho.setStrEstado("C");//cancelada
-                bd.InsertarDespachoCliente(despacho, false);
+            if (jtPorDespachar.isEditing()) {
+                jtPorDespachar.getCellEditor().cancelCellEditing();
+            }
+            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+            jlIndicadorLlamada.setIcon(img);
+
+            if (despacho.getStrHora() != null) {
+                if (!despacho.getStrHora().equals("") || jtPorDespachar.getValueAt(intFila, 0).equals("")) {
+                    despacho.setStrHora(funciones.getHora());
+                    despacho = getDatosPorDespachar();
+                    despacho.setStrEstado("C");//cancelada
+                    bd.InsertarDespachoCliente(despacho, false);
+                } else {
+                    despacho = getDatosPorDespachar();
+                    despacho.setStrHora(funciones.getHora());
+                    despacho.setStrEstado("C");//cancelada
+                    bd.InsertarDespachoCliente(despacho, false);
+                }
             } else {
-                despacho = getDatosPorDespachar();
                 despacho.setStrHora(funciones.getHora());
+                despacho = getDatosPorDespachar();
                 despacho.setStrEstado("C");//cancelada
                 bd.InsertarDespachoCliente(despacho, false);
             }
@@ -958,8 +974,6 @@ public final class Principal extends javax.swing.JFrame {
             DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
             model.removeRow(intFila);
             listaDespachosTemporales.remove(intFila);
-            jtPorDespachar.requestFocus();
-            jtPorDespachar.setRowSelectionInterval(0, 0);
             InicializarVariables();
         } catch (IndexOutOfBoundsException iex) {
         } catch (NullPointerException nex) {
@@ -1015,6 +1029,11 @@ public final class Principal extends javax.swing.JFrame {
         jtCodigo.setText("");
         resetValDespacho();
         jtPorDespachar.requestFocus();
+        try {
+            jtPorDespachar.setRowSelectionInterval(0, 0);
+        } catch (IllegalArgumentException iarg) {
+            //se produce cuando no hay filas en la tabla por despachar
+        }
     }
 
     /**
@@ -1404,9 +1423,7 @@ public final class Principal extends javax.swing.JFrame {
             if (intCol == 1) { //Cuando cambie la celda de telefono
                 try {
                     if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
-                        if (!actualizarFilaCampoTelefono(intFila, intCol)) {
-                            JOptionPane.showMessageDialog(this, "Número no válido...", "Error...", 0);
-                        }
+                        actualizarFilaCampoTelefono(intFila, intCol);
                     }
                 } catch (NullPointerException nex) {
                     System.err.println("No hay telefono recuperado de la celda...");
@@ -1427,22 +1444,19 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jtPorDespacharPropertyChange
     int filaAnt = -1;
 
-    private boolean actualizarFilaCampoTelefono(int intFila, int intCol) {
+    private void actualizarFilaCampoTelefono(int intFila, int intCol) {
         try {
             String tel = jtPorDespachar.getValueAt(intFila, 1).toString();
             if (funciones.isNumeric(tel)) {
                 jtTelefono.setText(tel);
                 desPorTabla_Campo = true; //despachar por la tabla de despachos
                 getBuscarPorTelefono();
-                return true;
             } else {
                 JOptionPane.showMessageDialog(this, "Número no válido...", "Error...", 0);
                 jtPorDespachar.setValueAt("", intFila, intCol);
                 jtTelefono.setText("");
-                return false;
             }
         } catch (NullPointerException ne) {
-            return false;
         }
     }
 
@@ -1471,15 +1485,15 @@ public final class Principal extends javax.swing.JFrame {
 
         if (intClicks == 1 && intBoton == 1) {
             try {
-                if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespacachos(), 1).equals("")) {
+                if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespachados(), 1).equals("")) {
 
                     if (ventanaDatos == null) {
                         ventanaDatos = new VentanaDatos(getDatosDespachados(), false);
-                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespacachos());
+                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
                         ventanaDatos.setVisible(true);
                     } else {
                         ventanaDatos.setDespachados(getDatosDespachados(), false);
-                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespacachos());
+                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
                         ventanaDatos.setVisible(true);
                         ventanaDatos.setLocationRelativeTo(this);
                     }
@@ -1649,7 +1663,7 @@ public final class Principal extends javax.swing.JFrame {
      * Obtiene la fila seleccioanda de la tabla despachados
      * @return int
      */
-    private int getIntFilaSeleccionadaDespacachos() {
+    private int getIntFilaSeleccionadaDespachados() {
         return jtDespachados.getSelectedRow();
     }
 
@@ -1663,7 +1677,7 @@ public final class Principal extends javax.swing.JFrame {
 
         int fila = 0;
         try {
-            fila = getIntFilaSeleccionadaDespacachos();
+            fila = getIntFilaSeleccionadaDespachados();
 
             strHora = (String) jtDespachados.getValueAt(fila, 0);
             strTelefono = (String) jtDespachados.getValueAt(fila, 1);
