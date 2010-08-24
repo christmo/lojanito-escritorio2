@@ -33,7 +33,7 @@ public class Reloj {
 
     class Cronometro extends TimerTask {
 
-        boolean parpadeo=false;
+        boolean parpadeo = false;
 
         public void run() {
             GregorianCalendar c = new GregorianCalendar();
@@ -41,10 +41,13 @@ public class Reloj {
             lblReloj.setText(sdfHora.format(c.getTime()));
             lblFecha.setText(sdfFecha.format(c.getTime()));
 
-            long menos5minutos = (convertirHora(Principal.horaNuevoTurno)).getTime() - 30000;
+            long menos5minutos = (convertirHora(Principal.horaNuevoTurno)).getTime() - 300000;
+            long horaActual = convertirHora(sdfHora.format(c.getTime())).getTime();
+            long horaSalida = convertirHora(Principal.horaNuevoTurno).getTime();
 
-            if(sdfHora.format(c.getTime()).equals(sdfHora.format(menos5minutos))){
-                parpadeo=true;
+            if (sdfHora.format(c.getTime()).equals(sdfHora.format(menos5minutos))
+                    || horaActual >= menos5minutos && horaActual <= horaSalida) {
+                parpadeo = true;
             }
 
             if (parpadeo) {
@@ -53,7 +56,7 @@ public class Reloj {
                 } else {
                     lblReloj.setForeground(Color.BLACK);
                 }
-            }else{
+            } else {
                 lblReloj.setForeground(Color.BLACK);
             }
 
@@ -81,14 +84,19 @@ public class Reloj {
             }
         }
 
+        /**
+         * Permite convertir una hora en string a date, ojo las
+         * horas que se envien por aqui tendran el año 1970, este
+         * metodo permite el trabajo con horas mas no con fechas
+         * @param hora
+         * @return Date
+         */
         private Date convertirHora(String hora) {
             DateFormat df = new SimpleDateFormat("HH:mm:ss");
             try {
                 Date today = df.parse(hora);
-                //System.out.println("Today = " + df.format(today));
                 return today;
             } catch (ParseException e) {
-                e.printStackTrace();
             }
             return null;
         }
