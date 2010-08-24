@@ -224,9 +224,9 @@ public class asignarMultas extends javax.swing.JDialog {
     }
 
     private boolean guardarRegistro(int intNroUnidad, String strFecha, String strHora, String strCodMulta) {
-        String sql = "INSERT INTO MULTAS(USUARIO, N_UNIDAD, FECHA, HORA, COD_MULTA,ESTADO)"
-                + "VALUES('" + strUsuario + "'," + intNroUnidad + ",'" + strFecha + "','" + strHora + "','" + strCodMulta + "'," + 1 + ")";
-        System.out.println("consulta realizada");
+        String sql = "INSERT INTO MULTAS_ASIGNADAS(USUARIO, N_UNIDAD, FECHA, HORA, COD_MULTA )"
+                + "VALUES('" + strUsuario + "'," + intNroUnidad + ",'" + strFecha + "','" + strHora + "','" + strCodMulta + "')";
+        System.out.println(sql);
         if (bd.ejecutarSentencia(sql)) {
             return true;
         }
