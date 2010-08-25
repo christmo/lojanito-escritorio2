@@ -229,11 +229,22 @@ public final class Principal extends javax.swing.JFrame {
     public static void ActualizarTurno() {
         turno = validarTurno();
         id_Turno = bd.getIdTurno(validarTurno());
+        ActualizarTurnoUsuario(sesion[0],id_Turno);
         try {
             horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Actualiza la tabla de usuarios con el turno en que entró por ultima vez el
+     * usuario
+     * @param user
+     * @param id_turno
+     */
+    private static void ActualizarTurnoUsuario(String user,int id_turno ){
+        bd.actualziarTurnoUsuario(user,id_turno);
     }
 
     /**
@@ -364,7 +375,7 @@ public final class Principal extends javax.swing.JFrame {
         return null;
     }
 
-    private void llenarComboEstados() {
+    public static void llenarComboEstados() {
         //Extracción de la BD
         colorCodigosBD();
 
@@ -1872,7 +1883,7 @@ public final class Principal extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnColor;
-    private javax.swing.JComboBox cbEstadosTaxi;
+    private static javax.swing.JComboBox cbEstadosTaxi;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
