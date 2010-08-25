@@ -37,7 +37,7 @@ public class ConexionBase {
         this.ip = rb.getString("ip_base");
         this.bd = rb.getString("base");
         this.usr = "root";
-        this.pass = "";
+        this.pass = "kradac";
 
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
@@ -269,7 +269,7 @@ public class ConexionBase {
         return null;
     }
 
-        /**
+    /**
      * Retorna el estado de la ultima unidad intentada despachar
      * @return String
      */
@@ -865,5 +865,143 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * Recupera la lista de usuarios del sistema
+     * @return String[]
+     */
+    public String[] getUsuarios() {
+        try {
+            String[] datosCast;
+            String sql = "SELECT USUARIO FROM USUARIOS";
+            rs = ejecutarConsulta(sql);
+            ArrayList<String> listaUsuarios = new ArrayList<String>();
+            while (rs.next()) {
+                listaUsuarios.add(rs.getString("USUARIO"));
+            }
+            datosCast = new String[listaUsuarios.size()];
+            datosCast = listaUsuarios.toArray(datosCast);
+            return datosCast;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene la lista de turnos de la base de datos
+     * @return String[]
+     */
+    public String[] getTurnos() {
+        try {
+            String[] datosCast;
+            String sql = "SELECT CONCAT(HORA_INI,' - ',HORA_FIN) AS HORA FROM TURNOS";
+            rs = ejecutarConsulta(sql);
+            ArrayList<String> listaTurnos = new ArrayList<String>();
+            while (rs.next()) {
+                listaTurnos.add(rs.getString("HORA"));
+            }
+            datosCast = new String[listaTurnos.size()];
+            datosCast = listaTurnos.toArray(datosCast);
+            return datosCast;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene lo datos de usuario
+     * @param usuario
+     * @return ResultSet
+     */
+    public ResultSet getDatosUsuario(String usuario) {
+        String sql = "SELECT * FROM USUARIOS WHERE USUARIO='" + usuario + "'";
+        return rs = ejecutarConsultaUnDato(sql);
+    }
+
+    /**
+     * Actualiza la tabla de usuarios con el turno en que entró por ultima vez el
+     * usuario
+     * @param user
+     * @param id_turno
+     */
+    public boolean actualziarTurnoUsuario(String user, int id_turno) {
+        String sql = "UPDATE USUARIOS SET ID_TURNO=" + id_turno + " WHERE USUARIO ='" + user + "'";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Inserta un nuevo usuario en la tabla de usuarios
+     * @param emp
+     * @param user
+     * @param pass
+     * @param nombre
+     * @param dir
+     * @param tel
+     * @param id_turno
+     * @param estado
+     * @param oper
+     * @param ci
+     * @return boolean
+     */
+    public boolean  insertarUsuario(String emp, String user, String pass,
+            String nombre, String dir, String tel, int id_turno,
+            String estado, String oper, String ci) {
+        String sql ="CALL SP_INSERTAR_USUARIOS('"+
+                emp+"','"+
+                user+"','"+
+                pass+"','"+
+                nombre+"','"+
+                dir+"','"+
+                tel+"',"+
+                id_turno+",'"+
+                estado+"','"+
+                oper+"','"+
+                ci+
+                "')";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Actualiza los datos del usuario
+     * @param emp
+     * @param user
+     * @param pass
+     * @param nombre
+     * @param dir
+     * @param tel
+     * @param id_turno
+     * @param estado
+     * @param oper
+     * @param ci
+     * @return boolean
+     */
+    public boolean actualizarUsuario(String emp, String user, String pass,
+            String nombre, String dir, String tel, int id_turno,
+            String estado, String oper, String ci) {
+        String sql ="CALL SP_ACTUALIZAR_USUARIOS('"+
+                emp+"','"+
+                user+"','"+
+                pass+"','"+
+                nombre+"','"+
+                dir+"','"+
+                tel+"',"+
+                id_turno+",'"+
+                estado+"','"+
+                oper+"','"+
+                ci+
+                "')";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Elimina el usuario de la base de datos
+     * @param usuario
+     */
+    public void eliminarUsuario(String usuario) {
+        String sql = "DELETE FROM USUARIOS WHERE USUARIO='"+usuario+"'";
+        ejecutarSentencia(sql);
     }
 }
