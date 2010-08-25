@@ -31,7 +31,7 @@ public class INICIO extends javax.swing.JFrame {
     JDialog beasignarMulta = null;
     JDialog nEstado = null;
     JDialog modEstados = null;
-
+    JDialog modUsuarios = null;
     public static String sesion[] = null;
     private ConexionBase conec;
 
@@ -59,9 +59,10 @@ public class INICIO extends javax.swing.JFrame {
         btnAsignarM.setText("<html><center>ASIGNAR <BR> MULTA</center></html>");
         btnMultas.setText("<html><center> MULTAS </center></html>");
         btnConfig.setText("<html><center>CONFIG</center></html>");
+        jbUsuarios.setText("<html><center>USUARIOS</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
 
-        btnModEstados.setText ("<html><center>EDITAR<br> ESTADOS</center></html>");
+        btnModEstados.setText("<html><center>EDITAR<br> ESTADOS</center></html>");
 
         btnModEstados.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnModEstados.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -102,6 +103,9 @@ public class INICIO extends javax.swing.JFrame {
         btnConfig.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnConfig.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        jbUsuarios.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbUsuarios.setHorizontalTextPosition(SwingConstants.CENTER);
+
         btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -131,6 +135,7 @@ public class INICIO extends javax.swing.JFrame {
         lblNombreAplicacion = new javax.swing.JLabel();
         lblEmpresa = new javax.swing.JLabel();
         btnModEstados = new javax.swing.JButton();
+        jbUsuarios = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -263,6 +268,14 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
+        jbUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/usuario.png"))); // NOI18N
+        jbUsuarios.setText("Usuarios");
+        jbUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbUsuariosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -272,14 +285,15 @@ public class INICIO extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 442, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 449, Short.MAX_VALUE)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -335,11 +349,13 @@ public class INICIO extends javax.swing.JFrame {
                     .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDirectorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46))
+                .addContainerGap())
         );
 
         pack();
@@ -392,7 +408,7 @@ public class INICIO extends javax.swing.JFrame {
             turnos.setSize(525, 250);
             turnos.setLocationRelativeTo(this);
             turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            turnos.setResizable(false);            
+            turnos.setResizable(false);
         }
         turnos.setVisible(true);
 
@@ -404,7 +420,7 @@ public class INICIO extends javax.swing.JFrame {
             nConductor.setSize(650, 550);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            nConductor.setResizable(false);            
+            nConductor.setResizable(false);
         }
         nConductor.setVisible(true);
     }//GEN-LAST:event_btnNvConductorActionPerformed
@@ -416,7 +432,7 @@ public class INICIO extends javax.swing.JFrame {
             editVehiculo.setSize(725, 770);
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            editVehiculo.setResizable(false);            
+            editVehiculo.setResizable(false);
         }
         editVehiculo.setVisible(true);
     }//GEN-LAST:event_btnEditVehiculoActionPerformed
@@ -434,7 +450,7 @@ public class INICIO extends javax.swing.JFrame {
             beasignarMulta.setSize(700, 700);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            beasignarMulta.setResizable(false);            
+            beasignarMulta.setResizable(false);
         }
         beasignarMulta.setVisible(true);
     }//GEN-LAST:event_btnBEMultasActionPerformed
@@ -450,7 +466,7 @@ public class INICIO extends javax.swing.JFrame {
             multas.setSize(496, 400);
             multas.setLocationRelativeTo(this);
             multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            multas.setResizable(false);            
+            multas.setResizable(false);
         }
         multas.setVisible(true);
 
@@ -463,14 +479,14 @@ public class INICIO extends javax.swing.JFrame {
             asignarMulta.setSize(350, 354);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            asignarMulta.setResizable(false);            
+            asignarMulta.setResizable(false);
         }
         asignarMulta.setVisible(true);
 
     }//GEN-LAST:event_btnAsignarMActionPerformed
 
     private void btnModEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModEstadosActionPerformed
-                if ((modEstados == null) || (!modEstados.isDisplayable())) {
+        if ((modEstados == null) || (!modEstados.isDisplayable())) {
             modEstados = new modEstados(this, this.conec);
             modEstados.setSize(500, 320);
             modEstados.setLocationRelativeTo(this);
@@ -479,6 +495,16 @@ public class INICIO extends javax.swing.JFrame {
         }
         modEstados.setVisible(true);
     }//GEN-LAST:event_btnModEstadosActionPerformed
+
+    private void jbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbUsuariosActionPerformed
+        if ((modUsuarios == null) || (!modUsuarios.isDisplayable())) {
+            modUsuarios = new modUsuarios(this, this.conec);
+            modUsuarios.setLocationRelativeTo(this);
+            modUsuarios.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            modUsuarios.setResizable(false);
+        }
+        modUsuarios.setVisible(true);
+    }//GEN-LAST:event_jbUsuariosActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -503,6 +529,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
+    private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
     // End of variables declaration//GEN-END:variables
