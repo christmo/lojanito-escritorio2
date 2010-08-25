@@ -29,6 +29,9 @@ public class INICIO extends javax.swing.JFrame {
     JDialog multas = null;
     JDialog asignarMulta = null;
     JDialog beasignarMulta = null;
+    JDialog nEstado = null;
+    JDialog modEstados = null;
+
     public static String sesion[] = null;
     private ConexionBase conec;
 
@@ -123,6 +126,7 @@ public class INICIO extends javax.swing.JFrame {
         btnAsignarM = new javax.swing.JButton();
         lblNombreAplicacion = new javax.swing.JLabel();
         lblEmpresa = new javax.swing.JLabel();
+        btnEstados1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -247,6 +251,14 @@ public class INICIO extends javax.swing.JFrame {
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
         lblEmpresa.setText("LOJA NORTE ");
 
+        btnEstados1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/estados.png"))); // NOI18N
+        btnEstados1.setText("Estados Taxi");
+        btnEstados1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstados1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -254,37 +266,36 @@ public class INICIO extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 356, Short.MAX_VALUE)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 403, Short.MAX_VALUE)
-                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEstados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAsignarM, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnTurnos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(99, 99, 99)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(lblNombreAplicacion)
-                            .addGap(215, 215, 215)))
+                            .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEstados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAsignarM, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTurnos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEstados1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblNombreAplicacion)
+                        .addGap(215, 215, 215))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblEmpresa)
-                        .addGap(201, 201, 201))))
+                        .addGap(201, 201, 201)))
+                .addGap(120, 120, 120))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,7 +312,9 @@ public class INICIO extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEstados1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,8 +346,8 @@ public class INICIO extends javax.swing.JFrame {
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             newVehiculo.setResizable(false);
-            newVehiculo.setVisible(true);
         }
+        newVehiculo.setVisible(true);
     }//GEN-LAST:event_btnNewVehiculoActionPerformed
 
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
@@ -344,12 +357,19 @@ public class INICIO extends javax.swing.JFrame {
             beConductor.setLocationRelativeTo(this);
             beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             beConductor.setResizable(false);
-            beConductor.setVisible(true);
         }
+        beConductor.setVisible(true);
     }//GEN-LAST:event_btnEditConductorActionPerformed
 
     private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
-        // TODO add your handling code here:
+        if ((nEstado == null) || (!nEstado.isDisplayable())) {
+            nEstado = new ingresoEstados(this, this.conec);
+            nEstado.setSize(354, 267);
+            nEstado.setLocationRelativeTo(this);
+            nEstado.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            nEstado.setResizable(false);
+        }
+        nEstado.setVisible(true);
     }//GEN-LAST:event_btnEstadosActionPerformed
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
@@ -362,9 +382,9 @@ public class INICIO extends javax.swing.JFrame {
             turnos.setSize(525, 250);
             turnos.setLocationRelativeTo(this);
             turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            turnos.setResizable(false);
-            turnos.setVisible(true);
+            turnos.setResizable(false);            
         }
+        turnos.setVisible(true);
 
     }//GEN-LAST:event_btnTurnosActionPerformed
 
@@ -374,23 +394,21 @@ public class INICIO extends javax.swing.JFrame {
             nConductor.setSize(650, 550);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            nConductor.setResizable(false);
-            nConductor.setVisible(true);
+            nConductor.setResizable(false);            
         }
+        nConductor.setVisible(true);
     }//GEN-LAST:event_btnNvConductorActionPerformed
 
     private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
 
-        //PASAR VARIABLES DE SESION
-        //POR EL CONSTRUCTOR
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
             editVehiculo = new modVehiculo(this, sesion, this.conec);
             editVehiculo.setSize(725, 770);
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            editVehiculo.setResizable(false);
-            editVehiculo.setVisible(true);
+            editVehiculo.setResizable(false);            
         }
+        editVehiculo.setVisible(true);
     }//GEN-LAST:event_btnEditVehiculoActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -402,13 +420,13 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
-            beasignarMulta = new modAsignarMultas(this, this.conec,sesion);
+            beasignarMulta = new modAsignarMultas(this, this.conec, sesion);
             beasignarMulta.setSize(700, 700);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            beasignarMulta.setResizable(false);
-            beasignarMulta.setVisible(true);
+            beasignarMulta.setResizable(false);            
         }
+        beasignarMulta.setVisible(true);
     }//GEN-LAST:event_btnBEMultasActionPerformed
 
     private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
@@ -422,9 +440,9 @@ public class INICIO extends javax.swing.JFrame {
             multas.setSize(496, 400);
             multas.setLocationRelativeTo(this);
             multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            multas.setResizable(false);
-            multas.setVisible(true);
+            multas.setResizable(false);            
         }
+        multas.setVisible(true);
 
     }//GEN-LAST:event_btnMultasActionPerformed
 
@@ -435,11 +453,22 @@ public class INICIO extends javax.swing.JFrame {
             asignarMulta.setSize(350, 354);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            asignarMulta.setResizable(false);
-            asignarMulta.setVisible(true);
+            asignarMulta.setResizable(false);            
         }
+        asignarMulta.setVisible(true);
 
     }//GEN-LAST:event_btnAsignarMActionPerformed
+
+    private void btnEstados1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstados1ActionPerformed
+                if ((modEstados == null) || (!modEstados.isDisplayable())) {
+            modEstados = new modEstados(this, this.conec);
+            modEstados.setSize(510, 289);
+            modEstados.setLocationRelativeTo(this);
+            modEstados.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            modEstados.setResizable(false);
+        }
+        modEstados.setVisible(true);
+    }//GEN-LAST:event_btnEstados1ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -457,6 +486,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnEditConductor;
     private javax.swing.JButton btnEditVehiculo;
     private javax.swing.JButton btnEstados;
+    private javax.swing.JButton btnEstados1;
     private javax.swing.JButton btnMultas;
     private javax.swing.JButton btnNewVehiculo;
     private javax.swing.JButton btnNvConductor;
