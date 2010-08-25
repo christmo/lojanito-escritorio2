@@ -37,7 +37,7 @@ public class ConexionBase {
         this.ip = rb.getString("ip_base");
         this.bd = rb.getString("base");
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
 
         url = "jdbc:mysql://" + ip + "/" + bd;
         try {
@@ -134,8 +134,8 @@ public class ConexionBase {
     public boolean ejecutarSentencia(String sql) {
         try {
             System.out.println("Ejecutar: " + sql);
-            int rta = st.executeUpdate(sql);
-            if (rta == 1) {
+            int rta = st.executeUpdate(sql);            
+            if (rta >= 0) {
                 return true;
             } else {
                 return false;
@@ -144,7 +144,6 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         } finally {
-            //CerrarConexion();
         }
     }
 
