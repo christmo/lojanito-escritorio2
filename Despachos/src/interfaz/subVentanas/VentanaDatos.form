@@ -67,7 +67,7 @@
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel8" min="-2" pref="68" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                          <Component id="jtLongitud" pref="224" max="32767" attributes="1"/>
+                                          <Component id="jtLongitud" pref="236" max="32767" attributes="1"/>
                                       </Group>
                                       <Component id="jbSalir" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
                                   </Group>
@@ -84,7 +84,7 @@
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jtNumeroCasa" pref="239" max="32767" attributes="1"/>
+                                  <Component id="jtNumeroCasa" pref="242" max="32767" attributes="1"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -99,8 +99,8 @@
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                   <Component id="jtTelefono" min="-2" pref="206" max="-2" attributes="1"/>
                               </Group>
-                              <Component id="jtNombre" alignment="0" pref="511" max="32767" attributes="1"/>
-                              <Component id="jtDireccion" alignment="1" pref="511" max="32767" attributes="0"/>
+                              <Component id="jtNombre" alignment="0" pref="528" max="32767" attributes="1"/>
+                              <Component id="jtDireccion" alignment="1" pref="528" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -288,14 +288,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="516" max="32767" attributes="0"/>
+                      <EmptySpace pref="533" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" alignment="0" pref="580" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="606" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" alignment="0" pref="580" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="0" pref="606" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -331,7 +331,9 @@
                 <Component class="javax.swing.JTextArea" name="jtReferencia">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="5"/>
+                    <Property name="tabSize" type="int" value="0"/>
                     <Property name="highlighter" type="javax.swing.text.Highlighter" editor="org.netbeans.modules.form.ComponentChooserEditor">
                       <ComponentRef name="null"/>
                     </Property>
@@ -364,7 +366,9 @@
                 <Component class="javax.swing.JTextArea" name="jtNota">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="5"/>
+                    <Property name="tabSize" type="int" value="0"/>
                     <Property name="highlighter" type="javax.swing.text.Highlighter" editor="org.netbeans.modules.form.ComponentChooserEditor">
                       <ComponentRef name="null"/>
                     </Property>
