@@ -267,7 +267,9 @@ public class VentanaDatos extends javax.swing.JDialog {
         jLabel5.setText("Referencia:");
 
         jtReferencia.setColumns(20);
+        jtReferencia.setLineWrap(true);
         jtReferencia.setRows(5);
+        jtReferencia.setTabSize(0);
         jtReferencia.setHighlighter(null);
         jtReferencia.setMargin(new java.awt.Insets(5, 5, 5, 5));
         jtReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -286,7 +288,9 @@ public class VentanaDatos extends javax.swing.JDialog {
         jLabel11.setText("Nota:");
 
         jtNota.setColumns(20);
+        jtNota.setLineWrap(true);
         jtNota.setRows(5);
+        jtNota.setTabSize(0);
         jtNota.setHighlighter(null);
         jtNota.setMargin(new java.awt.Insets(5, 5, 5, 5));
         jtNota.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -307,12 +311,12 @@ public class VentanaDatos extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(516, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                .addContainerGap(533, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel11)
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,7 +369,7 @@ public class VentanaDatos extends javax.swing.JDialog {
                                     .addGroup(jpDatosLayout.createSequentialGroup()
                                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(6, 6, 6)
-                                        .addComponent(jtLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
+                                        .addComponent(jtLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap())
                     .addGroup(jpDatosLayout.createSequentialGroup()
@@ -376,7 +380,7 @@ public class VentanaDatos extends javax.swing.JDialog {
                         .addGap(14, 14, 14)
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel9)
                                 .addGap(18, 18, 18)
@@ -389,8 +393,8 @@ public class VentanaDatos extends javax.swing.JDialog {
                                 .addComponent(jLabel6)
                                 .addGap(6, 6, 6)
                                 .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
-                            .addComponent(jtDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
+                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                            .addComponent(jtDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         jpDatosLayout.setVerticalGroup(
