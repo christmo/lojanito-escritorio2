@@ -109,9 +109,9 @@ public class funcionesUtilidad {
     public boolean isEmail(String correo) {
         Pattern pat = null;
         Matcher mat = null;
-        pat = Pattern.compile("^[a-zA-Z0-9_-]{2,}@[a-zA-Z0-9_-]{2,}\\.[a-zA-Z]{2,4}(\\.[a-zA-Z]{2,4})?$");
+        pat = Pattern.compile("[a-zA-Z0-9_-].*{2,}@[a-zA-Z0-9_-]{2,}\\.[a-zA-Z]{2,4}(\\.[a-zA-Z]{2,4})?$");
         mat = pat.matcher(correo);
-        if (mat.find()) {            
+        if (mat.find()) {
             return true;
         } else {
             return false;
@@ -189,15 +189,15 @@ public class funcionesUtilidad {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("k:m");
         String[] txtHoraMinutos = sdf.format(calendario.getTime()).split(":");
-        String txtHora="";
-        for (String hora : txtHoraMinutos) {            
-            if(hora.length()==1){
-                txtHora +="0"+hora;
-            }else{
+        String txtHora = "";
+        for (String hora : txtHoraMinutos) {
+            if (hora.length() == 1) {
+                txtHora += "0" + hora;
+            } else {
                 txtHora += hora;
             }
         }
-        return txtHora.substring(0, 2)+":"+txtHora.substring(2);
+        return txtHora.substring(0, 2) + ":" + txtHora.substring(2);
     }
 
     /**
@@ -226,8 +226,27 @@ public class funcionesUtilidad {
             }
         } else if (lon == 8) {
             return "0" + tel;
+        } else if (lon == 7) {
+            return "07" + tel;
+        } else if (lon == 6) {
+            return "072" + tel;
         } else {
             return "";
+        }
+    }
+
+    /**
+     * Valida si el numero de telefono tiene 9 caracteres
+     * @param text
+     * @return boolean
+     */
+    public boolean validarTel(String text) {
+        if (text.length() == 9) {
+            System.out.println("tiene 9");
+            return true;
+        } else {
+            System.out.println("NO tiene 9");
+            return false;
         }
     }
 }
