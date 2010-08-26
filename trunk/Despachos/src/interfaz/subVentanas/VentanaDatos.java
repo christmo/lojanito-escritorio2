@@ -29,9 +29,11 @@ public class VentanaDatos extends javax.swing.JDialog {
     private JTable tabla;
 
     /** Creates new form VentanaDatos */
-    public VentanaDatos() {
+    public VentanaDatos(boolean menu) {
         initComponents();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        jtTelefono.setEnabled(true);
+        this.accion = menu;
     }
 
     public VentanaDatos(Despachos despacho) {
@@ -46,8 +48,8 @@ public class VentanaDatos extends javax.swing.JDialog {
      * PorDespachar lo que permitira la edicion de la informacions
      * @param despacho
      */
-    public void setPorDespachar(Despachos despacho){
-        this.datos=despacho;
+    public void setPorDespachar(Despachos despacho) {
+        this.datos = despacho;
         cargarDatos(datos);
         estadoCampos(true);
     }
@@ -59,8 +61,8 @@ public class VentanaDatos extends javax.swing.JDialog {
      * @param despacho
      * @param estado
      */
-    public void setDespachados(Despachos despacho,boolean estado){
-        this.datos=despacho;
+    public void setDespachados(Despachos despacho, boolean estado) {
+        this.datos = despacho;
         cargarDatos(datos);
         estadoCampos(estado);
     }
@@ -225,7 +227,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel9.setText("Barrio:");
 
-        jtTelefono.setFont(new java.awt.Font("Arial", 1, 24));
+        jtTelefono.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jtTelefono.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtTelefono.setEnabled(false);
 
