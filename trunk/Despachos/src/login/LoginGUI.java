@@ -70,14 +70,12 @@ public class LoginGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Clave:");
 
-        jtUser.setText("LojaNorte");
         jtUser.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtUserKeyPressed(evt);
             }
         });
 
-        jpPass.setText("LojaNorte");
         jpPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jpPassFocusGained(evt);
