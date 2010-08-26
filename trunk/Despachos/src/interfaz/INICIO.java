@@ -11,6 +11,7 @@
 package interfaz;
 
 import BaseDatos.ConexionBase;
+import interfaz.subVentanas.VentanaDatos;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingConstants;
@@ -46,6 +47,10 @@ public class INICIO extends javax.swing.JFrame {
         initComponents();
 
         //this.setLocationRelativeTo(null);
+        try {
+            lblEmpresa.setText(bd.getEmpresa(Principal.sesion[1]));
+        } catch (NullPointerException ex) {
+        }
 
         btnNvConductor.setText("<html><center>NUEVO<br>CONDUCTOR</center></html>");
         btnEditVehiculo.setText("<html><center>EDITAR<br>VEHICULO</center></html>");
@@ -60,6 +65,7 @@ public class INICIO extends javax.swing.JFrame {
         btnMultas.setText("<html><center> MULTAS </center></html>");
         btnConfig.setText("<html><center>CONFIG</center></html>");
         jbUsuarios.setText("<html><center>USUARIOS</center></html>");
+        jbClientes.setText("<html><center>CLIENTES</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
 
         btnModEstados.setText("<html><center>EDITAR<br> ESTADOS</center></html>");
@@ -106,6 +112,9 @@ public class INICIO extends javax.swing.JFrame {
         jbUsuarios.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbUsuarios.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        jbClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbClientes.setHorizontalTextPosition(SwingConstants.CENTER);
+
         btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -136,6 +145,7 @@ public class INICIO extends javax.swing.JFrame {
         lblEmpresa = new javax.swing.JLabel();
         btnModEstados = new javax.swing.JButton();
         jbUsuarios = new javax.swing.JButton();
+        jbClientes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -258,7 +268,8 @@ public class INICIO extends javax.swing.JFrame {
         lblNombreAplicacion.setText("SIETE v1.0");
 
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
-        lblEmpresa.setText("LOJA NORTE ");
+        lblEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEmpresa.setText("CIUDAD VICTORIA ");
 
         btnModEstados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modEstados.png"))); // NOI18N
         btnModEstados.setText("Estados Taxi");
@@ -276,6 +287,14 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
+        jbClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/llamada.png"))); // NOI18N
+        jbClientes.setText("Clientes");
+        jbClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbClientesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -289,49 +308,49 @@ public class INICIO extends javax.swing.JFrame {
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnModEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(lblEmpresa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                                    .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                                    .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                                    .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jbClientes, 0, 0, Short.MAX_VALUE)
+                                    .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                                    .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(btnModEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(230, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblNombreAplicacion)
-                        .addGap(14, 14, 14))
-                    .addComponent(lblEmpresa, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(226, 226, 226))
+                .addContainerGap(239, Short.MAX_VALUE)
+                .addComponent(lblNombreAplicacion)
+                .addGap(240, 240, 240))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblEmpresa)
-                .addGap(36, 36, 36)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -350,7 +369,9 @@ public class INICIO extends javax.swing.JFrame {
                     .addComponent(btnDirectorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -506,6 +527,11 @@ public class INICIO extends javax.swing.JFrame {
         modUsuarios.setVisible(true);
     }//GEN-LAST:event_jbUsuariosActionPerformed
 
+    private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClientesActionPerformed
+        VentanaDatos v = new VentanaDatos(true);
+        v.setVisible(true);
+    }//GEN-LAST:event_jbClientesActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -529,6 +555,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
+    private javax.swing.JButton jbClientes;
     private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
