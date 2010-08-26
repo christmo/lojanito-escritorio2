@@ -134,7 +134,7 @@ public class ConexionBase {
     public boolean ejecutarSentencia(String sql) {
         try {
             System.out.println("Ejecutar: " + sql);
-            int rta = st.executeUpdate(sql);            
+            int rta = st.executeUpdate(sql);
             if (rta >= 0) {
                 return true;
             } else {
@@ -946,21 +946,21 @@ public class ConexionBase {
      * @param ci
      * @return boolean
      */
-    public boolean  insertarUsuario(String emp, String user, String pass,
+    public boolean insertarUsuario(String emp, String user, String pass,
             String nombre, String dir, String tel, int id_turno,
             String estado, String oper, String ci) {
-        String sql ="CALL SP_INSERTAR_USUARIOS('"+
-                emp+"','"+
-                user+"','"+
-                pass+"','"+
-                nombre+"','"+
-                dir+"','"+
-                tel+"',"+
-                id_turno+",'"+
-                estado+"','"+
-                oper+"','"+
-                ci+
-                "')";
+        String sql = "CALL SP_INSERTAR_USUARIOS('"
+                + emp + "','"
+                + user + "','"
+                + pass + "','"
+                + nombre + "','"
+                + dir + "','"
+                + tel + "',"
+                + id_turno + ",'"
+                + estado + "','"
+                + oper + "','"
+                + ci
+                + "')";
         return ejecutarSentencia(sql);
     }
 
@@ -981,18 +981,18 @@ public class ConexionBase {
     public boolean actualizarUsuario(String emp, String user, String pass,
             String nombre, String dir, String tel, int id_turno,
             String estado, String oper, String ci) {
-        String sql ="CALL SP_ACTUALIZAR_USUARIOS('"+
-                emp+"','"+
-                user+"','"+
-                pass+"','"+
-                nombre+"','"+
-                dir+"','"+
-                tel+"',"+
-                id_turno+",'"+
-                estado+"','"+
-                oper+"','"+
-                ci+
-                "')";
+        String sql = "CALL SP_ACTUALIZAR_USUARIOS('"
+                + emp + "','"
+                + user + "','"
+                + pass + "','"
+                + nombre + "','"
+                + dir + "','"
+                + tel + "',"
+                + id_turno + ",'"
+                + estado + "','"
+                + oper + "','"
+                + ci
+                + "')";
         return ejecutarSentencia(sql);
     }
 
@@ -1001,7 +1001,7 @@ public class ConexionBase {
      * @param usuario
      */
     public void eliminarUsuario(String usuario) {
-        String sql = "DELETE FROM USUARIOS WHERE USUARIO='"+usuario+"'";
+        String sql = "DELETE FROM USUARIOS WHERE USUARIO='" + usuario + "'";
         ejecutarSentencia(sql);
     }
 
