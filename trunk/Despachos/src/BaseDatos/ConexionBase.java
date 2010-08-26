@@ -1004,4 +1004,20 @@ public class ConexionBase {
         String sql = "DELETE FROM USUARIOS WHERE USUARIO='"+usuario+"'";
         ejecutarSentencia(sql);
     }
+
+    /**
+     * Obtiene el nombre de la empresa
+     * @param id
+     * @return String
+     */
+    public String getEmpresa(String id) {
+        try {
+            String sql = "SELECT NOMBRE_EMP FROM EMPRESAS WHERE ID_EMPRESA = '" + id + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("NOMBRE_EMP");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }
