@@ -22,12 +22,13 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
-import interfaz.comunicacion.CommMonitoreo;
+import interfaz.comunicacion.comm.CommMonitoreo;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -96,6 +97,8 @@ public final class Principal extends javax.swing.JFrame {
     /*Leer archivo de configuraciones*/
     private ResourceBundle rb;
     public static Principal gui;
+    /*Archivo de configuraciones*/
+    public static Properties arcConfig;
 
     /**
      * Constructor para recibir los datos de sesion desde el menu principal
@@ -105,6 +108,13 @@ public final class Principal extends javax.swing.JFrame {
         setSession(info);
         Principal.main(null);
         Principal.bd = conec;
+    }
+
+    public Principal(String[] info, ConexionBase conec, Properties archivo) {
+        setSession(info);
+        Principal.main(null);
+        Principal.bd = conec;
+        Principal.arcConfig = archivo;
     }
 
     /**
@@ -150,12 +160,13 @@ public final class Principal extends javax.swing.JFrame {
      * Abre la comunicación serial para leer el numero de telefono del cliente
      */
     public void IdentificadorLlamadas() {
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
-        String puerto = rb.getString("comm");
+        //rb = ResourceBundle.getBundle("configuracion.configsystem");
+        String puerto = arcConfig.getProperty("comm");
         //String puerto = jtPuerto.getText();
+        //String puerto = rb.getString("comm");
         System.out.println("puerto: " + puerto);
         if (!puerto.equals("0")) {
-            CommMonitoreo comm = new CommMonitoreo(puerto);
+            CommMonitoreo comm = new CommMonitoreo(puerto, bd);
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
             comm.start();
         }
@@ -229,7 +240,7 @@ public final class Principal extends javax.swing.JFrame {
     public static void ActualizarTurno() {
         turno = validarTurno();
         id_Turno = bd.getIdTurno(validarTurno());
-        ActualizarTurnoUsuario(sesion[0],id_Turno);
+        ActualizarTurnoUsuario(sesion[0], id_Turno);
         try {
             horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
         } catch (SQLException ex) {
@@ -243,8 +254,8 @@ public final class Principal extends javax.swing.JFrame {
      * @param user
      * @param id_turno
      */
-    private static void ActualizarTurnoUsuario(String user,int id_turno ){
-        bd.actualziarTurnoUsuario(user,id_turno);
+    private static void ActualizarTurnoUsuario(String user, int id_turno) {
+        bd.actualziarTurnoUsuario(user, id_turno);
     }
 
     /**
@@ -1373,9 +1384,8 @@ public final class Principal extends javax.swing.JFrame {
 
     private static void colorCodigosBD() {
         try {
-            ConexionBase cb = new ConexionBase();
             String sql = "SELECT ID_CODIGO,COLOR,ETIQUETA  FROM CODESTTAXI";
-            rs = cb.ejecutarConsultaUnDato(sql);
+            rs = bd.ejecutarConsultaUnDato(sql);
 
             codigo.clear();
             color.clear();
@@ -1386,7 +1396,7 @@ public final class Principal extends javax.swing.JFrame {
                 etiq.add(rs.getString(3));
                 etiqColor.put(rs.getString(3), rs.getString(2));
             } while (rs.next());
-            cb.CerrarConexion();
+
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }

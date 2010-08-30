@@ -11,9 +11,13 @@
 package login;
 
 import BaseDatos.ConexionBase;
+import configuracion.UIConfiguracion;
 import interfaz.Principal;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -30,18 +34,46 @@ public class LoginGUI extends javax.swing.JFrame {
     private String strPass = "";
     ConexionBase cb = null;
     ResultSet rs = null;
+    private Properties arcConfig;
+    private String url_config = CargarRutaArchivoPropiedades();
 
     /** Creates new form LoginGUI */
     public LoginGUI() {
         initComponents();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
-        
         jbtIngresar.setText("<html><center>INGRESAR</center></html>");
         jbtIngresar.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbtIngresar.setHorizontalTextPosition(SwingConstants.CENTER);
-
+        try {
+            arcConfig = new Properties();
+            arcConfig.load(new FileInputStream(url_config));
+            System.out.println("Cargado: " + url_config);
+        } catch (IOException ex) {
+            //Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Temporal: " + url_config);
+            UIConfiguracion.CrearArchivoPropiedades(url_config);
+        }
+        //System.out.println(System.getProperty("java.library.path"));
     }
 
+    public LoginGUI(Properties arcConfig) {
+        initComponents();
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        jbtIngresar.setText("<html><center>INGRESAR</center></html>");
+        jbtIngresar.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbtIngresar.setHorizontalTextPosition(SwingConstants.CENTER);
+        this.arcConfig = arcConfig;
+    }
+
+    private String CargarRutaArchivoPropiedades() {
+        if (System.getProperty("os.name").equals("Linux")) {
+            System.out.println(System.getProperty("os.name"));
+            return System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "configsystem.properties";
+        } else {
+            System.out.println(System.getProperty("os.name"));
+            return System.getProperty("java.io.tmpdir") + "configsystem.properties";
+        }
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -167,57 +199,65 @@ public class LoginGUI extends javax.swing.JFrame {
         strUser = null;
         chrPass = null;
         strPass = "";
+        boolean entrar = false;
 
+
+        strUser = jtUser.getText();
+        chrPass = jpPass.getPassword();
+
+        for (int i = 0; i < chrPass.length; i++) {
+            strPass += chrPass[i];
+        }
         try {
-            strUser = jtUser.getText();
-            chrPass = jpPass.getPassword();
+            cb = new ConexionBase(arcConfig);
+            entrar = true;
+        } catch (UnsupportedOperationException ux) {
+            UIConfiguracion config = new UIConfiguracion(url_config);
+            this.dispose();
+        }
+        if (entrar) {
+            try {
+                String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO FROM USUARIOS WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
 
-            for (int i = 0; i < chrPass.length; i++) {
-                strPass += chrPass[i];
-            }
+                rs = cb.ejecutarConsultaUnDato(sql);
 
-            cb = new ConexionBase();
-            String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO FROM USUARIOS WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
-            rs = cb.ejecutarConsultaUnDato(sql);
+                String usuarioBase = rs.getString("USUARIO");
+                String claveBase = rs.getString("CLAVE");
 
-            String usuarioBase = rs.getString("USUARIO");
-            String claveBase = rs.getString("CLAVE");
+                boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
+                boolean boolClave = (claveBase.toUpperCase().equals(strPass.toUpperCase()));
 
-            boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
-            boolean boolClave = (claveBase.toUpperCase().equals(strPass.toUpperCase()));
+                if (boolUsuario) {
+                    if (boolClave) {
+                        /**
+                         * Sesion -> usuario,id_empresa,Nombre_del_Usuario
+                         * Arreglo de 3 datos en el orden que se muestra
+                         */
+                        String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
 
-            System.out.println("Usuario: "+boolUsuario+" Clave: "+boolClave);
+                        //Principal pantalla = new Principal(sesion, cb);
+                        Principal pantalla = new Principal(sesion, cb, arcConfig);
 
-            if (boolUsuario) {
-                if (boolClave) {
-                    /**
-                     * Sesion -> usuario,id_empresa,Nombre_del_Usuario
-                     * Arreglo de 3 datos en el orden que se muestra
-                     */
-                    String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
-
-                    Principal pantalla = new Principal(sesion,cb);
-
-                   // cb.CerrarConexion();
-                    this.setVisible(false);
-                    System.out.println("Ingresar a Principal");
+                        //his.setVisible(false);
+                        System.out.println("Ingresar a Principal");
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
+                        jpPass.setFocusCycleRoot(true);
+                        jpPass.setText("");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
-                    jpPass.setFocusCycleRoot(true);
-                    jpPass.setText("");
+                    JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
+                    jtUser.setFocusCycleRoot(true);
+                    jtUser.setText("");
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
-                jtUser.setFocusCycleRoot(true);
-                jtUser.setText("");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al validar con la base de datos...\n"
+                        + "Los dos campos son requeridos...", "Error", 0);
+                jpPass.setFocusCycleRoot(true);
+            } catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(this, "Usuario no existe...", "Error", 0);
             }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al validar con la base de datos...\n"
-                    + "Los dos campos son requeridos...", "Error", 0);
-            jpPass.setFocusCycleRoot(true);
-        } catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(this, "Usuario no existe...", "Error", 0);
         }
     }
 
@@ -251,11 +291,11 @@ public class LoginGUI extends javax.swing.JFrame {
 
             public void run() {
                 try {
-                /**
-                 * TODO: con el estilo no funciona el redibujado de la tabla
-                 * vehiculos -=revisar=-
-                 * Problema ocurre cuando se cambia de turnos dinamicamente
-                 */
+                    /**
+                     * TODO: con el estilo no funciona el redibujado de la tabla
+                     * vehiculos -=revisar=-
+                     * Problema ocurre cuando se cambia de turnos dinamicamente
+                     */
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel");
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel");
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel");

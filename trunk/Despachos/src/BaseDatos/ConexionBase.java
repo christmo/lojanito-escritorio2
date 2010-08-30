@@ -1,6 +1,8 @@
 package BaseDatos;
 
+import com.mysql.jdbc.CommunicationsException;
 import com.mysql.jdbc.Statement;
+import interfaz.Principal;
 import interfaz.subVentanas.Despachos;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,9 +12,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,8 +27,9 @@ public class ConexionBase {
     private String driver, url, ip, bd, usr, pass;
     private Connection conexion;
     private Statement st;
-    private ResultSet rs;
+    private ResultSet rs = null;
     private ResourceBundle rb;
+    private Properties arcConfig;
 
     /**
      * Crea la conexion directamente a la base de datos de rastreosatelital
@@ -32,21 +37,79 @@ public class ConexionBase {
      * maquina local
      */
     public ConexionBase() {
+        System.out.println("Sin Archivo...");
         rb = ResourceBundle.getBundle("configuracion.configsystem");
         driver = "com.mysql.jdbc.Driver";
         this.ip = rb.getString("ip_base");
         this.bd = rb.getString("base");
         this.usr = "root";
-        this.pass = "kradac";
+        this.pass = "";
+        System.out.println("Pass de la base: "+pass);
 
         url = "jdbc:mysql://" + ip + "/" + bd;
+
         try {
             Class.forName(driver).newInstance();
             conexion = DriverManager.getConnection(url, usr, pass);
             st = (Statement) conexion.createStatement();
             System.out.println("Conexion a Base de Datos: " + bd + " Ok");
         } catch (Exception exc) {
-            System.out.println("Error al tratar de abrir la base de Datos: " + bd + " : " + exc);
+            String msg = exc.toString().substring(32, 76);
+            if (msg.toString().equals("MySQLSyntaxErrorException: Unknown database ")) {
+                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                System.err.println("Error al tratar de abrir la base de Datos: " + bd + " --> " + exc);
+                throw new UnsupportedOperationException("servidor");
+            }
+            if (msg.toString().equals("CommunicationsException: Communications link")) {
+                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + bd + " --> " + exc);
+                throw new UnsupportedOperationException("base");
+            }
+        }
+    }
+
+    /**
+     * Crea la conexion directamente a la base de datos de rastreosatelital
+     * de kradac, parametros de la conexion quemados por defecto para la
+     * maquina local
+     */
+    public ConexionBase(Properties conf) {
+        try {
+            this.arcConfig = conf;
+            driver = "com.mysql.jdbc.Driver";
+            this.ip = arcConfig.getProperty("ip_base");
+            //System.out.println("IP: "+this.ip);
+            this.bd = arcConfig.getProperty("base");
+            //System.out.println("BASE: "+this.bd);
+            this.usr = arcConfig.getProperty("user");
+            //System.out.println("USER: "+this.usr);
+            //this.usr = "root";
+            this.pass = arcConfig.getProperty("pass");
+            //System.out.println("PASS: "+this.pass);
+            //this.pass = "kradac";
+
+            url = "jdbc:mysql://" + ip + "/" + bd;
+
+            try {
+                Class.forName(driver).newInstance();
+                conexion = DriverManager.getConnection(url, usr, pass);
+                st = (Statement) conexion.createStatement();
+                System.out.println("Conexion a Base de Datos: " + bd + " Ok");
+            } catch (Exception exc) {
+                String msg = exc.toString().substring(32, 76);
+                if (msg.toString().equals("MySQLSyntaxErrorException: Unknown database ")) {
+                    JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                    System.err.println("Error al tratar de abrir la base de Datos: " + bd + " --> " + exc);
+                    throw new UnsupportedOperationException("servidor");
+                }
+                if (msg.toString().equals("CommunicationsException: Communications link")) {
+                    JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                    System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + bd + " --> " + exc);
+                    throw new UnsupportedOperationException("base");
+                }
+            }
+        } catch (NullPointerException ex) {
+            throw new UnsupportedOperationException("nulo");
         }
     }
 
@@ -70,7 +133,15 @@ public class ConexionBase {
             st = (Statement) conexion.createStatement();
             System.out.println("Conexion a Base de Datos: " + bd + " Ok");
         } catch (Exception exc) {
-            System.out.println("Error al tratar de abrir la base de Datos: " + bd + " : " + exc);
+            String msg = exc.toString().substring(32, 76);
+            if (msg.toString().equals("MySQLSyntaxErrorException: Unknown database ")) {
+                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                System.err.println("Error al tratar de abrir la base de Datos: " + bd + " --> " + exc);
+            }
+            if (msg.toString().equals("CommunicationsException: Communications link")) {
+                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
+                System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + bd + " --> " + exc);
+            }
         }
     }
 

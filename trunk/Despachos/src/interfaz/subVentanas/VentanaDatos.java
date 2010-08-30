@@ -7,6 +7,7 @@
 package interfaz.subVentanas;
 
 import BaseDatos.ConexionBase;
+import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -227,9 +228,14 @@ public class VentanaDatos extends javax.swing.JDialog {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel9.setText("Barrio:");
 
-        jtTelefono.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jtTelefono.setFont(new java.awt.Font("Arial", 1, 20));
         jtTelefono.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtTelefono.setEnabled(false);
+        jtTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtTelefonoFocusLost(evt);
+            }
+        });
 
         jtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -595,6 +601,16 @@ public class VentanaDatos extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_jtNotaKeyPressed
+
+    private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelefonoFocusLost
+        funcionesUtilidad f = new funcionesUtilidad();
+        String tel = jtTelefono.getText();
+        if(f.isNumeric(tel)){
+            jtTelefono.setText(f.validarTelefono(tel));
+        }else{
+            jtTelefono.setText("");
+        }
+    }//GEN-LAST:event_jtTelefonoFocusLost
 
     /**
      * Convierete a mayusculas lo que se envie
