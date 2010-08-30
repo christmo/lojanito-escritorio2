@@ -1,8 +1,6 @@
 package BaseDatos;
 
-import com.mysql.jdbc.CommunicationsException;
 import com.mysql.jdbc.Statement;
-import interfaz.Principal;
 import interfaz.subVentanas.Despachos;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -98,13 +96,9 @@ public class ConexionBase {
             } catch (Exception exc) {
                 String msg = exc.toString().substring(32, 76);
                 if (msg.toString().equals("MySQLSyntaxErrorException: Unknown database ")) {
-                    JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
-                    System.err.println("Error al tratar de abrir la base de Datos: " + bd + " --> " + exc);
                     throw new UnsupportedOperationException("servidor");
                 }
                 if (msg.toString().equals("CommunicationsException: Communications link")) {
-                    JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
-                    System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + bd + " --> " + exc);
                     throw new UnsupportedOperationException("base");
                 }
             }
