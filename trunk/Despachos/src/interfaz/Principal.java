@@ -95,7 +95,7 @@ public final class Principal extends javax.swing.JFrame {
     private static funcionesUtilidad funciones = new funcionesUtilidad();
 
     /*Leer archivo de configuraciones*/
-    private ResourceBundle rb;
+    //private ResourceBundle rb;
     public static Principal gui;
     /*Archivo de configuraciones*/
     public static Properties arcConfig;
@@ -148,12 +148,6 @@ public final class Principal extends javax.swing.JFrame {
         tiempo.start();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
-        /**
-         * TODO: borrar esto en la liberacion
-         */
-        jLabel7.setVisible(false);
-        jtPuerto.setVisible(false);
-        jButton1.setVisible(false);
     }
 
     /**
@@ -162,9 +156,8 @@ public final class Principal extends javax.swing.JFrame {
     public void IdentificadorLlamadas() {
         //rb = ResourceBundle.getBundle("configuracion.configsystem");
         String puerto = arcConfig.getProperty("comm");
-        //String puerto = jtPuerto.getText();
         //String puerto = rb.getString("comm");
-        System.out.println("puerto: " + puerto);
+        System.out.println("Puerto COMM: " + puerto);
         if (!puerto.equals("0")) {
             CommMonitoreo comm = new CommMonitoreo(puerto, bd);
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
@@ -435,9 +428,6 @@ public final class Principal extends javax.swing.JFrame {
         jtBuscarPorCodigo = new javax.swing.JTextField();
         jbMenu = new javax.swing.JButton();
         jlIndicadorLlamada = new javax.swing.JLabel();
-        jtPuerto = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -771,7 +761,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -806,17 +796,6 @@ public final class Principal extends javax.swing.JFrame {
 
         jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
 
-        jtPuerto.setText("0");
-
-        jLabel7.setText("puerto");
-
-        jButton1.setText("prueba");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -824,13 +803,13 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 251, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -838,18 +817,12 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 691, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -875,17 +848,12 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                        .addComponent(lblFecha))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7)
-                        .addComponent(jtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(lblFecha))
                 .addContainerGap())
         );
 
@@ -900,7 +868,6 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyPressed
         cod = evt.getKeyCode();
-        //System.out.println("" + cod);
         AccionesBorrado(cod, jtPorDespachar);
     }//GEN-LAST:event_jtPorDespacharKeyPressed
 
@@ -1124,7 +1091,6 @@ public final class Principal extends javax.swing.JFrame {
     private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
-        //System.out.println("clc: " + intClicks + " bot: " + intBoton);
 
         if (intClicks == 1 && intBoton == 3) {
             try {
@@ -1258,10 +1224,8 @@ public final class Principal extends javax.swing.JFrame {
                 despacho = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
                 if (desPorTabla_Campo) { //Despacha por tabla
-                    //System.out.println("Despachar Por Tabla");
                     setDatosFila(despacho, jtPorDespachar);
                 } else { //despacha por campo
-                    //System.out.println("Despachar Por Campo Telefono");
                     setDatosTablas(despacho, jtPorDespachar);
                 }
             } else {
@@ -1654,10 +1618,6 @@ public final class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbMenuActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        IdentificadorLlamadas();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
      * @param campo --> "nombre"||"telefono"||"codigo" --> campos a filtrar
@@ -1894,14 +1854,12 @@ public final class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnColor;
     private static javax.swing.JComboBox cbEstadosTaxi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1922,7 +1880,6 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField jtCodigo;
     private static javax.swing.JTable jtDespachados;
     private static javax.swing.JTable jtPorDespachar;
-    private javax.swing.JTextField jtPuerto;
     private javax.swing.JTextField jtTelefono;
     private static javax.swing.JTable jtVehiculos;
     private javax.swing.JLabel lblFecha;
