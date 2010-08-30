@@ -10,12 +10,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.comm.CommPortIdentifier;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -248,5 +251,45 @@ public class funcionesUtilidad {
             System.out.println("NO tiene 9");
             return false;
         }
+    }
+
+    /**
+     * Obtiene el password de las cajas de password que lo extraen en
+     * vector de char
+     * @param chrPass
+     * @return String
+     */
+    public String getPasswordDesdeChar(char[] chrPass) {
+        String strPass = "";
+
+        for (int i = 0; i < chrPass.length; i++) {
+            strPass += chrPass[i];
+        }
+        return strPass;
+    }
+    /**
+     * Communicacion Serial
+     */
+    private Enumeration listaPuertos;
+    private CommPortIdentifier id_Puerto;
+
+    /**
+     * Muestra la lista de puertos seriales y paralelos del equipo
+     */
+    public String[] ListaPuertos() {
+        listaPuertos = CommPortIdentifier.getPortIdentifiers();
+        String[] puertos = null;
+        ArrayList p = new ArrayList();
+        int i = 0;
+        while (listaPuertos.hasMoreElements()) {
+            id_Puerto = (CommPortIdentifier) listaPuertos.nextElement();
+            //System.out.println("Id: " + id_Puerto.getName() + " tipo: " + id_Puerto.getPortType());
+            if(id_Puerto.getPortType()==1){
+                p.add(id_Puerto.getName());
+            }
+            i++;
+        }
+        puertos = new String[p.size()];
+        return (String[])p.toArray(puertos);
     }
 }

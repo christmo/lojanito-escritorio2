@@ -2,13 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaz.comunicacion;
+package interfaz.comunicacion.comm;
 
 import BaseDatos.ConexionBase;
+import configuracion.Copiar;
 import interfaz.Principal;
 import interfaz.TrabajoTablas;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -43,7 +45,7 @@ public class CommMonitoreo extends Thread {
     private JTextField jtTelefono;
     private JTable jtPorDespachar;
     /*Llenar campos en la tabla*/
-    private ConexionBase bd = new ConexionBase();
+    private ConexionBase bd;
     private ResultSet rs;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private DefaultTableModel dtm;
@@ -64,6 +66,7 @@ public class CommMonitoreo extends Thread {
      * @param puerto
      */
     public CommMonitoreo(String puerto) {
+        bd = new ConexionBase();
         if (!AbrirPuerto(puerto)) {
             System.err.println("No se pudo abrir el puerto");
         }
@@ -73,15 +76,14 @@ public class CommMonitoreo extends Thread {
         }
     }
 
-    /**
-     * Muestra la lista de puertos seriales y paralelos del equipo
-     */
-    public void ListaPuertos() {
-        listaPuertos = CommPortIdentifier.getPortIdentifiers();
-
-        while (listaPuertos.hasMoreElements()) {
-            id_Puerto = (CommPortIdentifier) listaPuertos.nextElement();
-            System.out.println("Id: " + id_Puerto.getName() + " tipo: " + id_Puerto.getPortType());
+    public CommMonitoreo(String puerto, ConexionBase bd) {
+        this.bd = bd;
+        if (!AbrirPuerto(puerto)) {
+            System.err.println("No se pudo abrir el puerto");
+        }
+        if (!setParametros(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE)) {
+            System.err.println("No se pudo setear puerto");
+            CerrarPuerto();
         }
     }
 
@@ -91,7 +93,9 @@ public class CommMonitoreo extends Thread {
         String tel = "";
 
         boolean numero = false;
+        boolean celular = false;
         String strNumero = "";
+        String strCelular = "";
 
         while (true) {
             cod = leerDatosCode();
@@ -113,6 +117,7 @@ public class CommMonitoreo extends Thread {
             if (cod == 10) {
                 tel = "";
                 numero = false;
+                celular = false;
             } else {
                 tel += "" + (char) cod;
             }
@@ -121,15 +126,33 @@ public class CommMonitoreo extends Thread {
                 System.out.println("timbre");
                 timbrar(true, strNumero);
                 strNumero = "";
+                strCelular = "";
                 tel = "";
             } else if (tel.equals("NMBR = ")) {
                 tel = "";
                 numero = true;
+                celular = false;
+            } else if (tel.equals("+CLIP: \"")) {//+CLIP: "099362766",129,"",0,"",0
+                tel = "";
+                numero = true;
+                celular = true;
             }
 
             if (numero) {
                 strNumero = tel;
-                timbrar(true, strNumero);
+                if (celular) {
+                    if (tel.length() == 9) {
+                        strCelular = strNumero.substring(0, 9);
+                        System.out.println("Numero Celular: " + strCelular);
+                        timbrar(true, strCelular);
+                        try {
+                            setDespachoCliente(strNumero);
+                        } catch (UiThreadingViolationException a) {
+                        }
+                    }
+                } else {
+                    timbrar(true, strNumero);
+                }
             }
         }
     }
@@ -233,9 +256,61 @@ public class CommMonitoreo extends Thread {
             System.err.println("Cerrar Apicación - puerto en uso o no hay puerto serial disponible...");
             System.exit(0);
         } catch (NoSuchPortException ex) {
+            JOptionPane.showMessageDialog(null, "No se ha cargado el driver COMM de java:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
+            //JOptionPane.showMessageDialog(null, "Se ha producido el siguiente error:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
+            CargarDriverCOMM();
             Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(0);
         }
         return false;
+    }
+    
+    /*
+     * Librerias para windows para leer el puerto comm desde java
+     */
+    String strWin32 = "win32com.dll";
+    String strComm = "comm.jar";
+    String strProp = "javax.comm.properties";
+
+    /**
+     * Copia el driver para que pueda java leer el puerto com en windows
+     */
+    public void CargarDriverCOMM() {
+        Copiar copia = new Copiar();
+
+        String dirLib = System.getProperty("java.home") + System.getProperty("file.separator") + "lib/";
+        String dirBin = System.getProperty("java.home") + System.getProperty("file.separator") + "bin/";
+        //System.out.println(""+dirLib);
+        //System.out.println(""+dirBin);
+        //System.out.println(""+System.getProperty("user.dir")+System.getProperty("file.separator")+"lib");
+
+        File jar = new File(System.getProperty("java.class.path"));
+        String srcDirCOMM = jar.getPath().substring(0, jar.getPath().length() - jar.getName().length()) + "comm/";
+
+        System.out.println("PATH: " + srcDirCOMM + strWin32);
+        System.out.println("PATH: " + srcDirCOMM + strComm);
+        System.out.println("PATH: " + srcDirCOMM + strProp);
+
+        File win32 = new File(srcDirCOMM + strWin32);
+        File comm = new File(srcDirCOMM + strComm);
+        File com_prop = new File(srcDirCOMM + strProp);
+
+
+
+        /*if (srcDir.isDirectory()) {
+        if (!dstDir.exists()) {
+        dstDir.mkdir();
+        }
+        String[] children = srcDir.list();
+        for (int i=0; i<children.length; i++) {
+        copyDirectory(new File(srcDir, children[i]),
+        new File(dstDir, children[i]));
+        }
+        } else {
+        copy(srcDir, dstDir);
+        }*/
+
+
     }
 
     /**
@@ -262,14 +337,15 @@ public class CommMonitoreo extends Thread {
      * Permite hacer la lectura de los datos que se envien desde el puerto serie
      * @return InputStream
      */
-    /*public InputStream recibirDatos() {
-    try {
-    return sPuerto.getInputStream();
-    } catch (IOException ex) {
-    Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+    public InputStream recibirDatos() {
+        try {
+            return sPuerto.getInputStream();
+        } catch (IOException ex) {
+            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-    return null;
-    }*/
+
     /**
      * Permite escuchar lo que llega por el puerto serial
      * @return String
