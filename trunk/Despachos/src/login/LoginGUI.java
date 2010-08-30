@@ -50,7 +50,6 @@ public class LoginGUI extends javax.swing.JFrame {
             System.out.println("Cargado: " + url_config);
         } catch (IOException ex) {
             //Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Temporal: " + url_config);
             UIConfiguracion.CrearArchivoPropiedades(url_config);
         }
         //System.out.println(System.getProperty("java.library.path"));
@@ -65,12 +64,17 @@ public class LoginGUI extends javax.swing.JFrame {
         this.arcConfig = arcConfig;
     }
 
+    /**
+     * Hace el cargado del archivo de propiedades en el direcctorio temporal
+     * del sistema
+     * @return String
+     */
     private String CargarRutaArchivoPropiedades() {
         if (System.getProperty("os.name").equals("Linux")) {
-            System.out.println(System.getProperty("os.name"));
+            System.out.println("Sistema Operativo: " + System.getProperty("os.name"));
             return System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "configsystem.properties";
         } else {
-            System.out.println(System.getProperty("os.name"));
+            System.out.println("Sistema Operativo: " + System.getProperty("os.name"));
             return System.getProperty("java.io.tmpdir") + "configsystem.properties";
         }
     }
@@ -212,6 +216,14 @@ public class LoginGUI extends javax.swing.JFrame {
             cb = new ConexionBase(arcConfig);
             entrar = true;
         } catch (UnsupportedOperationException ux) {
+            String ms = ux.getMessage();
+            if (ms.equals("base")) {
+                JOptionPane.showMessageDialog(this, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + arcConfig.getProperty("base"), "Error...", 0);
+                System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + arcConfig.getProperty("base") + " --> " + ux);
+            } else if (ms.equals("servidor")) {
+                JOptionPane.showMessageDialog(this, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + arcConfig.getProperty("base"), "Error...", 0);
+                System.err.println("Error al tratar de abrir la base de Datos: " + arcConfig.getProperty("base") + " --> " + ux);
+            }
             UIConfiguracion config = new UIConfiguracion(url_config);
             this.dispose();
         }
@@ -252,11 +264,11 @@ public class LoginGUI extends javax.swing.JFrame {
                     jtUser.setText("");
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error al validar con la base de datos...\n"
-                        + "Los dos campos son requeridos...", "Error", 0);
+                JOptionPane.showMessageDialog(this, "Comprobar si el usuario y la clave con correctos...", "Error", 0);
                 jpPass.setFocusCycleRoot(true);
             } catch (NullPointerException npe) {
-                JOptionPane.showMessageDialog(this, "Usuario no existe...", "Error", 0);
+                JOptionPane.showMessageDialog(this, "No hay acceso a la base de datos, comprobar si la clave de la base de datos es corercta en el archivo de configuración...", "Error", 0);
+                System.exit(0);
             }
         }
     }
