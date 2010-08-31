@@ -199,6 +199,9 @@ public class LoginGUI extends javax.swing.JFrame {
         ingresar();
     }//GEN-LAST:event_jbtIngresarActionPerformed
 
+    /**
+     * Ingreso al sistema
+     */
     private void ingresar() {
         strUser = null;
         chrPass = null;
@@ -264,7 +267,7 @@ public class LoginGUI extends javax.swing.JFrame {
                     jtUser.setText("");
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Comprobar si el usuario y la clave con correctos...", "Error", 0);
+                JOptionPane.showMessageDialog(this, "Comprobar si el usuario y la clave son correctos...", "Error", 0);
                 jpPass.setFocusCycleRoot(true);
             } catch (NullPointerException npe) {
                 JOptionPane.showMessageDialog(this, "No hay acceso a la base de datos, comprobar si la clave de la base de datos es corercta en el archivo de configuración...", "Error", 0);
