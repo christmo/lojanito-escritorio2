@@ -542,7 +542,7 @@ public class VentanaDatos extends javax.swing.JDialog {
             if (accion) {
                 resultado = bd.InsertarCliente(datos);
                 if (!resultado) {
-                    JOptionPane.showMessageDialog(this, "No se pudo guardar el cliente...", "Error", 0);
+                    JOptionPane.showMessageDialog(this, "No se pudo guardar el cliente, ese número de teléfono esta asignado a otro cliente...", "Error", 0);
                 }
             } else {
                 resultado = bd.ActualizarCliente(datos, datos.getIntCodigo());
