@@ -34,44 +34,8 @@ public class ConexionBase {
      * de kradac, parametros de la conexion quemados por defecto para la
      * maquina local
      */
-    public ConexionBase() {
-        System.out.println("Sin Archivo...");
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
-        driver = "com.mysql.jdbc.Driver";
-        this.ip = rb.getString("ip_base");
-        this.bd = rb.getString("base");
-        this.usr = "root";
-        this.pass = "";
-        System.out.println("Pass de la base: "+pass);
-
-        url = "jdbc:mysql://" + ip + "/" + bd;
-
-        try {
-            Class.forName(driver).newInstance();
-            conexion = DriverManager.getConnection(url, usr, pass);
-            st = (Statement) conexion.createStatement();
-            System.out.println("Conexion a Base de Datos: " + bd + " Ok");
-        } catch (Exception exc) {
-            String msg = exc.toString().substring(32, 76);
-            if (msg.toString().equals("MySQLSyntaxErrorException: Unknown database ")) {
-                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
-                System.err.println("Error al tratar de abrir la base de Datos: " + bd + " --> " + exc);
-                throw new UnsupportedOperationException("servidor");
-            }
-            if (msg.toString().equals("CommunicationsException: Communications link")) {
-                JOptionPane.showMessageDialog(null, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ACCEDER AL SERVIDOR DE BASE DE DATOS... \n\n NOMBRE DE LA BASE DATOS: " + bd, "Error...", 0);
-                System.err.println("Error al ACCEDER AL SERVIDOR de la base de Datos: " + bd + " --> " + exc);
-                throw new UnsupportedOperationException("base");
-            }
-        }
-    }
-
-    /**
-     * Crea la conexion directamente a la base de datos de rastreosatelital
-     * de kradac, parametros de la conexion quemados por defecto para la
-     * maquina local
-     */
     public ConexionBase(Properties conf) {
+        System.out.println("Conexión a la base con Archivo de Configuración...");
         try {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";
@@ -893,10 +857,8 @@ public class ConexionBase {
             String sql = "SELECT HORA_INI FROM TURNOS WHERE ID_TURNO=" + (id_Turno + 1);
             rs = ejecutarConsultaUnDato(sql);
             turno = rs.getString("HORA_INI");
-            System.out.println("Turno:" + turno);
             return turno;
-        } catch (SQLException ex) {
-            System.out.println("El turno que sigue es el primero...");
+        } catch (SQLException ex) {            
             String sql1 = "SELECT HORA_INI FROM TURNOS WHERE ID_TURNO=" + (1);
             rs = ejecutarConsultaUnDato(sql1);
             return rs.getString("HORA_INI");
