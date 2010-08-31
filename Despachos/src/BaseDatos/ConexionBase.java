@@ -1072,4 +1072,21 @@ public class ConexionBase {
         }
         return null;
     }
+
+    /**
+     * Obtiene el telefono del usuario que envia el mail por si se desea informarle
+     * algo o comunicarse con el
+     * @param idUser
+     * @return
+     */
+    public String getTelefonoUsuario(String idUser){
+        try {
+            String sql = "SELECT TELEFONO FROM USUARIOS WHERE USUARIO='" + idUser + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("TELEFONO");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
 }
