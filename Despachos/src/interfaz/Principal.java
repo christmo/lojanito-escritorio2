@@ -1021,12 +1021,10 @@ public final class Principal extends javax.swing.JFrame {
      * guardando estos en la base de datos
      * @param intFila
      */
-    private void DespacharCliente(int intFila) {
-        System.out.println("Editando: " + jtPorDespachar.isEditing());
+    private void DespacharCliente(int intFila) {        
         if (jtPorDespachar.isEditing()) {
             jtPorDespachar.getCellEditor().cancelCellEditing();
         } else {
-            System.out.println("Entrar a f12");
             despacho = getDatosPorDespachar();
             despacho.setStrEstado("F"); //finalizado
 
