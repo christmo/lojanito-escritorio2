@@ -1004,7 +1004,15 @@ public final class Principal extends javax.swing.JFrame {
             jtPorDespachar.setValueAt("", intFila, 4);
             jtPorDespachar.setValueAt("", intFila, 5);
             jtPorDespachar.setValueAt("", intFila, 9);
+            jtBuscarPorNombre.setText("");
+            jtBuscarPorTelefono.setText("");
+            jtBuscarPorCodigo.setText("");
+            LimpiarCargarTablaDespachados();
         } catch (IndexOutOfBoundsException iex) {
+            jtBuscarPorNombre.setText("");
+            jtBuscarPorTelefono.setText("");
+            jtBuscarPorCodigo.setText("");
+            LimpiarCargarTablaDespachados();
         }
     }
 
@@ -1788,7 +1796,6 @@ public final class Principal extends javax.swing.JFrame {
         } else {
             LimpiarCargarTablaDespachados();
         }
-
     }
 
     /**
