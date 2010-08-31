@@ -1014,9 +1014,11 @@ public final class Principal extends javax.swing.JFrame {
      * @param intFila
      */
     private void DespacharCliente(int intFila) {
+        System.out.println("Editando: " + jtPorDespachar.isEditing());
         if (jtPorDespachar.isEditing()) {
-            jtPorDespachar.getCellEditor().stopCellEditing();
+            jtPorDespachar.getCellEditor().cancelCellEditing();
         } else {
+            System.out.println("Entrar a f12");
             despacho = getDatosPorDespachar();
             despacho.setStrEstado("F"); //finalizado
 
@@ -1046,11 +1048,6 @@ public final class Principal extends javax.swing.JFrame {
         jtCodigo.setText("");
         resetValDespacho();
         jtPorDespachar.requestFocus();
-        try {
-            jtPorDespachar.setRowSelectionInterval(0, 0);
-        } catch (IllegalArgumentException iarg) {
-            //se produce cuando no hay filas en la tabla por despachar
-        }
     }
 
     /**
