@@ -527,8 +527,15 @@ public class INICIO extends javax.swing.JFrame {
         modUsuarios.setVisible(true);
     }//GEN-LAST:event_jbUsuariosActionPerformed
 
+
+     VentanaDatos v;
     private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClientesActionPerformed
-        VentanaDatos v = new VentanaDatos(true);
+        if ((v == null) || (!v.isDisplayable())) {
+            v = new VentanaDatos(true, conec);
+            v.setLocationRelativeTo(this);
+            v.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            v.setResizable(false);
+        }
         v.setVisible(true);
     }//GEN-LAST:event_jbClientesActionPerformed
 
