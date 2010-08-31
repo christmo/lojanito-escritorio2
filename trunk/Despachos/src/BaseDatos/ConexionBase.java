@@ -357,19 +357,44 @@ public class ConexionBase {
      * @return confirmacion del resultado 1 valido || 0 invalido
      */
     public boolean InsertarCliente(Despachos des) {
-        String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
-                + " VALUES("
-                + "'" + des.getStrTelefono() + "',"
-                + des.getIntCodigo() + ","
-                + "'" + des.getStrNombre() + "',"
-                + "'" + des.getStrDireccion() + "',"
-                + "'" + des.getStrBarrio() + "',"
-                + "'" + des.getStrNumeroCasa() + "',"
-                + des.getLatitud() + ","
-                + des.getLongitud() + ","
-                + "'" + des.getStrReferecia() + "'"
-                + ")";
-        return ejecutarSentencia(sql);
+        if (!validarTelefonoCliente(des.getStrTelefono(), des.getIntCodigo())) {
+            String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
+                    + " VALUES("
+                    + "'" + des.getStrTelefono() + "',"
+                    + des.getIntCodigo() + ","
+                    + "'" + des.getStrNombre() + "',"
+                    + "'" + des.getStrDireccion() + "',"
+                    + "'" + des.getStrBarrio() + "',"
+                    + "'" + des.getStrNumeroCasa() + "',"
+                    + des.getLatitud() + ","
+                    + des.getLongitud() + ","
+                    + "'" + des.getStrReferecia() + "'"
+                    + ")";
+
+            return ejecutarSentencia(sql);
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Comprueba si ese numero de telefono ya esta ingresado para otro cliente
+     * @param telefono
+     * @return String
+     */
+    public boolean validarTelefonoCliente(String telefono, int codigo) {
+        try {
+            String sql = "SELECT CODIGO FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
+            rsAux = ejecutarConsultaUnDato(sql);
+            int cod = rsAux.getInt("CODIGO");
+            if (codigo == cod) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            return false;
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     /**
@@ -858,7 +883,7 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             turno = rs.getString("HORA_INI");
             return turno;
-        } catch (SQLException ex) {            
+        } catch (SQLException ex) {
             String sql1 = "SELECT HORA_INI FROM TURNOS WHERE ID_TURNO=" + (1);
             rs = ejecutarConsultaUnDato(sql1);
             return rs.getString("HORA_INI");
