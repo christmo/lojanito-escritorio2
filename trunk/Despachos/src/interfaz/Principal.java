@@ -1235,7 +1235,7 @@ public final class Principal extends javax.swing.JFrame {
                 /**
                  * Mostar la ventana de datos del cliente que esta en la tabla por despachar
                  * pero que no tiene un telefono
-                 */                
+                 */
                 if (ventanaDatos == null) {
                     ventanaDatos = new VentanaDatos(getDatosPorDespachar(), bd, 2);
                     ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
@@ -1755,6 +1755,8 @@ public final class Principal extends javax.swing.JFrame {
         if ((menu == null) || (!menu.isDisplayable())) {
             menu = new INICIO(sesion, Principal.bd);
             menu.setLocationRelativeTo(this);
+            menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            menu.setResizable(false);
         }
     }//GEN-LAST:event_jbMenuActionPerformed
 
