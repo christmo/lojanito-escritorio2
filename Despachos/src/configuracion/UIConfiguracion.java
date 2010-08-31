@@ -167,7 +167,7 @@ public class UIConfiguracion extends javax.swing.JDialog {
 
         jtPuertoBase.setText("3306");
 
-        jLabel5.setText("COMM:");
+        jLabel5.setText("COM:");
 
         jcPuertosComm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0" }));
 
@@ -180,7 +180,7 @@ public class UIConfiguracion extends javax.swing.JDialog {
                 .addComponent(jLabel4)
                 .addGap(4, 4, 4)
                 .addComponent(jtPuertoBase, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcPuertosComm, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
