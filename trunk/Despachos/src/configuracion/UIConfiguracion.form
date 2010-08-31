@@ -122,7 +122,7 @@
                   <Component id="jLabel4" min="-2" max="-2" attributes="1"/>
                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Component id="jtPuertoBase" min="-2" pref="66" max="-2" attributes="1"/>
-                  <EmptySpace pref="26" max="32767" attributes="0"/>
+                  <EmptySpace pref="38" max="32767" attributes="0"/>
                   <Component id="jLabel5" min="-2" max="-2" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jcPuertosComm" min="-2" pref="111" max="-2" attributes="0"/>
@@ -157,7 +157,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="COMM:"/>
+            <Property name="text" type="java.lang.String" value="COM:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="jcPuertosComm">
