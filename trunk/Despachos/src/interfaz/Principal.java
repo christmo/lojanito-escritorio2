@@ -29,7 +29,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -1094,21 +1094,54 @@ public final class Principal extends javax.swing.JFrame {
 
         if (intClicks == 1 && intBoton == 3) {
             try {
-                if (!jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 1).equals("")) {
-                    if (ventanaDatos == null) {
-                        ventanaDatos = new VentanaDatos(getDatosPorDespachar());
-                        ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
-                        ventanaDatos.setVisible(true);
+                /*
+                 * Con telefono y codigo en la tabla por despachar abrir la
+                 * ventana de datos normalmente
+                 */
+                if (!esNullFechaTablaPorDespachar()
+                        && !esNullTelefonoTablaPorDespachar()
+                        && !esNullCodigoTablaPorDespachar()) {
+                    AbrirVentanaDatosCliente(1);
+                } else {
+                    /*
+                     * Sin telefono, Con Codigo y Con Hora abrir la ventana
+                     * habilitado el campo telefono para actualizar el telefono
+                     * a ese codigo
+                     */
+                    if (!esNullFechaTablaPorDespachar()
+                            && !esNullCodigoTablaPorDespachar()
+                            && esNullTelefonoTablaPorDespachar()) {
+                        AbrirVentanaDatosCliente(2);
                     } else {
-                        ventanaDatos.setPorDespachar(getDatosPorDespachar());
-                        ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
-                        ventanaDatos.setVisible(true);
-                        ventanaDatos.setLocationRelativeTo(this);
+                        /**
+                         * Tiene fecha pero es nulo el codigo y el telefono
+                         * muestra la ventana para hacer una nueva insersion
+                         * si se le asigna un codigo, caso contrario es despacho
+                         * temporal
+                         */
+                        if (!esNullFechaTablaPorDespachar()
+                                && esNullCodigoTablaPorDespachar()
+                                && esNullTelefonoTablaPorDespachar()) {
+                            AbrirVentanaDatosCliente(3);
+                        } else {
+                            /**
+                             * Despacho temporal sin codigo mostrar la ventana
+                             * por defecto si se quiere guardar se debe
+                             * generar un codigo en la ventana
+                             */
+                            if (!esNullFechaTablaPorDespachar()
+                                    && esNullCodigoTablaPorDespachar()
+                                    && !esNullTelefonoTablaPorDespachar()) {
+                                AbrirVentanaDatosCliente(1);
+                            }
+                        }
                     }
                 }
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
-            } catch (ArrayIndexOutOfBoundsException aex) {
+
+            } //catch (NullPointerException ex) {
+            //     JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
+            //   }
+            catch (ArrayIndexOutOfBoundsException aex) {
             }
         }
         if (intClicks == 1 && intBoton == 1) {
@@ -1125,6 +1158,113 @@ public final class Principal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jtPorDespacharMousePressed
+
+    /**
+     * Comprueba si es nulo el valor que se recoje de la tabla, en el campo Fecha
+     * para presentar los datos de ese cliente en esa fila
+     * @return boolean -> true si es null o vacio
+     */
+    private boolean esNullFechaTablaPorDespachar() {
+        boolean boolNull = jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 0) == null;
+        if (!boolNull) {
+            if (jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 0).equals("")) {
+                boolNull = true;
+            } else {
+                boolNull = false;
+            }
+        }
+        return boolNull;
+    }
+
+    /**
+     * Comprueba si es nulo el valor que se recoje de la tabla, en el campo telefono
+     * para presentar los datos de ese cliente en esa fila
+     * @return boolean -> true si es null o vacio
+     */
+    private boolean esNullTelefonoTablaPorDespachar() {
+        boolean boolTelefonoNull = jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 1) == null;
+        if (!boolTelefonoNull) {
+            if (jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 1).equals("")) {
+                boolTelefonoNull = true;
+            } else {
+                boolTelefonoNull = false;
+            }
+        }
+        return boolTelefonoNull;
+    }
+
+    /**
+     * Comprueba si es nulo el valor que se recoje de la tabla, en el campo codigo
+     * para presentar los datos de ese cliente en esa fila
+     * @return boolean -> true si es null o vacio
+     */
+    private boolean esNullCodigoTablaPorDespachar() {
+        boolean boolNull = jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 2) == null;
+        if (!boolNull) {
+            if (jtPorDespachar.getValueAt(getIntFilaSeleccionada(), 2).equals("")) {
+                boolNull = true;
+            } else {
+                boolNull = false;
+            }
+        }
+        return boolNull;
+    }
+
+    /**
+     * Crea un nuevo objeto de la ventana de datos si no esta creado,
+     * y si esta creado pero oculto muestra la ventana con los datos 
+     * actualizados
+     * 
+     * @param ConTelefono -> verdadero si esta el telefono en la tabla falso si no hay telefono
+     */
+    private void AbrirVentanaDatosCliente(int casoTelefono) {
+        switch (casoTelefono) {
+            case 1:
+                if (ventanaDatos == null) {
+                    ventanaDatos = new VentanaDatos(getDatosPorDespachar(), bd, 1);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                } else {
+                    ventanaDatos.setPorDespachar(getDatosPorDespachar(), 1);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                    ventanaDatos.setLocationRelativeTo(this);
+                }
+                break;
+            case 2:
+                /**
+                 * Mostar la ventana de datos del cliente que esta en la tabla por despachar
+                 * pero que no tiene un telefono
+                 */                
+                if (ventanaDatos == null) {
+                    ventanaDatos = new VentanaDatos(getDatosPorDespachar(), bd, 2);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                } else {
+                    ventanaDatos.setPorDespachar(getDatosPorDespachar(), 2);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                    ventanaDatos.setLocationRelativeTo(this);
+                }
+                break;
+            case 3:
+                /**
+                 * Mostar la ventana de datos del cliente que esta en la tabla por despachar
+                 * pero que no tiene un telefono
+                 */
+                if (ventanaDatos == null) {
+                    ventanaDatos = new VentanaDatos(getDatosPorDespachar(), bd, 3);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                } else {
+                    ventanaDatos.setPorDespachar(getDatosPorDespachar(), 3);
+                    ventanaDatos.setDatosFila(jtPorDespachar, getIntFilaSeleccionada());
+                    ventanaDatos.setVisible(true);
+                    ventanaDatos.setLocationRelativeTo(this);
+                }
+                break;
+        }
+    }
 
     /**
      * Pone la Hora en la columna de hora cuando no se hace un despacho auntomatico
@@ -1194,7 +1334,7 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (ArrayIndexOutOfBoundsException aiobe) {
             //System.err.println("Error de NULL -> No hay datos Seleccionados...");
-            datos = new Despachos("", "", "", "", "", "", 0, 0, 0, "", id_Turno, sesion[0]);
+            datos = new Despachos(null, null, null, "", "", "", 0, 0, 0, "", id_Turno, sesion[0]);
         }
 
         return datos;
