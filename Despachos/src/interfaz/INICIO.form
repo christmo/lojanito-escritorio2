@@ -36,7 +36,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnConfig" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace pref="449" max="32767" attributes="0"/>
+                      <EmptySpace pref="335" max="32767" attributes="0"/>
+                      <Component id="jbProblemas" min="-2" pref="102" max="-2" attributes="1"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnSalir" min="-2" pref="70" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -71,8 +73,8 @@
                                           <Component id="btnAsignarM" min="-2" pref="110" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="1" attributes="1">
-                                      <Component id="btnMultas" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="btnMultas" min="-2" pref="110" max="-2" attributes="1"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="btnBEMultas" min="-2" pref="110" max="-2" attributes="0"/>
                                   </Group>
@@ -119,14 +121,15 @@
                   <Component id="btnMultas" alignment="1" min="-2" pref="85" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbUsuarios" alignment="3" min="-2" pref="85" max="-2" attributes="0"/>
-                  <Component id="jbClientes" alignment="3" min="-2" pref="85" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jbUsuarios" alignment="0" pref="85" max="32767" attributes="1"/>
+                  <Component id="jbClientes" alignment="0" pref="85" max="32767" attributes="1"/>
               </Group>
               <EmptySpace pref="34" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnConfig" alignment="3" min="-2" pref="68" max="-2" attributes="0"/>
                   <Component id="btnSalir" alignment="3" min="-2" pref="68" max="-2" attributes="0"/>
+                  <Component id="jbProblemas" alignment="3" pref="68" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -329,6 +332,17 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbClientesActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbProblemas">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/email.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Problemas"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbProblemasActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

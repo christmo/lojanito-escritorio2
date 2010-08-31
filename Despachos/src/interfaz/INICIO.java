@@ -11,6 +11,7 @@
 package interfaz;
 
 import BaseDatos.ConexionBase;
+import interfaz.comunicacion.mail.VentanaMail;
 import interfaz.subVentanas.VentanaDatos;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -66,6 +67,7 @@ public class INICIO extends javax.swing.JFrame {
         btnConfig.setText("<html><center>CONFIG</center></html>");
         jbUsuarios.setText("<html><center>USUARIOS</center></html>");
         jbClientes.setText("<html><center>CLIENTES</center></html>");
+        jbProblemas.setText("<html><center>PROBLEMAS</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
 
         btnModEstados.setText("<html><center>EDITAR<br> ESTADOS</center></html>");
@@ -115,6 +117,9 @@ public class INICIO extends javax.swing.JFrame {
         jbClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbClientes.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        jbProblemas.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbProblemas.setHorizontalTextPosition(SwingConstants.CENTER);
+
         btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -146,6 +151,7 @@ public class INICIO extends javax.swing.JFrame {
         btnModEstados = new javax.swing.JButton();
         jbUsuarios = new javax.swing.JButton();
         jbClientes = new javax.swing.JButton();
+        jbProblemas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -295,6 +301,14 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
+        jbProblemas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/email.png"))); // NOI18N
+        jbProblemas.setText("Problemas");
+        jbProblemas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbProblemasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -304,7 +318,9 @@ public class INICIO extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 449, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 335, Short.MAX_VALUE)
+                        .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
@@ -333,7 +349,7 @@ public class INICIO extends javax.swing.JFrame {
                                             .addComponent(btnModEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(18, 18, 18)
                                             .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
@@ -369,13 +385,14 @@ public class INICIO extends javax.swing.JFrame {
                     .addComponent(btnDirectorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(jbClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbProblemas, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -526,9 +543,7 @@ public class INICIO extends javax.swing.JFrame {
         }
         modUsuarios.setVisible(true);
     }//GEN-LAST:event_jbUsuariosActionPerformed
-
-
-     VentanaDatos v;
+    private VentanaDatos v;
     private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClientesActionPerformed
         if ((v == null) || (!v.isDisplayable())) {
             v = new VentanaDatos(true, conec);
@@ -538,6 +553,16 @@ public class INICIO extends javax.swing.JFrame {
         }
         v.setVisible(true);
     }//GEN-LAST:event_jbClientesActionPerformed
+    private VentanaMail mail;
+    private void jbProblemasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbProblemasActionPerformed
+        if ((mail == null) || (!mail.isDisplayable())) {
+            mail = new VentanaMail(conec, sesion);
+            mail.setLocationRelativeTo(this);
+            mail.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            mail.setResizable(false);
+        }
+        mail.setVisible(true);
+    }//GEN-LAST:event_jbProblemasActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -563,6 +588,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
     private javax.swing.JButton jbClientes;
+    private javax.swing.JButton jbProblemas;
     private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
