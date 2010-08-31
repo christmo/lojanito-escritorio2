@@ -65,17 +65,6 @@ public class CommMonitoreo extends Thread {
      * Abrir el puerto con configuraciones por defecto
      * @param puerto
      */
-    public CommMonitoreo(String puerto) {
-        bd = new ConexionBase();
-        if (!AbrirPuerto(puerto)) {
-            System.err.println("No se pudo abrir el puerto");
-        }
-        if (!setParametros(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE)) {
-            System.err.println("No se pudo setear puerto");
-            CerrarPuerto();
-        }
-    }
-
     public CommMonitoreo(String puerto, ConexionBase bd) {
         this.bd = bd;
         if (!AbrirPuerto(puerto)) {
@@ -96,6 +85,8 @@ public class CommMonitoreo extends Thread {
         boolean celular = false;
         String strNumero = "";
         String strCelular = "";
+        String strNumeroCelularAnterior = "";
+        int intContadorTimbreCelular = 1;//numero maximo antes de cortar automaticamente 8
 
         while (true) {
             cod = leerDatosCode();
@@ -117,14 +108,14 @@ public class CommMonitoreo extends Thread {
             if (cod == 10) {
                 tel = "";
                 numero = false;
-                celular = false;
             } else {
                 tel += "" + (char) cod;
             }
 
             if (tel.equals("RING")) {
-                System.out.println("timbre");
-                timbrar(true, strNumero);
+                if (!celular) {
+                    timbrar(true, strNumero);
+                }
                 strNumero = "";
                 strCelular = "";
                 tel = "";
@@ -132,6 +123,8 @@ public class CommMonitoreo extends Thread {
                 tel = "";
                 numero = true;
                 celular = false;
+                intContadorTimbreCelular = 1;
+                strNumeroCelularAnterior = "";
             } else if (tel.equals("+CLIP: \"")) {//+CLIP: "099362766",129,"",0,"",0
                 tel = "";
                 numero = true;
@@ -145,18 +138,42 @@ public class CommMonitoreo extends Thread {
                         strCelular = strNumero.substring(0, 9);
                         System.out.println("Numero Celular: " + strCelular);
                         timbrar(true, strCelular);
-                        try {
-                            setDespachoCliente(strNumero);
-                        } catch (UiThreadingViolationException a) {
+                        if (!strNumeroCelularAnterior.equals(strCelular)) {
+                            try {
+                                setDespachoCliente(strNumero);
+                                strNumeroCelularAnterior = strNumero;
+                                intContadorTimbreCelular++;
+                            } catch (UiThreadingViolationException a) {
+                            }
+                        } else {
+                            /*
+                             * Antes que ingrese otra llamada del mismo celular es necesario
+                             * que timbre ocho veces que es el maximo permitido, esto se realiza
+                             * porque en la trama del numero celular se envia el numero
+                             * constantemente en cada RING
+                             */
+                            //System.out.println("N: " + intContadorTimbreCelular);
+                            if (intContadorTimbreCelular >= 8) {
+                                intContadorTimbreCelular = 1;
+                                strNumeroCelularAnterior = "";
+                            } else {
+                                intContadorTimbreCelular++;
+                            }
                         }
                     }
-                } else {
+                } else { // telefono convencional
                     timbrar(true, strNumero);
                 }
             }
         }
     }
 
+    /**
+     * busca un cliente por el numero de telefono para despacharlo, devuelve el
+     * codigo del usuario a ser despachado
+     * @param strTelefono
+     * @return String
+     */
     private String setDespachoCliente(String strTelefono) {
 
         try {
@@ -192,8 +209,6 @@ public class CommMonitoreo extends Thread {
                 "0",
                 ""};
             dtm.insertRow(0, inicial);
-            jtPorDespachar.setRowSelectionInterval(0, 0);
-
         }
         return intCodigo;
     }
@@ -264,7 +279,6 @@ public class CommMonitoreo extends Thread {
         }
         return false;
     }
-    
     /*
      * Librerias para windows para leer el puerto comm desde java
      */
