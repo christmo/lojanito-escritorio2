@@ -23,24 +23,63 @@ import javax.swing.JTable;
 public class VentanaDatos extends javax.swing.JDialog {
 
     private Despachos datos = new Despachos();
-    private ConexionBase bd = new ConexionBase();
+    private ConexionBase bd;
     private boolean accion = false;
     private ResultSet rs;
     private int filaSeleccionada = 0;
     private JTable tabla;
 
-    /** Creates new form VentanaDatos */
-    public VentanaDatos(boolean menu) {
+    /**
+     * Constructor para llamar a la ventana de datos para ingresar nuevos clientes
+     * desde el menu de opciones
+     * @param menu
+     * @param bd
+     */
+    public VentanaDatos(boolean menu, ConexionBase bd) {
         initComponents();
+        this.bd = bd;
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         jtTelefono.setEnabled(true);
         this.accion = menu;
     }
 
-    public VentanaDatos(Despachos despacho) {
+    /**
+     * Se utiliza este constructor para visualizar los datos del cliente,
+     * en este se debe tener el telefono del cliente para desplegar la ventana
+     * @param despacho
+     * @param bd
+     */
+    public VentanaDatos(Despachos despacho, ConexionBase bd) {
         initComponents();
         this.datos = despacho;
+        this.bd = bd;
         cargarDatos(datos);
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+    }
+
+    /**
+     * Se utiliza este constructor cuando en la tabla por despachar no se pone un
+     * telefono es un usuario sin telefono pero hay que visualizar los datos
+     * @param despacho
+     * @param bd
+     * @param ActivarTelefono
+     */
+    public VentanaDatos(Despachos despacho, ConexionBase bd, int caso) {
+        initComponents();
+        this.datos = despacho;
+        this.bd = bd;
+        cargarDatos(datos);
+        switch (caso) {
+            case 1:
+                jtTelefono.setEnabled(false);
+                break;
+            case 2:
+                jtTelefono.setEnabled(true);
+                break;
+            case 3:
+                jtTelefono.setEnabled(true);
+                break;
+        }
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
 
@@ -53,6 +92,28 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         cargarDatos(datos);
         estadoCampos(true);
+    }
+
+    /**
+     * Permite setear los valores a presentarse en la ventana para la tabla
+     * PorDespachar lo que permitira la edicion de la informacions
+     * @param despacho
+     */
+    public void setPorDespachar(Despachos despacho, int caso) {
+        this.datos = despacho;
+        cargarDatos(datos);
+        estadoCampos(true);
+        switch (caso) {
+            case 1:
+                jtTelefono.setEnabled(false);
+                break;
+            case 2:
+                jtTelefono.setEnabled(true);
+                break;
+            case 3:
+                jtTelefono.setEnabled(true);
+                break;
+        }
     }
 
     /**
@@ -605,9 +666,10 @@ public class VentanaDatos extends javax.swing.JDialog {
     private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelefonoFocusLost
         funcionesUtilidad f = new funcionesUtilidad();
         String tel = jtTelefono.getText();
-        if(f.isNumeric(tel)){
+        if (f.isNumeric(tel)) {
             jtTelefono.setText(f.validarTelefono(tel));
-        }else{
+            insertarDatosTabla(jtTelefono.getText(), 1);
+        } else {
             jtTelefono.setText("");
         }
     }//GEN-LAST:event_jtTelefonoFocusLost
