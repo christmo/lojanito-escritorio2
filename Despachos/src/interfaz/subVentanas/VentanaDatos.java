@@ -135,9 +135,10 @@ public class VentanaDatos extends javax.swing.JDialog {
      * @param datosDespachados
      * @param estado //false para modo de lectura
      */
-    public VentanaDatos(Despachos datosDespachados, boolean estado) {
+    public VentanaDatos(Despachos datosDespachados, boolean estado, ConexionBase bd) {
         initComponents();
         this.datos = datosDespachados;
+        this.bd = bd;
         cargarDatos(datos);
         estadoCampos(estado);
     }
@@ -187,8 +188,10 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtDireccion.setText(despacho.getStrDireccion());
         jtBarrio.setText(despacho.getStrBarrio());
         jtNota.setText(despacho.getStrNota());
+
         String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE CODIGO='" + despacho.getIntCodigo() + "'";
         rs = bd.ejecutarConsultaUnDato(sql);
+
         try {
             String n_casa = rs.getString("NUM_CASA_CLI");
             String referencia = rs.getString("INFOR_ADICIONAL");
@@ -199,7 +202,7 @@ public class VentanaDatos extends javax.swing.JDialog {
             jtLatitud.setText(lat);
             jtLongitud.setText(lon);
         } catch (SQLException ex) {
-            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos.java :-)");
+            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
             //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
