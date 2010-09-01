@@ -1,6 +1,7 @@
 package BaseDatos;
 
 import com.mysql.jdbc.Statement;
+import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -135,6 +136,10 @@ public class ConexionBase {
         }
         return rs;
     }
+
+    /**
+     * Resul set auxiliar para las dobles consultas
+     */
     ResultSet rsAux;
 
     /**
@@ -372,7 +377,7 @@ public class ConexionBase {
                     + ")";
 
             return ejecutarSentencia(sql);
-        }else{
+        } else {
             return false;
         }
     }
@@ -821,6 +826,46 @@ public class ConexionBase {
     }
 
     /**
+     * Obtiene los datos de un cliente consultado por el nombre
+     * @param nombre
+     * @return ArrayList<Clientes>
+     */
+    public ArrayList<Clientes> buscarClientesPorNombre(String nombre) {
+        ArrayList<Clientes> datos = new ArrayList<Clientes>();
+
+        try {
+            String sql = "SELECT "
+                    + "NOMBRE_APELLIDO_CLI,"
+                    + "TELEFONO,"
+                    + "CODIGO,"
+                    + "DIRECCION_CLI,"
+                    + "SECTOR,"
+                    + "NUM_CASA_CLI,"
+                    + "INFOR_ADICIONAL "
+                    + "FROM CLIENTES "
+                    + "WHERE NOMBRE_APELLIDO_CLI LIKE '" + nombre + "%'";
+            System.out.println(sql);
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Clientes c = new Clientes();
+                c.setNombre(rs.getString("NOMBRE_APELLIDO_CLI"));
+                c.setTelefono(rs.getString("TELEFONO"));
+                c.setCodigo(rs.getString("CODIGO"));
+                c.setDireccion(rs.getString("DIRECCION_CLI"));
+                c.setBarrio(rs.getString("SECTOR"));
+                c.setN_casa(rs.getString("NUM_CASA_CLI"));
+                c.setReferencia(rs.getString("INFOR_ADICIONAL"));
+                datos.add(c);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
      * Obtiene la lista de despachados a partir de un codigo
      * @param telefono
      * @param usuario
@@ -1079,7 +1124,7 @@ public class ConexionBase {
      * @param idUser
      * @return
      */
-    public String getTelefonoUsuario(String idUser){
+    public String getTelefonoUsuario(String idUser) {
         try {
             String sql = "SELECT TELEFONO FROM USUARIOS WHERE USUARIO='" + idUser + "'";
             rs = ejecutarConsultaUnDato(sql);
