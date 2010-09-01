@@ -23,16 +23,21 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
+import interfaz.subVentanas.Clientes;
+import interfaz.subVentanas.ConsultaClientes;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 //import java.util.ResourceBundle;
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -123,6 +128,30 @@ public final class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         ConfiguracionInicial();
+
+        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "Despachar");
+        jtPorDespachar.getActionMap().put("Despachar", new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    jtPorDespachar.getCellEditor().stopCellEditing();
+                } catch (NullPointerException ex) {
+                }
+                int intFila = jtPorDespachar.getSelectedRow();
+                DespacharCliente(intFila);
+            }
+        });
+
+        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        jtPorDespachar.getActionMap().put("Enter", new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    jtPorDespachar.getCellEditor().stopCellEditing();
+                } catch (NullPointerException ex) {
+                }
+            }
+        });
     }
 
     /**
@@ -428,6 +457,7 @@ public final class Principal extends javax.swing.JFrame {
         jtBuscarPorCodigo = new javax.swing.JTextField();
         jbMenu = new javax.swing.JButton();
         jlIndicadorLlamada = new javax.swing.JLabel();
+        jbBuscarClienteNombre = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -761,7 +791,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -796,6 +826,14 @@ public final class Principal extends javax.swing.JFrame {
 
         jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
 
+        jbBuscarClienteNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
+        jbBuscarClienteNombre.setText("Clientes");
+        jbBuscarClienteNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClienteNombreActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -803,13 +841,13 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 251, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -817,12 +855,14 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 691, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbBuscarClienteNombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 543, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -848,10 +888,11 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(lblFecha))
                 .addContainerGap())
@@ -904,12 +945,12 @@ public final class Principal extends javax.swing.JFrame {
              * F8 Para borra toda la fila
              */
             BorrarFilaSeleccionadaPorDespachar(intFila);
-        } else if (cod == 123) {
-            /**
-             * F12 Para despachar
-             */
-            DespacharCliente(intFila);
-        } else if (cod == 155) {
+        } /*else if (cod == 123) {
+        /**
+         * F12 Para despachar
+         *//*
+        DespacharCliente(intFila);
+        } */ else if (cod == 155) {
             /**
              * Insert Ingresa una nueva fila para el despacho
              */
@@ -1021,7 +1062,7 @@ public final class Principal extends javax.swing.JFrame {
      * guardando estos en la base de datos
      * @param intFila
      */
-    private void DespacharCliente(int intFila) {        
+    private void DespacharCliente(int intFila) {
         if (jtPorDespachar.isEditing()) {
             jtPorDespachar.getCellEditor().cancelCellEditing();
         } else {
@@ -1554,9 +1595,10 @@ public final class Principal extends javax.swing.JFrame {
                 jlIndicadorLlamada.setIcon(img);
                 jtTelefono.setText("");
                 //------
-                jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
-                jtPorDespachar.setValueAt("0", intFila, 8);
                 try {
+                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
+                    jtPorDespachar.setValueAt("0", intFila, 8);
+
                     intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
                     intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
 
@@ -1709,23 +1751,24 @@ public final class Principal extends javax.swing.JFrame {
 
         if (intClicks == 1 && intBoton == 1) {
             try {
-                if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespachados(), 1).equals("")) {
+                //if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespachados(), 1).equals("")) {
 
-                    if (ventanaDatos == null) {
-                        ventanaDatos = new VentanaDatos(getDatosDespachados(), false);
-                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
-                        ventanaDatos.setVisible(true);
-                    } else {
-                        ventanaDatos.setDespachados(getDatosDespachados(), false);
-                        ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
-                        ventanaDatos.setVisible(true);
-                        ventanaDatos.setLocationRelativeTo(this);
-                    }
-
+                if (ventanaDatos == null) {
+                    ventanaDatos = new VentanaDatos(getDatosDespachados(), false, bd);
+                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
+                    ventanaDatos.setVisible(true);
+                } else {
+                    ventanaDatos.setDespachados(getDatosDespachados(), false);
+                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
+                    ventanaDatos.setVisible(true);
+                    ventanaDatos.setLocationRelativeTo(this);
                 }
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
-            } catch (ArrayIndexOutOfBoundsException aex) {
+
+                //}
+
+            }/* catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
+            } */ catch (ArrayIndexOutOfBoundsException aex) {
             }
         }
     }//GEN-LAST:event_jtDespachadosMousePressed
@@ -1762,6 +1805,19 @@ public final class Principal extends javax.swing.JFrame {
             menu.setResizable(false);
         }
     }//GEN-LAST:event_jbMenuActionPerformed
+    /*
+     * Ventana de consultar los clientes por nombre
+     */
+    private ConsultaClientes cliente;
+
+    private void jbBuscarClienteNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteNombreActionPerformed
+        if ((cliente == null) || (!cliente.isDisplayable())) {
+            cliente = new ConsultaClientes(Principal.bd);
+            cliente.setLocationRelativeTo(this);
+            cliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            cliente.setResizable(false);
+        }
+    }//GEN-LAST:event_jbBuscarClienteNombreActionPerformed
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -2010,6 +2066,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jbBuscarClienteNombre;
     private javax.swing.JButton jbDespachar;
     private javax.swing.JButton jbEliminarFila;
     private javax.swing.JButton jbLimpiarCampos;
@@ -2029,7 +2086,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblReloj;
     // End of variables declaration//GEN-END:variables
-    TrabajoTablas trabajarTabla;
+    private static TrabajoTablas trabajarTabla;
 
     /**
      * Ingresa un despacho en la tabla de clientes por Despachar en la
@@ -2037,7 +2094,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param des
      * @param tabla
      */
-    public void setDatosTablas(Despachos des, JTable tabla) {
+    public static void setDatosTablas(Despachos des, JTable tabla) {
         trabajarTabla = new TrabajoTablas();
         listaDespachosTemporales.add(des);
 
@@ -2052,14 +2109,14 @@ public final class Principal extends javax.swing.JFrame {
      * @param des
      * @param tabla
      */
-    public void setDatosFila(Despachos des, JTable tabla) {
+    private void setDatosFila(Despachos des, JTable tabla) {
         //jtTelefono.setText(des.getStrTelefono());
         listaDespachosTemporales.add(des);
 
         LlenarFila(filaAnt, tabla, des);
     }
 
-    public void LlenarFila(int fila, JTable tabla, Despachos d) {
+    private void LlenarFila(int fila, JTable tabla, Despachos d) {
         tabla.setValueAt(d.getStrHora(), fila, 0);
         tabla.setValueAt(d.getStrTelefono(), fila, 1);
         if (d.getIntCodigo() == 0) {
@@ -2160,5 +2217,25 @@ public final class Principal extends javax.swing.JFrame {
         }
         datosCast = new String[codigosLista.size()];
         return codigosLista.toArray(datosCast);
+    }
+
+    /**
+     * Inserta un nuevo despacho desde la tabla de buscar clientes por nombre
+     * @param cliente
+     */
+    public static void ingresarClientePorDespachar(Clientes cliente) {
+        Despachos despacharClienteNombre = new Despachos();
+        despacharClienteNombre.setStrHora(funciones.getHora());
+        despacharClienteNombre.setIntCodigo(Integer.parseInt(cliente.getCodigo()));
+        despacharClienteNombre.setStrTelefono(cliente.getTelefono());
+        despacharClienteNombre.setStrNombre(cliente.getNombre());
+        despacharClienteNombre.setStrDireccion(cliente.getDireccion());
+        despacharClienteNombre.setStrBarrio(cliente.getBarrio());
+        despacharClienteNombre.setStrNota(cliente.getReferencia());
+
+        //-
+        despacharClienteNombre.setStrNumeroCasa(cliente.getN_casa());
+        //-
+        setDatosTablas(despacharClienteNombre, jtPorDespachar);
     }
 }
