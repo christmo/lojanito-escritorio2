@@ -104,6 +104,8 @@ public final class Principal extends javax.swing.JFrame {
     public static Principal gui;
     /*Archivo de configuraciones*/
     public static Properties arcConfig;
+
+    /*Puerto Serial*/
     private CommMonitoreo comm;
 
     /**
@@ -204,10 +206,10 @@ public final class Principal extends javax.swing.JFrame {
         System.out.println("Empresa: " + sesion[1]);
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
-            if (sesion[1].equals("TP")) {
-                comm.enviarDatos("at\n");
-                comm.enviarDatos("at#cid=1\n");
-            }
+            
+            comm.enviarDatos("at\n");
+            comm.enviarDatos(bd.getComandoActivarModem(sesion[1])+"\n");
+            
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
             comm.start();
         }
