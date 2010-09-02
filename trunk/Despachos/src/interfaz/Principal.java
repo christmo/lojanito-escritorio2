@@ -128,30 +128,6 @@ public final class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         ConfiguracionInicial();
-
-        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "Despachar");
-        jtPorDespachar.getActionMap().put("Despachar", new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    jtPorDespachar.getCellEditor().stopCellEditing();
-                } catch (NullPointerException ex) {
-                }
-                int intFila = jtPorDespachar.getSelectedRow();
-                DespacharCliente(intFila);
-            }
-        });
-
-        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
-        jtPorDespachar.getActionMap().put("Enter", new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    jtPorDespachar.getCellEditor().stopCellEditing();
-                } catch (NullPointerException ex) {
-                }
-            }
-        });
     }
 
     /**
@@ -177,6 +153,43 @@ public final class Principal extends javax.swing.JFrame {
         tiempo.start();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
+
+        /**
+         * Despachar con la tecla F12
+         */
+        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "Despachar");
+        jtPorDespachar.getActionMap().put("Despachar", new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    jtPorDespachar.getCellEditor().stopCellEditing();
+                } catch (NullPointerException ex) {
+                }
+
+                int intFila = jtPorDespachar.getSelectedRow();
+                String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 6).toString();
+                if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
+                    DespacharCliente(intFila);
+                } else {
+                    JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                }
+            }
+        });
+
+        /**
+         * Parar la edición de la celda cuando se precione enter y mantener el
+         * enfoque en la misma fila
+         */
+        jtPorDespachar.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        jtPorDespachar.getActionMap().put("Enter", new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    jtPorDespachar.getCellEditor().stopCellEditing();
+                } catch (NullPointerException ex) {
+                }
+            }
+        });
     }
 
     /**
@@ -952,24 +965,9 @@ public final class Principal extends javax.swing.JFrame {
         DespacharCliente(intFila);
         } */ else if (cod == 155) {
             /**
-             * Insert Ingresa una nueva fila para el despacho
+             * Tecla -> Insert = Ingresa una nueva fila para el despacho
              */
             NuevaFilaDespacho();
-        } else if (cod == 10) {
-            /**
-             * TODO: hacer que se quede en la misma fila donde se encuentre
-             * editando -> por ahora no se ejecutan los eventos
-             */
-            /*System.out.println("Enter: " + intFila);
-            try {
-            if (intFila == 0) {
-            jtPorDespachar.setRowSelectionInterval(0, 0);
-            } else {
-            jtPorDespachar.setRowSelectionInterval(intFila - 1, intFila - 1);
-            }
-
-            } catch (IllegalArgumentException iae) {
-            }*/
         }
     }
 
@@ -1561,6 +1559,10 @@ public final class Principal extends javax.swing.JFrame {
         Map unidadCodigoBD = new HashMap();
 
         try {
+            /*
+             * TODO: REVISAR -> Optimizar esta consulta que obtiene demasiados datos que
+             * los que deberian
+             */
             String sql = "SELECT TAB1.N_UNIDAD, TAB1.ID_CODIGO FROM REGCODESTTAXI AS TAB1, (SELECT aux.ID_CODIGO, MAX(CONCAT(aux.FECHA,aux.HORA)) AS TMP FROM REGCODESTTAXI aux GROUP BY aux.N_UNIDAD) AS TAB2 WHERE CONCAT(TAB1.FECHA,TAB1.HORA) = TAB2.TMP";
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
@@ -1583,6 +1585,7 @@ public final class Principal extends javax.swing.JFrame {
         jtVehiculos.repaint();
     }
     private int intMinutoAnt = 0;
+    private int contador = 0;
 
     private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
         if (evt.getPropertyName().equals("tableCellEditor")) {
@@ -1590,25 +1593,47 @@ public final class Principal extends javax.swing.JFrame {
             int intCol = jtPorDespachar.getSelectedColumn();
 
             if (intCol == 6) { //Cuando cambie la celda de Munitos
-                //------
+                //------ Poner el icono de colgar el telefono
                 Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
                 jlIndicadorLlamada.setIcon(img);
                 jtTelefono.setText("");
                 //------
                 try {
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
-                    jtPorDespachar.setValueAt("0", intFila, 8);
+                    /**
+                     * Antes de poner los minutos de llegada a recojer el cliente
+                     * se requiere que esté seleccionada una unidad
+                     */
+                    String strCampoUnidad = "";
+                    try {
+                        strCampoUnidad = jtPorDespachar.getValueAt(intFila, 7).toString();
+                    } catch (NullPointerException ex) {
+                    }
+                    if (!strCampoUnidad.equals("") && !strCampoUnidad.equals("0")) {
+                        jtPorDespachar.setValueAt("0", intFila, 8);
 
-                    intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
-                    intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
+                        intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
+                        intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
 
-                    if (intAtraso != 0) {
-                        int res = (intMinutoAnt - intMinutos) + intAtraso;
-                        jtPorDespachar.setValueAt("" + res, intFila, 8);
-                        intMinutoAnt = intMinutos;
+                        if (intAtraso != 0) {
+                            int res = (intMinutoAnt - intMinutos) + intAtraso;
+                            jtPorDespachar.setValueAt("" + res, intFila, 8);
+                            intMinutoAnt = intMinutos;
+                        } else {
+                            jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
+                            intMinutoAnt = intMinutos;
+                        }
                     } else {
-                        jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
-                        intMinutoAnt = intMinutos;
+                        contador++;
+                        if (contador == 2) {
+                            JOptionPane.showMessageDialog(Principal.gui, "Debe seleccionar la unidad que recogerá al pasajero en ese tiempo...", "Error...", 0);
+                            try {
+                                jtPorDespachar.getCellEditor().stopCellEditing();
+                            } catch (NullPointerException ex) {
+                            }
+                            jtPorDespachar.setValueAt("", intFila, 6);
+                            contador = 0;
+                        }
                     }
                 } catch (NumberFormatException nfe) {
                     jtPorDespachar.setValueAt("", intFila, 6);
@@ -1628,6 +1653,10 @@ public final class Principal extends javax.swing.JFrame {
             }
 
             if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 9) {
+                /**
+                 * Cuando cambie cualquiera de estas celdas poner la hora en
+                 * el campo de la hora
+                 */
                 try {
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                 } catch (NullPointerException ex) {
@@ -1635,7 +1664,7 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
 
-            if (intCol == 7) {
+            if (intCol == 7) { // cambio de la celda de unidad
                 if (jtPorDespachar.isEditing()) {
                     jtPorDespachar.getCellEditor().cancelCellEditing();
                 } else {
@@ -1647,7 +1676,9 @@ public final class Principal extends javax.swing.JFrame {
                         }
                         String strEstadoUnidad = "";
                         try {
-                            strEstadoUnidad = bd.getEstadoUnidad(Integer.parseInt(unidad));
+                            if (!unidad.equals("0")) {
+                                strEstadoUnidad = bd.getEstadoUnidad(Integer.parseInt(unidad));
+                            }
                         } catch (NumberFormatException nfex) {
                         }
 
@@ -1667,6 +1698,8 @@ public final class Principal extends javax.swing.JFrame {
                         }
                     } catch (ArrayIndexOutOfBoundsException aex) {
                     } catch (NullPointerException ex) {
+                        JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
+                        jtPorDespachar.setValueAt("", intFila, 7);
                     }
                 }
             }
