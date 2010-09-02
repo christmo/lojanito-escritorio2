@@ -104,6 +104,7 @@ public final class Principal extends javax.swing.JFrame {
     public static Principal gui;
     /*Archivo de configuraciones*/
     public static Properties arcConfig;
+    private CommMonitoreo comm;
 
     /**
      * Constructor para recibir los datos de sesion desde el menu principal
@@ -200,8 +201,13 @@ public final class Principal extends javax.swing.JFrame {
         String puerto = arcConfig.getProperty("comm");
         //String puerto = rb.getString("comm");
         System.out.println("Puerto COMM: " + puerto);
+        System.out.println("Empresa: " + sesion[1]);
         if (!puerto.equals("0")) {
-            CommMonitoreo comm = new CommMonitoreo(puerto, bd);
+            comm = new CommMonitoreo(puerto, bd);
+            if (sesion[1].equals("TP")) {
+                comm.enviarDatos("at\n");
+                comm.enviarDatos("at#cid=1\n");
+            }
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
             comm.start();
         }
@@ -917,6 +923,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         bd.CerrarConexion();
+        comm.CerrarPuerto();
         System.exit(0);
     }//GEN-LAST:event_jbSalirActionPerformed
 
