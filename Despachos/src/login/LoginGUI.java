@@ -13,6 +13,7 @@ package login;
 import BaseDatos.ConexionBase;
 import configuracion.UIConfiguracion;
 import interfaz.Principal;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -52,6 +53,7 @@ public class LoginGUI extends javax.swing.JFrame {
             //Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
             UIConfiguracion.CrearArchivoPropiedades(url_config);
         }
+        existenDirectorios();
         //System.out.println(System.getProperty("java.library.path"));
     }
 
@@ -272,6 +274,34 @@ public class LoginGUI extends javax.swing.JFrame {
             } catch (NullPointerException npe) {
                 JOptionPane.showMessageDialog(this, "No hay acceso a la base de datos, comprobar si la clave de la base de datos es corercta en el archivo de configuración...", "Error", 0);
                 System.exit(0);
+            }
+        }
+    }
+
+    /**
+     * Creacion del directorio de imagenes para conductores y vehiculos
+     */
+    private void existenDirectorios() {
+        File jar = new File(System.getProperty("java.class.path"));
+        String srcDirProyecto = jar.getPath().substring(0, jar.getPath().length() - jar.getName().length());
+        String con = arcConfig.getProperty("dirImgConductores");
+        String veh = arcConfig.getProperty("dirImgVehiculos");
+        if (con == null) {
+            File dirConductores = new File(srcDirProyecto + con);
+            if (!dirConductores.exists()) {
+                dirConductores.mkdir();
+                System.out.println("Creado Directorio: " + con);
+            } else {
+                System.out.println("Directorio: " + con + " ya existe...");
+            }
+        }
+        if (veh != null) {
+            File dirVehiculos = new File(srcDirProyecto + veh);
+            if (!dirVehiculos.exists()) {
+                dirVehiculos.mkdir();
+                System.out.println("Creado Directorio: " + veh);
+            } else {
+                System.out.println("Directorio: " + veh + " ya existe...");
             }
         }
     }
