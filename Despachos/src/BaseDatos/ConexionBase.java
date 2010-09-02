@@ -136,7 +136,6 @@ public class ConexionBase {
         }
         return rs;
     }
-
     /**
      * Resul set auxiliar para las dobles consultas
      */
@@ -294,11 +293,17 @@ public class ConexionBase {
      */
     public String getEstadoUnidad() {
         try {
-            String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
-            rs = ejecutarConsultaUnDato(sql);
-            return rs.getString("ETIQUETA");
+            if (estadoUnidad.equals("")) {
+                String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
+                rs = ejecutarConsultaUnDato(sql);
+                return rs.getString("ETIQUETA");
+            }
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (NullPointerException ex) {
+            //throw new UnsupportedOperationException("SinEstado");
+            return null;
         }
         return null;
     }
