@@ -432,7 +432,7 @@ public class CommMonitoreo extends Thread {
     /**
      * Cerrar el puerto abierto
      */
-    public boolean CerrarPuerto() {
+    public final boolean CerrarPuerto() {
         sPuerto.close();
         return true;
         //id_Puerto.removePortOwnershipListener(this);
