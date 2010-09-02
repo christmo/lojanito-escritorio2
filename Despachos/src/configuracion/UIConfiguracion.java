@@ -82,6 +82,9 @@ public class UIConfiguracion extends javax.swing.JDialog {
             bw.write("user = " + arcConfig.getProperty("user") + "\n");
             bw.write("pass = " + arcConfig.getProperty("pass") + "\n");
 
+            bw.write("dirImgConductores = " + arcConfig.getProperty("dirImgConductores") + "\n");
+            bw.write("dirImgVehiculos = " + arcConfig.getProperty("dirImgVehiculos") + "\n");
+
             bw.close();
 
             System.out.println("Archivo escrito en: " + url);
@@ -319,25 +322,25 @@ public class UIConfiguracion extends javax.swing.JDialog {
             arcConfig.load(new FileInputStream(archivo));
 
             String ip = arcConfig.getProperty("ip_base");
-            if (ip.equals("null")||ip.equals("")) {
+            if (ip.equals("null") || ip.equals("")) {
                 arcConfig.setProperty("ip_base", jtIP.getText());
 
             }
             String base = arcConfig.getProperty("base");
-            if (base.equals("null")||base.equals("")) {
+            if (base.equals("null") || base.equals("")) {
                 arcConfig.setProperty("base", jtBD.getText());
             }
             String user = arcConfig.getProperty("user");
-            if (user.equals("null")||user.equals("")) {
+            if (user.equals("null") || user.equals("")) {
                 arcConfig.setProperty("user", jtUser.getText());
             }
             String pass = arcConfig.getProperty("pass");
-            if (pass.equals("null")||pass.equals("")) {
+            if (pass.equals("null") || pass.equals("")) {
                 arcConfig.setProperty("pass", f.getPasswordDesdeChar(jpPass.getPassword()));
             }
 
             String puertoBase = arcConfig.getProperty("puerto_base");
-            if (puertoBase.equals("0")||puertoBase.equals("")) {
+            if (puertoBase.equals("0") || puertoBase.equals("")) {
                 arcConfig.setProperty("puerto_base", jtPuertoBase.getText());
             }
 
@@ -356,17 +359,16 @@ public class UIConfiguracion extends javax.swing.JDialog {
             Logger.getLogger(UIConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     /**
      * @param args the command line arguments
      */
     /*public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    java.awt.EventQueue.invokeLater(new Runnable() {
 
-            public void run() {
-                new UIConfiguracion().setVisible(true);
-            }
-        });
+    public void run() {
+    new UIConfiguracion().setVisible(true);
+    }
+    });
     }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
