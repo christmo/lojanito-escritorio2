@@ -1139,4 +1139,20 @@ public class ConexionBase {
         }
         return "";
     }
+
+    /**
+     * Codigo de activación de modem para el equipo
+     * @param id_empres
+     * @return String
+     */
+    public String getComandoActivarModem(String id_empres){
+        try {
+            String sql = "SELECT MODEM FROM EMPRESAS WHERE ID_EMPRESA='" + id_empres + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("MODEM");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
 }
