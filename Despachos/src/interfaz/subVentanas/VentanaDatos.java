@@ -7,6 +7,7 @@
 package interfaz.subVentanas;
 
 import BaseDatos.ConexionBase;
+import interfaz.comunicacion.mapa.SocketMapa;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,6 +29,7 @@ public class VentanaDatos extends javax.swing.JDialog {
     private ResultSet rs;
     private int filaSeleccionada = 0;
     private JTable tabla;
+    private boolean menu = false;
 
     /**
      * Constructor para llamar a la ventana de datos para ingresar nuevos clientes
@@ -38,9 +40,11 @@ public class VentanaDatos extends javax.swing.JDialog {
     public VentanaDatos(boolean menu, ConexionBase bd) {
         initComponents();
         this.bd = bd;
+        AbrirPuertoCoordenadas();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         jtTelefono.setEnabled(true);
-        this.accion = menu;
+        jtCodigo.setEnabled(true);
+        this.menu = menu;
     }
 
     /**
@@ -54,6 +58,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         this.bd = bd;
         cargarDatos(datos);
+        AbrirPuertoCoordenadas();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
 
@@ -69,9 +74,10 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         this.bd = bd;
         cargarDatos(datos);
+        AbrirPuertoCoordenadas();
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(false);
+                jtTelefono.setEnabled(true);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -84,6 +90,20 @@ public class VentanaDatos extends javax.swing.JDialog {
     }
 
     /**
+     * Enviar en el estado false, para mostrar la ventana en modo de lectura de
+     * información, no permitir cambiar los datos
+     * @param datosDespachados
+     * @param estado //false para modo de lectura
+     */
+    public VentanaDatos(Despachos datosDespachados, boolean estado, ConexionBase bd) {
+        initComponents();
+        this.datos = datosDespachados;
+        this.bd = bd;
+        cargarDatos(datos);
+        estadoCampos(estado);
+    }
+
+    /**
      * Permite setear los valores a presentarse en la ventana para la tabla
      * PorDespachar lo que permitira la edicion de la informacions
      * @param despacho
@@ -91,6 +111,7 @@ public class VentanaDatos extends javax.swing.JDialog {
     public void setPorDespachar(Despachos despacho) {
         this.datos = despacho;
         cargarDatos(datos);
+        AbrirPuertoCoordenadas();
         estadoCampos(true);
     }
 
@@ -102,10 +123,11 @@ public class VentanaDatos extends javax.swing.JDialog {
     public void setPorDespachar(Despachos despacho, int caso) {
         this.datos = despacho;
         cargarDatos(datos);
+        AbrirPuertoCoordenadas();
         estadoCampos(true);
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(false);
+                jtTelefono.setEnabled(true);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -130,20 +152,6 @@ public class VentanaDatos extends javax.swing.JDialog {
     }
 
     /**
-     * Enviar en el estado false, para mostrar la ventana en modo de lectura de
-     * información, no permitir cambiar los datos
-     * @param datosDespachados
-     * @param estado //false para modo de lectura
-     */
-    public VentanaDatos(Despachos datosDespachados, boolean estado, ConexionBase bd) {
-        initComponents();
-        this.datos = datosDespachados;
-        this.bd = bd;
-        cargarDatos(datos);
-        estadoCampos(estado);
-    }
-
-    /**
      * Deshabilita los campos para que no se pueda cambiar la info cuando se
      * muestra los parametros en modo de lectura
      * @param estado
@@ -157,6 +165,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtNota.setEditable(estado);
         jbAceptar.setEnabled(estado);
         jbCodigo.setEnabled(estado);
+        jtTelefono.setEnabled(estado);
         jtLatitud.setEditable(estado);
         jtLongitud.setEditable(estado);
         jbSalir.setVisible(true);
@@ -177,10 +186,12 @@ public class VentanaDatos extends javax.swing.JDialog {
             jbCodigo.setVisible(true);
             accion = true; //insertar
             jtCodigo.setText("");
+            menu = false;
         } else {
             jbCodigo.setVisible(false);
             accion = false; //actualizar
             jtCodigo.setText(cod);
+            menu = false;
         }
 
         jtTelefono.setText(despacho.getStrTelefono());
@@ -189,7 +200,24 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtBarrio.setText(despacho.getStrBarrio());
         jtNota.setText(despacho.getStrNota());
 
-        String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE CODIGO='" + despacho.getIntCodigo() + "'";
+        if (despacho.getIntCodigo() != 0) {
+            ObtenerDatosClienteConCodigo(despacho.getIntCodigo());
+        } else {
+            try {
+                if (!despacho.getStrTelefono().equals("")) {
+                    ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
+                }
+            } catch (NullPointerException ex) {
+            }
+        }
+    }
+
+    /**
+     * Obtener datos del un cliente ingresado en la base que tiene un codigo
+     * @param codigo
+     */
+    private void ObtenerDatosClienteConCodigo(int codigo) {
+        String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE CODIGO=" + codigo;
         rs = bd.ejecutarConsultaUnDato(sql);
 
         try {
@@ -203,7 +231,32 @@ public class VentanaDatos extends javax.swing.JDialog {
             jtLongitud.setText(lon);
         } catch (SQLException ex) {
             System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
-            //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            jtNumeroCasa.setText("");
+            jtReferencia.setText("");
+        }
+    }
+
+    /**
+     * Obtiene los datos de un cliente ingresado pero que no tiene codigo
+     * @param telefono
+     */
+    private void ObtenerDatosClienteConTelefono(String telefono) {
+        String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
+        rs = bd.ejecutarConsultaUnDato(sql);
+
+        try {
+            String n_casa = rs.getString("NUM_CASA_CLI");
+            String referencia = rs.getString("INFOR_ADICIONAL");
+            String lat = rs.getString("LATITUD");
+            String lon = rs.getString("LONGITUD");
+            jtNumeroCasa.setText(n_casa);
+            jtReferencia.setText(referencia);
+            jtLatitud.setText(lat);
+            jtLongitud.setText(lon);
+        } catch (SQLException ex) {
+            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
+            jtNumeroCasa.setText("");
+            jtReferencia.setText("");
         }
     }
 
@@ -528,8 +581,10 @@ public class VentanaDatos extends javax.swing.JDialog {
 
     private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarActionPerformed
         if (jtCodigo.getText().equals("") || jtCodigo.getText() == null) {
-            this.setVisible(false);
+            CerrarPuertoCoordenadas();
+            this.dispose();
         } else {
+            CerrarPuertoCoordenadas();
             GuardarDatos();
             this.dispose();
         }
@@ -542,15 +597,19 @@ public class VentanaDatos extends javax.swing.JDialog {
         boolean resultado = false;
         datos = getDatosNuevos();
         if (!datos.getStrNombre().equals("") && !datos.getStrDireccion().equals("")) {
-            if (accion) {
-                resultado = bd.InsertarCliente(datos);
+            if (menu) {//Accion desde el menu siempre inserta clientes
+                resultado = bd.InsertarClienteMenu(datos);
                 if (!resultado) {
                     JOptionPane.showMessageDialog(this, "No se pudo guardar el cliente, ese número de teléfono esta asignado a otro cliente...", "Error", 0);
                 }
             } else {
-                resultado = bd.ActualizarCliente(datos, datos.getIntCodigo());
-                if (!resultado) {
-                    JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
+                if (accion) {
+                    resultado = bd.InsertarCliente(datos);
+                } else { // desde la tabla actualiza los datos cuando hay codigo
+                    resultado = bd.ActualizarCliente(datos, datos.getIntCodigo());
+                    if (!resultado) {
+                        JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
+                    }
                 }
             }
             LimpiarCampos();
@@ -621,12 +680,12 @@ public class VentanaDatos extends javax.swing.JDialog {
 
     private void jtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtDireccionFocusLost
         jtDireccion.setText(Mayusculas(jtDireccion.getText()));
-        insertarDatosTabla(jtDireccion.getText(), 4);
+        insertarDatosTabla(jtDireccion.getText(), 5);
     }//GEN-LAST:event_jtDireccionFocusLost
 
     private void jtBarrioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtBarrioFocusLost
         jtBarrio.setText(Mayusculas(jtBarrio.getText()));
-        insertarDatosTabla(jtBarrio.getText(), 5);
+        insertarDatosTabla(jtBarrio.getText(), 4);
     }//GEN-LAST:event_jtBarrioFocusLost
 
     private void jtNumeroCasaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNumeroCasaFocusLost
@@ -643,8 +702,8 @@ public class VentanaDatos extends javax.swing.JDialog {
     }//GEN-LAST:event_jtNotaFocusLost
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        CerrarPuertoCoordenadas();
         LimpiarCampos();
-        //this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jbSalirActionPerformed
 
@@ -685,7 +744,6 @@ public class VentanaDatos extends javax.swing.JDialog {
     public String Mayusculas(String txt) {
         return txt.toUpperCase();
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -707,12 +765,39 @@ public class VentanaDatos extends javax.swing.JDialog {
     private javax.swing.JTextField jtBarrio;
     private javax.swing.JTextField jtCodigo;
     private javax.swing.JTextField jtDireccion;
-    private javax.swing.JTextField jtLatitud;
-    private javax.swing.JTextField jtLongitud;
+    public static javax.swing.JTextField jtLatitud;
+    public static javax.swing.JTextField jtLongitud;
     private javax.swing.JTextField jtNombre;
     private javax.swing.JTextArea jtNota;
     private javax.swing.JTextField jtNumeroCasa;
     private javax.swing.JTextArea jtReferencia;
     private javax.swing.JTextField jtTelefono;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Permite escribir las coordenadas, con un clic desde el navegador
+     * en los campos de latitud y longitud
+     * @param latitud
+     * @param longitud
+     */
+    public static void setCoordenadasMapa(String latitud, String longitud) {
+        jtLatitud.setText(latitud);
+        jtLongitud.setText(longitud);
+    }
+    /**
+     * Conxion mapa web KRADAC para recolectar las coordenadas para los
+     * clientes
+     */
+    private SocketMapa sock;
+
+    private void AbrirPuertoCoordenadas() {
+        sock = new SocketMapa();
+    }
+
+    public void CerrarPuertoCoordenadas() {
+        try {
+            sock.CerrarPuerto();
+        } catch (NullPointerException ex) {
+        }
+    }
 }
