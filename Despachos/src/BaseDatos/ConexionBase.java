@@ -362,12 +362,58 @@ public class ConexionBase {
     }
 
     /**
-     * Inserta un cliente
+     * Inserta un cliente o actualiza dependiendo del caso, si ya esta ingresado
+     * el cliente en el sistema solo actualiza los datos del cliente
      * @param Despachos
      * @return confirmacion del resultado 1 valido || 0 invalido
      */
     public boolean InsertarCliente(Despachos des) {
-        if (!validarTelefonoCliente(des.getStrTelefono(), des.getIntCodigo())) {
+        boolean validarCliente = validarTelefonoCliente(des.getStrTelefono(), des.getIntCodigo());
+        boolean codigoEs0 = des.getIntCodigo() == 0;
+        if (!validarCliente && codigoEs0) {
+            String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
+                    + " VALUES("
+                    + "'" + des.getStrTelefono() + "',"
+                    + des.getIntCodigo() + ","
+                    + "'" + des.getStrNombre() + "',"
+                    + "'" + des.getStrDireccion() + "',"
+                    + "'" + des.getStrBarrio() + "',"
+                    + "'" + des.getStrNumeroCasa() + "',"
+                    + des.getLatitud() + ","
+                    + des.getLongitud() + ","
+                    + "'" + des.getStrReferecia() + "'"
+                    + ")";
+
+            return ejecutarSentencia(sql);
+        } else if (!validarCliente && !codigoEs0) {
+            String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
+                    + " VALUES("
+                    + "'" + des.getStrTelefono() + "',"
+                    + des.getIntCodigo() + ","
+                    + "'" + des.getStrNombre() + "',"
+                    + "'" + des.getStrDireccion() + "',"
+                    + "'" + des.getStrBarrio() + "',"
+                    + "'" + des.getStrNumeroCasa() + "',"
+                    + des.getLatitud() + ","
+                    + des.getLongitud() + ","
+                    + "'" + des.getStrReferecia() + "'"
+                    + ")";
+
+            return ejecutarSentencia(sql);
+        } else {
+            return ActualizarClienteConTelefono(des, des.getStrTelefono());
+        }
+    }
+
+    /**
+     * Inserta un cliente desde el menu de opciones del sistema
+     * @param Despachos
+     * @return confirmacion del resultado 1 valido || 0 invalido
+     */
+    public boolean InsertarClienteMenu(Despachos des) {
+        boolean validarCliente = validarTelefonoCliente(des.getStrTelefono(), des.getIntCodigo());
+
+        if (!validarCliente) {
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -385,6 +431,27 @@ public class ConexionBase {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Actualiza los campos de un cliente ingresado
+     * @param des
+     * @param codigo
+     * @return boolean
+     */
+    public boolean ActualizarClienteConTelefono(Despachos des, String telefono) {
+        String sql = "UPDATE CLIENTES SET "
+                + "CODIGO=" + des.getIntCodigo() + ","
+                + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
+                + "DIRECCION_CLI=" + "'" + des.getStrDireccion() + "',"
+                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD=" + des.getLatitud() + ","
+                + "LONGITUD=" + des.getLongitud() + ","
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "'"
+                + "WHERE TELEFONO='" + telefono + "'";
+
+        return ejecutarSentencia(sql);
     }
 
     /**
@@ -1145,7 +1212,7 @@ public class ConexionBase {
      * @param id_empres
      * @return String
      */
-    public String getComandoActivarModem(String id_empres){
+    public String getComandoActivarModem(String id_empres) {
         try {
             String sql = "SELECT MODEM FROM EMPRESAS WHERE ID_EMPRESA='" + id_empres + "'";
             rs = ejecutarConsultaUnDato(sql);
