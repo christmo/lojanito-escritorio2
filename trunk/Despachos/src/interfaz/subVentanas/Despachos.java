@@ -28,27 +28,6 @@ public class Despachos {
     public Despachos() {
     }
 
-    /*public Despachos(String hora,
-    String tel,
-    String cod,
-    String nom,
-    String dir,
-    String barrio,
-    String minutos,
-    String unidad,
-    String atraso,
-    String nota) {
-    this.strHora = hora;
-    this.strTelefono = tel;
-    this.intCodigo = Integer.parseInt(cod);
-    this.strNombre = nom;
-    this.strDireccion = dir;
-    this.strBarrio = barrio;
-    this.intMinutos = Integer.parseInt(minutos);
-    this.intUnidad = Integer.parseInt(unidad);
-    this.intAtraso = Integer.parseInt(atraso);
-    this.strNota = nota;
-    }*/
     public Despachos(String hora,
             String tel,
             String cod,
@@ -79,18 +58,6 @@ public class Despachos {
         this.strUsuario = usuario;
     }
 
-    /*public Despachos(String tel, String cod, String nom, String dir, String barrio, String nota) {
-    this.strTelefono = tel;
-    try {
-    this.intCodigo = Integer.parseInt(cod);
-    } catch (NumberFormatException ex) {
-    this.intCodigo = 0;
-    }
-    this.strNombre = nom;
-    this.strDireccion = dir;
-    this.strBarrio = barrio;
-    this.strNota = nota;
-    }*/
     public Despachos(String hora, String tel, String cod, String nom, String dir, String barrio, String nota) {
         this.strHora = hora;
         this.strTelefono = tel;
@@ -109,7 +76,6 @@ public class Despachos {
             String fecha,
             String hora,
             String tel,
-            //String cod,
             String nom,
             String dir,
             String barrio,
