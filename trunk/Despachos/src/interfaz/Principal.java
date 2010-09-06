@@ -98,10 +98,13 @@ public final class Principal extends javax.swing.JFrame {
     public static String turno;
     private static int id_Turno;
     private static funcionesUtilidad funciones = new funcionesUtilidad();
+    /**
+     * Objeto de esta misma interfaz para hacer uso de las constantes de la clase
+     */
+    public static Principal gui;
 
     /*Leer archivo de configuraciones*/
     //private ResourceBundle rb;
-    public static Principal gui;
     /*Archivo de configuraciones*/
     public static Properties arcConfig;
 
@@ -170,10 +173,14 @@ public final class Principal extends javax.swing.JFrame {
                 }
 
                 int intFila = jtPorDespachar.getSelectedRow();
-                String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 6).toString();
-                if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
-                    DespacharCliente(intFila);
-                } else {
+                try {
+                    String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
+                    if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
+                        DespacharCliente(intFila);
+                    } else {
+                        JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                    }
+                } catch (NullPointerException ex) {
                     JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                 }
             }
@@ -206,10 +213,20 @@ public final class Principal extends javax.swing.JFrame {
         System.out.println("Empresa: " + sesion[1]);
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
-            
-            comm.enviarDatos("at\n");
-            comm.enviarDatos(bd.getComandoActivarModem(sesion[1])+"\n");
-            
+
+            comm.enviarDatos("at\n\r");
+
+            String comando = bd.getComandoActivarModem(sesion[1]);
+            System.out.println("Enviar: " + comando);
+
+            /**
+             * Utilizar 3 porque la ejecusion es muy rapida
+             * y el modem no se activa tan rapido
+             */
+            comm.enviarDatos(comando + "\n\r");
+            comm.enviarDatos(comando + "\n\r");
+            comm.enviarDatos(comando + "\n\r");
+
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
             comm.start();
         }
@@ -253,10 +270,10 @@ public final class Principal extends javax.swing.JFrame {
                     d.getStrTelefono(),
                     "" + d.getIntCodigo(),
                     d.getStrNombre(),
-                    d.getStrDireccion(),
                     d.getStrBarrio(),
-                    "" + d.getIntMinutos(),
+                    d.getStrDireccion(),
                     "" + d.getIntUnidad(),
+                    "" + d.getIntMinutos(),
                     "" + d.getIntAtraso(),
                     d.getStrNota()
                 };
@@ -345,9 +362,7 @@ public final class Principal extends javax.swing.JFrame {
         String[] strEncColum = strCabecerasColumnasVehiculos;
         for (String col : strEncColum) {
             TableColumn tc = jtVehiculos.getColumn(col);
-            tc.setMinWidth(25);
-            jtVehiculos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            if (strEncColum.length > 40 && strEncColum.length <= 99) {
+            if (strEncColum.length >= 1 && strEncColum.length <= 99) {
                 tc.setMaxWidth(25);
                 jtVehiculos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             } else if (strEncColum.length > 99) {
@@ -522,7 +537,7 @@ public final class Principal extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Hora", "Télefono", "Código", "Nombre", "Dirección", "Barrio", "MIN", "UNI", "ATR", "NOTA"
+                "Hora", "Télefono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -550,22 +565,23 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jtPorDespachar);
-        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(40);
-        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(40);
-        jtPorDespachar.getColumnModel().getColumn(1).setMinWidth(75);
-        jtPorDespachar.getColumnModel().getColumn(1).setMaxWidth(75);
-        jtPorDespachar.getColumnModel().getColumn(2).setMinWidth(45);
-        jtPorDespachar.getColumnModel().getColumn(2).setMaxWidth(45);
+        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(45);
+        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(45);
+        jtPorDespachar.getColumnModel().getColumn(1).setMinWidth(80);
+        jtPorDespachar.getColumnModel().getColumn(1).setMaxWidth(80);
+        jtPorDespachar.getColumnModel().getColumn(2).setMinWidth(50);
+        jtPorDespachar.getColumnModel().getColumn(2).setMaxWidth(50);
         jtPorDespachar.getColumnModel().getColumn(3).setPreferredWidth(150);
-        jtPorDespachar.getColumnModel().getColumn(4).setPreferredWidth(250);
-        jtPorDespachar.getColumnModel().getColumn(5).setMinWidth(75);
-        jtPorDespachar.getColumnModel().getColumn(5).setMaxWidth(75);
-        jtPorDespachar.getColumnModel().getColumn(6).setMinWidth(25);
-        jtPorDespachar.getColumnModel().getColumn(6).setMaxWidth(25);
-        jtPorDespachar.getColumnModel().getColumn(7).setMinWidth(25);
-        jtPorDespachar.getColumnModel().getColumn(7).setMaxWidth(25);
-        jtPorDespachar.getColumnModel().getColumn(8).setMinWidth(25);
-        jtPorDespachar.getColumnModel().getColumn(8).setMaxWidth(25);
+        jtPorDespachar.getColumnModel().getColumn(4).setMinWidth(100);
+        jtPorDespachar.getColumnModel().getColumn(4).setPreferredWidth(100);
+        jtPorDespachar.getColumnModel().getColumn(4).setMaxWidth(100);
+        jtPorDespachar.getColumnModel().getColumn(5).setPreferredWidth(250);
+        jtPorDespachar.getColumnModel().getColumn(6).setMinWidth(30);
+        jtPorDespachar.getColumnModel().getColumn(6).setMaxWidth(30);
+        jtPorDespachar.getColumnModel().getColumn(7).setMinWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(7).setMaxWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(8).setMinWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(8).setMaxWidth(28);
         jtPorDespachar.getColumnModel().getColumn(9).setMinWidth(100);
         jtPorDespachar.getColumnModel().getColumn(9).setMaxWidth(100);
 
@@ -574,7 +590,7 @@ public final class Principal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Hora", "Teléfono", "Código", "Nombre", "Dirección", "Barrio", "MIN", "UNI", "ATR", "NOTA"
+                "Hora", "Teléfono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -585,6 +601,7 @@ public final class Principal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtDespachados.setColumnSelectionAllowed(true);
         jtDespachados.getTableHeader().setReorderingAllowed(false);
         jtDespachados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -593,22 +610,23 @@ public final class Principal extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jtDespachados);
         jtDespachados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jtDespachados.getColumnModel().getColumn(0).setMinWidth(40);
-        jtDespachados.getColumnModel().getColumn(0).setMaxWidth(40);
-        jtDespachados.getColumnModel().getColumn(1).setMinWidth(75);
-        jtDespachados.getColumnModel().getColumn(1).setMaxWidth(75);
-        jtDespachados.getColumnModel().getColumn(2).setMinWidth(45);
-        jtDespachados.getColumnModel().getColumn(2).setMaxWidth(45);
+        jtDespachados.getColumnModel().getColumn(0).setMinWidth(45);
+        jtDespachados.getColumnModel().getColumn(0).setMaxWidth(45);
+        jtDespachados.getColumnModel().getColumn(1).setMinWidth(80);
+        jtDespachados.getColumnModel().getColumn(1).setMaxWidth(80);
+        jtDespachados.getColumnModel().getColumn(2).setMinWidth(50);
+        jtDespachados.getColumnModel().getColumn(2).setMaxWidth(50);
         jtDespachados.getColumnModel().getColumn(3).setPreferredWidth(150);
-        jtDespachados.getColumnModel().getColumn(4).setPreferredWidth(250);
-        jtDespachados.getColumnModel().getColumn(5).setMinWidth(75);
-        jtDespachados.getColumnModel().getColumn(5).setMaxWidth(75);
-        jtDespachados.getColumnModel().getColumn(6).setMinWidth(25);
-        jtDespachados.getColumnModel().getColumn(6).setMaxWidth(25);
-        jtDespachados.getColumnModel().getColumn(7).setMinWidth(25);
-        jtDespachados.getColumnModel().getColumn(7).setMaxWidth(25);
-        jtDespachados.getColumnModel().getColumn(8).setMinWidth(25);
-        jtDespachados.getColumnModel().getColumn(8).setMaxWidth(25);
+        jtDespachados.getColumnModel().getColumn(4).setMinWidth(100);
+        jtDespachados.getColumnModel().getColumn(4).setPreferredWidth(100);
+        jtDespachados.getColumnModel().getColumn(4).setMaxWidth(100);
+        jtDespachados.getColumnModel().getColumn(5).setPreferredWidth(250);
+        jtDespachados.getColumnModel().getColumn(6).setMinWidth(30);
+        jtDespachados.getColumnModel().getColumn(6).setMaxWidth(30);
+        jtDespachados.getColumnModel().getColumn(7).setMinWidth(28);
+        jtDespachados.getColumnModel().getColumn(7).setMaxWidth(28);
+        jtDespachados.getColumnModel().getColumn(8).setMinWidth(28);
+        jtDespachados.getColumnModel().getColumn(8).setMaxWidth(28);
         jtDespachados.getColumnModel().getColumn(9).setMinWidth(100);
         jtDespachados.getColumnModel().getColumn(9).setMaxWidth(100);
 
@@ -697,7 +715,7 @@ public final class Principal extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -812,7 +830,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -862,13 +880,13 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 251, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -876,14 +894,14 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
                         .addGap(18, 18, 18)
                         .addComponent(jbBuscarClienteNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 543, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 545, Short.MAX_VALUE)
                         .addComponent(lblFecha)))
                 .addContainerGap())
         );
@@ -891,8 +909,8 @@ public final class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -909,7 +927,7 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -925,7 +943,10 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         bd.CerrarConexion();
-        comm.CerrarPuerto();
+        try {
+            comm.CerrarPuerto();
+        } catch (NullPointerException ex) {
+        }
         System.exit(0);
     }//GEN-LAST:event_jbSalirActionPerformed
 
@@ -953,8 +974,17 @@ public final class Principal extends javax.swing.JFrame {
             } else {
                 Tabla.setValueAt("", intFila, intCol);
             }
-            if (intCol == 7) {
+            /**
+             * Columna de Unidad
+             */
+            if (intCol == 6) {
                 BorrarColorDespachoVehiculo(Tabla);
+            }
+            /**
+             * Columna de Minutos
+             */
+            if (intCol == 7) {
+                Tabla.setValueAt("0", intFila, intCol);
             }
         } else if (cod == 118) {
             /**
@@ -1078,6 +1108,7 @@ public final class Principal extends javax.swing.JFrame {
 
             if (sePuedeDespachar(despacho, intFila)) {
                 boolean r = setDatosTablaDespachados(despacho, jtDespachados);
+                GuardarClienteSinCodigo(despacho);
                 if (r) {
                     try {
                         AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), "ACTIVO");
@@ -1090,6 +1121,19 @@ public final class Principal extends javax.swing.JFrame {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Guarda un cliente que llamo pero que no tiene codigo, para que cuando
+     * vuelva a llamar sepa que cliente es.
+     * @param Despacho
+     */
+    private void GuardarClienteSinCodigo(Despachos des) {
+        if (!des.getStrTelefono().equals("")) {
+            des.setStrNumeroCasa("");
+            des.setStrReferecia("");
+            bd.InsertarCliente(des);
         }
     }
 
@@ -1127,7 +1171,7 @@ public final class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Se debe ingresar un barrio donde vive el cliente...", "Error...", 0);
         } else if (d.getIntMinutos() < 0) {
             JOptionPane.showMessageDialog(this, "La estimación de tiempo de llegada a recojer al cliente es incorrecta, tiene que ser mayor a 0...", "Error...", 0);
-            jtPorDespachar.setValueAt("", fila, 6);
+            jtPorDespachar.setValueAt("", fila, 7);
             jtPorDespachar.setValueAt("0", fila, 8);
         } else if (!validarUnidad(d.getIntUnidad())) {
             JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
@@ -1144,6 +1188,10 @@ public final class Principal extends javax.swing.JFrame {
         int intBoton = evt.getButton();
 
         if (intClicks == 1 && intBoton == 3) {
+            try {
+                ventanaDatos.CerrarPuertoCoordenadas();
+            } catch (NullPointerException ex) {
+            }
             try {
                 /*
                  * Con telefono y codigo en la tabla por despachar abrir la
@@ -1344,25 +1392,25 @@ public final class Principal extends javax.swing.JFrame {
             strTelefono = (String) jtPorDespachar.getValueAt(fila, 1);
             intCodigo = (String) jtPorDespachar.getValueAt(fila, 2);
             strNombre = (String) jtPorDespachar.getValueAt(fila, 3);
-            strDireccion = (String) jtPorDespachar.getValueAt(fila, 4);
-            strBarrio = (String) jtPorDespachar.getValueAt(fila, 5);
+            strBarrio = (String) jtPorDespachar.getValueAt(fila, 4);
+            strDireccion = (String) jtPorDespachar.getValueAt(fila, 5);
 
             try {
-                intMinutos = Integer.parseInt(jtPorDespachar.getValueAt(fila, 6).toString());
+                intMinutos = Integer.parseInt(jtPorDespachar.getValueAt(fila, 7).toString());
             } catch (NumberFormatException nfe) {
                 //System.err.println("No hay Minutos...");
                 //JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Minutos(MIN)...", "Error...", 0);
                 intMinutos = 0;
-                jtPorDespachar.setValueAt("", fila, 6);
+                jtPorDespachar.setValueAt("", fila, 7);
             } catch (NullPointerException ex) {
                 intMinutos = 0;
             }
             try {
-                intUnidad = Integer.parseInt(jtPorDespachar.getValueAt(fila, 7).toString());
+                intUnidad = Integer.parseInt(jtPorDespachar.getValueAt(fila, 6).toString());
             } catch (NumberFormatException nfe) {
                 //System.err.println("No hay Unidad...");
                 //JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Unidad(UNI)...", "Error...", 0);
-                jtPorDespachar.setValueAt("", fila, 7);
+                jtPorDespachar.setValueAt("", fila, 6);
                 intUnidad = 0;
             } catch (NullPointerException ex) {
                 intUnidad = 0;
@@ -1601,12 +1649,7 @@ public final class Principal extends javax.swing.JFrame {
             int intFila = jtPorDespachar.getSelectedRow();
             int intCol = jtPorDespachar.getSelectedColumn();
 
-            if (intCol == 6) { //Cuando cambie la celda de Munitos
-                //------ Poner el icono de colgar el telefono
-                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
-                jlIndicadorLlamada.setIcon(img);
-                jtTelefono.setText("");
-                //------
+            if (intCol == 7) { //Cuando cambie la celda de Munitos
                 try {
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                     /**
@@ -1615,13 +1658,13 @@ public final class Principal extends javax.swing.JFrame {
                      */
                     String strCampoUnidad = "";
                     try {
-                        strCampoUnidad = jtPorDespachar.getValueAt(intFila, 7).toString();
+                        strCampoUnidad = jtPorDespachar.getValueAt(intFila, 6).toString();
                     } catch (NullPointerException ex) {
                     }
                     if (!strCampoUnidad.equals("") && !strCampoUnidad.equals("0")) {
                         jtPorDespachar.setValueAt("0", intFila, 8);
 
-                        intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 6));
+                        intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 7));
                         intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
 
                         if (intAtraso != 0) {
@@ -1640,12 +1683,12 @@ public final class Principal extends javax.swing.JFrame {
                                 jtPorDespachar.getCellEditor().stopCellEditing();
                             } catch (NullPointerException ex) {
                             }
-                            jtPorDespachar.setValueAt("", intFila, 6);
+                            jtPorDespachar.setValueAt("", intFila, 7);
                             contador = 0;
                         }
                     }
                 } catch (NumberFormatException nfe) {
-                    jtPorDespachar.setValueAt("", intFila, 6);
+                    jtPorDespachar.setValueAt("", intFila, 7);
                 } catch (ArrayIndexOutOfBoundsException ex) {
                 }
             }
@@ -1673,7 +1716,12 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
 
-            if (intCol == 7) { // cambio de la celda de unidad
+            if (intCol == 6) { // cambio de la celda de unidad
+                //------ Poner el icono de colgar el telefono
+                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+                jlIndicadorLlamada.setIcon(img);
+                jtTelefono.setText("");
+                //------
                 if (jtPorDespachar.isEditing()) {
                     jtPorDespachar.getCellEditor().cancelCellEditing();
                 } else {
@@ -1708,7 +1756,7 @@ public final class Principal extends javax.swing.JFrame {
                     } catch (ArrayIndexOutOfBoundsException aex) {
                     } catch (NullPointerException ex) {
                         JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
-                        jtPorDespachar.setValueAt("", intFila, 7);
+                        jtPorDespachar.setValueAt("", intFila, 6);
                     }
                 }
             }
@@ -1793,8 +1841,6 @@ public final class Principal extends javax.swing.JFrame {
 
         if (intClicks == 1 && intBoton == 1) {
             try {
-                //if (!jtDespachados.getValueAt(getIntFilaSeleccionadaDespachados(), 1).equals("")) {
-
                 if (ventanaDatos == null) {
                     ventanaDatos = new VentanaDatos(getDatosDespachados(), false, bd);
                     ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
@@ -1805,12 +1851,7 @@ public final class Principal extends javax.swing.JFrame {
                     ventanaDatos.setVisible(true);
                     ventanaDatos.setLocationRelativeTo(this);
                 }
-
-                //}
-
-            }/* catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay datos que mostrar...", "Error", 0);
-            } */ catch (ArrayIndexOutOfBoundsException aex) {
+            } catch (ArrayIndexOutOfBoundsException aex) {
             }
         }
     }//GEN-LAST:event_jtDespachadosMousePressed
@@ -2002,10 +2043,10 @@ public final class Principal extends javax.swing.JFrame {
             strTelefono = (String) jtDespachados.getValueAt(fila, 1);
             intCodigo = (String) jtDespachados.getValueAt(fila, 2);
             strNombre = (String) jtDespachados.getValueAt(fila, 3);
-            strDireccion = (String) jtDespachados.getValueAt(fila, 4);
-            strBarrio = (String) jtDespachados.getValueAt(fila, 5);
-            intMinutos = Integer.parseInt(jtDespachados.getValueAt(fila, 6).toString());
-            intUnidad = Integer.parseInt(jtDespachados.getValueAt(fila, 7).toString());
+            strBarrio = (String) jtDespachados.getValueAt(fila, 4);
+            strDireccion = (String) jtDespachados.getValueAt(fila, 5);
+            intUnidad = Integer.parseInt(jtDespachados.getValueAt(fila, 6).toString());
+            intMinutos = Integer.parseInt(jtDespachados.getValueAt(fila, 7).toString());
             intAtraso = Integer.parseInt(jtDespachados.getValueAt(fila, 8).toString());
             strNota = (String) jtDespachados.getValueAt(fila, 9);
             datos = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio,
@@ -2056,7 +2097,7 @@ public final class Principal extends javax.swing.JFrame {
             int N_filas = jtPorDespachar.getRowCount();
             for (int i = 0; i < N_filas; i++) {
                 String dato = (String) jtPorDespachar.getValueAt(i, 8);
-                String minuto = (String) jtPorDespachar.getValueAt(i, 6);
+                String minuto = (String) jtPorDespachar.getValueAt(i, 7);
                 try {
                     if (!dato.equals("") && !minuto.equals("")) {
                         int atraso = Integer.parseInt(dato);
@@ -2167,8 +2208,8 @@ public final class Principal extends javax.swing.JFrame {
             tabla.setValueAt("" + d.getIntCodigo(), fila, 2);
         }
         tabla.setValueAt(d.getStrNombre(), fila, 3);
-        tabla.setValueAt(d.getStrDireccion(), fila, 4);
-        tabla.setValueAt(d.getStrBarrio(), fila, 5);
+        tabla.setValueAt(d.getStrBarrio(), fila, 4);
+        tabla.setValueAt(d.getStrDireccion(), fila, 5);
         tabla.setValueAt("", fila, 6);
         tabla.setValueAt("", fila, 7);
         tabla.setValueAt("0", fila, 8);
@@ -2192,7 +2233,7 @@ public final class Principal extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
             }
-            jtPorDespachar.setValueAt("0", fila, 7);
+            jtPorDespachar.setValueAt("0", fila, 6);
         } else {
             trabajarTabla = new TrabajoTablas();
             listaDespachados.add(des);
