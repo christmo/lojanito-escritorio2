@@ -284,25 +284,33 @@ public class LoginGUI extends javax.swing.JFrame {
     private void existenDirectorios() {
         File jar = new File(System.getProperty("java.class.path"));
         String srcDirProyecto = jar.getPath().substring(0, jar.getPath().length() - jar.getName().length());
-        String con = arcConfig.getProperty("dirImgConductores");
-        String veh = arcConfig.getProperty("dirImgVehiculos");
-        if (con == null) {
-            File dirConductores = new File(srcDirProyecto + con);
-            if (!dirConductores.exists()) {
-                dirConductores.mkdir();
-                System.out.println("Creado Directorio: " + con);
-            } else {
-                System.out.println("Directorio: " + con + " ya existe...");
+        System.out.println("DirFuente: "+srcDirProyecto);
+        try {
+            String con = arcConfig.getProperty("dirImgConductores");
+            if (con != null) {
+                File dirConductores = new File(srcDirProyecto + con);
+                System.out.println("Dir: " + srcDirProyecto + con);
+                if (!dirConductores.exists()) {
+                    dirConductores.mkdir();
+                    System.out.println("Creado Directorio: " + con);
+                } else {
+                    System.out.println("Directorio: " + con + " ya existe...");
+                }
+
             }
-        }
-        if (veh != null) {
-            File dirVehiculos = new File(srcDirProyecto + veh);
-            if (!dirVehiculos.exists()) {
-                dirVehiculos.mkdir();
-                System.out.println("Creado Directorio: " + veh);
-            } else {
-                System.out.println("Directorio: " + veh + " ya existe...");
+
+            String veh = arcConfig.getProperty("dirImgVehiculos");
+            if (veh != null) {
+                File dirVehiculos = new File(srcDirProyecto + veh);
+                System.out.println("Dir: " + srcDirProyecto + veh);
+                if (!dirVehiculos.exists()) {
+                    dirVehiculos.mkdir();
+                    System.out.println("Creado Directorio: " + veh);
+                } else {
+                    System.out.println("Directorio: " + veh + " ya existe...");
+                }
             }
+        } catch (NullPointerException ex) {
         }
     }
 
