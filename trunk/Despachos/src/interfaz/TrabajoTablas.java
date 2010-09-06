@@ -8,7 +8,6 @@ import interfaz.subVentanas.Despachos;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -19,22 +18,6 @@ public class TrabajoTablas {
     private ArrayList<Despachos> listaDespachados = new ArrayList<Despachos>();
     private ArrayList<Despachos> listaPorDespacharTMP = new ArrayList<Despachos>();
     private DefaultTableModel dtm;
-    private TableColumnModel tcm;
-    /**
-     * Ancho fijo para las tablas
-     */
-    int[] anchosColunas = {
-        40,
-        75,
-        45,
-        250,
-        350,
-        75,
-        25,
-        25,
-        25,
-        100
-    };
 
     /**
      * Inserta Una fila en la Tabla PorDEspachar de la Parte Superior de la
@@ -58,8 +41,8 @@ public class TrabajoTablas {
                 listaPorDespacharTMP.get(i).getStrTelefono(),
                 ""+listaPorDespacharTMP.get(i).getIntCodigo(),
                 listaPorDespacharTMP.get(i).getStrNombre(),
-                listaPorDespacharTMP.get(i).getStrDireccion(),
                 listaPorDespacharTMP.get(i).getStrBarrio(),
+                listaPorDespacharTMP.get(i).getStrDireccion(),
                 "",
                 "",
                 "0",
@@ -91,10 +74,10 @@ public class TrabajoTablas {
                     listaDespachados.get(i).getStrTelefono(),
                     ""+listaDespachados.get(i).getIntCodigo(),
                     listaDespachados.get(i).getStrNombre(),
-                    listaDespachados.get(i).getStrDireccion(),
                     listaDespachados.get(i).getStrBarrio(),
-                    "" + listaDespachados.get(i).getIntMinutos(),
+                    listaDespachados.get(i).getStrDireccion(),
                     "" + listaDespachados.get(i).getIntUnidad(),
+                    "" + listaDespachados.get(i).getIntMinutos(),
                     "" + listaDespachados.get(i).getIntAtraso(),
                     listaDespachados.get(i).getStrNota()
                 };
@@ -103,21 +86,4 @@ public class TrabajoTablas {
         } catch (NullPointerException ex) {
         }
     }
-    /**
-     * Configura los anchos de las columnas de las tablas
-     * @param tabla
-     */
-    /*public void AjustarAnchoColumnasTabla(JTable tabla) {
-    tcm = tabla.getColumnModel();
-    TableColumn columnaTabla;
-    for (int i = 0; i < tabla.getColumnCount(); i++) {
-    columnaTabla = tcm.getColumn(i);
-    if (i != 3 || i != 4) {
-    columnaTabla.setMinWidth(anchosColunas[i]);
-    columnaTabla.setMaxWidth(anchosColunas[i]);
-    } else {
-    columnaTabla.setPreferredWidth(anchosColunas[i]);
-    }
-    }
-    }*/
 }
