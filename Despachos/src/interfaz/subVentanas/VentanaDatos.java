@@ -40,26 +40,12 @@ public class VentanaDatos extends javax.swing.JDialog {
     public VentanaDatos(boolean menu, ConexionBase bd) {
         initComponents();
         this.bd = bd;
-        AbrirPuertoCoordenadas();
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         jtTelefono.setEnabled(true);
         jtCodigo.setEnabled(true);
         this.menu = menu;
-    }
-
-    /**
-     * Se utiliza este constructor para visualizar los datos del cliente,
-     * en este se debe tener el telefono del cliente para desplegar la ventana
-     * @param despacho
-     * @param bd
-     */
-    public VentanaDatos(Despachos despacho, ConexionBase bd) {
-        initComponents();
-        this.datos = despacho;
-        this.bd = bd;
-        cargarDatos(datos);
         AbrirPuertoCoordenadas();
-        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        initEdicionLatLon();
     }
 
     /**
@@ -74,10 +60,9 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         this.bd = bd;
         cargarDatos(datos);
-        AbrirPuertoCoordenadas();
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(true);
+                jtTelefono.setEnabled(false);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -87,14 +72,18 @@ public class VentanaDatos extends javax.swing.JDialog {
                 break;
         }
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+        AbrirPuertoCoordenadas();
+        initEdicionLatLon();
     }
 
-    /**
+    
+    /****************** Modo solo lectura ********************************
      * Enviar en el estado false, para mostrar la ventana en modo de lectura de
-     * información, no permitir cambiar los datos
+     * información, no permitir cambiar los datos, se utiliza en la tabla de
+     * despachados para mostrar la informacion del cliente
      * @param datosDespachados
      * @param estado //false para modo de lectura
-     */
+     *********************************************************************/
     public VentanaDatos(Despachos datosDespachados, boolean estado, ConexionBase bd) {
         initComponents();
         this.datos = datosDespachados;
@@ -111,8 +100,9 @@ public class VentanaDatos extends javax.swing.JDialog {
     public void setPorDespachar(Despachos despacho) {
         this.datos = despacho;
         cargarDatos(datos);
-        AbrirPuertoCoordenadas();
         estadoCampos(true);
+        AbrirPuertoCoordenadas();
+        initEdicionLatLon();
     }
 
     /**
@@ -123,11 +113,10 @@ public class VentanaDatos extends javax.swing.JDialog {
     public void setPorDespachar(Despachos despacho, int caso) {
         this.datos = despacho;
         cargarDatos(datos);
-        AbrirPuertoCoordenadas();
         estadoCampos(true);
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(true);
+                jtTelefono.setEnabled(false);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -136,6 +125,17 @@ public class VentanaDatos extends javax.swing.JDialog {
                 jtTelefono.setEnabled(true);
                 break;
         }
+        AbrirPuertoCoordenadas();
+        initEdicionLatLon();
+    }
+
+    /**
+     * Inicializar los campos de edicion de latitud y longitud
+     */
+    private void initEdicionLatLon() {
+        jcEditarCoord.setSelected(false);
+        jtLatitud.setEditable(false);
+        jtLongitud.setEditable(false);
     }
 
     /**
@@ -168,6 +168,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtTelefono.setEnabled(estado);
         jtLatitud.setEditable(estado);
         jtLongitud.setEditable(estado);
+        jcEditarCoord.setEnabled(estado);
         jbSalir.setVisible(true);
     }
 
@@ -183,13 +184,16 @@ public class VentanaDatos extends javax.swing.JDialog {
     private void cargarDatos(Despachos despacho) {
         String cod = "" + despacho.getIntCodigo();
         if (cod == null || cod.equals("") || cod.equals("0")) {
+            //si no tiene codigo pero el cliente existe o no
             jbCodigo.setVisible(true);
-            accion = true; //insertar
+            actualizarConCod = false;
             jtCodigo.setText("");
             menu = false;
         } else {
+            //si tiene codigo el cliente actualizar de ley
             jbCodigo.setVisible(false);
             accion = false; //actualizar
+            actualizarConCod = true;
             jtCodigo.setText(cod);
             menu = false;
         }
@@ -205,12 +209,20 @@ public class VentanaDatos extends javax.swing.JDialog {
         } else {
             try {
                 if (!despacho.getStrTelefono().equals("")) {
-                    ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
+                    /**
+                     * La accion sera si con el telefono retorna datos hay que
+                     * actualizar la info caso contrario hay que insertar los
+                     * datos en la tabla de clientes
+                     */
+                    accion = ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
+                } else {
+                    accion = true; //-> insertar
                 }
             } catch (NullPointerException ex) {
             }
         }
     }
+    boolean actualizarConCod;
 
     /**
      * Obtener datos del un cliente ingresado en la base que tiene un codigo
@@ -238,9 +250,13 @@ public class VentanaDatos extends javax.swing.JDialog {
 
     /**
      * Obtiene los datos de un cliente ingresado pero que no tiene codigo
+     * Retorna falso cuando si obtiene datos esto es para tomar la accion de
+     * actualizacion de los datos de la tabla de clientes
+     * Retorna true cuando no obtiene valores para ese telefono, eso quiere decir
+     * que la accion sera de insertar los nuevos datos ingresados
      * @param telefono
      */
-    private void ObtenerDatosClienteConTelefono(String telefono) {
+    private boolean ObtenerDatosClienteConTelefono(String telefono) {
         String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
         rs = bd.ejecutarConsultaUnDato(sql);
 
@@ -253,10 +269,12 @@ public class VentanaDatos extends javax.swing.JDialog {
             jtReferencia.setText(referencia);
             jtLatitud.setText(lat);
             jtLongitud.setText(lon);
+            return false; // -> actualizar los datos
         } catch (SQLException ex) {
             System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
             jtNumeroCasa.setText("");
             jtReferencia.setText("");
+            return true; // -> insertar los datos
         }
     }
 
@@ -285,7 +303,6 @@ public class VentanaDatos extends javax.swing.JDialog {
         jpDatos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jtCodigo = new javax.swing.JTextField();
-        jbAceptar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -296,10 +313,6 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtDireccion = new javax.swing.JTextField();
         jtNumeroCasa = new javax.swing.JTextField();
         jtBarrio = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jtLatitud = new javax.swing.JTextField();
-        jtLongitud = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -308,6 +321,12 @@ public class VentanaDatos extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         jtNota = new javax.swing.JTextArea();
         jbCodigo = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jtLatitud = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jtLongitud = new javax.swing.JTextField();
+        jcEditarCoord = new javax.swing.JCheckBox();
+        jbAceptar = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
 
         setTitle("Clientes");
@@ -321,14 +340,6 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtCodigo.setFont(new java.awt.Font("Arial", 1, 24));
         jtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtCodigo.setEnabled(false);
-
-        jbAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/ok.png"))); // NOI18N
-        jbAceptar.setText("Aceptar");
-        jbAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbAceptarActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("Nombre:");
@@ -378,16 +389,6 @@ public class VentanaDatos extends javax.swing.JDialog {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel7.setText("Latitud:");
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel8.setText("Longitud:");
-
-        jtLatitud.setText("0.0");
-
-        jtLongitud.setText("0.0");
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("Referencia:");
 
@@ -436,12 +437,12 @@ public class VentanaDatos extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(533, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+                .addContainerGap(494, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel11)
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -463,6 +464,35 @@ public class VentanaDatos extends javax.swing.JDialog {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel7.setText("Latitud:");
+
+        jtLatitud.setEditable(false);
+        jtLatitud.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtLatitud.setText("0.0");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel8.setText("Longitud:");
+
+        jtLongitud.setEditable(false);
+        jtLongitud.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtLongitud.setText("0.0");
+
+        jcEditarCoord.setText("Editar Coordenadas del Cliente");
+        jcEditarCoord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcEditarCoordActionPerformed(evt);
+            }
+        });
+
+        jbAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/ok.png"))); // NOI18N
+        jbAceptar.setText("Aceptar");
+        jbAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAceptarActionPerformed(evt);
+            }
+        });
+
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
         jbSalir.setText("Cancelar");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -478,25 +508,13 @@ public class VentanaDatos extends javax.swing.JDialog {
             .addGroup(jpDatosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(jpDatosLayout.createSequentialGroup()
-                        .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpDatosLayout.createSequentialGroup()
-                                .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jbAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jpDatosLayout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpDatosLayout.createSequentialGroup()
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jtLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
-                                    .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
+                    .addGroup(jpDatosLayout.createSequentialGroup()
+                        .addComponent(jcEditarCoord)
+                        .addContainerGap())
+                    .addComponent(jLabel2)
                     .addGroup(jpDatosLayout.createSequentialGroup()
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -505,21 +523,36 @@ public class VentanaDatos extends javax.swing.JDialog {
                         .addGap(14, 14, 14)
                         .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtNumeroCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
+                                .addGap(27, 27, 27)
                                 .addComponent(jtBarrio, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosLayout.createSequentialGroup()
-                                .addComponent(jtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel6)
-                                .addGap(6, 6, 6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
-                            .addComponent(jtDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE))
+                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                            .addComponent(jtDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(jpDatosLayout.createSequentialGroup()
+                        .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jbAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jpDatosLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpDatosLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(6, 6, 6)
+                                .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())))
         );
         jpDatosLayout.setVerticalGroup(
@@ -549,13 +582,15 @@ public class VentanaDatos extends javax.swing.JDialog {
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jcEditarCoord)
+                .addGap(8, 8, 8)
                 .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                    .addComponent(jtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbAceptar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                     .addComponent(jbSalir))
@@ -566,11 +601,16 @@ public class VentanaDatos extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jpDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -606,7 +646,17 @@ public class VentanaDatos extends javax.swing.JDialog {
                 if (accion) {
                     resultado = bd.InsertarCliente(datos);
                 } else { // desde la tabla actualiza los datos cuando hay codigo
-                    resultado = bd.ActualizarCliente(datos, datos.getIntCodigo());
+                    if (actualizarConCod) {
+                        /**
+                         * Actualiza cuando existe un codigo donde actualizar
+                         */
+                        resultado = bd.ActualizarClienteCod(datos);
+                    } else {
+                        /**
+                         * Actualiza cuando no tiene codigo pero tiene un telefono
+                         */
+                        resultado = bd.ActualizarClienteTel(datos);
+                    }
                     if (!resultado) {
                         JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
                     }
@@ -736,6 +786,16 @@ public class VentanaDatos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jtTelefonoFocusLost
 
+    private void jcEditarCoordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcEditarCoordActionPerformed
+        if (jcEditarCoord.isSelected()) {
+            jtLatitud.setEditable(true);
+            jtLongitud.setEditable(true);
+        } else {
+            jtLatitud.setEditable(false);
+            jtLongitud.setEditable(false);
+        }
+    }//GEN-LAST:event_jcEditarCoordActionPerformed
+
     /**
      * Convierete a mayusculas lo que se envie
      * @param txt
@@ -761,6 +821,7 @@ public class VentanaDatos extends javax.swing.JDialog {
     private javax.swing.JButton jbAceptar;
     private javax.swing.JButton jbCodigo;
     private javax.swing.JButton jbSalir;
+    private static javax.swing.JCheckBox jcEditarCoord;
     private javax.swing.JPanel jpDatos;
     private javax.swing.JTextField jtBarrio;
     private javax.swing.JTextField jtCodigo;
@@ -781,8 +842,10 @@ public class VentanaDatos extends javax.swing.JDialog {
      * @param longitud
      */
     public static void setCoordenadasMapa(String latitud, String longitud) {
-        jtLatitud.setText(latitud);
-        jtLongitud.setText(longitud);
+        if (jcEditarCoord.isSelected()) {
+            jtLatitud.setText(latitud);
+            jtLongitud.setText(longitud);
+        }
     }
     /**
      * Conxion mapa web KRADAC para recolectar las coordenadas para los
