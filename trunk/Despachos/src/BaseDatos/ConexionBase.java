@@ -1,5 +1,6 @@
 package BaseDatos;
 
+import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.Statement;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
@@ -230,13 +231,14 @@ public class ConexionBase {
         try {
             String sql = "SELECT N_UNIDAD FROM VEHICULOS WHERE N_UNIDAD = '" + unidad + "'";
             rs = ejecutarConsultaUnDato(sql);
-            int intNumero = Integer.parseInt(rs.getString(1));
+            int intNumero = rs.getInt("N_UNIDAD");
 
             if (unidad == intNumero) {
                 return true;
             }
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
         return false;
     }
@@ -371,6 +373,10 @@ public class ConexionBase {
         boolean validarCliente = validarTelefonoCliente(des.getStrTelefono(), des.getIntCodigo());
         boolean codigoEs0 = des.getIntCodigo() == 0;
         if (!validarCliente && codigoEs0) {
+            /**
+             * Hace esto si el codigo es 0 y el cliente NO esta ingresado en la
+             * base de datos
+             */
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -386,6 +392,10 @@ public class ConexionBase {
 
             return ejecutarSentencia(sql);
         } else if (!validarCliente && !codigoEs0) {
+            /**
+             * Hace si el codigo NO es 0 y el cliente NO esta ingresado
+             * en la base de datos
+             */
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -400,9 +410,37 @@ public class ConexionBase {
                     + ")";
 
             return ejecutarSentencia(sql);
-        } else {
-            return ActualizarClienteConTelefono(des, des.getStrTelefono());
         }
+        //else if (validarCliente && codigoEs0) {
+        /**
+         * Si el cliente esta ingresado pero no tiene codigo
+         * actualizar los datos de este
+         */
+        /* return ActualizarClienteConTelefono(des, des.getStrTelefono());
+        }*/
+        System.err.println("No se que hacer pero no actualziar desde aqui");
+        return false;
+    }
+
+    /**
+     * Actualiza los campos de un cliente ingresado
+     * @param des
+     * @param codigo
+     * @return boolean
+     */
+    public boolean ActualizarClienteConTelefono(Despachos des, String telefono) {
+        String sql = "UPDATE CLIENTES SET "
+                + "CODIGO=" + des.getIntCodigo() + ","
+                + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
+                + "DIRECCION_CLI=" + "'" + des.getStrDireccion() + "',"
+                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD=" + des.getLatitud() + ","
+                + "LONGITUD=" + des.getLongitud() + ","
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "' "
+                + "WHERE TELEFONO='" + telefono + "'";
+
+        return ejecutarSentencia(sql);
     }
 
     /**
@@ -434,28 +472,8 @@ public class ConexionBase {
     }
 
     /**
-     * Actualiza los campos de un cliente ingresado
-     * @param des
-     * @param codigo
-     * @return boolean
-     */
-    public boolean ActualizarClienteConTelefono(Despachos des, String telefono) {
-        String sql = "UPDATE CLIENTES SET "
-                + "CODIGO=" + des.getIntCodigo() + ","
-                + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
-                + "DIRECCION_CLI=" + "'" + des.getStrDireccion() + "',"
-                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
-                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
-                + "LATITUD=" + des.getLatitud() + ","
-                + "LONGITUD=" + des.getLongitud() + ","
-                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "'"
-                + "WHERE TELEFONO='" + telefono + "'";
-
-        return ejecutarSentencia(sql);
-    }
-
-    /**
      * Comprueba si ese numero de telefono ya esta ingresado para otro cliente
+     * true si esta el telefono ingresado para el codigo ques e envia
      * @param telefono
      * @return String
      */
@@ -480,7 +498,7 @@ public class ConexionBase {
      * @param codigo
      * @return boolean
      */
-    public boolean ActualizarCliente(Despachos des, int codigo) {
+    public boolean ActualizarClienteCod(Despachos des) {
         String sql = "UPDATE CLIENTES SET "
                 + "TELEFONO=" + "'" + des.getStrTelefono() + "',"
                 + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
@@ -489,8 +507,28 @@ public class ConexionBase {
                 + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
                 + "LATITUD=" + des.getLatitud() + ","
                 + "LONGITUD=" + des.getLongitud() + ","
-                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "'"
-                + "WHERE CODIGO=" + codigo;
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "' "
+                + "WHERE CODIGO=" + des.getIntCodigo();
+
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Actualiza los datos de un cliente a partir de un telefono
+     * @param des
+     * @return boolean
+     */
+    public boolean ActualizarClienteTel(Despachos des) {
+        String sql = "UPDATE CLIENTES SET "
+                + "CODIGO=" + des.getIntCodigo() + ","
+                + "NOMBRE_APELLIDO_CLI=" + "'" + des.getStrNombre() + "',"
+                + "DIRECCION_CLI=" + "'" + des.getStrDireccion() + "',"
+                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD=" + des.getLatitud() + ","
+                + "LONGITUD=" + des.getLongitud() + ","
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "' "
+                + "WHERE TELEFONO='" + des.getStrTelefono() + "'";
 
         return ejecutarSentencia(sql);
     }
@@ -1221,5 +1259,78 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    /**
+     * Insertar los datos de un cliente en la tabla de Posiciones para que este
+     * pueda ser graficado en el mapa
+     * @param cod_cliente
+     * @param n_unidad
+     * @param latitud
+     * @param longitud
+     * @return boolean
+     */
+    public boolean InsertarClienteMapa(int cod_cliente, double latitud, double longitud) {
+        String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,LATITUD,LONGITUD) "
+                + "VALUES("
+                + cod_cliente + ","
+                + null + ","
+                + latitud + ","
+                + longitud
+                + ")";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Obtiene la latitud y longitud de un cliente a partir de un codigo de
+     * cliente
+     * @param codigo
+     * @return ResultSet
+     */
+    public ResultSet obtenerLatLonCliente(int codigo) {
+        String sql = "SELECT LATITUD, LONGITUD FROM CLIENTES WHERE CODIGO =" + codigo;
+        return ejecutarConsultaUnDato(sql);
+    }
+
+    /**
+     * Elimina un cliente que se encuentra dibujado en el mapa desde la tabla
+     * posicion_clientes
+     * @param cod_cliente
+     * @param n_unidad
+     * @return boolean
+     */
+    public boolean EliminarClienteMapa(int cod_cliente, int n_unidad) {
+        String sql = "DELETE FROM POSICION_CLIENTES WHERE COD_CLIENTE=" + cod_cliente + " AND N_UNIDAD=" + n_unidad;
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Elimina un cliente del mapa si solo tiene el cod del cliente
+     * @param cod_cliente
+     * @return boolean
+     */
+    public boolean EliminarClienteMapa(int cod_cliente) {
+        String sql = "DELETE FROM POSICION_CLIENTES WHERE COD_CLIENTE=" + cod_cliente;
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Truncar la tabla de posicione al finalizar para cuando se inicie la aplicacion
+     * no exista ningun cliente en el mapa
+     * @return boolean
+     */
+    public boolean TruncarTablaPosicionesCliente() {
+        String sql = "TRUNCATE POSICION_CLIENTES";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Actualiza la unidad a un cliente que se encuentra dibujado en el mapa
+     * @param cliente
+     * @param unidad
+     */
+    public void ActualizarUnidadClienteMapa(int cliente, int unidad) {
+        String sql = "UPDATE POSICION_CLIENTES SET N_UNIDAD=" + unidad + " WHERE COD_CLIENTE=" + cliente;
+        ejecutarSentencia(sql);
     }
 }
