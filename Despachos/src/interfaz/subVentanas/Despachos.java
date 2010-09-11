@@ -25,10 +25,32 @@ public class Despachos {
     private double latitud;
     private double longitud;
 
+    /*
+     * Hora de entrada de la llamada en milisegundos
+     */
+    private long horaEnMilis;
+    /**
+     * Hora de la asignasion en milisegundos
+     */
+    private long horaDeAsignacion;
+    /**
+     * Hora en la que fue despachado el cliente
+     */
+    private long horaDeDespacho;
+    /**
+     * resta entre la hora de asignasion y la del despacho
+     */
+    private int minutosEntreClienteServidor;
+    /**
+     * Fila de la tabla por despachar
+     */
+    private int filaTablaTMP;
+
     public Despachos() {
     }
 
-    public Despachos(String hora,
+    public Despachos(//long horaEnMilis,
+            String hora,
             String tel,
             String cod,
             String nom,
@@ -40,6 +62,7 @@ public class Despachos {
             String nota,
             int id_turno,
             String usuario) {
+        //this.horaEnMilis = horaEnMilis;
         this.strHora = hora;
         this.strTelefono = tel;
         try {
@@ -58,7 +81,8 @@ public class Despachos {
         this.strUsuario = usuario;
     }
 
-    public Despachos(String hora, String tel, String cod, String nom, String dir, String barrio, String nota) {
+    public Despachos(long horaEnMilis,String hora, String tel, String cod, String nom, String dir, String barrio, String nota) {
+        this.horaEnMilis = horaEnMilis;
         this.strHora = hora;
         this.strTelefono = tel;
         try {
@@ -72,7 +96,8 @@ public class Despachos {
         this.strNota = nota;
     }
 
-    public Despachos(String cod_cliente,
+    public Despachos(//long horaEnMilis,
+            String cod_cliente,
             String fecha,
             String hora,
             String tel,
@@ -92,6 +117,7 @@ public class Despachos {
             this.intCodigo = 0;
         }
         this.strFecha = fecha;
+        //this.horaEnMilis = horaEnMilis;
         this.strHora = hora;
         this.strTelefono = tel;
         this.strNombre = nom;
@@ -372,5 +398,75 @@ public class Despachos {
      */
     public void setStrEstado(String strEstado) {
         this.strEstado = strEstado;
+    }
+
+    /**
+     * @return the horaEnMilis
+     */
+    public long getHoraEnMilis() {
+        return horaEnMilis;
+    }
+
+    /**
+     * @param horaEnMilis the horaEnMilis to set
+     */
+    public void setHoraEnMilis(long horaEnMilis) {
+        this.horaEnMilis = horaEnMilis;
+    }
+
+    /**
+     * @return the horaDeAsignacion
+     */
+    public long getHoraDeAsignacion() {
+        return horaDeAsignacion;
+    }
+
+    /**
+     * @param horaDeAsignacion the horaDeAsignacion to set
+     */
+    public void setHoraDeAsignacion(long horaDeAsignacion) {
+        this.horaDeAsignacion = horaDeAsignacion;
+    }
+
+    /**
+     * @return the minutosEntreClienteServidor
+     */
+    public int getMinutosEntreClienteServidor() {
+        return minutosEntreClienteServidor;
+    }
+
+    /**
+     * @param minutosEntreClienteServidor the minutosEntreClienteServidor to set
+     */
+    public void setMinutosEntreClienteServidor(int minutosEntreClienteServidor) {
+        this.minutosEntreClienteServidor = minutosEntreClienteServidor;
+    }
+
+    /**
+     * @return the filaTablaTMP
+     */
+    public int getFilaTablaTMP() {
+        return filaTablaTMP;
+    }
+
+    /**
+     * @param filaTablaTMP the filaTablaTMP to set
+     */
+    public void setFilaTablaTMP(int filaTablaTMP) {
+        this.filaTablaTMP = filaTablaTMP;
+    }
+
+    /**
+     * @return the horaDeDespacho
+     */
+    public long getHoraDeDespacho() {
+        return horaDeDespacho;
+    }
+
+    /**
+     * @param horaDeDespacho the horaDeDespacho to set
+     */
+    public void setHoraDeDespacho(long horaDeDespacho) {
+        this.horaDeDespacho = horaDeDespacho;
     }
 }

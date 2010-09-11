@@ -190,9 +190,9 @@ public class funcionesUtilidad {
      */
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("k:m");
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
         String[] txtHoraMinutos = sdf.format(calendario.getTime()).split(":");
-        String txtHora = "";
+        /*String txtHora = "";
         for (String hora : txtHoraMinutos) {
             if (hora.length() == 1) {
                 txtHora += "0" + hora;
@@ -200,7 +200,18 @@ public class funcionesUtilidad {
                 txtHora += hora;
             }
         }
-        return txtHora.substring(0, 2) + ":" + txtHora.substring(2);
+        return txtHora.substring(0, 2) + ":" + txtHora.substring(2);*/
+        System.out.println("Hora: "+sdf.format(calendario.getTime()));
+        return sdf.format(calendario.getTime());
+    }
+
+    /**
+     * Devuelve hora y minutos actuales del sistema en milisegundos
+     * @return String
+     */
+    public long getHoraEnMilis() {
+        Calendar calendario = new GregorianCalendar();
+        return calendario.getTimeInMillis();
     }
 
     /**

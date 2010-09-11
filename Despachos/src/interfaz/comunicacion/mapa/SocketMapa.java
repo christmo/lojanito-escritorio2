@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class SocketMapa extends Thread {
 
-    static final int PUERTO = 666;
+    static final int PUERTO = 65000;
     public InputStream is;
     public OutputStream os;
     boolean escuchar = true;
@@ -40,14 +40,14 @@ public class SocketMapa extends Thread {
      * Activa el hilo para que cree un servidor que escuche todo por el
      * puerto determinado
      */
-    public final void activarHilo() {
+    private void activarHilo() {
         this.start();
     }
 
     /**
      * Cerrar el puerto en el que esta escuchando el servidor
      */
-    public final void CerrarPuerto() {
+    public void CerrarPuerto() {
         System.out.println("Cerrar Puerto Coordenadas");
         escuchar = false;
         try {
@@ -68,6 +68,8 @@ public class SocketMapa extends Thread {
 
             try {
                 skCliente = skServidor.accept();
+
+                System.out.println("Aceptar");
 
                 //PrintWriter out = new PrintWriter(skCliente.getOutputStream(), true);
                 //PrintWriter out = new PrintWriter(skCliente.getOutputStream(), true);
@@ -104,8 +106,6 @@ public class SocketMapa extends Thread {
                             System.out.println("Coordenadas: " + datosMapa);
                             procesarCoordenadas(datosMapa);
                             //escuchar = false;
-
-
                         } else {
                             datosMapa += "" + caracter;
                             escuchar = true;
@@ -115,6 +115,7 @@ public class SocketMapa extends Thread {
                     } else {
                         datosMapa = "";
                         contarSeparador = 0;
+                        escuchar = false;
                         CerrarPuerto();
                         new SocketMapa();
                     } //}
@@ -147,7 +148,7 @@ public class SocketMapa extends Thread {
         }
     }
 
-    public static void main(String[] arg) {
-        new SocketMapa();
-    }
+    /*public static void main(String[] arg) {
+    new SocketMapa();
+    }*/
 }

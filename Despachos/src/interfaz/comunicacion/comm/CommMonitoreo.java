@@ -184,7 +184,7 @@ public class CommMonitoreo extends Thread {
                 strDireccion = rs.getString("DIRECCION_CLI");
                 strBarrio = rs.getString("SECTOR");
                 strHora = funciones.getHora();
-                despacho = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
+                despacho = new Despachos(funciones.getHoraEnMilis(),strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
 
                 setDatosTablas(despacho, jtPorDespachar);

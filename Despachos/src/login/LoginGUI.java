@@ -108,12 +108,14 @@ public class LoginGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Clave:");
 
+        jtUser.setText("kradac");
         jtUser.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtUserKeyPressed(evt);
             }
         });
 
+        jpPass.setText("kradac");
         jpPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jpPassFocusGained(evt);
