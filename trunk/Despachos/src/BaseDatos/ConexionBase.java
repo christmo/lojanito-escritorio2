@@ -167,7 +167,7 @@ public class ConexionBase {
      */
     public boolean ejecutarSentencia(String sql) {
         try {
-            System.out.println("Ejecutar: " + sql);
+            //System.out.println("Ejecutar: " + sql);
             int rta = st.executeUpdate(sql);
             if (rta >= 0) {
                 return true;
@@ -189,13 +189,16 @@ public class ConexionBase {
      */
     public boolean ejecutarSentenciaHilo(String sql) {
         try {
+            System.out.println("Ejecutar: "+sql);
             int rta = st.executeUpdate(sql);
+            System.err.println("Guarda Coordenadas Bien...");
             if (rta >= 0) {
                 return true;
             } else {
                 return false;
             }
         } catch (SQLException ex) {
+            System.out.println("Error de Clave primaria...");
             return false;
         } 
     }

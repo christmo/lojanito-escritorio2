@@ -43,9 +43,10 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 try {
                     echoSocket = new Socket(DIRECCION, PUERTO);
                 } catch (UnknownHostException ex) {
-                    Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
-                    Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("No esta conectado a internet...");
                 }
                 ConsultaRecorridosServidorBD.sleep(5000);
             } catch (InterruptedException ex) {
