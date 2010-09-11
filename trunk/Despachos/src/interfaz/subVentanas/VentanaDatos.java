@@ -44,7 +44,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtTelefono.setEnabled(true);
         jtCodigo.setEnabled(true);
         this.menu = menu;
-        AbrirPuertoCoordenadas();
+        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -62,7 +62,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         cargarDatos(datos);
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(false);
+                jtTelefono.setEnabled(true);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -72,11 +72,10 @@ public class VentanaDatos extends javax.swing.JDialog {
                 break;
         }
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
-        AbrirPuertoCoordenadas();
+        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
-    
     /****************** Modo solo lectura ********************************
      * Enviar en el estado false, para mostrar la ventana en modo de lectura de
      * información, no permitir cambiar los datos, se utiliza en la tabla de
@@ -101,7 +100,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         cargarDatos(datos);
         estadoCampos(true);
-        AbrirPuertoCoordenadas();
+        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -116,7 +115,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         estadoCampos(true);
         switch (caso) {
             case 1:
-                jtTelefono.setEnabled(false);
+                jtTelefono.setEnabled(true);
                 break;
             case 2:
                 jtTelefono.setEnabled(true);
@@ -125,7 +124,7 @@ public class VentanaDatos extends javax.swing.JDialog {
                 jtTelefono.setEnabled(true);
                 break;
         }
-        AbrirPuertoCoordenadas();
+        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -340,6 +339,11 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtCodigo.setFont(new java.awt.Font("Arial", 1, 24));
         jtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jtCodigo.setEnabled(false);
+        jtCodigo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtCodigoFocusLost(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("Nombre:");
@@ -779,7 +783,22 @@ public class VentanaDatos extends javax.swing.JDialog {
         funcionesUtilidad f = new funcionesUtilidad();
         String tel = jtTelefono.getText();
         if (f.isNumeric(tel)) {
-            jtTelefono.setText(f.validarTelefono(tel));
+            try {
+                String telefono = f.validarTelefono(tel);
+                jtTelefono.setText(telefono);
+                rs = bd.getClientePorTelefono(telefono);
+                String cod = rs.getString("CODIGO");
+                if (!cod.equals(jtCodigo.getText())) {
+                    try {
+                        JOptionPane.showMessageDialog(this, "Ya existe un cliente ingresado con ese teléfono es:\n" + "Nombre del Cliente: " + rs.getString("NOMBRE_APELLIDO_CLI") + "\n" + "Codigo: " + rs.getString("CODIGO"), "Error...", 0);
+                        jtTelefono.setText(datos.getStrTelefono());
+                    } catch (SQLException ex) {
+                        //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (SQLException ex) {
+                //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
             insertarDatosTabla(jtTelefono.getText(), 1);
         } else {
             jtTelefono.setText("");
@@ -790,11 +809,23 @@ public class VentanaDatos extends javax.swing.JDialog {
         if (jcEditarCoord.isSelected()) {
             jtLatitud.setEditable(true);
             jtLongitud.setEditable(true);
+            AbrirPuertoCoordenadas();
         } else {
             jtLatitud.setEditable(false);
             jtLongitud.setEditable(false);
+            CerrarPuertoCoordenadas();
         }
     }//GEN-LAST:event_jcEditarCoordActionPerformed
+
+    private void jtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtCodigoFocusLost
+        String cod_cli = jtCodigo.getText();
+        if (bd.clienteExiste(cod_cli)) {
+            JOptionPane.showMessageDialog(this, "Ya hay otro cliente con ese código, es mejor utilizar el boton "
+                    + "para generar un código automaticamente...", "Error", 0);
+            jtCodigo.setText("");
+            jtCodigo.requestFocus();
+        }
+    }//GEN-LAST:event_jtCodigoFocusLost
 
     /**
      * Convierete a mayusculas lo que se envie

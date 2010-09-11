@@ -177,8 +177,27 @@ public class ConexionBase {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } finally {
-        }
+        } 
+    }
+
+    /**
+     * Ejecuta una sentencia en la base esta puede ser de INSERT, UPDATE O
+     * DELETE el la misma solo que no presenta los errores en la base de datos
+     * ni imprime la ejecucion del sql
+     * @param sql - Sentencias INSERT, UPDATE, DELETE
+     * @return int - confirmacion del resultado 1 valido || 0 invalido
+     */
+    public boolean ejecutarSentenciaHilo(String sql) {
+        try {
+            int rta = st.executeUpdate(sql);
+            if (rta >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            return false;
+        } 
     }
 
     /**
@@ -311,14 +330,29 @@ public class ConexionBase {
     }
 
     /**
-     * Retorna el estado de la ultima unidad intentada despachar
+     * Retorna la etiqueta de un estado dependiendo del codigo ques e envie
      * @return String
      */
-    public String getEtiquetaEstadoUnidad(String estadoUnidad) {
+    public String getEtiquetaEstadoUnidad(String codigo) {
         try {
-            String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
+            String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + codigo + "'";
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("ETIQUETA");
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Retorna el codigo de un etiqueta de estado segun el nombre de la etiqueta
+     * @return String
+     */
+    public String getCodigoEtiquetaEstadoUnidad(String nombre) {
+        try {
+            String sql = "SELECT ID_CODIGO FROM CODESTTAXI WHERE ETIQUETA = '" + nombre + "'";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getString("ID_CODIGO");
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1331,6 +1365,105 @@ public class ConexionBase {
      */
     public void ActualizarUnidadClienteMapa(int cliente, int unidad) {
         String sql = "UPDATE POSICION_CLIENTES SET N_UNIDAD=" + unidad + " WHERE COD_CLIENTE=" + cliente;
+        ejecutarSentencia(sql);
+    }
+
+    /**
+     * comprueba si un cliente ya esta ingresado en la base de datos
+     * retorna false si no esta el cliente en la base de datos
+     * @param cod_cli
+     * @return boolean
+     */
+    public boolean clienteExiste(String cod_cli) {
+        if (!cod_cli.equals("")) {
+            try {
+                String sql = "SELECT CODIGO FROM CLIENTES WHERE CODIGO = " + cod_cli;
+                rs = ejecutarConsultaUnDato(sql);
+                if (cod_cli.equals(rs.getString("CODIGO"))) {
+                    return true;
+                }
+            } catch (SQLException ex) {
+                //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Insertar recorrido que viene del servidor KRADAC para guardarlo en la bd
+     * y mostrar los taxis en el mapa
+     * @param particion
+     * @param unidad
+     * @param empresa
+     * @param latitud
+     * @param longitud
+     * @param fecha
+     * @param hora
+     * @param est_taxi
+     * @param vel
+     * @param est_taxim
+     * @return boolean
+     */
+    public boolean InsertarRecorridoTaxi(String particion,
+            String unidad,
+            String empresa,
+            String latitud,
+            String longitud,
+            String fecha,
+            String hora,
+            String est_taxi,
+            String vel,
+            String est_taxim) {
+
+        String sql = "CALL SP_INSERTAR_RECORRIDOS('"
+                + particion + "',"
+                + Integer.parseInt(unidad) + ",'"
+                + empresa + "',"
+                + Double.parseDouble(latitud) + ","
+                + Double.parseDouble(longitud) + ",'"
+                + fecha + "','"
+                + hora + "','"
+                + est_taxi + "',"
+                + Double.parseDouble(vel) + ",'"
+                + est_taxim
+                + "')";
+        return ejecutarSentenciaHilo(sql);
+    }
+
+    /**
+     * Inserta la asignasion en el servidor kradac
+     * @param Despachos
+     */
+    public void InsertarAsignacionServidorKRADAC(Despachos d) {
+        System.out.println("Enviar datos al Server...");
+        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                +d.getIntUnidad() +","+d.getIntCodigo()+",'ASIGNADO',"+d.getMinutosEntreClienteServidor()+");";
+        ejecutarSentencia(sql);
+        System.out.println("Kradac: "+sql);
+        InsertarDespachoServidorKRADAC(d);
+    }
+
+    /**
+     * Inserta luego de asignado el ocupado del taxi cuando se despacho
+     * @param Despachos
+     */
+    public void InsertarDespachoServidorKRADAC(Despachos d){
+        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                +d.getIntUnidad() +","+d.getIntCodigo()+",'OCUPADO',"+"-1"+");";
+        System.out.println("Kradac: "+sql);
+        ejecutarSentencia(sql);
+    }
+
+
+    /**
+     * Inserta luego de asignado el ocupado del taxi cuando se despacho
+     * @param Despachos
+     */
+    public void InsertarLibreServidorKRADAC(Despachos d){
+        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                +d.getIntUnidad() +","+d.getIntCodigo()+",'LIBRE',"+"-2"+");";
+        System.out.println("Kradac: "+sql);
         ejecutarSentencia(sql);
     }
 }

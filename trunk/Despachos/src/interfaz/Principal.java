@@ -23,6 +23,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
+import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
+import interfaz.subVentanas.Asignacion;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.ConsultaClientes;
 import interfaz.subVentanas.VentanaDatos;
@@ -143,6 +145,7 @@ public final class Principal extends javax.swing.JFrame {
     public void setSession(String[] datos) {
         Principal.sesion = datos;
     }
+    ArrayList<Asignacion> listaAsignados = new ArrayList<Asignacion>();
 
     /**
      * Configuracion inicial de la ventana para que se ejecuten cuando se cargue
@@ -157,6 +160,7 @@ public final class Principal extends javax.swing.JFrame {
         IdentificadorLlamadas();
         jtTelefono.requestFocus();
         tiempo.start();
+        consultaRecorridosServidorBD.start();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
 
@@ -173,18 +177,44 @@ public final class Principal extends javax.swing.JFrame {
                 }
 
                 int intFila = jtPorDespachar.getSelectedRow();
-                String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-                String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
                 try {
-                    String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
-                    if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
-                        DespacharCliente(intFila);
-                        QuitarClienteMapa(cod_cli, unidad);
-                    } else {
+                    String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+                    String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+
+                    try {
+                        String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
+                        System.out.println("Minutos: "+strCampoMinutos);
+                        if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
+                            InsertarAsignacionDespachoServidorKradac();
+                            DespacharCliente(intFila);
+                            QuitarClienteMapa(cod_cli, unidad);
+                        }else{
+                            JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                        }
+                    } catch (NullPointerException ex) {
                         JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                     }
                 } catch (NullPointerException ex) {
-                    JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                    //JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                    JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
+                }
+            }
+
+            /**
+             * Realiza la insersion del despacho y de la asignacion de la aunidad
+             * en el servidor de Kradac
+             */
+            private void InsertarAsignacionDespachoServidorKradac() {
+                int intFila = jtPorDespachar.getSelectedRow();
+                int minutos;
+                for (Despachos d : listaDespachosTemporales) {
+                    if (d.getFilaTablaTMP() == intFila) {
+                        d.setHoraDeDespacho(funciones.getHoraEnMilis());
+                        minutos = (int) ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60;
+                        d.setMinutosEntreClienteServidor(minutos);
+                        bd.InsertarAsignacionServidorKRADAC(d);
+                        break;
+                    }
                 }
             }
         });
@@ -615,8 +645,8 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jtPorDespachar);
-        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(45);
-        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(45);
+        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(65);
+        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(65);
         jtPorDespachar.getColumnModel().getColumn(1).setMinWidth(80);
         jtPorDespachar.getColumnModel().getColumn(1).setMaxWidth(80);
         jtPorDespachar.getColumnModel().getColumn(2).setMinWidth(50);
@@ -1040,18 +1070,21 @@ public final class Principal extends javax.swing.JFrame {
          * Borrar el texto antes de insertar algo nuevo
          */
         if (cod >= 48 && cod <= 105) {
-            String tmp = "" + jtPorDespachar.getValueAt(intFila, intCol);
-            if (!tmp.equals("")) {
-                if (intCol == 6) {
-                    UnidadAntesDeBorrar = tmp;
-                    CampoUnidadCambio = true;
-                } else {
-                    CampoUnidadCambio = false;
+            try {
+                String tmp = "" + jtPorDespachar.getValueAt(intFila, intCol);
+                if (!tmp.equals("")) {
+                    if (intCol == 6) {
+                        UnidadAntesDeBorrar = tmp;
+                        CampoUnidadCambio = true;
+                    } else {
+                        CampoUnidadCambio = false;
+                    }
+                    //String campoAnt = tmp;
+                    //System.out.println("Campo Ant: " + campoAnt);
                 }
-                //String campoAnt = tmp;
-                //System.out.println("Campo Ant: " + campoAnt);
+                jtPorDespachar.setValueAt("", intFila, intCol);
+            } catch (ArrayIndexOutOfBoundsException aidx) {
             }
-            jtPorDespachar.setValueAt("", intFila, intCol);
         }
     }
     private boolean CampoUnidadCambio = false;
@@ -1108,13 +1141,14 @@ public final class Principal extends javax.swing.JFrame {
             String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
             String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
             if (despacho.getIntUnidad() != 0) {
-                AsignarColorDespachoVehiculo(unidad, "ACTIVO");
+                String etiquetaActivo = bd.getEtiquetaEstadoUnidad("AC");
+                AsignarColorDespachoVehiculo(unidad, etiquetaActivo);
             }
             QuitarClienteMapa(cod_cli, unidad);
 
             DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
             model.removeRow(intFila);
-            listaDespachosTemporales.remove(intFila);
+            //listaDespachosTemporales.remove(intFila);
             InicializarVariables();
         } catch (IndexOutOfBoundsException iex) {
         } catch (NullPointerException nex) {
@@ -1168,15 +1202,14 @@ public final class Principal extends javax.swing.JFrame {
                 boolean r = setDatosTablaDespachados(despacho, jtDespachados);
                 GuardarClienteSinCodigo(despacho);
                 if (r) {
-                    try {
-                        AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), "ACTIVO");
-                        setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
-                        DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-                        model.removeRow(intFila);
-                        listaDespachosTemporales.remove(intFila);
-                        InicializarVariables();
-                    } catch (IndexOutOfBoundsException iex) {
-                    }
+
+                    AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), "OCUPADO");
+                    setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
+                    DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+                    model.removeRow(intFila);
+                    //listaDespachosTemporales.remove(intFila);
+                    InicializarVariables();
+
                 }
             }
         }
@@ -1244,6 +1277,11 @@ public final class Principal extends javax.swing.JFrame {
     private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
+
+        try {
+            jtPorDespachar.getCellEditor().stopCellEditing();
+        } catch (NullPointerException ex) {
+        }
 
         if (intClicks == 1 && intBoton == 3) {
             try {
@@ -1505,6 +1543,7 @@ public final class Principal extends javax.swing.JFrame {
      * @return String
      */
     private String getBuscarPorTelefono() {
+
         strTelefono = funciones.validarTelefono(jtTelefono.getText());
         try {
             if (!strTelefono.equals("")) {
@@ -1514,7 +1553,7 @@ public final class Principal extends javax.swing.JFrame {
                 strDireccion = rs.getString("DIRECCION_CLI");
                 strBarrio = rs.getString("SECTOR");
                 strHora = funciones.getHora();
-                despacho = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
+                despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
                 if (desPorTabla_Campo) { //Despacha por tabla
                     setDatosFila(despacho, jtPorDespachar);
@@ -1576,6 +1615,7 @@ public final class Principal extends javax.swing.JFrame {
      * @return String
      */
     private String getBuscarPorCodigo() {
+
         intCodigo = jtCodigo.getText();
         try {
             String sql = "SELECT TELEFONO,"
@@ -1590,7 +1630,8 @@ public final class Principal extends javax.swing.JFrame {
             strBarrio = rs.getString("SECTOR");
             strHora = funciones.getHora();
 
-            despacho = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
+            despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
+
 
             setDatosTablas(despacho, jtPorDespachar);
             IngresarClienteMapa("" + despacho.getIntCodigo());
@@ -1615,10 +1656,36 @@ public final class Principal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una Unidad primero", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+
         cambiarEstadoTaxi(etiqueta, codVehiculo);
         jtVehiculos.setCellSelectionEnabled(false);
         jtTelefono.requestFocus();
     }//GEN-LAST:event_btnColorActionPerformed
+
+    /**
+     * Activa y pone en libre las unidades seleccionadas en el servidor, y remueve
+     * el registro del despacho de la lista de despachos temporales
+     * @param codVehiculo
+     */
+    private void RemoverDespachoDeTemporal(String unidad) {
+        System.out.println("Remover el temporal...");
+        for (int i = 0; i < listaDespachosTemporales.size(); i++) {
+            if (listaDespachosTemporales.get(i).getIntUnidad() == Integer.parseInt(unidad)) {
+                bd.InsertarLibreServidorKRADAC(listaDespachosTemporales.get(i));
+                listaDespachosTemporales.remove(i);
+                break;
+            }
+        }
+
+        ImprmirTMP();
+    }
+
+    /***--------------------------------Borrar*/
+    private void ImprmirTMP(){
+        for (Despachos d: listaDespachosTemporales) {
+            System.out.println("TMP: "+d.getStrHora()+" C:"+d.getIntCodigo()+" U:"+d.getIntUnidad());
+        }
+    }
 
     /**
      * Cambia el estado de un TAXI en la BD
@@ -1628,7 +1695,16 @@ public final class Principal extends javax.swing.JFrame {
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
+        System.out.println("Codigo: " + codig);
+
         for (String i : codVh) {
+            /*
+             * Si es AC significa que va activar esa unidad por tal motivo hay que
+             * remover todo el despacho del temporal
+             */
+            if (bd.getCodigoEtiquetaEstadoUnidad(etq).equals("AC")) {
+                RemoverDespachoDeTemporal(i);
+            }
             String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
             bd.ejecutarSentencia(sql);
         }
@@ -1677,7 +1753,7 @@ public final class Principal extends javax.swing.JFrame {
              * TODO: REVISAR -> Optimizar esta consulta que obtiene demasiados datos que
              * los que deberian
              */
-            String sql = "SELECT TAB1.N_UNIDAD, TAB1.ID_CODIGO FROM REGCODESTTAXI AS TAB1, (SELECT aux.ID_CODIGO, MAX(CONCAT(aux.FECHA,aux.HORA)) AS TMP FROM REGCODESTTAXI aux GROUP BY aux.N_UNIDAD) AS TAB2 WHERE CONCAT(TAB1.FECHA,TAB1.HORA) = TAB2.TMP";
+            String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP;";
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
                 unidadCodigoBD.put(rs.getString(1), rs.getString(2));
@@ -1709,7 +1785,6 @@ public final class Principal extends javax.swing.JFrame {
 
             if (intCol == 7) { //Cuando cambie la celda de Munitos
                 try {
-                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                     /**
                      * Antes de poner los minutos de llegada a recojer el cliente
                      * se requiere que esté seleccionada una unidad
@@ -1780,6 +1855,7 @@ public final class Principal extends javax.swing.JFrame {
                 jlIndicadorLlamada.setIcon(img);
                 jtTelefono.setText("");
                 //------
+                ActualizarListaTMPDEspachosTemporales(intFila);
                 try {
                     String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
 
@@ -1841,7 +1917,6 @@ public final class Principal extends javax.swing.JFrame {
 
                 if (strEstadoUnidad.equals("AC")) {
 
-                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                     AsignarColorDespachoVehiculo(unidad, "ASIGNADO");
 
                     ActualizarClienteMapa(cod_cli, unidad);
@@ -2292,8 +2367,13 @@ public final class Principal extends javax.swing.JFrame {
      */
     private void setDatosFila(Despachos des, JTable tabla) {
         //jtTelefono.setText(des.getStrTelefono());
-        listaDespachosTemporales.add(des);
 
+        listaDespachosTemporales.add(des);
+        for (int i = 0; i < listaDespachosTemporales.size(); i++) {
+
+            System.out.println("" + listaDespachosTemporales.get(i).getStrDireccion());
+
+        }
         LlenarFila(filaAnt, tabla, des);
     }
 
@@ -2467,6 +2547,44 @@ public final class Principal extends javax.swing.JFrame {
     private void ActualizarClienteMapa(String cod_cli, String unidad) {
         if (!cod_cli.equals("") || !cod_cli.equals("0")) {
             bd.ActualizarUnidadClienteMapa(Integer.parseInt(cod_cli), Integer.parseInt(unidad));
+        }
+    }
+    /**
+     * Comprueba el tiempo en que se piensa recojer al cliente por cada minuto
+     * para saber si el taxista se atrasa o no
+     */
+    Timer consultaRecorridosServidorBD = new Timer(5000, new ActionListener() {
+
+        public void actionPerformed(ActionEvent ae) {
+            ConsultaRecorridosServidorBD conServidor = new ConsultaRecorridosServidorBD(sesion[1], bd);
+            conServidor.GuardarDatosRecorridos();
+        }
+    });
+
+    /**
+     * Actualiza en memoria los cambios que haya en las unidades para poder calcular
+     * el tiempo de despacho y de asignacion en el servidor
+     * @param idx
+     */
+    private void ActualizarListaTMPDEspachosTemporales(int idx) {
+        String horaTbl = jtPorDespachar.getValueAt(idx, 0).toString();
+        String horaDspch = "";
+
+        for (int i = 0; i < listaDespachosTemporales.size(); i++) {
+            horaDspch = listaDespachosTemporales.get(i).getStrHora();
+            if (horaTbl.equals(horaDspch)) {
+                String unidad = jtPorDespachar.getValueAt(idx, 6).toString();
+                System.out.println("idx:" + idx + " u:" + unidad);
+                if (!unidad.equals("0") || !unidad.equals("")) {
+                    try {
+                        listaDespachosTemporales.get(i).setHoraDeAsignacion(funciones.getHoraEnMilis());
+                        listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
+                        listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
+                    } catch (NumberFormatException ex) {
+                    }
+                    break;
+                }
+            }
         }
     }
 }
