@@ -8,11 +8,13 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author kradac
  */
-public class ConsultaRecorridosServidorBD {
+public class ConsultaRecorridosServidorBD extends Thread {
 
     private static final int PUERTO = 666;
     private static final String DIRECCION = "200.0.29.117";
@@ -30,6 +32,26 @@ public class ConsultaRecorridosServidorBD {
         } catch (IOException ex) {
             //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Conexion rechasada por el servidor de BD...");
+        }
+    }
+
+    @Override
+    public void run(){
+
+        while(true){
+            try {
+                try {
+                    echoSocket = new Socket(DIRECCION, PUERTO);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ConsultaRecorridosServidorBD.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            GuardarDatosRecorridos();
         }
     }
 
@@ -55,7 +77,6 @@ public class ConsultaRecorridosServidorBD {
      */
     private void GuardarDatosRecorridos(String datoVehiculo, ConexionBase bd) {
         String[] recorrido = datoVehiculo.split(",");
-        System.out.println("----");
         /**
         ----
         ID PARTICION: 20100909
@@ -112,8 +133,11 @@ public class ConsultaRecorridosServidorBD {
             salida.close();
             entrada.close();
             echoSocket.close();
+            
             cast = new String[nuevosDatos.size()];
+            
             datos = nuevosDatos.toArray(cast);
+            System.out.println("Tamaño: "+datos.length);
             return datos;
         } catch (Exception e) {
             System.err.println("Exception:  " + e);
