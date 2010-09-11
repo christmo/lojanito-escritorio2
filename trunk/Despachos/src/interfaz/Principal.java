@@ -24,7 +24,7 @@ import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
 import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
-import interfaz.subVentanas.Asignacion;
+
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.ConsultaClientes;
 import interfaz.subVentanas.VentanaDatos;
@@ -145,7 +145,7 @@ public final class Principal extends javax.swing.JFrame {
     public void setSession(String[] datos) {
         Principal.sesion = datos;
     }
-    ArrayList<Asignacion> listaAsignados = new ArrayList<Asignacion>();
+    
 
     /**
      * Configuracion inicial de la ventana para que se ejecuten cuando se cargue
