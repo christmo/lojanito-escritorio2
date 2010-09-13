@@ -20,9 +20,9 @@ public class prueba {
             //ResultSet rs = cb.ejecutarConsulta(sql);
             //System.out.println("ID: " + rs.getString(3));
 
-            for (int i = 39; i <= 39; i++) {
+            for (int i = 8; i <= 8; i++) {
                 //String sql1 = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI) VALUES('"+(7257917+i)+"','"+i+"','"+"Prueba "+i+"')";
-                String sql1 = "INSERT INTO VEHICULOS(PLACA,N_UNIDAD,ID_EMPRESA) VALUES('Placa" + i + "'," + i + ",'LN')";
+                String sql1 = "INSERT INTO VEHICULOS(PLACA,N_UNIDAD,ID_EMPRESA) VALUES('Placa" + i + "'," + i + ",'RA')";
                 System.out.println("" + sql1);
                 cb.ejecutarSentencia(sql1);
             }

@@ -191,16 +191,6 @@ public class funcionesUtilidad {
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
-        String[] txtHoraMinutos = sdf.format(calendario.getTime()).split(":");
-        /*String txtHora = "";
-        for (String hora : txtHoraMinutos) {
-            if (hora.length() == 1) {
-                txtHora += "0" + hora;
-            } else {
-                txtHora += hora;
-            }
-        }
-        return txtHora.substring(0, 2) + ":" + txtHora.substring(2);*/
         System.out.println("Hora: "+sdf.format(calendario.getTime()));
         return sdf.format(calendario.getTime());
     }

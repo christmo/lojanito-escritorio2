@@ -15,6 +15,7 @@ import interfaz.Principal;
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,8 +28,8 @@ import javax.swing.JOptionPane;
  * @author Usuario
  */
 public class ingresoVehiculos extends javax.swing.JDialog {
-    
-    private ResourceBundle rb;
+
+    //private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
@@ -37,15 +38,18 @@ public class ingresoVehiculos extends javax.swing.JDialog {
     private String ID_EMPRESA;
     private String id_usuario;
     Icon ic;
+    private Properties arcConfig;
 
     /**
      * ENVIAR EL ID_EMPRESA POR EL CONSTRUCTOR
      * @param id_empresa
      */
-    public ingresoVehiculos(JFrame padre, String sesion[], ConexionBase conec) {
-        super(padre,"Ingreso de Vehiculos");
+    public ingresoVehiculos(JFrame padre, String sesion[], ConexionBase conec, Properties arcConfig) {
+        super(padre, "Ingreso de Vehiculos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+
         this.bd = conec;
+        this.arcConfig = arcConfig;
 
         initComponents();
         cargarConductores(cmbConductor, 0);
@@ -398,7 +402,8 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                     String imgName = lblEtiquetaImagen.getText();
 
                     if (!imgName.equals("defaultveh.png")) {
-                        imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
+                        //imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
+                        imgName = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
                     }
 
                     guardarVehiculo(txtPlaca.getText(), Integer.valueOf(txtNUnidad.getText()),
@@ -498,15 +503,14 @@ public class ingresoVehiculos extends javax.swing.JDialog {
     /**
      * Carga el archivo de propiedades del sistema
      */
-    private void leerProperties() {
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }
-
+    /*private void leerProperties() {
+    rb = ResourceBundle.getBundle("configuracion.configsystem");
+    }*/
     /**
      * Carga la imagen por defecto para el vehículo
      */
     private void cargarImgDefault() {
-        leerProperties();
+        //leerProperties();
 
         Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultveh.png"));
         if (fot.getIconHeight() == -1) {
@@ -552,7 +556,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
         String sql = "CALL SP_INSERT_VEHICULO('" + placa + "'," + nUnidad
                 + ",'" + emp + "','" + con + "','" + conAux + "','"
                 + modelo + "'," + año + ",'" + pro + "','" + infor + "','"
-                + img + "','" + mar + "','" + nummo + "','" + numcha + "','"+this.id_usuario+"')";
+                + img + "','" + mar + "','" + nummo + "','" + numcha + "','" + this.id_usuario + "')";
 
         if (!bd.ejecutarSentencia(sql)) {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));

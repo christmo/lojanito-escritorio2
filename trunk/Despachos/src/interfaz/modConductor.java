@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class modConductor extends javax.swing.JDialog {
 
     ArrayList<String[]> conductores;
-    private ResourceBundle rb;
+    //private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
@@ -609,7 +609,7 @@ public class modConductor extends javax.swing.JDialog {
 
         img = aux[8];
 
-        leerProperties();
+//        leerProperties();
 
         if (aux[8] == null || aux[8].equals("")) {
 
@@ -619,7 +619,8 @@ public class modConductor extends javax.swing.JDialog {
             lblFoto.setText("");
         } else {
 
-            Icon fot = new ImageIcon(rb.getString("dirImgConductores") + "\\" + aux[8]);
+            //Icon fot = new ImageIcon(rb.getString("dirImgConductores") + "\\" + aux[8]);
+            Icon fot = new ImageIcon(arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgConductores") + System.getProperty("file.separator") + aux[8]);
 
             if (fot.getIconWidth() == -1) {
                 lblFoto.setText("IMAGEN NO ENCONTRADA");
@@ -634,10 +635,9 @@ public class modConductor extends javax.swing.JDialog {
     /**
      * Carga el archivo de propiedades del sistema
      */
-    private void leerProperties() {
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }
-
+    /*private void leerProperties() {
+    rb = ResourceBundle.getBundle("configuracion.configsystem");
+    }*/
     /**
      * Limpia contenido de las cajas
      */
