@@ -41,7 +41,7 @@ public class ConexionBase {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";
             this.ip = arcConfig.getProperty("ip_base");
-            this.bd = arcConfig.getProperty("base");            
+            this.bd = arcConfig.getProperty("base");
             this.usr = arcConfig.getProperty("user");
             this.pass = arcConfig.getProperty("pass");
 
@@ -180,18 +180,17 @@ public class ConexionBase {
      * @param sql - Sentencias INSERT, UPDATE, DELETE
      * @return int - confirmacion del resultado 1 valido || 0 invalido
      */
-    public boolean ejecutarSentenciaHilo(String sql) {
+    public boolean ejecutarSentenciaHilo(String sql, String unidad) {
         try {
-//            System.out.println("Ejecutar: " + sql);
             int rta = st.executeUpdate(sql);
-            System.err.println("Guarda Coordenadas Bien...");
+            System.err.println("Unidad: " + unidad + " --> Coordenadas Nuevas");
             if (rta >= 0) {
                 return true;
             } else {
                 return false;
             }
         } catch (SQLException ex) {
-            System.out.println("Error de Clave primaria...");
+            System.out.println("Unidad: " + unidad + " --> Coordenadas ya ingresadas");
             return false;
         }
     }
@@ -1424,7 +1423,7 @@ public class ConexionBase {
                 + Double.parseDouble(vel) + ",'"
                 + est_taxim
                 + "')";
-        return ejecutarSentenciaHilo(sql);
+        return ejecutarSentenciaHilo(sql, unidad);
     }
 
     /**
@@ -1440,7 +1439,7 @@ public class ConexionBase {
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                         + demo.getIntUnidad() + "," + demo.getIntCodigo() + ",'ASIGNADO'," + demo.getMinutosEntreClienteServidor() + ");";
                 ejecutarSentencia(sql);
-                System.out.println("Kradac: " + sql);
+                System.out.println("KRADAC: " + sql);
                 InsertarDespachoServidorKRADAC(demo);
             }
         });
@@ -1453,7 +1452,7 @@ public class ConexionBase {
     public void InsertarDespachoServidorKRADAC(Despachos d) {
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                 + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ");";
-        System.out.println("Kradac: " + sql);
+        System.out.println("KRADAC: " + sql);
         ejecutarSentencia(sql);
     }
 
@@ -1469,7 +1468,7 @@ public class ConexionBase {
                 System.out.println("Enviar datos al Server...");
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                         + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ");";
-                System.out.println("Kradac: " + sql);
+                System.out.println("KRADAC: " + sql);
                 ejecutarSentencia(sql);
             }
         });
