@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 
 /**
  * @author kradac
@@ -35,11 +36,15 @@ public class ConsultaRecorridosServidorBD extends Thread {
             try {
                 echoSocket = new Socket(DIRECCION, PUERTO);
                 System.err.println("Iniciar conexion con el server BD...");
+                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/senal.png"));
+                Principal.lblSenal.setIcon(img);
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
                 Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"));
+                Principal.lblSenal.setIcon(img);
                 if (ex.getMessage().equals("No route to host: connect")) {
                     System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
                     cerrarConexionServerKradac();
@@ -91,7 +96,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 //System.out.println("" + trama);
                 GuardarDatosRecorridos(trama, bd);
             }
-            Principal.lblSenal.setVisible(true);
         } catch (NullPointerException ex) {
         }
     }
@@ -181,7 +185,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 //cerrarConexionServerKradac();
                 //AbrirPuerto();
             }
-            Principal.lblSenal.setVisible(false);
         }
         return null;
     }
