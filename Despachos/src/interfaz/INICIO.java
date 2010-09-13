@@ -13,6 +13,7 @@ package interfaz;
 import BaseDatos.ConexionBase;
 import interfaz.comunicacion.mail.VentanaMail;
 import interfaz.subVentanas.VentanaDatos;
+import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingConstants;
@@ -36,15 +37,17 @@ public class INICIO extends javax.swing.JFrame {
     JDialog modUsuarios = null;
     public static String sesion[] = null;
     private ConexionBase conec;
+    private Properties arcConfig;
 
     /** Creates new form INICIO */
     public INICIO() {
         initComponents();
     }
 
-    public INICIO(String strSesion[], ConexionBase bd) {
+    public INICIO(String strSesion[], ConexionBase bd, Properties archivo) {
         this.conec = bd;
         INICIO.sesion = strSesion;
+        this.arcConfig = archivo;
         initComponents();
 
         //this.setLocationRelativeTo(null);
@@ -416,7 +419,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
         if ((beConductor == null) || (!beConductor.isDisplayable())) {
-            beConductor = new modConductor(this, this.conec);
+            beConductor = new modConductor(this, this.conec, arcConfig);
             beConductor.setSize(705, 720);
             beConductor.setLocationRelativeTo(this);
             beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

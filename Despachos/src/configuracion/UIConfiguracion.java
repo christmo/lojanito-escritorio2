@@ -81,8 +81,20 @@ public class UIConfiguracion extends javax.swing.JDialog {
             bw.write("user = " + arcConfig.getProperty("user") + "\n");
             bw.write("pass = " + arcConfig.getProperty("pass") + "\n");
 
+            File jar = new File(System.getProperty("java.class.path"));
+            String srcDirProyecto = jar.getPath().substring(0, jar.getPath().length() - jar.getName().length());
+
+            bw.write("\n\n#\n# Directorio donde se almacenan las imágenes\n#\n");
+            bw.write("dirProyecto = " + procesarPath(srcDirProyecto) + "\n");
             bw.write("dirImgConductores = " + arcConfig.getProperty("dirImgConductores") + "\n");
             bw.write("dirImgVehiculos = " + arcConfig.getProperty("dirImgVehiculos") + "\n");
+
+            bw.write("\n\n#\n# Comunicacion Servidor KRADAC\n#\n");
+            bw.write("ip_kradac = " + arcConfig.getProperty("ip_kradac") + "\n");
+            bw.write("puerto_kradac = " + arcConfig.getProperty("puerto_kradac") + "\n");
+
+            bw.write("\n\n#\n# Comunicacion Mapa para obtener Coordenadas\n#\n");
+            bw.write("puerto_mapa = " + arcConfig.getProperty("puerto_mapa") + "\n");
 
             bw.close();
 
@@ -91,6 +103,11 @@ public class UIConfiguracion extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(UIConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private static String procesarPath(String path) {
+        System.out.println("PATH: " + path);
+        return path.replace("\\", "\\\\");
     }
 
     /**
