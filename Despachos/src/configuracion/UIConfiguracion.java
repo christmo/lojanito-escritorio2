@@ -60,7 +60,6 @@ public class UIConfiguracion extends javax.swing.JDialog {
         String[] pu = f.ListaPuertos();
         for (int i = 0; i < pu.length; i++) {
             jcPuertosComm.addItem(pu[i]);
-
         }
     }
 

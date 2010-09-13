@@ -24,35 +24,41 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
     public ConsultaRecorridosServidorBD(String empresa, ConexionBase bd) {
         try {
+            System.err.println("Iniciar conexion con el server BD...");
             echoSocket = new Socket(DIRECCION, PUERTO);
             this.empresa = empresa;
             this.bd = bd;
         } catch (UnknownHostException ex) {
-            //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Conexion rechasada por el servidor de BD...");
+            if (ex.getMessage().equals("No route to host: connect")) {
+                System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
+            }
         }
     }
 
     @Override
-    public void run(){
+    public void run() {
 
-        while(true){
+        while (true) {
             try {
                 try {
                     echoSocket = new Socket(DIRECCION, PUERTO);
+                    GuardarDatosRecorridos();
                 } catch (UnknownHostException ex) {
-                    //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-                    System.out.println("No esta conectado a internet...");
+                    if (ex.getMessage().equals("No route to host: connect")) {
+                        System.err.println("No hay conexion, puede ser porque no hay internet, el cable de red esta desconectado o el servidor de BD esta offline...");
+                    }
                 }
                 ConsultaRecorridosServidorBD.sleep(5000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("" + ex.getMessage());
             }
-            GuardarDatosRecorridos();
         }
     }
 
@@ -134,40 +140,15 @@ public class ConsultaRecorridosServidorBD extends Thread {
             salida.close();
             entrada.close();
             echoSocket.close();
-            
+
             cast = new String[nuevosDatos.size()];
-            
+
             datos = nuevosDatos.toArray(cast);
-            System.out.println("Tamaño: "+datos.length);
+            System.out.println("Datos Recuperados: " + datos.length);
             return datos;
         } catch (Exception e) {
             System.err.println("Exception:  " + e);
         }
         return null;
     }
-    // public static void main(String[] args) {
-        /*try {
-    Socket echoSocket = new Socket(DIRECCION, PUERTO);
-
-    BufferedReader entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-    PrintStream salida = new PrintStream(echoSocket.getOutputStream(), true);
-
-    salida.print("LN\r\n");
-
-    String dato;
-    while ((dato = entrada.readLine()) != null) {
-    //System.out.println(dato);
-    String[] pos = dato.split("#");
-    for (int i = 0; i < pos.length; i++) {
-    System.out.println(pos[i]);
-    }
-    }
-
-    salida.close();
-    entrada.close();
-    echoSocket.close();
-    } catch (Exception e) {
-    System.err.println("Exception:  " + e);
-    }*/
-    // }
 }
