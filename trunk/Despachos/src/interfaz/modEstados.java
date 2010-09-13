@@ -129,7 +129,7 @@ public class modEstados extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(328, 131, -1, 50));
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(328, 131, 120, 50));
 
         jLabel4.setText("Etiqueta :");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 78, -1, -1));
@@ -141,28 +141,33 @@ public class modEstados extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         if (!estados.get(lstEstados.getSelectedIndex())[0].equals("DEFAULT")) {
+            String codig = estados.get(lstEstados.getSelectedIndex())[0];
+            if (!codig.equals("ASI") && !codig.equals("OCU") && !codig.equals("AC")) {
+                if (eliminarEstado(codig)) {
 
+                    ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
+                    JOptionPane.showMessageDialog(this, "REGISTRO ELIMINADO",
+                            "OK",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            ic);
+                    Principal.llenarComboEstados();
 
-            if (eliminarEstado(estados.get(lstEstados.getSelectedIndex())[0])) {
-
-                ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
-                JOptionPane.showMessageDialog(this, "REGISTRO ELIMINADO",
-                        "OK",
-                        JOptionPane.INFORMATION_MESSAGE,
-                        ic);
-                Principal.llenarComboEstados();
-
+                } else {
+                    ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
+                    JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO",
+                            "ERROR",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            ic);
+                }
+                habilitarComponentes(false);
+                cargarEstadosExistentes();
+                txtEtiqueta.setText("");
+                txtColor.setBackground(new Color(236, 233, 216));
             } else {
-                ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
-                JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO",
-                        "ERROR",
-                        JOptionPane.INFORMATION_MESSAGE,
-                        ic);
+                JOptionPane.showMessageDialog(this, 
+                        "No se puede eliminar este estado, es requerido para el correcto funcionamiento del programa...",
+                        "Error...", 0);
             }
-            habilitarComponentes(false);
-            cargarEstadosExistentes();
-            txtEtiqueta.setText("");
-            txtColor.setBackground(new Color(236, 233, 216));
         } else {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
             JOptionPane.showMessageDialog(this, "NO SE PUEDE ELIMINAR EL ESTADO POR DEFECTO",

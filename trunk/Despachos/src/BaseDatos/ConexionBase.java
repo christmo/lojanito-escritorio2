@@ -36,7 +36,7 @@ public class ConexionBase {
      * maquina local
      */
     public ConexionBase(Properties conf) {
-        System.out.println("Conexión a la base con Archivo de Configuración...");
+        System.out.println("Conexion a la base con Archivo de Configuracion...");
         try {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";

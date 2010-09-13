@@ -9,6 +9,7 @@ import BaseDatos.ConexionBase;
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class modConductor extends javax.swing.JDialog {
-    
+
     ArrayList<String[]> conductores;
     private ResourceBundle rb;
     private File Ffoto = null;
@@ -30,12 +31,13 @@ public class modConductor extends javax.swing.JDialog {
     private String img;
     ConexionBase bd;
     ResultSet rs;
+    private Properties arcConfig;
 
     /** Creates new form NewJPanel */
-    public modConductor(JFrame padre, ConexionBase con) {
-        super(padre,"Búsqueda de Conductores");
+    public modConductor(JFrame padre, ConexionBase con, Properties archivo) {
+        super(padre, "Búsqueda de Conductores");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
-
+        this.arcConfig = archivo;
         this.bd = con;
         initComponents();
     }
@@ -453,11 +455,11 @@ public class modConductor extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
                     "ERROR FOTOGRAFÍA",
                     JOptionPane.ERROR_MESSAGE);
-        } else if (!funciones.isEmail(txtemail.getText()) && txtemail.getText().length()>0){
-                    JOptionPane.showMessageDialog(this, "e-Mail no válido",
-                            "e-mail",
-                            JOptionPane.ERROR_MESSAGE);
-                }else {
+        } else if (!funciones.isEmail(txtemail.getText()) && txtemail.getText().length() > 0) {
+            JOptionPane.showMessageDialog(this, "e-Mail no válido",
+                    "e-mail",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
             boolean rta = guardarRegistro(txtCedula.getText(),
                     txtNomApe.getText(),
                     txtDireccion.getText(),
@@ -609,7 +611,7 @@ public class modConductor extends javax.swing.JDialog {
 
         leerProperties();
 
-        if (aux[8] == null || aux[8].equals("")) {           
+        if (aux[8] == null || aux[8].equals("")) {
 
             Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
             lblFoto.setIcon(fot);
@@ -716,7 +718,10 @@ public class modConductor extends javax.swing.JDialog {
         if (lblEtiquetaImagen.getText().equals("defaultcon.jpg")) {
             imgName = "defaultcon.jpg";
         } else {
-            imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            String carpetaCond = arcConfig.getProperty("dirImgConductores");
+            String srcDirProyecto = arcConfig.getProperty("dirProyecto");
+            //imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            imgName = funciones.guardarImagen(Ffoto, srcDirProyecto + carpetaCond);
         }
 
         if (imgName != null) {

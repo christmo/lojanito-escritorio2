@@ -688,7 +688,6 @@ public final class Principal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtDespachados.setColumnSelectionAllowed(true);
         jtDespachados.getTableHeader().setReorderingAllowed(false);
         jtDespachados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -1638,18 +1637,23 @@ public final class Principal extends javax.swing.JFrame {
         int[] numCol = jtVehiculos.getSelectedColumns();
         JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
         String etiqueta = editor.getText();
+        String codEtiqueta = bd.getCodigoEtiquetaEstadoUnidad(etiqueta);
 
-        ArrayList<String> codVehiculo = new ArrayList();
-        if (numCol.length > 0) {
-            for (int i = 0; i < numCol.length; i++) {
-                codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
+        if (!codEtiqueta.equals("OCU") && !codEtiqueta.equals("ASI")) {
+            ArrayList<String> codVehiculo = new ArrayList();
+            if (numCol.length > 0) {
+                for (int i = 0; i < numCol.length; i++) {
+                    codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una Unidad primero", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una Unidad primero", "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
 
-        cambiarEstadoTaxi(etiqueta, codVehiculo);
-        jtVehiculos.setCellSelectionEnabled(false);
+            cambiarEstadoTaxi(etiqueta, codVehiculo);
+            jtVehiculos.setCellSelectionEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "Este estado no se puede asignar desde aqui...", "Error...", 0);
+        }
         jtTelefono.requestFocus();
     }//GEN-LAST:event_btnColorActionPerformed
 
@@ -2087,7 +2091,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
         if ((menu == null) || (!menu.isDisplayable())) {
-            menu = new INICIO(sesion, Principal.bd);
+            menu = new INICIO(sesion, Principal.bd, arcConfig);
             menu.setLocationRelativeTo(this);
             menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             menu.setResizable(false);

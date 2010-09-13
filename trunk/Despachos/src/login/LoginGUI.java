@@ -109,6 +109,11 @@ public class LoginGUI extends javax.swing.JFrame {
         jLabel2.setText("Clave:");
 
         jtUser.setText("LOJANORTE");
+        jtUser.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtUserFocusLost(evt);
+            }
+        });
         jtUser.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtUserKeyPressed(evt);
@@ -284,14 +289,12 @@ public class LoginGUI extends javax.swing.JFrame {
      * Creacion del directorio de imagenes para conductores y vehiculos
      */
     private void existenDirectorios() {
-        File jar = new File(System.getProperty("java.class.path"));
-        String srcDirProyecto = jar.getPath().substring(0, jar.getPath().length() - jar.getName().length());
-        System.out.println("DirFuente: "+srcDirProyecto);
+        String srcDirProyecto = arcConfig.getProperty("dirProyecto");
+        System.out.println("Dir Proyecto: "+srcDirProyecto);
         try {
             String con = arcConfig.getProperty("dirImgConductores");
             if (con != null) {
                 File dirConductores = new File(srcDirProyecto + con);
-                System.out.println("Dir: " + srcDirProyecto + con);
                 if (!dirConductores.exists()) {
                     dirConductores.mkdir();
                     System.out.println("Creado Directorio: " + con);
@@ -304,7 +307,6 @@ public class LoginGUI extends javax.swing.JFrame {
             String veh = arcConfig.getProperty("dirImgVehiculos");
             if (veh != null) {
                 File dirVehiculos = new File(srcDirProyecto + veh);
-                System.out.println("Dir: " + srcDirProyecto + veh);
                 if (!dirVehiculos.exists()) {
                     dirVehiculos.mkdir();
                     System.out.println("Creado Directorio: " + veh);
@@ -337,6 +339,10 @@ public class LoginGUI extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_jtUserKeyPressed
+
+    private void jtUserFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtUserFocusLost
+        jtUser.setText(jtUser.getText().toUpperCase());
+    }//GEN-LAST:event_jtUserFocusLost
 
     /**
      * @param args the command line arguments
