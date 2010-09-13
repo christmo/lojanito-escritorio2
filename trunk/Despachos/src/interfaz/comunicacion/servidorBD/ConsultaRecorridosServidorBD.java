@@ -18,8 +18,8 @@ import javax.swing.Icon;
  */
 public class ConsultaRecorridosServidorBD extends Thread {
 
-    private static final int PUERTO = 666;
-    private static final String DIRECCION = "200.0.29.117";
+    private static int PUERTO = 666;
+    private static String DIRECCION;
     private Socket echoSocket;
     private String empresa;
     private ConexionBase bd;
@@ -29,6 +29,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
     public ConsultaRecorridosServidorBD(String empresa, ConexionBase bd) {
         this.empresa = empresa;
         this.bd = bd;
+        ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
+        ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
     }
 
     private void AbrirPuerto() {
