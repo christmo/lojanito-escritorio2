@@ -108,7 +108,6 @@ public class LoginGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Clave:");
 
-        jtUser.setText("LOJANORTE");
         jtUser.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jtUserFocusLost(evt);
@@ -120,7 +119,6 @@ public class LoginGUI extends javax.swing.JFrame {
             }
         });
 
-        jpPass.setText("LOJANORTE");
         jpPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jpPassFocusGained(evt);
