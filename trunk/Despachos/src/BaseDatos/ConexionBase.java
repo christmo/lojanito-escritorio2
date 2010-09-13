@@ -1,6 +1,5 @@
 package BaseDatos;
 
-import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.Statement;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
@@ -42,15 +41,9 @@ public class ConexionBase {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";
             this.ip = arcConfig.getProperty("ip_base");
-            //System.out.println("IP: "+this.ip);
-            this.bd = arcConfig.getProperty("base");
-            //System.out.println("BASE: "+this.bd);
+            this.bd = arcConfig.getProperty("base");            
             this.usr = arcConfig.getProperty("user");
-            //System.out.println("USER: "+this.usr);
-            //this.usr = "root";
             this.pass = arcConfig.getProperty("pass");
-            //System.out.println("PASS: "+this.pass);
-            //this.pass = "kradac";
 
             url = "jdbc:mysql://" + ip + "/" + bd;
 
@@ -167,7 +160,7 @@ public class ConexionBase {
      */
     public boolean ejecutarSentencia(String sql) {
         try {
-            //System.out.println("Ejecutar: " + sql);
+            System.out.println("Ejecutar: " + sql);
             int rta = st.executeUpdate(sql);
             if (rta >= 0) {
                 return true;
@@ -177,7 +170,7 @@ public class ConexionBase {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } 
+        }
     }
 
     /**
@@ -189,7 +182,7 @@ public class ConexionBase {
      */
     public boolean ejecutarSentenciaHilo(String sql) {
         try {
-            System.out.println("Ejecutar: "+sql);
+//            System.out.println("Ejecutar: " + sql);
             int rta = st.executeUpdate(sql);
             System.err.println("Guarda Coordenadas Bien...");
             if (rta >= 0) {
@@ -200,7 +193,7 @@ public class ConexionBase {
         } catch (SQLException ex) {
             System.out.println("Error de Clave primaria...");
             return false;
-        } 
+        }
     }
 
     /**
@@ -1439,34 +1432,62 @@ public class ConexionBase {
      * @param Despachos
      */
     public void InsertarAsignacionServidorKRADAC(Despachos d) {
-        System.out.println("Enviar datos al Server...");
-        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                +d.getIntUnidad() +","+d.getIntCodigo()+",'ASIGNADO',"+d.getMinutosEntreClienteServidor()+");";
-        ejecutarSentencia(sql);
-        System.out.println("Kradac: "+sql);
-        InsertarDespachoServidorKRADAC(d);
+        final Despachos demo = d;
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                System.out.println("Enviar datos al Server...");
+                String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                        + demo.getIntUnidad() + "," + demo.getIntCodigo() + ",'ASIGNADO'," + demo.getMinutosEntreClienteServidor() + ");";
+                ejecutarSentencia(sql);
+                System.out.println("Kradac: " + sql);
+                InsertarDespachoServidorKRADAC(demo);
+            }
+        });
     }
 
     /**
      * Inserta luego de asignado el ocupado del taxi cuando se despacho
      * @param Despachos
      */
-    public void InsertarDespachoServidorKRADAC(Despachos d){
-        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                +d.getIntUnidad() +","+d.getIntCodigo()+",'OCUPADO',"+"-1"+");";
-        System.out.println("Kradac: "+sql);
+    public void InsertarDespachoServidorKRADAC(Despachos d) {
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ");";
+        System.out.println("Kradac: " + sql);
         ejecutarSentencia(sql);
     }
-
 
     /**
      * Inserta luego de asignado el ocupado del taxi cuando se despacho
      * @param Despachos
      */
-    public void InsertarLibreServidorKRADAC(Despachos d){
-        String sql ="INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                +d.getIntUnidad() +","+d.getIntCodigo()+",'LIBRE',"+"-2"+");";
-        System.out.println("Kradac: "+sql);
-        ejecutarSentencia(sql);
+    public void InsertarLibreServidorKRADAC(Despachos desp) {
+        final Despachos d = desp;
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                System.out.println("Enviar datos al Server...");
+                String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
+                        + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ");";
+                System.out.println("Kradac: " + sql);
+                ejecutarSentencia(sql);
+            }
+        });
+    }
+
+    /**
+     * Obtiene el nombre de los estados de los vehiculos dependiendo del estado
+     * @param codigo
+     * @return
+     */
+    public String getNombreEstadoUnidad(String codigo) {
+        String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO='" + codigo + "'";
+        rs = ejecutarConsultaUnDato(sql);
+        try {
+            return rs.getString("ETIQUETA");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 }
