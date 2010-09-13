@@ -9,6 +9,7 @@ import BaseDatos.ConexionBase;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,20 +25,22 @@ import javax.swing.JFrame;
 public class ingresoConductor extends javax.swing.JDialog {
 
     private File Ffoto = null;
-    private ResourceBundle rb;
+    //private ResourceBundle rb;
     private funcionesUtilidad utilidad = new funcionesUtilidad();
     ConexionBase bd;
     ResultSet rs;
+    Properties arcConfig;
 
     /** Creates new form ingresoConductor */
-    public ingresoConductor(JFrame padre, ConexionBase con) {
+    public ingresoConductor(JFrame padre, ConexionBase con, Properties arcConfig) {
         super(padre, "Ingreso de Conductores");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
         this.bd = con;
+        this.arcConfig = arcConfig;
 
         initComponents();
-        leerProperties();
+        //leerProperties();
         Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
         lblFoto.setIcon(fot);
         lblFotoEtiqueta.setText("defaultcon.jpg");
@@ -327,12 +330,11 @@ public class ingresoConductor extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "SELECCIONE LA FOTO DEL CONDUCTOR",
                             "ERROR FOTOGRAFÍA",
                             JOptionPane.ERROR_MESSAGE);
-                } else if (!objFun.isEmail(txtemail.getText()) && txtemail.getText().length()>0){
+                } else if (!objFun.isEmail(txtemail.getText()) && txtemail.getText().length() > 0) {
                     JOptionPane.showMessageDialog(this, "e-Mail no válido",
                             "e-mail",
                             JOptionPane.ERROR_MESSAGE);
-                }
-                else {
+                } else {
 
                     boolean rta = guardarRegistro(txtCedula.getText(),
                             txtNomApe.getText(),
@@ -474,7 +476,9 @@ public class ingresoConductor extends javax.swing.JDialog {
         if (lblFotoEtiqueta.getText().equals("defaultcon.jpg")) {
             imgName = "defaultcon.jpg";
         } else {
-            imgName = utilidad.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            //imgName = utilidad.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            imgName = utilidad.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto")+arcConfig.getProperty("dirImgConductores"));
+
         }
 
 
@@ -505,7 +509,7 @@ public class ingresoConductor extends javax.swing.JDialog {
     /**
      * Carga el archivo de propiedades del sistema
      */
-    private void leerProperties() {
+    /*private void leerProperties() {
         rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }
+    }*/
 }

@@ -408,7 +408,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
-            newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec);
+            newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec, arcConfig);
             newVehiculo.setSize(680, 595);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -457,7 +457,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
-            nConductor = new ingresoConductor(this, this.conec);
+            nConductor = new ingresoConductor(this, this.conec, arcConfig);
             nConductor.setSize(650, 550);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -469,7 +469,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
 
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
-            editVehiculo = new modVehiculo(this, sesion, this.conec);
+            editVehiculo = new modVehiculo(this, sesion, this.conec, arcConfig);
             editVehiculo.setSize(725, 770);
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

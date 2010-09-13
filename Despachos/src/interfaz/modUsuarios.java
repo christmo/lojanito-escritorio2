@@ -463,13 +463,13 @@ public class modUsuarios extends javax.swing.JDialog {
 
     private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelefonoFocusLost
         String tel = fun.validarTelefono(jtTelefono.getText());
-        System.out.println("tel: "+tel);
+        System.out.println("tel: " + tel);
         if (!fun.isNumeric(tel)) {
             jtTelefono.setText("");
         } else {
             if (!fun.validarTel(tel)) {
                 jtTelefono.setText("");
-            }else{
+            } else {
                 jtTelefono.setText(tel);
             }
         }
@@ -495,6 +495,7 @@ public class modUsuarios extends javax.swing.JDialog {
                 jcOperador.setSelectedIndex(Integer.parseInt(rs.getString(9)));
             } catch (NullPointerException ex) {
             } catch (NumberFormatException nfe) {
+            } catch (IllegalArgumentException ex) {
             }
         } catch (SQLException ex) {
             Logger.getLogger(modUsuarios.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,6 +9,7 @@ import BaseDatos.ConexionBase;
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,7 +27,7 @@ public class modVehiculo extends javax.swing.JDialog {
 
     ConexionBase bd;
     ArrayList<String[]> vehiculos;
-    private ResourceBundle rb;
+    //private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private String img;
@@ -36,17 +37,19 @@ public class modVehiculo extends javax.swing.JDialog {
     Icon icError;
     Icon icOk;
     private String[] sesion;
+    private Properties arcConfig;
 
-    public modVehiculo(JFrame padre, String[] ses, ConexionBase con) {
+    public modVehiculo(JFrame padre, String[] ses, ConexionBase con, Properties arcConfig) {
         super(padre, "Busqueda de Vehículos");
         super.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
 
 
         this.sesion = ses;
         this.bd = con;
+        this.arcConfig = arcConfig;
 
         initComponents();
-        leerProperties();
+        // leerProperties();
         cargarConductores(cmbConductor);
         cargarConductores(cmbConductorAux);
         icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
@@ -526,7 +529,9 @@ public class modVehiculo extends javax.swing.JDialog {
                             System.out.println("[" + imgActual + "]");
 
                             if (!imgOriginal.equals(imgActual) && !(imgActual.equals("defaultveh.png"))) {
-                                imgActual = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
+                                //imgActual = funciones.guardarImagen(Ffoto, rb.getString("dirImgVehiculos"));
+                                imgActual = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
+
                             }
 
                             if (nomConductorAux.equals("< NO ASIGNADO >")) {
@@ -787,7 +792,10 @@ public class modVehiculo extends javax.swing.JDialog {
 
         } else {
 
-            Icon fot = new ImageIcon(rb.getString("dirImgVehiculos") + "\\" + aux[10]);
+//            Icon fot = new ImageIcon(rb.getString("dirImgVehiculos") + "\\" + aux[10]);
+
+            Icon fot = new ImageIcon(arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos") + System.getProperty("file.separator") + aux[10]);
+
             img = aux[10];
             imgOriginal = img;
             if (fot.getIconWidth() == -1) {
@@ -807,10 +815,9 @@ public class modVehiculo extends javax.swing.JDialog {
     /**
      * Carga el archivo de propiedades del sistema
      */
-    private void leerProperties() {
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }
-
+    /*private void leerProperties() {
+    rb = ResourceBundle.getBundle("configuracion.configsystem");
+    }*/
     /**
      * Limpia contenido de las cajas
      */
@@ -905,7 +912,8 @@ public class modVehiculo extends javax.swing.JDialog {
         if (img.equals("defaultcon.jpg")) {
             imgName = "defaultcon.jpg";
         } else {
-            imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            //imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
+            imgName = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
         }
 
         if (imgName != null) {
