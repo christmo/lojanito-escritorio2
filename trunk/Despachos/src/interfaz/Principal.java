@@ -297,7 +297,7 @@ public final class Principal extends javax.swing.JFrame {
             comm.enviarDatos("at\n\r");
 
             String comando = bd.getComandoActivarModem(sesion[1]);
-            System.out.println("Enviar: " + comando);
+            System.out.println("Comando MODEM: " + comando);
 
             /**
              * Utilizar 3 porque la ejecusion es muy rapida
