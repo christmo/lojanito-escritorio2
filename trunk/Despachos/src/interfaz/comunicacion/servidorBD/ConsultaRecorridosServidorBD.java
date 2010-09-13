@@ -121,6 +121,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
             BufferedReader entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
             PrintStream salida = new PrintStream(echoSocket.getOutputStream(), true);
 
+            System.out.println("Empresa:"+empresa);
+
             salida.print(empresa + "\r\n");
             boolean salir = false;
             String dato;
