@@ -1,6 +1,7 @@
 package interfaz.comunicacion.servidorBD;
 
 import BaseDatos.ConexionBase;
+import interfaz.Principal;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -90,6 +91,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 //System.out.println("" + trama);
                 GuardarDatosRecorridos(trama, bd);
             }
+            Principal.lblSenal.setVisible(true);
         } catch (NullPointerException ex) {
         }
     }
@@ -168,8 +170,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
         } catch (Exception e) {
             //System.err.println("Exepcion Obteniendo Datos: " + e.getMessage());
             //if (e.getMessage().equals("Connection reset")) {
-                cerrarConexionServerKradac();
-                AbrirPuerto();
+            cerrarConexionServerKradac();
+            AbrirPuerto();
             //}
             if (e.getMessage().equals("Socket is closed")) {
                 AbrirPuerto();
@@ -179,6 +181,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 //cerrarConexionServerKradac();
                 //AbrirPuerto();
             }
+            Principal.lblSenal.setVisible(false);
         }
         return null;
     }

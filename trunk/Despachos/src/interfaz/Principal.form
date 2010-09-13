@@ -28,13 +28,13 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jsVehiculos" alignment="1" pref="1009" max="32767" attributes="0"/>
-                  <Component id="jScrollPane3" alignment="1" pref="1009" max="32767" attributes="0"/>
+                  <Component id="jsVehiculos" alignment="1" pref="1013" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="1" pref="1013" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jlIndicadorLlamada" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="272" max="32767" attributes="0"/>
+                      <EmptySpace pref="251" max="32767" attributes="0"/>
                       <Component id="lblReloj" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -44,14 +44,18 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" alignment="0" pref="1009" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="0" pref="1013" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbMenu" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbBuscarClienteNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="589" max="32767" attributes="0"/>
+                      <EmptySpace pref="461" max="32767" attributes="0"/>
+                      <Component id="lblSenal" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jlSenalInternet" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lblFecha" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -86,13 +90,15 @@
                   <Component id="jPanel4" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="262" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" pref="263" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="lblSenal" max="32767" attributes="1"/>
+                  <Component id="jlSenalInternet" max="32767" attributes="1"/>
                   <Component id="jbBuscarClienteNombre" max="32767" attributes="1"/>
                   <Component id="jbMenu" alignment="0" pref="50" max="32767" attributes="1"/>
                   <Component id="jbSalir" alignment="0" pref="50" max="32767" attributes="1"/>
-                  <Component id="lblFecha" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblFecha" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -622,7 +628,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                  <Component id="jtBuscarPorNombre" pref="378" max="32767" attributes="0"/>
+                  <Component id="jtBuscarPorNombre" pref="255" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -731,6 +737,15 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarClienteNombreActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jlSenalInternet">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblSenal">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/senal.png"/>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
