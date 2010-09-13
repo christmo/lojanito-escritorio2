@@ -4,6 +4,7 @@
  */
 package interfaz.comunicacion.mapa;
 
+import interfaz.Principal;
 import interfaz.subVentanas.VentanaDatos;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class SocketMapa extends Thread {
 
-    static final int PUERTO = 65000;
+    static int PUERTO = 65000;
     public InputStream is;
     public OutputStream os;
     boolean escuchar = true;
@@ -28,6 +29,7 @@ public class SocketMapa extends Thread {
 
     public SocketMapa() {
         try {
+            SocketMapa.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_mapa"));
             skServidor = new ServerSocket(PUERTO);
             activarHilo();
         } catch (IOException ex) {
@@ -48,10 +50,10 @@ public class SocketMapa extends Thread {
      * Cerrar el puerto en el que esta escuchando el servidor
      */
     public void CerrarPuerto() {
-        System.out.println("Cerrar Puerto Coordenadas");
         escuchar = false;
         try {
             skServidor.close();
+            System.out.println("Cerrar Puerto Coordenadas");
         } catch (IOException ex) {
             Logger.getLogger(SocketMapa.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
@@ -122,6 +124,7 @@ public class SocketMapa extends Thread {
 
                 }
             } catch (SocketException se) {
+                System.out.println("Ex:"+se.getMessage());
                 System.err.println("No se puede aceptar conexiones socket cerrado...");
             }
 
