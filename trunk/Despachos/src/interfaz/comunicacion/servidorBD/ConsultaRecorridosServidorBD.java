@@ -66,17 +66,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
         while (true) {
             try {
-                //try {
-                //echoSocket = new Socket(DIRECCION, PUERTO);
                 GuardarDatosRecorridos();
-                //} catch (UnknownHostException ex) {
-                //  Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-                /*} catch (IOException ex) {
-                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-                if (ex.getMessage().equals("No route to host: connect")) {
-                System.err.println("No hay conexion, puede ser porque no hay internet, el cable de red esta desconectado o el servidor de BD esta offline...");
-                }
-                }*/
                 ConsultaRecorridosServidorBD.sleep(5000);
             } catch (InterruptedException ex) {
                 //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
@@ -162,9 +152,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
                     }
                 }
             }
-            //salida.close();
-            //entrada.close();
-            //echoSocket.close();
 
             cast = new String[nuevosDatos.size()];
 
@@ -172,19 +159,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
             System.out.println("Datos Recuperados: " + datos.length);
             return datos;
         } catch (Exception e) {
-            //System.err.println("Exepcion Obteniendo Datos: " + e.getMessage());
-            //if (e.getMessage().equals("Connection reset")) {
             cerrarConexionServerKradac();
             AbrirPuerto();
-            //}
-            if (e.getMessage().equals("Socket is closed")) {
-                AbrirPuerto();
-            }
-            if (e == null) {
-                System.out.println("Null");
-                //cerrarConexionServerKradac();
-                //AbrirPuerto();
-            }
         }
         return null;
     }
