@@ -197,28 +197,6 @@ public final class Principal extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
                 }
             }
-
-            /**
-             * Realiza la insersion del despacho y de la asignacion de la aunidad
-             * en el servidor de Kradac
-             */
-            private void InsertarAsignacionDespachoServidorKradac() {
-                int intFila = jtPorDespachar.getSelectedRow();
-                long minutos;
-                for (Despachos d : listaDespachosTemporales) {
-                    String  horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
-                    
-                    if (d.getStrHora().equals(horaTabla)) {
-                        d.setHoraDeDespacho(funciones.getHoraEnMilis());
-                        System.out.println("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
-                        minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
-                        System.out.println("Minutos desde cliente:" + minutos);
-                        d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
-                        bd.InsertarAsignacionServidorKRADAC(d);
-                        break;
-                    }
-                }
-            }
         });
 
         /**
@@ -1084,7 +1062,8 @@ public final class Principal extends javax.swing.JFrame {
              * Columna de Minutos
              */
             if (intCol == 7) {
-                Tabla.setValueAt("0", intFila, intCol);
+                Tabla.setValueAt("", intFila, intCol);
+                Tabla.setValueAt("0", intFila, 8);
             }
         }
         /**
@@ -1142,7 +1121,10 @@ public final class Principal extends javax.swing.JFrame {
             }
 
             String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+            System.out.println("Cli: " + cod_cli);
             String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+            System.out.println("Unidad: " + unidad);
+
             if (despacho.getIntUnidad() != 0) {
                 String etiquetaActivo = bd.getEtiquetaEstadoUnidad("AC");
                 AsignarColorDespachoVehiculo(unidad, etiquetaActivo);
@@ -1151,7 +1133,7 @@ public final class Principal extends javax.swing.JFrame {
 
             DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
             model.removeRow(intFila);
-            //listaDespachosTemporales.remove(intFila);
+
             InicializarVariables();
         } catch (IndexOutOfBoundsException iex) {
         } catch (NullPointerException nex) {
@@ -1702,7 +1684,7 @@ public final class Principal extends javax.swing.JFrame {
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
-        System.out.println("Codigo: " + codig);
+        System.out.println("Estado: " + codig);
 
         for (String i : codVh) {
             /*
@@ -1853,8 +1835,17 @@ public final class Principal extends javax.swing.JFrame {
                  * Cuando cambie cualquiera de estas celdas poner la hora en
                  * el campo de la hora
                  */
+                String horaAntes = "";
                 try {
+                    try {
+                        horaAntes = jtPorDespachar.getValueAt(intFila, 0).toString();
+                    } catch (NullPointerException ex) {
+                    }
+                    //Poner una nueva hora cuandos edite alguno de estos campos
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
+                    //actualizar la lista de despachos temporales en memoria
+                    //para poder encontrar este cambio por la hora
+                    ActualizarListaTMPHoraIngreso(intFila, horaAntes);
                 } catch (NullPointerException ex) {
                 } catch (ArrayIndexOutOfBoundsException aex) {
                 }
@@ -1875,7 +1866,6 @@ public final class Principal extends javax.swing.JFrame {
                         jtPorDespachar.getCellEditor().cancelCellEditing();
                     } else {
                         try {
-                            System.out.println("Cambio: " + CampoUnidadCambio);
                             if (CampoUnidadCambio) {
                                 ActivarUnidadBorrada(cod_cli);
                                 ActualizarAsignacion(intFila, intCol, cod_cli);
@@ -1896,7 +1886,6 @@ public final class Principal extends javax.swing.JFrame {
             Mayuculas(jtPorDespachar, intFila);
         }
     }//GEN-LAST:event_jtPorDespacharPropertyChange
-    private String RespaldoDeUnidad = "";
 
     /**
      * Agrega el despacho que se inserte por la tabla que no tenga codigo ni telefono
@@ -1911,9 +1900,7 @@ public final class Principal extends javax.swing.JFrame {
             int intFila = jtPorDespachar.getSelectedRow();
             int i = 0;
             for (Despachos d : listaDespachosTemporales) {
-                System.out.println("horas: " + d.getStrHora() + " HoraT:" + jtPorDespachar.getValueAt(intFila, 0));
                 actualizar = d.getStrHora().equals(jtPorDespachar.getValueAt(intFila, 0));
-                System.out.println("Actualizar:" + actualizar);
                 if (actualizar) {
                     break;
                 }
@@ -1959,8 +1946,6 @@ public final class Principal extends javax.swing.JFrame {
         try {
             if (validarUnidad(Integer.parseInt(unidad))) {
                 strEstadoUnidad = bd.getEstadoUnidad(Integer.parseInt(unidad));
-
-                RespaldoDeUnidad = unidad;
 
                 if (strEstadoUnidad.equals("AC")) {
 
@@ -2053,6 +2038,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
         int intFila = jtPorDespachar.getSelectedRow();
+        InsertarAsignacionDespachoServidorKradac();
         DespacharCliente(intFila);
     }//GEN-LAST:event_jbDespacharActionPerformed
 
@@ -2606,25 +2592,70 @@ public final class Principal extends javax.swing.JFrame {
      * @param idx
      */
     private void ActualizarListaTMPDEspachosTemporales(int idx) {
-        String horaTbl = jtPorDespachar.getValueAt(idx, 0).toString();
+        try {
+            String horaTbl = jtPorDespachar.getValueAt(idx, 0).toString();
+            String horaDspch = "";
+
+            for (int i = 0; i < listaDespachosTemporales.size(); i++) {
+                horaDspch = listaDespachosTemporales.get(i).getStrHora();
+                if (horaTbl.equals(horaDspch)) {
+                    String unidad = jtPorDespachar.getValueAt(idx, 6).toString();
+
+                    if (!unidad.equals("0") || !unidad.equals("")) {
+                        try {
+                            long hora = funciones.getHoraEnMilis();
+                            listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
+
+                            System.out.println("Hora seteada: " + hora);
+
+                            listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
+                            listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
+                        } catch (NumberFormatException ex) {
+                        }
+                        break;
+                    }
+                }
+            }
+        } catch (NullPointerException ex) {
+        }
+    }
+
+    /**
+     * Actualiza en memoria los cambios que haya en las unidades para poder calcular
+     * el tiempo de despacho y de asignacion en el servidor
+     * @param idx
+     */
+    private void ActualizarListaTMPHoraIngreso(int idx, String horaAnt) {
+        String horaTbl = horaAnt;
         String horaDspch = "";
 
         for (int i = 0; i < listaDespachosTemporales.size(); i++) {
             horaDspch = listaDespachosTemporales.get(i).getStrHora();
             if (horaTbl.equals(horaDspch)) {
-                String unidad = jtPorDespachar.getValueAt(idx, 6).toString();
-                System.out.println("idx:" + idx + " u:" + unidad);
-                if (!unidad.equals("0") || !unidad.equals("")) {
-                    try {
-                        long hora = funciones.getHoraEnMilis();
-                        listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
-                        System.out.println("Hora seteada: " + hora);
-                        listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
-                        listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
-                    } catch (NumberFormatException ex) {
-                    }
-                    break;
-                }
+                listaDespachosTemporales.get(i).setStrHora(jtPorDespachar.getValueAt(idx, 0).toString());
+            }
+        }
+    }
+
+    /**
+     * Realiza la insersion del despacho y de la asignacion de la aunidad
+     * en el servidor de Kradac
+     */
+    private void InsertarAsignacionDespachoServidorKradac() {
+        int intFila = jtPorDespachar.getSelectedRow();
+        long minutos;
+        ImprmirTMP();
+        for (Despachos d : listaDespachosTemporales) {
+            String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
+
+            if (d.getStrHora().equals(horaTabla)) {
+                d.setHoraDeDespacho(funciones.getHoraEnMilis());
+                System.out.println("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
+                minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
+                System.out.println("Minutos desde cliente:" + minutos);
+                d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
+                bd.InsertarAsignacionServidorKRADAC(d);
+                break;
             }
         }
     }

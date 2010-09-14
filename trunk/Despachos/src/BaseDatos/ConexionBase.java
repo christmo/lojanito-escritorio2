@@ -3,6 +3,9 @@ package BaseDatos;
 import com.mysql.jdbc.Statement;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,7 +26,11 @@ import javax.swing.JOptionPane;
  */
 public class ConexionBase {
 
-    private String driver, url, ip, bd, usr, pass;
+    private String driver, url, ip, usr, pass;
+    /**
+     * Nombre de la Base de datos
+     */
+    private String bd;
     private Connection conexion;
     private Statement st;
     private ResultSet rs = null;
@@ -406,6 +413,7 @@ public class ConexionBase {
              * Hace esto si el codigo es 0 y el cliente NO esta ingresado en la
              * base de datos
              */
+            System.out.println("Entrar Por aqui si el codigo es 0");
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -425,6 +433,7 @@ public class ConexionBase {
              * Hace si el codigo NO es 0 y el cliente NO esta ingresado
              * en la base de datos
              */
+            System.out.println("Entrar Por aqui si el codigo NO es 0");
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -503,7 +512,9 @@ public class ConexionBase {
             String sql = "SELECT CODIGO FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
             rsAux = ejecutarConsultaUnDato(sql);
             int cod = rsAux.getInt("CODIGO");
+            System.out.println("Este codigo de vuelve: "+cod +" = "+codigo);
             if (codigo == cod) {
+                System.err.println("Ya hay un cliente con ese telefono...");
                 return true;
             }
         } catch (SQLException ex) {
@@ -1424,11 +1435,7 @@ public class ConexionBase {
      * @param Despachos
      */
     public void InsertarAsignacionServidorKRADAC(Despachos d) {
-        System.err.println("Imprimir D");
-        ImprimirDespacho(d);
         this.demo = d;
-        System.err.println("Imprimir Demo");
-        ImprimirDespacho(demo);
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -1441,7 +1448,7 @@ public class ConexionBase {
                         + ",'ASIGNADO',"
                         + demo.getMinutosEntreClienteServidor()
                         + ");";
-                ejecutarSentencia(sql);
+                //ejecutarSentencia(sql);
                 System.out.println("KRADAC: " + sql);
                 InsertarDespachoServidorKRADAC(demo);
             }
@@ -1451,7 +1458,7 @@ public class ConexionBase {
     public void ImprimirDespacho(Despachos desp) {
         System.out.println("-*-\n" + "Nombre: " + desp.getStrNombre());
         System.out.println("Codigo: " + desp.getIntCodigo());
-        System.out.println("Unidad: " + desp.getIntUnidad()+"\n-/-");
+        System.out.println("Unidad: " + desp.getIntUnidad() + "\n-/-");
     }
 
     /**
@@ -1462,7 +1469,7 @@ public class ConexionBase {
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                 + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ");";
         System.out.println("KRADAC: " + sql);
-        ejecutarSentencia(sql);
+        //ejecutarSentencia(sql);
     }
 
     /**
@@ -1478,7 +1485,7 @@ public class ConexionBase {
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                         + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ");";
                 System.out.println("KRADAC: " + sql);
-                ejecutarSentencia(sql);
+                //ejecutarSentencia(sql);
             }
         });
     }
@@ -1497,5 +1504,54 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    /**
+     * Solo funciona donde MySQL este instalado fisicamente, si se usa con wamp
+     * poner la ruta donde se intalo wamp y mysql se puede usuatilizar para hacer
+     * actualizaciones a las base de datos...
+     * @param scriptpath
+     * @param verbose
+     * @return String
+     */
+    public String executeScript(String scriptpath, boolean verbose) {
+        String output = null;
+        try {
+            String[] cmd = new String[]{"mysql",
+                this.bd,
+                "--user=" + this.usr,
+                "--password=" + this.pass,
+                "-e",
+                "\"source " + scriptpath + "\""
+            };
+            System.err.println(cmd[0] + " " + cmd[1] + " "
+                    + cmd[2] + " " + cmd[3] + " "
+                    + cmd[4] + " " + cmd[5]);
+            Process proc = Runtime.getRuntime().exec(cmd);
+            if (verbose) {
+                InputStream inputstream = proc.getInputStream();
+                InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+                BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+                // read the output
+                String line;
+                while ((line = bufferedreader.readLine()) != null) {
+                    System.out.println(line);
+                }
+
+                // check for failure
+                try {
+                    if (proc.waitFor() != 0) {
+                        System.err.println("exit value = "
+                                + proc.exitValue());
+                    }
+                } catch (InterruptedException e) {
+                    System.err.println(e);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 }
