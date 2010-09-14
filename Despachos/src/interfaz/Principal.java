@@ -961,7 +961,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
-        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/senal.png"))); // NOI18N
+        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
