@@ -206,7 +206,9 @@ public final class Principal extends javax.swing.JFrame {
                 int intFila = jtPorDespachar.getSelectedRow();
                 long minutos;
                 for (Despachos d : listaDespachosTemporales) {
-                    if (d.getFilaTablaTMP() == intFila) {
+                    String  horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
+                    
+                    if (d.getStrHora().equals(horaTabla)) {
                         d.setHoraDeDespacho(funciones.getHoraEnMilis());
                         System.out.println("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
                         minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
@@ -2616,7 +2618,7 @@ public final class Principal extends javax.swing.JFrame {
                     try {
                         long hora = funciones.getHoraEnMilis();
                         listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
-                        System.out.println("Hora seteada..." + hora);
+                        System.out.println("Hora seteada: " + hora);
                         listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
                         listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
                     } catch (NumberFormatException ex) {
