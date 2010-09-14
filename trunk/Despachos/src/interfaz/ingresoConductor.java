@@ -477,7 +477,8 @@ public class ingresoConductor extends javax.swing.JDialog {
             imgName = "defaultcon.jpg";
         } else {
             //imgName = utilidad.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
-            imgName = utilidad.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto")+arcConfig.getProperty("dirImgConductores"));
+            String path = arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgConductores");
+            imgName = utilidad.guardarImagen(Ffoto, path);
 
         }
 
@@ -501,15 +502,9 @@ public class ingresoConductor extends javax.swing.JDialog {
     }
 
     /**
-     * Cierra la ventana
-     */
-    private void salir() {
-    }
-
-    /**
      * Carga el archivo de propiedades del sistema
      */
     /*private void leerProperties() {
-        rb = ResourceBundle.getBundle("configuracion.configsystem");
+    rb = ResourceBundle.getBundle("configuracion.configsystem");
     }*/
 }

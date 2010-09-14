@@ -30,7 +30,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jLabel2" alignment="0" pref="338" max="32767" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" pref="340" max="32767" attributes="0"/>
                   <Component id="jPanel2" alignment="1" max="32767" attributes="0"/>
                   <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -44,7 +44,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="jbAceptar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="74" max="32767" attributes="0"/>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Component id="jbCancelar" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
           </Group>
@@ -122,7 +122,7 @@
                   <Component id="jLabel4" min="-2" max="-2" attributes="1"/>
                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Component id="jtPuertoBase" min="-2" pref="66" max="-2" attributes="1"/>
-                  <EmptySpace pref="63" max="32767" attributes="0"/>
+                  <EmptySpace pref="36" max="32767" attributes="0"/>
                   <Component id="jLabel5" min="-2" max="-2" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jcPuertosComm" min="-2" pref="111" max="-2" attributes="0"/>
@@ -186,7 +186,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jtBD" alignment="0" pref="302" max="32767" attributes="0"/>
+                      <Component id="jtBD" alignment="0" pref="306" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -194,8 +194,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jtUser" pref="254" max="32767" attributes="0"/>
-                              <Component id="jpPass" pref="254" max="32767" attributes="0"/>
+                              <Component id="jtUser" pref="228" max="32767" attributes="0"/>
+                              <Component id="jpPass" pref="228" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -264,7 +264,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jtIP" pref="302" max="32767" attributes="0"/>
+                  <Component id="jtIP" pref="306" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
