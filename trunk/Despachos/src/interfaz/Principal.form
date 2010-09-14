@@ -743,7 +743,7 @@
     <Component class="javax.swing.JLabel" name="lblSenal">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/interfaz/iconos/senal.png"/>
+          <Image iconType="3" name="/interfaz/iconos/nosenal.png"/>
         </Property>
       </Properties>
       <AuxValues>

@@ -30,7 +30,11 @@ public class ConsultaRecorridosServidorBD extends Thread {
         this.empresa = empresa;
         this.bd = bd;
         ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
-        ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
+        try {
+            ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
+        } catch (NumberFormatException ex) {
+            System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
+        }
     }
 
     private void AbrirPuerto() {
