@@ -171,7 +171,9 @@ public class funcionesUtilidad {
                     + String.valueOf(nombreUnico.get(Calendar.MINUTE))
                     + String.valueOf(nombreUnico.get(Calendar.SECOND));
 
-            FileOutputStream fos = new FileOutputStream(ruta + "\\" + nombreFoto + ".jpg");
+            //FileOutputStream fos = new FileOutputStream(ruta + "\\" + nombreFoto + ".jpg");
+            FileOutputStream fos = new FileOutputStream(ruta + System.getProperty("file.separator") + nombreFoto + ".jpg");
+
             FileChannel canalFuente = fis.getChannel();
             FileChannel canalDestino = fos.getChannel();
             canalFuente.transferTo(0, canalFuente.size(), canalDestino);
@@ -191,7 +193,7 @@ public class funcionesUtilidad {
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
-        System.out.println("Hora: "+sdf.format(calendario.getTime()));
+        System.out.println("Hora: " + sdf.format(calendario.getTime()));
         return sdf.format(calendario.getTime());
     }
 
@@ -285,12 +287,12 @@ public class funcionesUtilidad {
         while (listaPuertos.hasMoreElements()) {
             id_Puerto = (CommPortIdentifier) listaPuertos.nextElement();
             //System.out.println("Id: " + id_Puerto.getName() + " tipo: " + id_Puerto.getPortType());
-            if(id_Puerto.getPortType()==1){
+            if (id_Puerto.getPortType() == 1) {
                 p.add(id_Puerto.getName());
             }
             i++;
         }
         puertos = new String[p.size()];
-        return (String[])p.toArray(puertos);
+        return (String[]) p.toArray(puertos);
     }
 }
