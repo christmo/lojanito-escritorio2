@@ -27,7 +27,7 @@ public class ConexionBase {
     private Connection conexion;
     private Statement st;
     private ResultSet rs = null;
-    private ResourceBundle rb;
+    //private ResourceBundle rb;
     private Properties arcConfig;
 
     /**
@@ -440,14 +440,6 @@ public class ConexionBase {
 
             return ejecutarSentencia(sql);
         }
-        //else if (validarCliente && codigoEs0) {
-        /**
-         * Si el cliente esta ingresado pero no tiene codigo
-         * actualizar los datos de este
-         */
-        /* return ActualizarClienteConTelefono(des, des.getStrTelefono());
-        }*/
-        System.err.println("No se que hacer pero no actualziar desde aqui");
         return false;
     }
 
@@ -1425,24 +1417,41 @@ public class ConexionBase {
                 + "')";
         return ejecutarSentenciaHilo(sql, unidad);
     }
+    Despachos demo;
 
     /**
      * Inserta la asignasion en el servidor kradac
      * @param Despachos
      */
     public void InsertarAsignacionServidorKRADAC(Despachos d) {
-        final Despachos demo = d;
+        System.err.println("Imprimir D");
+        ImprimirDespacho(d);
+        this.demo = d;
+        System.err.println("Imprimir Demo");
+        ImprimirDespacho(demo);
+
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 System.out.println("Enviar datos al Server...");
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                        + demo.getIntUnidad() + "," + demo.getIntCodigo() + ",'ASIGNADO'," + demo.getMinutosEntreClienteServidor() + ");";
+                        + demo.getIntUnidad()
+                        + ","
+                        + demo.getIntCodigo()
+                        + ",'ASIGNADO',"
+                        + demo.getMinutosEntreClienteServidor()
+                        + ");";
                 ejecutarSentencia(sql);
                 System.out.println("KRADAC: " + sql);
                 InsertarDespachoServidorKRADAC(demo);
             }
         });
+    }
+
+    public void ImprimirDespacho(Despachos desp) {
+        System.out.println("-*-\n" + "Nombre: " + desp.getStrNombre());
+        System.out.println("Codigo: " + desp.getIntCodigo());
+        System.out.println("Unidad: " + desp.getIntUnidad()+"\n-/-");
     }
 
     /**
