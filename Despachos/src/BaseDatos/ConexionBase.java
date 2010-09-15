@@ -1448,7 +1448,7 @@ public class ConexionBase {
                         + ",'ASIGNADO',"
                         + demo.getMinutosEntreClienteServidor()
                         + ");";
-                //ejecutarSentencia(sql);
+                ejecutarSentencia(sql);
                 System.out.println("KRADAC: " + sql);
                 InsertarDespachoServidorKRADAC(demo);
             }
@@ -1469,7 +1469,7 @@ public class ConexionBase {
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                 + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ");";
         System.out.println("KRADAC: " + sql);
-        //ejecutarSentencia(sql);
+        ejecutarSentencia(sql);
     }
 
     /**
@@ -1485,7 +1485,7 @@ public class ConexionBase {
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
                         + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ");";
                 System.out.println("KRADAC: " + sql);
-                //ejecutarSentencia(sql);
+                ejecutarSentencia(sql);
             }
         });
     }

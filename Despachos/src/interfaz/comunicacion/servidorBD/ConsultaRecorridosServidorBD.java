@@ -20,11 +20,12 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
     private static int PUERTO = 666;
     private static String DIRECCION;
-    private Socket echoSocket;
+    private static Socket echoSocket;
     private String empresa;
     private ConexionBase bd;
-    private BufferedReader entrada;
-    private PrintStream salida;
+    private static BufferedReader entrada;
+    private static PrintStream salida;
+    CronometroReconexion crono = new CronometroReconexion();
 
     public ConsultaRecorridosServidorBD(String empresa, ConexionBase bd) {
         this.empresa = empresa;
@@ -32,24 +33,28 @@ public class ConsultaRecorridosServidorBD extends Thread {
         ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
         try {
             ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
+            crono.IniciarCrono();
         } catch (NumberFormatException ex) {
             System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
         }
     }
 
-    private void AbrirPuerto() {
+    public static void AbrirPuerto() {
         try {
             try {
                 echoSocket = new Socket(DIRECCION, PUERTO);
                 System.err.println("Iniciar conexion con el server BD...");
-                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/senal.png"));
+                Icon img = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/senal.png"));
                 Principal.lblSenal.setIcon(img);
             } catch (UnknownHostException ex) {
+                Icon img = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/nosenal.png"));
+                Principal.lblSenal.setIcon(img);
                 cerrarConexionServerKradac();
+                AbrirPuerto();
                 Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"));
+                Icon img = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/nosenal.png"));
                 Principal.lblSenal.setIcon(img);
                 if (ex.getMessage().equals("No route to host: connect")) {
                     System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
@@ -92,7 +97,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 //System.out.println("" + trama);
                 GuardarDatosRecorridos(trama, bd);
             }
+            crono.reiniciar();
         } catch (NullPointerException ex) {
+            System.err.println("No guardar, NO se recuperaron datos...");
         }
     }
 
@@ -171,7 +178,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         return null;
     }
 
-    private void cerrarConexionServerKradac() {
+    public static void cerrarConexionServerKradac() {
         try {
             try {
                 salida.close();
