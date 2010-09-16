@@ -7,7 +7,7 @@
 package interfaz.subVentanas;
 
 import BaseDatos.ConexionBase;
-import interfaz.comunicacion.mapa.SocketMapa;
+import interfaz.comunicacion.mapa.ObtenerCoordenadasMapa;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -882,15 +882,15 @@ public class VentanaDatos extends javax.swing.JDialog {
      * Conxion mapa web KRADAC para recolectar las coordenadas para los
      * clientes
      */
-    private SocketMapa sock;
+    private ObtenerCoordenadasMapa sock;
 
     private void AbrirPuertoCoordenadas() {
-        sock = new SocketMapa();
+        sock = new ObtenerCoordenadasMapa();
     }
 
     public void CerrarPuertoCoordenadas() {
         try {
-            sock.CerrarPuerto();
+            sock.PararDeEscuchar();
         } catch (NullPointerException ex) {
         }
     }
