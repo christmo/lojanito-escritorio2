@@ -22,8 +22,8 @@ public class ObtenerCoordenadasMapa extends Thread {
 //    private static int puerto = 65000;
     private static int puerto;
     boolean escuchar = true;
-    ServerSocket ss;
-    Socket s;
+    private ServerSocket ss;
+    private Socket s;
 
     /*public static void main(String[] args) {
     new ObtenerCoordenadasMapa();
