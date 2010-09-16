@@ -6,6 +6,7 @@
 package interfaz;
 
 import BaseDatos.ConexionBase;
+import BaseDatos.GuardarServidorKRADAC;
 import interfaz.reloj.Reloj;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
@@ -190,7 +191,7 @@ public final class Principal extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                         }
                     } catch (NullPointerException ex) {
-                        JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                        JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada...\na recoger el pasajero...", "Error...", 0);
                     }
                 } catch (NullPointerException ex) {
                     //JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
@@ -1660,7 +1661,8 @@ public final class Principal extends javax.swing.JFrame {
         System.out.println("Remover el temporal...");
         for (int i = 0; i < listaDespachosTemporales.size(); i++) {
             if (listaDespachosTemporales.get(i).getIntUnidad() == Integer.parseInt(unidad)) {
-                bd.InsertarLibreServidorKRADAC(listaDespachosTemporales.get(i));
+                GuardarServidorKRADAC server = new GuardarServidorKRADAC(listaDespachosTemporales.get(i), false);
+                server.start();
                 listaDespachosTemporales.remove(i);
                 break;
             }
@@ -2040,6 +2042,12 @@ public final class Principal extends javax.swing.JFrame {
         int intFila = jtPorDespachar.getSelectedRow();
         InsertarAsignacionDespachoServidorKradac();
         DespacharCliente(intFila);
+        try {
+            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+            QuitarClienteMapa(cod_cli, unidad);
+        } catch (NullPointerException ex) {
+        }
     }//GEN-LAST:event_jbDespacharActionPerformed
 
     private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDespachadosMousePressed
@@ -2566,9 +2574,9 @@ public final class Principal extends javax.swing.JFrame {
         try {
             if (!codigoCliente.equals("")) {
                 if (!n_unidad.equals("")) {
-                    //bd.EliminarClienteMapa(Integer.parseInt(codigoCliente), Integer.parseInt(n_unidad));
+                    bd.EliminarClienteMapa(Integer.parseInt(codigoCliente), Integer.parseInt(n_unidad));
                 } else {
-                    //bd.EliminarClienteMapa(Integer.parseInt(codigoCliente));
+                    bd.EliminarClienteMapa(Integer.parseInt(codigoCliente));
                 }
             }
         } catch (NumberFormatException ex) {
@@ -2654,7 +2662,10 @@ public final class Principal extends javax.swing.JFrame {
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
                 System.out.println("Minutos desde cliente:" + minutos);
                 d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
-                bd.InsertarAsignacionServidorKRADAC(d);
+
+                GuardarServidorKRADAC server = new GuardarServidorKRADAC(d, true);
+                server.start();
+
                 break;
             }
         }

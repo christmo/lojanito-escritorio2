@@ -1,6 +1,7 @@
 package BaseDatos;
 
 import com.mysql.jdbc.Statement;
+import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
 import java.io.BufferedReader;
@@ -36,6 +37,7 @@ public class ConexionBase {
     private ResultSet rs = null;
     //private ResourceBundle rb;
     private Properties arcConfig;
+    private funcionesUtilidad funciones = new funcionesUtilidad();
 
     /**
      * Crea la conexion directamente a la base de datos de rastreosatelital
@@ -1303,13 +1305,15 @@ public class ConexionBase {
      * @return boolean
      */
     public boolean InsertarClienteMapa(int cod_cliente, double latitud, double longitud) {
-        String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,LATITUD,LONGITUD) "
+        String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,LATITUD,LONGITUD,FECHA,HORA) "
                 + "VALUES("
                 + cod_cliente + ","
                 + null + ","
                 + latitud + ","
-                + longitud
-                + ")";
+                + longitud + ",'"
+                + funciones.getFecha() + "','"
+                + funciones.getHora()
+                + "')";
         return ejecutarSentencia(sql);
     }
 
@@ -1430,70 +1434,10 @@ public class ConexionBase {
     }
     Despachos demo;
 
-    /**
-     * Inserta la asignasion en el servidor kradac
-     * @param Despachos
-     */
-    public void InsertarAsignacionServidorKRADAC(Despachos d) {
-        this.demo = d;
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                System.out.println("Enviar datos al Server...");
-                String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                        + demo.getIntUnidad()
-                        + ","
-                        + demo.getIntCodigo()
-                        + ",'ASIGNADO',"
-                        + demo.getMinutosEntreClienteServidor()
-                        + ",'"
-                        + demo.getStrTelefono()
-                        + "');";
-                ejecutarSentencia(sql);
-                System.out.println("KRADAC: " + sql);
-                InsertarDespachoServidorKRADAC(demo);
-            }
-        });
-    }
-
     public void ImprimirDespacho(Despachos desp) {
         System.out.println("-*-\n" + "Nombre: " + desp.getStrNombre());
         System.out.println("Codigo: " + desp.getIntCodigo());
         System.out.println("Unidad: " + desp.getIntUnidad() + "\n-/-");
-    }
-
-    /**
-     * Inserta luego de asignado el ocupado del taxi cuando se despacho
-     * @param Despachos
-     */
-    public void InsertarDespachoServidorKRADAC(Despachos d) {
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ",'"
-                        + demo.getStrTelefono()
-                        + "');";
-        System.out.println("KRADAC: " + sql);
-        ejecutarSentencia(sql);
-    }
-
-    /**
-     * Inserta luego de asignado el ocupado del taxi cuando se despacho
-     * @param Despachos
-     */
-    public void InsertarLibreServidorKRADAC(Despachos desp) {
-        final Despachos d = desp;
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                System.out.println("Enviar datos al Server...");
-                String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                        + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ",'"
-                        + demo.getStrTelefono()
-                        + "');";
-                System.out.println("KRADAC: " + sql);
-                ejecutarSentencia(sql);
-            }
-        });
     }
 
     /**

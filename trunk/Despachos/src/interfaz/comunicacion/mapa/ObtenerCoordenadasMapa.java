@@ -77,7 +77,8 @@ public class ObtenerCoordenadasMapa extends Thread {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
+            PararDeEscuchar();
         }
     }
 
@@ -89,6 +90,7 @@ public class ObtenerCoordenadasMapa extends Thread {
             this.escuchar = false;
         } catch (IOException ex) {
             Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
         }
     }
 
