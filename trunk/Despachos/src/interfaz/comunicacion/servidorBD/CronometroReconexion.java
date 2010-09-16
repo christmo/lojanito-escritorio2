@@ -17,16 +17,13 @@ public class CronometroReconexion extends Thread {
     int i = 1;
 
     public CronometroReconexion() {
-
         seguir = true;
         i = 1;
     }
 
     @Override
     public void run() {
-        System.out.println("Iniciar hilo: " + seguir);
         while (seguir) {
-
             //System.out.println("T:" + i);
             i++;
             if (i == 60) {
@@ -49,8 +46,6 @@ public class CronometroReconexion extends Thread {
         this.start();
         seguir = true;
         i = 1;
-        System.out.println("Iniciar");
-
     }
 
     public void reiniciar() {
