@@ -512,7 +512,7 @@ public class ConexionBase {
             String sql = "SELECT CODIGO FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
             rsAux = ejecutarConsultaUnDato(sql);
             int cod = rsAux.getInt("CODIGO");
-            System.out.println("Este codigo de vuelve: "+cod +" = "+codigo);
+            System.out.println("Este codigo de vuelve: " + cod + " = " + codigo);
             if (codigo == cod) {
                 System.err.println("Ya hay un cliente con ese telefono...");
                 return true;
@@ -1447,7 +1447,9 @@ public class ConexionBase {
                         + demo.getIntCodigo()
                         + ",'ASIGNADO',"
                         + demo.getMinutosEntreClienteServidor()
-                        + ");";
+                        + ",'"
+                        + demo.getStrTelefono()
+                        + "');";
                 ejecutarSentencia(sql);
                 System.out.println("KRADAC: " + sql);
                 InsertarDespachoServidorKRADAC(demo);
@@ -1467,7 +1469,9 @@ public class ConexionBase {
      */
     public void InsertarDespachoServidorKRADAC(Despachos d) {
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ");";
+                + d.getIntUnidad() + "," + d.getIntCodigo() + ",'OCUPADO'," + "-1" + ",'"
+                        + demo.getStrTelefono()
+                        + "');";
         System.out.println("KRADAC: " + sql);
         ejecutarSentencia(sql);
     }
@@ -1483,7 +1487,9 @@ public class ConexionBase {
             public void run() {
                 System.out.println("Enviar datos al Server...");
                 String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA) VALUES ("
-                        + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ");";
+                        + d.getIntUnidad() + "," + d.getIntCodigo() + ",'LIBRE'," + "-2" + ",'"
+                        + demo.getStrTelefono()
+                        + "');";
                 System.out.println("KRADAC: " + sql);
                 ejecutarSentencia(sql);
             }

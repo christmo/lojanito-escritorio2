@@ -27,12 +27,13 @@ public class CronometroReconexion extends Thread {
         System.out.println("Iniciar hilo: " + seguir);
         while (seguir) {
 
-            System.out.println("T:" + i);
+            //System.out.println("T:" + i);
             i++;
-            if(i==60){
+            if (i == 60) {
                 System.err.println("Reiniciar la conexion con el servidor...");
                 ConsultaRecorridosServidorBD.cerrarConexionServerKradac();
                 ConsultaRecorridosServidorBD.AbrirPuerto();
+                i = 1;
             }
             try {
                 Thread.sleep(1000);

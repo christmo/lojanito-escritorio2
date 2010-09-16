@@ -193,7 +193,7 @@ public class funcionesUtilidad {
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
-        System.out.println("Hora: " + sdf.format(calendario.getTime()));
+        //System.out.println("Hora: " + sdf.format(calendario.getTime()));
         return sdf.format(calendario.getTime());
     }
 
