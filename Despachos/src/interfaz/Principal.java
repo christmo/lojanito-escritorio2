@@ -6,7 +6,7 @@
 package interfaz;
 
 import BaseDatos.ConexionBase;
-import BaseDatos.GuardarServidorKRADAC;
+import interfaz.comunicacion.servidorBD.GuardarServidorKRADAC;
 import interfaz.reloj.Reloj;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
