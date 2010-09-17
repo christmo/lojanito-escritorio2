@@ -210,6 +210,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoSenal() {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
+        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC();
+        actualizarServer.start();
     }
 
     /**
