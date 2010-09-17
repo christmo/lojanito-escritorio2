@@ -189,6 +189,33 @@ public class ConexionBase {
     }
 
     /**
+     * Utilizar cuando de error de ResultSet cerrado por problemas de los hilos
+     * @param sql
+     * @return boolean
+     */
+    public boolean ejecutarSentenciaStatement2(String sql) {
+        try {
+            Statement st1 = (Statement) conexion.createStatement();
+
+            System.out.println("Ejecutar: " + sql);
+            int rta = st1.executeUpdate(sql);
+            if (rta >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            if (!ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                System.err.println("La tabla del servidor no es accesible...");
+            }
+            return false;
+        }
+    }
+
+    /**
      * Ejecuta una sentencia en la base esta puede ser de INSERT, UPDATE O
      * DELETE el la misma solo que no presenta los errores en la base de datos
      * ni imprime la ejecucion del sql

@@ -1,4 +1,3 @@
-
 package interfaz.comunicacion.servidorBD;
 
 import BaseDatos.ConexionBase;
@@ -94,21 +93,27 @@ public class GuardarServidorKRADAC extends Thread {
 
     /**
      * Insertar datos en el servidor de KRADAC PARA LOS DESPACHOS
+     * @param intUnidad
+     * @param intCodCliente
+     * @param strEstado
+     * @param minutos -> numero de minutos que han pasado desde que se despacho
+     * @param strTelefono
+     * @return boolean
      */
     private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono) {
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR) "
                 + "VALUES ("
                 + intUnidad
                 + ","
                 + intCodCliente
                 + ",'"
                 + strEstado
+                + "','"
+                + strTelefono
                 + "',"
                 + minutos
-                + ",'"
-                + strTelefono
-                + "');";
-        return bd.ejecutarSentencia(sql);
+                + ");";
+        return bd.ejecutarSentenciaStatement2(sql);
     }
 
     /**
@@ -117,7 +122,7 @@ public class GuardarServidorKRADAC extends Thread {
      */
     private void BorrarRespadoLocal(long HoraInsert) {
         String sql = "DELETE FROM RESPALDO_ASIGNACION_SERVER WHERE HORA_INSERT = " + HoraInsert;
-        bd.ejecutarSentencia(sql);
+        bd.ejecutarSentenciaStatement2(sql);
     }
 
     /**
@@ -127,19 +132,19 @@ public class GuardarServidorKRADAC extends Thread {
      */
     private boolean ConexionServidorKRADAC() {
         /*try {
-            //InetAddress address = InetAddress.getByName("200.0.29.117");
-            InetAddress address = InetAddress.getByName(Principal.arcConfig.getProperty("ip_kradac"));
-            // Try to reach the specified address within the timeout
-            // periode. If during this periode the address cannot be
-            // reach then the method returns false.
-            boolean reachable = address.isReachable(1000);
-            System.out.println("Es alcanzable el server KRADAC: " + reachable);
-            return reachable;
+        //InetAddress address = InetAddress.getByName("200.0.29.117");
+        InetAddress address = InetAddress.getByName(Principal.arcConfig.getProperty("ip_kradac"));
+        // Try to reach the specified address within the timeout
+        // periode. If during this periode the address cannot be
+        // reach then the method returns false.
+        boolean reachable = address.isReachable(1000);
+        System.out.println("Es alcanzable el server KRADAC: " + reachable);
+        return reachable;
         } catch (IOException ex) {
-            Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+        Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+        return false;
         }*/
-
+        System.err.println("Insertar server KRADAC: " + ConsultaRecorridosServidorBD.HayInternet);
         return ConsultaRecorridosServidorBD.HayInternet;
     }
 
@@ -176,7 +181,6 @@ public class GuardarServidorKRADAC extends Thread {
         }
         System.err.println("KRADAC: " + sql);
         InsertarDespachoServidorKRADAC();
-        bd.CerrarConexion();
     }
 
     /**
@@ -203,7 +207,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "',"
                     + "0"
                     + ",'"
-                    + desp.getStrTelefono() 
+                    + desp.getStrTelefono()
                     + "',"
                     + funciones.getHoraEnMilis()
                     + ");";
@@ -236,7 +240,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "',"
                     + "0"
                     + ",'"
-                    + desp.getStrTelefono() 
+                    + desp.getStrTelefono()
                     + "',"
                     + funciones.getHoraEnMilis()
                     + ");";
