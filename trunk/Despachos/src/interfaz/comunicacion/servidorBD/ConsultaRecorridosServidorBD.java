@@ -53,7 +53,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 echoSocket = new Socket(DIRECCION, PUERTO);
                 System.err.println("Iniciar conexion con el server BD...");
             } catch (UnknownHostException ex) {
-                //Principal.lblSenal.setIcon(senal);
                 cerrarConexionServerKradac();
                 AbrirPuerto();
                 Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
