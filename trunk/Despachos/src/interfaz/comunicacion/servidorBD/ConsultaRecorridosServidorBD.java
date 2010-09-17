@@ -18,7 +18,7 @@ import javax.swing.Icon;
  */
 public class ConsultaRecorridosServidorBD extends Thread {
 
-    private static int PUERTO = 666;
+    private static int PUERTO;// = 666;
     private static String DIRECCION;
     private static Socket echoSocket;
     private String empresa;
@@ -28,6 +28,11 @@ public class ConsultaRecorridosServidorBD extends Thread {
     CronometroReconexion crono = new CronometroReconexion();
     private static Icon senal = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/senal.png"));
     private static Icon nosenal = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/nosenal.png"));
+    /**
+     * Guarda una bandera de que si se estan recupenado datos desde el servidor
+     * de KRADAC, entonces tambien se puede insertar datos alli....
+     */
+    public static boolean HayInternet;
 
     public ConsultaRecorridosServidorBD(String empresa, ConexionBase bd) {
         this.empresa = empresa;
@@ -54,7 +59,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
-                Principal.lblSenal.setIcon(nosenal);
+                PonerIconoNOSenal();
                 if (ex.getMessage().equals("No route to host: connect")) {
                     System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
                     cerrarConexionServerKradac();
@@ -110,7 +115,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private void GuardarDatosRecorridos(String datoVehiculo, ConexionBase bd) {
         String[] recorrido = datoVehiculo.split(",");
 
-        Principal.lblSenal.setIcon(senal);
+        PonerIconoSenal();
         /**
         ----
         ID PARTICION: 20100909
@@ -179,8 +184,11 @@ public class ConsultaRecorridosServidorBD extends Thread {
         return null;
     }
 
+    /**
+     * Cierra la conexion con el servidor de KRADAC
+     */
     public static void cerrarConexionServerKradac() {
-        Principal.lblSenal.setIcon(nosenal);
+        PonerIconoNOSenal();
         try {
             try {
                 salida.close();
@@ -189,11 +197,28 @@ public class ConsultaRecorridosServidorBD extends Thread {
             }
             try {
                 echoSocket.close();
-                System.out.println("Socket Cerrado...");
+                System.out.println("Socket cerrado con servidor KRADAC...");
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {
             Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Pone el icono en la interfaz Principal de señal
+     */
+    private static void PonerIconoSenal() {
+        Principal.lblSenal.setIcon(senal);
+        HayInternet = true;
+    }
+
+    /**
+     * Pone el icono en la interfaz Principal de Sin Señal no se estan guardando los
+     * datos recuperados desde el servidor
+     */
+    private static void PonerIconoNOSenal() {
+        Principal.lblSenal.setIcon(nosenal);
+        HayInternet = false;
     }
 }

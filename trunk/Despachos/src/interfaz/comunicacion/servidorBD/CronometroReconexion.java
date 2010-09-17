@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Usuario
+ * @author christmo
  */
 public class CronometroReconexion extends Thread {
 

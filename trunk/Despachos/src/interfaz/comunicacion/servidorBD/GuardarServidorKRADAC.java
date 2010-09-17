@@ -1,15 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package BaseDatos;
 
+package interfaz.comunicacion.servidorBD;
+
+import BaseDatos.ConexionBase;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Usuario
+ * @author christmo
  */
 public class GuardarServidorKRADAC extends Thread {
 
@@ -129,7 +126,7 @@ public class GuardarServidorKRADAC extends Thread {
      * @return boolean
      */
     private boolean ConexionServidorKRADAC() {
-        try {
+        /*try {
             //InetAddress address = InetAddress.getByName("200.0.29.117");
             InetAddress address = InetAddress.getByName(Principal.arcConfig.getProperty("ip_kradac"));
             // Try to reach the specified address within the timeout
@@ -141,7 +138,9 @@ public class GuardarServidorKRADAC extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }
+        }*/
+
+        return ConsultaRecorridosServidorBD.HayInternet;
     }
 
     /**
