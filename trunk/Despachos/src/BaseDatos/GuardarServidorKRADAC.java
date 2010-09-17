@@ -5,7 +5,15 @@
 package BaseDatos;
 
 import interfaz.Principal;
+import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +24,8 @@ public class GuardarServidorKRADAC extends Thread {
     private ConexionBase bd;
     private Despachos desp;
     private boolean accion;
+    private funcionesUtilidad funciones = new funcionesUtilidad();
+    private ResultSet rs;
 
     /**
      * Guarda por separado los datos que van al servidor
@@ -37,6 +47,101 @@ public class GuardarServidorKRADAC extends Thread {
         } else {
             InsertarLibreServidorKRADAC();
         }
+        ActualizarServidorConConexion();
+    }
+
+    /**
+     * Actualiza los estados de los vehiculos guardados localmente mientras se vaya
+     * el internet, en el servidor KRADAC cuando haya ya sea alcanzable el servidor
+     */
+    private void ActualizarServidorConConexion() {
+        if (ConexionServidorKRADAC()) {
+            if (bd.getNumeroFilasRespaldoAsignacion() > 0) {
+                InsertarFilasRespaldadasLocalesEnServidorKRADAC();
+            }
+        }
+    }
+
+    /**
+     * Insertar las filas que NO hayan podido guardarse en el servidor al momento
+     * de su ejecucion y que estan almacenadas en la tabla de respaldos local
+     */
+    private void InsertarFilasRespaldadasLocalesEnServidorKRADAC() {
+        try {
+            long minutos;
+            rs = bd.getFilasRespaldoLocalAsignaciones();
+            while (rs.next()) {
+                long HoraAct = funciones.getHoraEnMilis();
+                long HoraInsert = rs.getLong("HORA_INSERT");
+                int MinDespacho = rs.getInt("HORA");
+                minutos = (((HoraAct - HoraInsert) / 1000) / 60) + MinDespacho;
+                System.err.println("Minutos desde la Desconexion:" + minutos);
+                boolean estadoInsersionServidor = InsertServidorKRADAC(
+                        rs.getInt("N_UNIDAD"),
+                        rs.getInt("COD_CLIENTE"),
+                        rs.getString("ESTADO"),
+                        (int) minutos,
+                        rs.getString("FONO"));
+                if (estadoInsersionServidor) {
+                    /**
+                     * Borrar el respaldo ya que se ha guardado correctamente
+                     * en els ervidor de KRADAC
+                     */
+                    BorrarRespadoLocal(HoraInsert);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Insertar datos en el servidor de KRADAC PARA LOS DESPACHOS
+     */
+    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono) {
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+                + "VALUES ("
+                + intUnidad
+                + ","
+                + intCodCliente
+                + ",'"
+                + strEstado
+                + "',"
+                + minutos
+                + ",'"
+                + strTelefono
+                + "');";
+        return bd.ejecutarSentencia(sql);
+    }
+
+    /**
+     * Borrar respaldo local, luego de haber guardado el respaldo en el servidor
+     * @param HoraInsert
+     */
+    private void BorrarRespadoLocal(long HoraInsert) {
+        String sql = "DELETE FROM RESPALDO_ASIGNACION_SERVER WHERE HORA_INSERT = " + HoraInsert;
+        bd.ejecutarSentencia(sql);
+    }
+
+    /**
+     * Comprueba si el servidor de base de datos de KRADAC es alcanzable para
+     * realizar transacciones, con esto sabremos que si hay conexion a internet
+     * @return boolean
+     */
+    private boolean ConexionServidorKRADAC() {
+        try {
+            //InetAddress address = InetAddress.getByName("200.0.29.117");
+            InetAddress address = InetAddress.getByName(Principal.arcConfig.getProperty("ip_kradac"));
+            // Try to reach the specified address within the timeout
+            // periode. If during this periode the address cannot be
+            // reach then the method returns false.
+            boolean reachable = address.isReachable(1000);
+            System.out.println("Es alcanzable el server KRADAC: " + reachable);
+            return reachable;
+        } catch (IOException ex) {
+            Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     /**
@@ -54,16 +159,21 @@ public class GuardarServidorKRADAC extends Thread {
                 + "');";
         if (!bd.ejecutarSentencia(sql)) {
             System.err.println("Respaldar ASIGNADO...");
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) VALUES ("
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
+                    + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
                     + desp.getIntCodigo()
-                    + ",'ASIGNADO',"
+                    + ",'ASIGNADO','"
+                    + funciones.getFecha()
+                    + "',"
                     + desp.getMinutosEntreClienteServidor()
                     + ",'"
                     + desp.getStrTelefono()
-                    + "');";
-            bd.ejecutarConsulta(sql2);
+                    + "',"
+                    + funciones.getHoraEnMilis()
+                    + ");";
+            bd.ejecutarSentencia(sql2);
         }
         System.err.println("KRADAC: " + sql);
         InsertarDespachoServidorKRADAC();
@@ -82,12 +192,23 @@ public class GuardarServidorKRADAC extends Thread {
         System.err.println("KRADAC: " + sql);
         if (!bd.ejecutarSentencia(sql)) {
             System.err.println("Respaldar OCUPADO...");
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
                     + "VALUES ("
-                    + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'OCUPADO'," + "-1" + ",'"
-                    + desp.getStrTelefono()
-                    + "');";
-            bd.ejecutarConsulta(sql2);
+                    + desp.getIntUnidad()
+                    + ","
+                    + desp.getIntCodigo()
+                    + ",'"
+                    + "OCUPADO"
+                    + "','"
+                    + funciones.getFecha()
+                    + "',"
+                    + "0"
+                    + ",'"
+                    + desp.getStrTelefono() 
+                    + "',"
+                    + funciones.getHoraEnMilis()
+                    + ");";
+            bd.ejecutarSentencia(sql2);
         }
     }
 
@@ -104,12 +225,23 @@ public class GuardarServidorKRADAC extends Thread {
         System.err.println("KRADAC: " + sql);
         if (!bd.ejecutarSentencia(sql)) {
             System.err.println("Respaldar LIBRE...");
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
                     + "VALUES ("
-                    + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'LIBRE'," + "-2" + ",'"
-                    + desp.getStrTelefono()
-                    + "');";
-            bd.ejecutarConsulta(sql2);
+                    + desp.getIntUnidad()
+                    + ","
+                    + desp.getIntCodigo()
+                    + ",'"
+                    + "LIBRE"
+                    + "','"
+                    + funciones.getFecha()
+                    + "',"
+                    + "0"
+                    + ",'"
+                    + desp.getStrTelefono() 
+                    + "',"
+                    + funciones.getHoraEnMilis()
+                    + ");";
+            bd.ejecutarSentencia(sql2);
         }
     }
 }
