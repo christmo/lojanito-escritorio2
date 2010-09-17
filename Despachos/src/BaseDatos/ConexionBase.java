@@ -135,7 +135,9 @@ public class ConexionBase {
             rs = st.executeQuery(sql);
             rs.next();
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return rs;
     }
@@ -177,7 +179,11 @@ public class ConexionBase {
                 return false;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            if (!ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                System.err.println("La tabla del servidor no es accesible...");
+            }
             return false;
         }
     }
@@ -1454,6 +1460,33 @@ public class ConexionBase {
             Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    /**
+     * Obtiene el numero de filas que tiene el archivo de respaldos de estados
+     * de asignacion del carro
+     * @return int
+     */
+    public int getNumeroFilasRespaldoAsignacion() {
+        try {
+            String sql = "SELECT COUNT(*) FROM RESPALDO_ASIGNACION_SERVER;";
+            rs = ejecutarConsultaUnDato(sql);
+            return rs.getInt(1);
+        } catch (SQLException ex) {
+            //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
+        }
+        return 0;
+    }
+
+    /**
+     * Obtiene todas las filas de los datos respaldados localmente de los estados
+     * de asignacion, ocupado y libre de los vehiculos
+     * @return ResultSet
+     */
+    public ResultSet getFilasRespaldoLocalAsignaciones() {
+        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT FROM RESPALDO_ASIGNACION_SERVER";
+        return rs = ejecutarConsulta(sql);
     }
 
     /**
