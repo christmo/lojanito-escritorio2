@@ -1658,7 +1658,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param codVehiculo
      */
     private void RemoverDespachoDeTemporal(String unidad) {
-        System.out.println("Remover el temporal...");
+        
         for (int i = 0; i < listaDespachosTemporales.size(); i++) {
             if (listaDespachosTemporales.get(i).getIntUnidad() == Integer.parseInt(unidad)) {
                 GuardarServidorKRADAC server = new GuardarServidorKRADAC(listaDespachosTemporales.get(i), false);
@@ -1667,16 +1667,15 @@ public final class Principal extends javax.swing.JFrame {
                 break;
             }
         }
-
-        ImprmirTMP();
     }
 
-    /***--------------------------------Borrar*/
+    /***--------------------------------Borrar--------------------------------*/
     private void ImprmirTMP() {
         for (Despachos d : listaDespachosTemporales) {
             System.out.println("TMP: " + d.getStrHora() + " C:" + d.getIntCodigo() + " U:" + d.getIntUnidad());
         }
     }
+    /*----------------------------------------------------------------*/
 
     /**
      * Cambia el estado de un TAXI en la BD
@@ -2614,7 +2613,7 @@ public final class Principal extends javax.swing.JFrame {
                             long hora = funciones.getHoraEnMilis();
                             listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
 
-                            System.out.println("Hora seteada: " + hora);
+                            //System.out.println("Hora seteada: " + hora);
 
                             listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
                             listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
@@ -2652,15 +2651,15 @@ public final class Principal extends javax.swing.JFrame {
     private void InsertarAsignacionDespachoServidorKradac() {
         int intFila = jtPorDespachar.getSelectedRow();
         long minutos;
-        ImprmirTMP();
+        
         for (Despachos d : listaDespachosTemporales) {
             String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
 
             if (d.getStrHora().equals(horaTabla)) {
                 d.setHoraDeDespacho(funciones.getHoraEnMilis());
-                System.out.println("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
+                //System.out.println("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
-                System.out.println("Minutos desde cliente:" + minutos);
+                //System.out.println("Minutos desde cliente:" + minutos);
                 d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
 
                 GuardarServidorKRADAC server = new GuardarServidorKRADAC(d, true);

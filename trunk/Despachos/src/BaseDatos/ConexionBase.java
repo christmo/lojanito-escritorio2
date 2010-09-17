@@ -141,6 +141,26 @@ public class ConexionBase {
         }
         return rs;
     }
+
+    /**
+     * Ejecuta una consulta en la base de datos, que devuelve valores
+     * no es necesario recorrer el resultset, no imprime la consulta
+     * para ponerla en hilos donde no es necesario ver lo que sale...
+     * @param sql - debe ser Select
+     * @return ResultSet
+     */
+    public ResultSet ejecutarConsultaUnDatoNoImprimir(String sql) {
+        //System.out.println("Consultar: " + sql);
+        try {
+            rs = st.executeQuery(sql);
+            rs.next();
+        } catch (SQLException ex) {
+            if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return rs;
+    }
     /**
      * Resul set auxiliar para las dobles consultas
      */
@@ -179,11 +199,18 @@ public class ConexionBase {
                 return false;
             }
         } catch (SQLException ex) {
-            if (!ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-            } else {
+            //Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED
+            System.out.println("EX:" + ex.getMessage());
+            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 System.err.println("La tabla del servidor no es accesible...");
+            } else if (ex.getMessage().equals("Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.117' (10065)")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
+            } else if (ex.getMessage().equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
+            } else {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             }
+
             return false;
         }
     }
@@ -206,11 +233,17 @@ public class ConexionBase {
             }
 
         } catch (SQLException ex) {
-            if (!ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-            } else {
+            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 System.err.println("La tabla del servidor no es accesible...");
+            } else if (ex.getMessage().equals("Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.117' (10065)")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
+            } else if (ex.getMessage().equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
+            } else {
+                //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("ERROR: " + ex.getMessage());
             }
+
             return false;
         }
     }
@@ -547,9 +580,7 @@ public class ConexionBase {
             String sql = "SELECT CODIGO FROM CLIENTES WHERE TELEFONO='" + telefono + "'";
             rsAux = ejecutarConsultaUnDato(sql);
             int cod = rsAux.getInt("CODIGO");
-            System.out.println("Este codigo de vuelve: " + cod + " = " + codigo);
             if (codigo == cod) {
-                System.err.println("Ya hay un cliente con ese telefono...");
                 return true;
             }
         } catch (SQLException ex) {
@@ -1497,7 +1528,7 @@ public class ConexionBase {
     public int getNumeroFilasRespaldoAsignacion() {
         try {
             String sql = "SELECT COUNT(*) FROM RESPALDO_ASIGNACION_SERVER;";
-            rs = ejecutarConsultaUnDato(sql);
+            rs = ejecutarConsultaUnDatoNoImprimir(sql);
             return rs.getInt(1);
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);

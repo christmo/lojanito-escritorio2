@@ -53,7 +53,7 @@ public class GuardarServidorKRADAC extends Thread {
                 + desp.getStrTelefono()
                 + "');";
         if (!bd.ejecutarSentencia(sql)) {
-            System.err.println("Respaldar ASIGNADO...");
+            //System.err.println("Respaldar ASIGNADO...");
             String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
                     + "VALUES ("
                     + desp.getIntUnidad()
@@ -85,7 +85,7 @@ public class GuardarServidorKRADAC extends Thread {
                 + "');";
         System.err.println("KRADAC: " + sql);
         if (!bd.ejecutarSentencia(sql)) {
-            System.err.println("Respaldar OCUPADO...");
+            //System.err.println("Respaldar OCUPADO...");
             String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
                     + "VALUES ("
                     + desp.getIntUnidad()
@@ -118,7 +118,7 @@ public class GuardarServidorKRADAC extends Thread {
                 + "');";
         System.err.println("KRADAC: " + sql);
         if (!bd.ejecutarSentencia(sql)) {
-            System.err.println("Respaldar LIBRE...");
+            //System.err.println("Respaldar LIBRE...");
             String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT) "
                     + "VALUES ("
                     + desp.getIntUnidad()

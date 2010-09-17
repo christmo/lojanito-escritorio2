@@ -22,7 +22,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static String DIRECCION;
     private static Socket echoSocket;
     private String empresa;
-    private ConexionBase bd;
+    private static ConexionBase bd;
     private static BufferedReader entrada;
     private static PrintStream salida;
     CronometroReconexion crono = new CronometroReconexion();
@@ -210,7 +210,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoSenal() {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
-        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC();
+        int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
+        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas);
         actualizarServer.start();
     }
 

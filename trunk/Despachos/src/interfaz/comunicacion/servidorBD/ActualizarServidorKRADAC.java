@@ -21,16 +21,15 @@ public class ActualizarServidorKRADAC extends Thread {
     private ConexionBase bd;
     private ResultSet rs;
     private funcionesUtilidad funciones = new funcionesUtilidad();
+    private int intFilasRespaldadas;
 
-    public ActualizarServidorKRADAC() {
-        this.bd = new ConexionBase(Principal.arcConfig);
+    public ActualizarServidorKRADAC(int filas) {
+        this.intFilasRespaldadas = filas;
     }
 
     @Override
     public void run() {
-        System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
         ActualizarServidorConConexion();
-        bd.CerrarConexion();
     }
 
     /**
@@ -39,8 +38,11 @@ public class ActualizarServidorKRADAC extends Thread {
      */
     private void ActualizarServidorConConexion() {
         if (ConexionServidorKRADAC()) {
-            if (bd.getNumeroFilasRespaldoAsignacion() > 0) {
+            if (intFilasRespaldadas > 0) {
+                System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
+                this.bd = new ConexionBase(Principal.arcConfig);
                 InsertarFilasRespaldadasLocalesEnServidorKRADAC();
+                bd.CerrarConexion();
             }
         }
     }
@@ -58,7 +60,7 @@ public class ActualizarServidorKRADAC extends Thread {
                 long HoraInsert = rs.getLong("HORA_INSERT");
                 int MinDespacho = rs.getInt("HORA");
                 minutos = (((HoraAct - HoraInsert) / 1000) / 60) + MinDespacho;
-                System.err.println("Minutos desde la Desconexion:" + minutos);
+                //System.err.println("Minutos desde la Desconexion:" + minutos);
                 boolean estadoInsersionServidor = InsertServidorKRADAC(
                         rs.getInt("N_UNIDAD"),
                         rs.getInt("COD_CLIENTE"),
@@ -118,7 +120,7 @@ public class ActualizarServidorKRADAC extends Thread {
      * @return boolean
      */
     private boolean ConexionServidorKRADAC() {
-        System.err.println("Insertar server KRADAC: " + ConsultaRecorridosServidorBD.HayInternet);
+        //System.err.println("Insertar server KRADAC: " + ConsultaRecorridosServidorBD.HayInternet);
         return ConsultaRecorridosServidorBD.HayInternet;
     }
 }
