@@ -52,7 +52,19 @@ public class GuardarServidorKRADAC extends Thread {
                 + ",'"
                 + desp.getStrTelefono()
                 + "');";
-        bd.ejecutarSentencia(sql);
+        if (!bd.ejecutarSentencia(sql)) {
+            System.err.println("Respaldar ASIGNADO...");
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) VALUES ("
+                    + desp.getIntUnidad()
+                    + ","
+                    + desp.getIntCodigo()
+                    + ",'ASIGNADO',"
+                    + desp.getMinutosEntreClienteServidor()
+                    + ",'"
+                    + desp.getStrTelefono()
+                    + "');";
+            bd.ejecutarConsulta(sql2);
+        }
         System.err.println("KRADAC: " + sql);
         InsertarDespachoServidorKRADAC();
         bd.CerrarConexion();
@@ -62,12 +74,21 @@ public class GuardarServidorKRADAC extends Thread {
      * Inserta luego de asignado el ocupado del taxi cuando se despacho
      */
     public void InsertarDespachoServidorKRADAC() {
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) VALUES ("
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+                + "VALUES ("
                 + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'OCUPADO'," + "-1" + ",'"
                 + desp.getStrTelefono()
                 + "');";
         System.err.println("KRADAC: " + sql);
-        bd.ejecutarSentencia(sql);
+        if (!bd.ejecutarSentencia(sql)) {
+            System.err.println("Respaldar OCUPADO...");
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+                    + "VALUES ("
+                    + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'OCUPADO'," + "-1" + ",'"
+                    + desp.getStrTelefono()
+                    + "');";
+            bd.ejecutarConsulta(sql2);
+        }
     }
 
     /**
@@ -75,11 +96,20 @@ public class GuardarServidorKRADAC extends Thread {
      */
     public void InsertarLibreServidorKRADAC() {
         System.out.println("Enviar datos al Server...");
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) VALUES ("
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+                + "VALUES ("
                 + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'LIBRE'," + "-2" + ",'"
                 + desp.getStrTelefono()
                 + "');";
         System.err.println("KRADAC: " + sql);
-        bd.ejecutarSentencia(sql);
+        if (!bd.ejecutarSentencia(sql)) {
+            System.err.println("Respaldar LIBRE...");
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,HORA,FONO) "
+                    + "VALUES ("
+                    + desp.getIntUnidad() + "," + desp.getIntCodigo() + ",'LIBRE'," + "-2" + ",'"
+                    + desp.getStrTelefono()
+                    + "');";
+            bd.ejecutarConsulta(sql2);
+        }
     }
 }
