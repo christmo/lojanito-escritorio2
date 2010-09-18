@@ -75,13 +75,13 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jtNumeroCasa" min="-2" pref="200" max="-2" attributes="1"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="27" max="32767" attributes="0"/>
                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Component id="jtBarrio" min="-2" pref="207" max="-2" attributes="1"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jtCodigo" pref="146" max="32767" attributes="0"/>
+                                  <Component id="jtCodigo" pref="174" max="32767" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jbCodigo" min="-2" pref="34" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -89,8 +89,8 @@
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="jtTelefono" min="-2" pref="206" max="-2" attributes="1"/>
                               </Group>
-                              <Component id="jtNombre" alignment="0" pref="489" max="32767" attributes="1"/>
-                              <Component id="jtDireccion" alignment="1" pref="489" max="32767" attributes="0"/>
+                              <Component id="jtNombre" alignment="0" pref="498" max="32767" attributes="1"/>
+                              <Component id="jtDireccion" alignment="1" pref="498" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -103,7 +103,7 @@
                                   <Component id="jtLatitud" min="-2" pref="214" max="-2" attributes="1"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="14" max="32767" attributes="0"/>
+                          <EmptySpace pref="36" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -269,7 +269,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="494" max="32767" attributes="0"/>
+                      <EmptySpace pref="503" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" pref="567" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">

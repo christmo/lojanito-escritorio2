@@ -1095,50 +1095,69 @@ public final class Principal extends javax.swing.JFrame {
      * @param intFila
      */
     private void BorrarFilaSeleccionadaPorDespachar(int intFila) {
-        try {
-            if (jtPorDespachar.isEditing()) {
-                jtPorDespachar.getCellEditor().cancelCellEditing();
-            }
-            Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
-            jlIndicadorLlamada.setIcon(img);
 
-            if (despacho.getStrHora() != null) {
-                if (!despacho.getStrHora().equals("") || jtPorDespachar.getValueAt(intFila, 0).equals("")) {
-                    despacho = getDatosPorDespachar();
-                    despacho.setStrHora(funciones.getHora());
-                    despacho.setStrEstado("C");//cancelada
-                    bd.InsertarDespachoCliente(despacho, false);
-                } else {
-                    despacho = getDatosPorDespachar();
-                    despacho.setStrHora(funciones.getHora());
-                    despacho.setStrEstado("C");//cancelada
-                    bd.InsertarDespachoCliente(despacho, false);
-                }
+        if (jtPorDespachar.isEditing()) {
+            jtPorDespachar.getCellEditor().cancelCellEditing();
+        }
+        Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+        jlIndicadorLlamada.setIcon(img);
+
+        if (despacho.getStrHora() != null) {
+            String hora = "";
+            try {
+                hora = jtPorDespachar.getValueAt(intFila, 0).toString();
+            } catch (NullPointerException ex) {
+            } catch (ArrayIndexOutOfBoundsException aex) {
+            }
+
+            if (!despacho.getStrHora().equals("") || hora.equals("")) {
+                despacho = getDatosPorDespachar();
+                despacho.setStrHora(funciones.getHora());
+                despacho.setStrEstado("C");//cancelada
+                bd.InsertarDespachoCliente(despacho, false);
             } else {
                 despacho = getDatosPorDespachar();
                 despacho.setStrHora(funciones.getHora());
                 despacho.setStrEstado("C");//cancelada
                 bd.InsertarDespachoCliente(despacho, false);
             }
-
-            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-            System.out.println("Cli: " + cod_cli);
-            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-            System.out.println("Unidad: " + unidad);
-
-            if (despacho.getIntUnidad() != 0) {
-                String etiquetaActivo = bd.getEtiquetaEstadoUnidad("AC");
-                AsignarColorDespachoVehiculo(unidad, etiquetaActivo);
-            }
-            QuitarClienteMapa(cod_cli, unidad);
-
-            DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-            model.removeRow(intFila);
-
-            InicializarVariables();
-        } catch (IndexOutOfBoundsException iex) {
-        } catch (NullPointerException nex) {
+        } else {
+            despacho = getDatosPorDespachar();
+            despacho.setStrHora(funciones.getHora());
+            despacho.setStrEstado("C");//cancelada
+            bd.InsertarDespachoCliente(despacho, false);
         }
+
+        String cod_cli = "";
+        try {
+            cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+            System.out.println("Cli: " + cod_cli);
+        } catch (NullPointerException ex) {
+            System.out.println("No tiene Codigo de Cliente");
+        } catch (ArrayIndexOutOfBoundsException aex) {
+        }
+
+        String unidad = "";
+
+        try {
+            unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+            System.out.println("Unidad: " + unidad);
+        } catch (NullPointerException ex) {
+            System.out.println("No tiene Unidad");
+        } catch (ArrayIndexOutOfBoundsException aex) {
+        }
+
+        if (despacho.getIntUnidad() != 0) {
+            String etiquetaActivo = bd.getEtiquetaEstadoUnidad("AC");
+            AsignarColorDespachoVehiculo(unidad, etiquetaActivo);
+        }
+        QuitarClienteMapa(cod_cli, unidad);
+
+        DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+        model.removeRow(intFila);
+
+        InicializarVariables();
+
     }
 
     /**
@@ -1658,7 +1677,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param codVehiculo
      */
     private void RemoverDespachoDeTemporal(String unidad) {
-        
+
         for (int i = 0; i < listaDespachosTemporales.size(); i++) {
             if (listaDespachosTemporales.get(i).getIntUnidad() == Integer.parseInt(unidad)) {
                 GuardarServidorKRADAC server = new GuardarServidorKRADAC(listaDespachosTemporales.get(i), false);
@@ -2651,7 +2670,7 @@ public final class Principal extends javax.swing.JFrame {
     private void InsertarAsignacionDespachoServidorKradac() {
         int intFila = jtPorDespachar.getSelectedRow();
         long minutos;
-        
+
         for (Despachos d : listaDespachosTemporales) {
             String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
 
