@@ -1548,6 +1548,17 @@ public class ConexionBase {
     }
 
     /**
+     * Obtener los vehiculos que estan ocupados y asignados al momento de cerrar
+     * el programa para activarlos para que no haya conflictos...
+     * @return ResultSet
+     */
+    public ResultSet getUnidadesOcupadasAsignadas(){
+        String sql ="SELECT A.N_UNIDAD, A.ID_CODIGO "
+                + "FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP AND A.ID_CODIGO IN ('OCU','ASI')";
+        return rs = ejecutarConsulta(sql);
+    }
+
+    /**
      * Solo funciona donde MySQL este instalado fisicamente, si se usa con wamp
      * poner la ruta donde se intalo wamp y mysql se puede usuatilizar para hacer
      * actualizaciones a las base de datos...
