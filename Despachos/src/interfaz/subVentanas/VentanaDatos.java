@@ -7,6 +7,7 @@
 package interfaz.subVentanas;
 
 import BaseDatos.ConexionBase;
+import interfaz.Principal;
 import interfaz.comunicacion.mapa.ObtenerCoordenadasMapa;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
@@ -630,9 +631,31 @@ public class VentanaDatos extends javax.swing.JDialog {
         } else {
             CerrarPuertoCoordenadas();
             GuardarDatos();
+            String cod = jtCodigo.getText();
+            IngresarClienteMapa(cod);
             this.dispose();
         }
     }//GEN-LAST:event_jbAceptarActionPerformed
+
+    /**
+     * Permite insertar un cliente en la tabla de posisionamiento para que sea
+     * dibujado en el mapa
+     * @param codigoCliente
+     * @param n_unidad
+     */
+    private void IngresarClienteMapa(String codigoCliente) {
+        
+        double lat = datos.getLatitud();
+        double lon = datos.getLongitud();
+        
+
+        if (lon != 0 && lat != 0) {
+            if (!codigoCliente.equals("") || !codigoCliente.equals("0")) {
+                System.out.println("Entro");
+                bd.InsertarClienteMapa(datos.getIntCodigo(), lat, lon);
+            }
+        }
+    }
 
     /**
      * Guarda los datos de nuevos o editados del cliente en la base de datos
