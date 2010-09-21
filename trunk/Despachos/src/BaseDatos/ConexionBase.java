@@ -202,7 +202,7 @@ public class ConexionBase {
             //Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED
             System.out.println("EX:" + ex.getMessage());
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                System.err.println("La tabla del servidor no es accesible...");
+                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
             } else if (ex.getMessage().equals("Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.117' (10065)")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
             } else if (ex.getMessage().equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED")) {
