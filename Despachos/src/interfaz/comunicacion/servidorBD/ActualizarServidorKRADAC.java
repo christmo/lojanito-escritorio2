@@ -77,7 +77,11 @@ public class ActualizarServidorKRADAC extends Thread {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
+                
+            } else {
+                Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -90,7 +94,7 @@ public class ActualizarServidorKRADAC extends Thread {
      * @param strTelefono
      * @return boolean
      */
-    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono,String usuario) {
+    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono, String usuario) {
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) "
                 + "VALUES ("
                 + intUnidad
