@@ -201,6 +201,20 @@ public class ConexionBase {
         } catch (SQLException ex) {
             //Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED
             System.out.println("EX:" + ex.getMessage());
+            String txt = ex.getMessage();
+            try {
+                txt = ex.getMessage().substring(0, 76);
+                if (txt.substring(0, 76).equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
+                    return false;
+                } else if (txt.substring(0, 76).equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
+                    return false;
+                }
+            } catch (StringIndexOutOfBoundsException sex) {
+            }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 System.err.println("La tabla \"SERVER\" no esta creada localmente...");
                 return false;
@@ -209,14 +223,6 @@ public class ConexionBase {
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                return false;
-            } else if (ex.getMessage().substring(0, 76).equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
-                String[] ip_server = ex.getMessage().split("'");
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                return false;
-            } else if (ex.getMessage().substring(0, 76).equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
-                String[] ip_server = ex.getMessage().split("'");
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
                 return false;
             } else {
                 Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
@@ -722,11 +728,11 @@ public class ConexionBase {
         if (id == 0) {
             sql = "SELECT PLACA, N_UNIDAD, ID_EMPRESA, ID_CON, CONDUCTOR_AUX, "
                     + " MODELO, ANIO,PROPIETARIO, INF_ADICIONAL, "
-                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS FROM VEHICULOS WHERE PLACA LIKE '" + parametro + "%'";
+                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS, REG_MUNICIPAL FROM VEHICULOS WHERE PLACA LIKE '" + parametro + "%'";
         } else {
             sql = "SELECT PLACA, N_UNIDAD, ID_EMPRESA, ID_CON, CONDUCTOR_AUX, "
                     + "MODELO, ANIO,PROPIETARIO, INF_ADICIONAL, "
-                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS FROM VEHICULOS WHERE N_UNIDAD = '" + parametro + "'";
+                    + "IMAGEN, MARCA, NUM_MOTOR, NUM_CHASIS, REG_MUNICIPAL FROM VEHICULOS WHERE N_UNIDAD = '" + parametro + "'";
         }
 
         ResultSet res = ejecutarConsulta(sql);
@@ -746,6 +752,7 @@ public class ConexionBase {
                 aux[11] = res.getString("MARCA");
                 aux[12] = res.getString("NUM_MOTOR");
                 aux[13] = res.getString("NUM_CHASIS");
+                aux[5] = res.getString("REG_MUNICIPAL");
                 rta.add(aux);
             }
         } catch (SQLException ex) {
@@ -860,7 +867,7 @@ public class ConexionBase {
     }
 
     /**
-     * 
+     * Actualizar un vehiculo
      * @param pl
      * @param numi
      * @param emp
@@ -874,7 +881,8 @@ public class ConexionBase {
      * @param mar
      * @param mot
      * @param cha
-     * @return
+     * @param reg_municipal
+     * @return boolean
      */
     public boolean actualizarVehiculo(String pl,
             int numi,
@@ -888,11 +896,25 @@ public class ConexionBase {
             String img,
             String mar,
             String mot,
-            String cha) {
+            String cha,
+            String reg_municipal) {
 
-        String sql = "CALL SP_UPDATE_VEHICULO('" + pl + "'," + numi
-                + ",'" + emp + "','" + con + "','" + conaux + "','" + model + "'," + an + ",'" + pro
-                + "','" + inf + "','" + img + "','" + mar + "','" + mot + "','" + cha + "')";
+        String sql = "CALL SP_UPDATE_VEHICULO('"
+                + pl + "',"
+                + numi + ",'"
+                + emp + "','"
+                + con + "','"
+                + conaux + "','"
+                + model + "',"
+                + an + ",'"
+                + pro + "','"
+                + inf + "','"
+                + img + "','"
+                + mar + "','"
+                + mot + "','"
+                + cha + "',"
+                + reg_municipal
+                + ")";
 
         return ejecutarSentencia(sql);
 
@@ -1397,11 +1419,15 @@ public class ConexionBase {
      * @param longitud
      * @return boolean
      */
-    public boolean InsertarClienteMapa(int cod_cliente, double latitud, double longitud) {
-        String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,LATITUD,LONGITUD,FECHA,HORA) "
+    public boolean InsertarClienteMapa(int cod_cliente, String strNombre, String strBarrio, String strTelefono, double latitud, double longitud) {
+        String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,NOMBRE,BARRIO,FONO,LATITUD,LONGITUD,FECHA,HORA) "
+                //String sql = "INSERT INTO POSICION_CLIENTES(COD_CLIENTE,N_UNIDAD,LATITUD,LONGITUD,FECHA,HORA) "
                 + "VALUES("
                 + cod_cliente + ","
-                + null + ","
+                + null + ",'"
+                + strNombre + "','"
+                + strBarrio + "','"
+                + strTelefono + "',"
                 + latitud + ","
                 + longitud + ",'"
                 + funciones.getFecha() + "','"
