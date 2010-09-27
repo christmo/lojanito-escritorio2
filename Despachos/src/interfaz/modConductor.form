@@ -70,10 +70,10 @@
                           <Component id="txtNomApe" alignment="0" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="lblFoto" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="lblFoto" min="-2" pref="210" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="43" max="32767" attributes="0"/>
+              <EmptySpace pref="77" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="168" pref="168" max="168" attributes="0"/>
@@ -189,7 +189,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Component id="lblFoto" min="-2" pref="248" max="-2" attributes="0"/>
+                  <Component id="lblFoto" min="-2" pref="250" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">

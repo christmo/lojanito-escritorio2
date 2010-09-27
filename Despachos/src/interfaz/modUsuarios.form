@@ -30,12 +30,12 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jbAceptar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="302" max="32767" attributes="0"/>
+                      <EmptySpace pref="206" max="32767" attributes="0"/>
                       <Component id="jbEliminar" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbLimpiarCampos" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jbNuevoUsuario" min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="jbNuevoUsuario" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -54,7 +54,7 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jbAceptar" pref="42" max="32767" attributes="0"/>
+                  <Component id="jbAceptar" max="32767" attributes="0"/>
                   <Component id="jbNuevoUsuario" min="-2" pref="42" max="-2" attributes="1"/>
                   <Component id="jbLimpiarCampos" min="-2" pref="42" max="-2" attributes="1"/>
                   <Component id="jbEliminar" min="-2" pref="42" max="-2" attributes="0"/>
@@ -342,8 +342,9 @@
     <Component class="javax.swing.JButton" name="jbNuevoUsuario">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/interfaz/iconos/mas.png"/>
+          <Image iconType="3" name="/interfaz/iconos/guardar.png"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="Guardar"/>
         <Property name="toolTipText" type="java.lang.String" value="A&#xf1;ade un Usuario Nuevo, despues de haber ingresado los datos..."/>
       </Properties>
       <Events>
@@ -353,9 +354,9 @@
     <Component class="javax.swing.JButton" name="jbAceptar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/interfaz/iconos/ok.png"/>
+          <Image iconType="3" name="/interfaz/iconos/cancelar.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Aceptar"/>
+        <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAceptarActionPerformed"/>
