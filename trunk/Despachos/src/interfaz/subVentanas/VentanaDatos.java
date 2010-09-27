@@ -26,10 +26,20 @@ public class VentanaDatos extends javax.swing.JDialog {
 
     private Despachos datos = new Despachos();
     private ConexionBase bd;
+    /**
+     * Es una bandera para saber si actualizar la inforamcion <b>false</b> o insertar
+     * los datos del cliente con <b>true</b>
+     */
     private boolean accion = false;
     private ResultSet rs;
     private int filaSeleccionada = 0;
     private JTable tabla;
+    /**
+     * Bandera para saber si la orden viene del menu o desde la tabla de clientes
+     * por despachar, cuando viene del menu es <b>true</b> y el cliente siempre se
+     * inserta, cuando viene de la tabla con <b>false</b> se puede actualizar la info
+     * o insertar nuevos datos...
+     */
     private boolean menu = false;
 
     /**
@@ -45,7 +55,6 @@ public class VentanaDatos extends javax.swing.JDialog {
         jtTelefono.setEnabled(true);
         jtCodigo.setEnabled(true);
         this.menu = menu;
-        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -73,7 +82,6 @@ public class VentanaDatos extends javax.swing.JDialog {
                 break;
         }
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
-        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -101,7 +109,6 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.datos = despacho;
         cargarDatos(datos);
         estadoCampos(true);
-        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -125,7 +132,6 @@ public class VentanaDatos extends javax.swing.JDialog {
                 jtTelefono.setEnabled(true);
                 break;
         }
-        //AbrirPuertoCoordenadas();
         initEdicionLatLon();
     }
 
@@ -176,6 +182,11 @@ public class VentanaDatos extends javax.swing.JDialog {
         this.filaSeleccionada = fila;
         this.tabla = tabla;
     }
+    /**
+     * Permite actualizar los datos del cliente cunado no tiene telefono
+     * ni codigo, pero el cliente estan ingresado en la base de datos
+     */
+    boolean actualizarConNombre = false;
 
     /**
      * Carga cada uno de los Datos en los cuadros de texto
@@ -189,6 +200,15 @@ public class VentanaDatos extends javax.swing.JDialog {
             actualizarConCod = false;
             jtCodigo.setText("");
             menu = false;
+            try {
+                String tel = despacho.getStrTelefono();
+                if (tel.equals("") || tel.equals("null")) {
+                    jtNombre.setEditable(false);
+                    jtDireccion.setEditable(false);
+                    actualizarConNombre = true; //actualiza con nombre
+                }
+            } catch (NullPointerException ex) {
+            }
         } else {
             //si tiene codigo el cliente actualizar de ley
             jbCodigo.setVisible(false);
@@ -216,12 +236,20 @@ public class VentanaDatos extends javax.swing.JDialog {
                      */
                     accion = ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
                 } else {
-                    accion = true; //-> insertar
+                    if (ObtenerDatosClienteConNombreYDireccion(despacho.getStrNombre(), despacho.getStrDireccion())) {
+                        accion = false; //Actualizar la inforamcion
+                    } else {
+                        accion = true; //-> insertar
+                    }
                 }
             } catch (NullPointerException ex) {
             }
         }
     }
+    /**
+     * Bandera que permite saber por que campo se va actualziar la informacion
+     * true cuando el cliente tiene codigo y false si se va actualizar por telefono
+     */
     boolean actualizarConCod;
 
     /**
@@ -275,6 +303,37 @@ public class VentanaDatos extends javax.swing.JDialog {
             jtNumeroCasa.setText("");
             jtReferencia.setText("");
             return true; // -> insertar los datos
+        }
+    }
+
+    /**
+     * Comprueba si el cliente esta en la base de datos a partir de un nombre y una
+     * direccion retorna <b>true si el cliente existe</b> lo cual indica que se debe
+     * actualizar la info de ese cliente, y retorna <b>false si el cliente no existe</b>
+     * lo que conlleva a que se inserte el nuevo dato
+     * @param nombre
+     * @param dir
+     * @return boolean |true si existe el cliente el bd
+     */
+    private boolean ObtenerDatosClienteConNombreYDireccion(String nombre, String dir) {
+        String sql = "SELECT NUM_CASA_CLI, INFOR_ADICIONAL,LATITUD,LONGITUD FROM CLIENTES WHERE NOMBRE_APELLIDO_CLI='" + nombre + "' AND DIRECCION_CLI='" + dir + "'";
+        rs = bd.ejecutarConsultaUnDato(sql);
+
+        try {
+            String n_casa = rs.getString("NUM_CASA_CLI");
+            String referencia = rs.getString("INFOR_ADICIONAL");
+            String lat = rs.getString("LATITUD");
+            String lon = rs.getString("LONGITUD");
+            jtNumeroCasa.setText(n_casa);
+            jtReferencia.setText(referencia);
+            jtLatitud.setText(lat);
+            jtLongitud.setText(lon);
+            return true; // -> actualizar los datos
+        } catch (SQLException ex) {
+            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
+            jtNumeroCasa.setText("");
+            jtReferencia.setText("");
+            return false; // -> insertar los datos
         }
     }
 
@@ -625,16 +684,16 @@ public class VentanaDatos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarActionPerformed
-        if (jtCodigo.getText().equals("") || jtCodigo.getText() == null) {
-            CerrarPuertoCoordenadas();
-            this.dispose();
-        } else {
-            CerrarPuertoCoordenadas();
-            GuardarDatos();
-            String cod = jtCodigo.getText();
-            IngresarClienteMapa(cod);
-            this.dispose();
-        }
+        /*if (jtCodigo.getText().equals("") || jtCodigo.getText() == null) {
+        CerrarPuertoCoordenadas();
+        this.dispose();
+        } else {*/
+        CerrarPuertoCoordenadas();
+        GuardarDatos();
+        String cod = jtCodigo.getText();
+        IngresarClienteMapa(cod);
+        this.dispose();
+        //}
     }//GEN-LAST:event_jbAceptarActionPerformed
 
     /**
@@ -644,15 +703,16 @@ public class VentanaDatos extends javax.swing.JDialog {
      * @param n_unidad
      */
     private void IngresarClienteMapa(String codigoCliente) {
-        
+
         double lat = datos.getLatitud();
         double lon = datos.getLongitud();
-        
+
 
         if (lon != 0 && lat != 0) {
             if (!codigoCliente.equals("") || !codigoCliente.equals("0")) {
                 System.out.println("Entro");
-                bd.InsertarClienteMapa(datos.getIntCodigo(), lat, lon);
+                bd.InsertarClienteMapa(datos.getIntCodigo(), datos.getStrNombre(),
+                        datos.getStrBarrio(), datos.getStrTelefono(), lat, lon);
             }
         }
     }
@@ -670,7 +730,7 @@ public class VentanaDatos extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "No se pudo guardar el cliente, ese número de teléfono esta asignado a otro cliente...", "Error", 0);
                 }
             } else {
-                if (accion) {
+                if (accion) { // true inserta los datos nuevos
                     resultado = bd.InsertarCliente(datos);
                 } else { // desde la tabla actualiza los datos cuando hay codigo
                     if (actualizarConCod) {
@@ -679,10 +739,20 @@ public class VentanaDatos extends javax.swing.JDialog {
                          */
                         resultado = bd.ActualizarClienteCod(datos);
                     } else {
-                        /**
-                         * Actualiza cuando no tiene codigo pero tiene un telefono
-                         */
-                        resultado = bd.ActualizarClienteTel(datos);
+
+                        if (actualizarConNombre) {
+                            /**
+                             * Actualiza cuando no hay ni cod ni tel, y actualiza
+                             * los datos a partir del nombre y la direccion
+                             */
+                            resultado = bd.ActualizarClientePorNombre(datos);
+                        } else {
+                            /**
+                             * Actualiza cuando no tiene codigo pero tiene un telefono
+                             */
+                            resultado = bd.ActualizarClienteTel(datos);
+                        }
+
                     }
                     if (!resultado) {
                         JOptionPane.showMessageDialog(this, "No se pudo actualizar el cliente...", "Error", 0);
@@ -716,7 +786,11 @@ public class VentanaDatos extends javax.swing.JDialog {
     private Despachos getDatosNuevos() {
         Despachos d = new Despachos();
         try {
-            d.setIntCodigo(Integer.parseInt(jtCodigo.getText()));
+            try {
+                d.setIntCodigo(Integer.parseInt(jtCodigo.getText()));
+            } catch (NumberFormatException ex) {
+                d.setIntCodigo(0);
+            }
             d.setStrTelefono(jtTelefono.getText());
             d.setStrNombre(jtNombre.getText());
             d.setStrDireccion(jtDireccion.getText());
