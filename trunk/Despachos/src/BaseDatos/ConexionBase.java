@@ -38,7 +38,7 @@ public class ConexionBase {
     //private ResourceBundle rb;
     private Properties arcConfig;
     private funcionesUtilidad funciones = new funcionesUtilidad();
-    
+
     /**
      * Crea la conexion directamente a la base de datos de rastreosatelital
      * de kradac, parametros de la conexion quemados por defecto para la
@@ -212,7 +212,12 @@ public class ConexionBase {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
                     return false;
-                }else{
+                } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
+                    return false;
+                } else {
+
                     txt = ex.getMessage().substring(0, 15);
                 }
             } catch (StringIndexOutOfBoundsException sex) {
@@ -223,7 +228,7 @@ public class ConexionBase {
                 System.err.println("La tabla \"SERVER\" no esta creada localmente...");
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
-                System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                System.err.println("No hay Conexion a internet o no hay permisos -> no se pueden guardar los datos en la tabla del servidor...");
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
@@ -231,7 +236,10 @@ public class ConexionBase {
             } else if (txt.equals("Duplicate entry")) {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
                 return false;
-            } else {
+            } else if(ex.getMessage().equals("Got an error reading communication packets")){
+                System.err.println("No hay Conexion a internet o no hay permisos -> no se pueden guardar los datos en la tabla del servidor...");
+                return false;
+            }else{
                 Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
@@ -256,18 +264,45 @@ public class ConexionBase {
             }
 
         } catch (SQLException ex) {
-            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                System.err.println("La tabla del servidor no es accesible...");
-            } else if (ex.getMessage().equals("Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.117' (10065)")) {
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
-            } else if (ex.getMessage().equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED")) {
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
-            } else {
-                //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-                System.err.println("ERROR: " + ex.getMessage());
+            System.out.println("EX:" + ex.getMessage());
+            String txt = ex.getMessage();
+            try {
+                txt = ex.getMessage().substring(0, 76);
+                if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
+                    return false;
+                } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
+                    return false;
+                } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
+                    String[] ip_server = ex.getMessage().split("'");
+                    System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
+                    return false;
+                } else {
+                    txt = ex.getMessage().substring(0, 15);
+                }
+            } catch (StringIndexOutOfBoundsException sex) {
+                txt = ex.getMessage().substring(0, 15);
+                System.out.println("" + txt);
             }
-
-            return false;
+            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
+                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
+                return false;
+            } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
+                System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                return false;
+            } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
+                return false;
+            } else if (txt.equals("Duplicate entry")) {
+                System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
+                return false;
+            } else {
+                Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
         }
     }
 
