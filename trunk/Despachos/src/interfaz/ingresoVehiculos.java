@@ -100,7 +100,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
         jLabel15 = new javax.swing.JLabel();
         txtNumChasis = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        txtNumChasis1 = new javax.swing.JTextField();
+        txtRegistroMunicipal = new javax.swing.JTextField();
 
         jLabel6.setText("jLabel6");
 
@@ -150,6 +150,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
 
         txtInformacion.setColumns(20);
         txtInformacion.setRows(5);
+        txtInformacion.setTabSize(0);
         txtInformacion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtInformacionFocusLost(evt);
@@ -217,9 +218,9 @@ public class ingresoVehiculos extends javax.swing.JDialog {
 
         jLabel16.setText("REGISTRO MUNICIPAL:");
 
-        txtNumChasis1.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtRegistroMunicipal.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNumChasis1FocusLost(evt);
+                txtRegistroMunicipalFocusLost(evt);
             }
         });
 
@@ -251,7 +252,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                                         .addComponent(jLabel9)
                                         .addGap(11, 11, 11)
                                         .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtNumChasis1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                                    .addComponent(txtRegistroMunicipal, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                                     .addComponent(txtNumChasis, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                                     .addComponent(txtPropietario, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                                     .addComponent(txtMarca, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
@@ -344,7 +345,7 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(txtNumChasis1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtRegistroMunicipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -422,7 +423,8 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                             Integer.valueOf(spAño.getValue().toString()),
                             txtPropietario.getText(), txtInformacion.getText(),
                             imgName, txtMarca.getText(), txtNumMotor.getText(),
-                            txtNumChasis.getText());
+                            txtNumChasis.getText(),
+                            txtRegistroMunicipal.getText());
                 } else {
                     JOptionPane.showMessageDialog(this, "CONDUCTOR Y AUXILIAR SON IGUALES",
                             "ERROR CONDUCTOR",
@@ -456,10 +458,14 @@ public class ingresoVehiculos extends javax.swing.JDialog {
         txtNumChasis.setText(txtNumChasis.getText().toUpperCase());
     }//GEN-LAST:event_txtNumChasisFocusLost
 
-    private void txtNumChasis1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumChasis1FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumChasis1FocusLost
-
+    private void txtRegistroMunicipalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRegistroMunicipalFocusLost
+        try{
+           Integer.parseInt(txtRegistroMunicipal.getText());
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this,"Solo ingresar números...","Error...", 0);
+            txtRegistroMunicipal.setText("");
+        }
+    }//GEN-LAST:event_txtRegistroMunicipalFocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnCancelar;
@@ -489,10 +495,10 @@ public class ingresoVehiculos extends javax.swing.JDialog {
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtNUnidad;
     private javax.swing.JTextField txtNumChasis;
-    private javax.swing.JTextField txtNumChasis1;
     private javax.swing.JTextField txtNumMotor;
     private javax.swing.JTextField txtPlaca;
     private javax.swing.JTextField txtPropietario;
+    private javax.swing.JTextField txtRegistroMunicipal;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -543,18 +549,19 @@ public class ingresoVehiculos extends javax.swing.JDialog {
 
     /**
      * Guarda los datos del nuevo Vehículo
-     * 
      * @param placa
      * @param nUnidad
      * @param emp
      * @param con
      * @param conAux
-     * @param color
      * @param modelo
      * @param año
      * @param pro
      * @param infor
      * @param img
+     * @param mar
+     * @param nummo
+     * @param numcha
      */
     private void guardarVehiculo(String placa,
             int nUnidad,
@@ -568,12 +575,26 @@ public class ingresoVehiculos extends javax.swing.JDialog {
             String img,
             String mar,
             String nummo,
-            String numcha) {
+            String numcha,
+            String reg_municipal) {
 
-        String sql = "CALL SP_INSERT_VEHICULO('" + placa + "'," + nUnidad
-                + ",'" + emp + "','" + con + "','" + conAux + "','"
-                + modelo + "'," + año + ",'" + pro + "','" + infor + "','"
-                + img + "','" + mar + "','" + nummo + "','" + numcha + "','" + this.id_usuario + "')";
+        String sql = "CALL SP_INSERT_VEHICULO('"
+                + placa + "',"
+                + nUnidad + ",'"
+                + emp + "','"
+                + con + "','"
+                + conAux + "','"
+                + modelo + "',"
+                + año + ",'"
+                + pro + "','"
+                + infor + "','"
+                + img + "','"
+                + mar + "','"
+                + nummo + "','"
+                + numcha + "','"
+                + this.id_usuario + "',"
+                + reg_municipal
+                + ")";
 
         if (!bd.ejecutarSentencia(sql)) {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));

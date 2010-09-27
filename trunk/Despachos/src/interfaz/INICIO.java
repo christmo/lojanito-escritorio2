@@ -473,7 +473,7 @@ public class INICIO extends javax.swing.JFrame {
 
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
             editVehiculo = new modVehiculo(this, sesion, this.conec, arcConfig);
-            editVehiculo.setSize(725, 770);
+            editVehiculo.setSize(778, 740);//[778, 713]
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             editVehiculo.setResizable(false);
