@@ -13,6 +13,7 @@ package interfaz.subVentanas;
 import BaseDatos.ConexionBase;
 import interfaz.Principal;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -40,6 +41,7 @@ public class ConsultaClientes extends javax.swing.JDialog {
     }
 
     private void configuracionInicial() {
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         jtNombreCliente.requestFocus();
     }
 

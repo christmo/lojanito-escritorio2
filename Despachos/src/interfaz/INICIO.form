@@ -36,68 +36,69 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnConfig" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace pref="340" max="32767" attributes="0"/>
+                      <EmptySpace pref="332" max="32767" attributes="0"/>
                       <Component id="jbProblemas" min="-2" pref="102" max="-2" attributes="1"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnSalir" min="-2" pref="70" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblNombreAplicacion" pref="586" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnDirectorio" alignment="0" pref="110" max="32767" attributes="1"/>
+                          <Component id="btnEditConductor" alignment="0" pref="110" max="32767" attributes="1"/>
+                          <Component id="btnNvConductor" alignment="0" pref="110" max="32767" attributes="1"/>
+                          <Component id="jbUsuarios" alignment="0" pref="110" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jbClientes" min="0" pref="0" max="32767" attributes="1"/>
+                          <Component id="btnEditVehiculo" alignment="0" pref="110" max="32767" attributes="1"/>
+                          <Component id="btnNewVehiculo" alignment="0" pref="110" max="32767" attributes="1"/>
+                          <Component id="btnReportes" alignment="0" pref="110" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="lblEmpresa" alignment="0" max="32767" attributes="1"/>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnEstados" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="btnTurnos" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnModEstados" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="btnAsignarM" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="btnDirectorio" alignment="0" pref="110" max="32767" attributes="1"/>
-                                  <Component id="btnEditConductor" alignment="0" pref="110" max="32767" attributes="1"/>
-                                  <Component id="btnNvConductor" alignment="0" pref="110" max="32767" attributes="1"/>
-                                  <Component id="jbUsuarios" alignment="0" pref="110" max="32767" attributes="1"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jbClientes" min="0" pref="0" max="32767" attributes="1"/>
-                                  <Component id="btnEditVehiculo" alignment="0" pref="110" max="32767" attributes="1"/>
-                                  <Component id="btnNewVehiculo" alignment="0" pref="110" max="32767" attributes="1"/>
-                                  <Component id="btnReportes" alignment="0" pref="110" max="32767" attributes="1"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="btnEstados" min="-2" pref="110" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="btnTurnos" min="-2" pref="110" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="btnModEstados" min="-2" pref="110" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="btnAsignarM" min="-2" pref="110" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnMultas" min="-2" pref="110" max="-2" attributes="1"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="btnBEMultas" min="-2" pref="110" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jbMapa" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                                  <Component id="btnMultas" alignment="0" pref="110" max="32767" attributes="1"/>
                               </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnBEMultas" min="-2" pref="110" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblEmpresa" pref="586" max="32767" attributes="1"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="244" max="32767" attributes="0"/>
-              <Component id="lblNombreAplicacion" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="240" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="lblNombreAplicacion" min="-2" pref="30" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="lblEmpresa" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -123,7 +124,10 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jbUsuarios" alignment="0" pref="85" max="32767" attributes="1"/>
-                  <Component id="jbClientes" alignment="0" pref="85" max="32767" attributes="1"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="jbClientes" alignment="3" pref="85" max="32767" attributes="1"/>
+                      <Component id="jbMapa" alignment="3" pref="85" max="32767" attributes="1"/>
+                  </Group>
               </Group>
               <EmptySpace pref="34" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -289,7 +293,6 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Nimbus Roman No9 L" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="SIETE v1.0"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblEmpresa">
@@ -343,6 +346,17 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbProblemasActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbMapa">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/mapa.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Mapa"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbMapaActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
