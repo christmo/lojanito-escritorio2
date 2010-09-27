@@ -74,6 +74,7 @@ public class INICIO extends javax.swing.JFrame {
         jbUsuarios.setText("<html><center>USUARIOS</center></html>");
         jbClientes.setText("<html><center>CLIENTES</center></html>");
         jbProblemas.setText("<html><center>PROBLEMAS</center></html>");
+        jbMapa.setText("<html><center>MAPA</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
 
         btnModEstados.setText("<html><center>EDITAR<br> ESTADOS</center></html>");
@@ -126,6 +127,9 @@ public class INICIO extends javax.swing.JFrame {
         jbProblemas.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbProblemas.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        jbMapa.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbMapa.setHorizontalTextPosition(SwingConstants.CENTER);
+
         btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -158,6 +162,7 @@ public class INICIO extends javax.swing.JFrame {
         jbUsuarios = new javax.swing.JButton();
         jbClientes = new javax.swing.JButton();
         jbProblemas = new javax.swing.JButton();
+        jbMapa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -277,7 +282,6 @@ public class INICIO extends javax.swing.JFrame {
         });
 
         lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 24));
-        lblNombreAplicacion.setText("SIETE v1.0");
 
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
         lblEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -315,6 +319,14 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
+        jbMapa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/mapa.png"))); // NOI18N
+        jbMapa.setText("Mapa");
+        jbMapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMapaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -324,53 +336,54 @@ public class INICIO extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 335, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
                         .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jbClientes, 0, 0, Short.MAX_VALUE)
+                            .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblEmpresa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnModEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(btnEditConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(btnNvConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(jbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jbClientes, 0, 0, Short.MAX_VALUE)
-                                    .addComponent(btnEditVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(btnNewVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(btnEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(btnModEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnAsignarM, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(btnMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(jbMapa, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+                                    .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(239, Short.MAX_VALUE)
-                .addComponent(lblNombreAplicacion)
-                .addGap(240, 240, 240))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
                 .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addComponent(lblEmpresa)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +406,9 @@ public class INICIO extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                    .addComponent(jbClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                        .addComponent(jbMapa, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -576,6 +591,10 @@ public class INICIO extends javax.swing.JFrame {
         mail.setVisible(true);
     }//GEN-LAST:event_jbProblemasActionPerformed
 
+    private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
+
+    }//GEN-LAST:event_jbMapaActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -600,6 +619,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
     private javax.swing.JButton jbClientes;
+    private javax.swing.JButton jbMapa;
     private javax.swing.JButton jbProblemas;
     private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;

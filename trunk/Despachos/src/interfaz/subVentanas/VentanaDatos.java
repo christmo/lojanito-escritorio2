@@ -7,7 +7,6 @@
 package interfaz.subVentanas;
 
 import BaseDatos.ConexionBase;
-import interfaz.Principal;
 import interfaz.comunicacion.mapa.ObtenerCoordenadasMapa;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
@@ -22,7 +21,7 @@ import javax.swing.JTable;
  *
  * @author root
  */
-public class VentanaDatos extends javax.swing.JDialog {
+public class VentanaDatos extends javax.swing.JFrame {
 
     private Despachos datos = new Despachos();
     private ConexionBase bd;
@@ -41,6 +40,11 @@ public class VentanaDatos extends javax.swing.JDialog {
      * o insertar nuevos datos...
      */
     private boolean menu = false;
+
+    private VentanaDatos() {
+        initComponents();
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
+    }
 
     /**
      * Constructor para llamar a la ventana de datos para ingresar nuevos clientes
@@ -67,6 +71,7 @@ public class VentanaDatos extends javax.swing.JDialog {
      */
     public VentanaDatos(Despachos despacho, ConexionBase bd, int caso) {
         initComponents();
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         this.datos = despacho;
         this.bd = bd;
         cargarDatos(datos);
@@ -96,6 +101,7 @@ public class VentanaDatos extends javax.swing.JDialog {
         initComponents();
         this.datos = datosDespachados;
         this.bd = bd;
+        this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         cargarDatos(datos);
         estadoCampos(estado);
     }
@@ -931,6 +937,15 @@ public class VentanaDatos extends javax.swing.JDialog {
      */
     public String Mayusculas(String txt) {
         return txt.toUpperCase();
+    }
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                new VentanaDatos().setVisible(true);
+            }
+        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
