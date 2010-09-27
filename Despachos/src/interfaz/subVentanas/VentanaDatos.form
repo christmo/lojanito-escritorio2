@@ -75,7 +75,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jtNumeroCasa" min="-2" pref="200" max="-2" attributes="1"/>
-                                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                                  <EmptySpace pref="40" max="32767" attributes="0"/>
                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Component id="jtBarrio" min="-2" pref="207" max="-2" attributes="1"/>
@@ -89,8 +89,8 @@
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="jtTelefono" min="-2" pref="206" max="-2" attributes="1"/>
                               </Group>
-                              <Component id="jtNombre" alignment="0" pref="498" max="32767" attributes="1"/>
-                              <Component id="jtDireccion" alignment="1" pref="498" max="32767" attributes="0"/>
+                              <Component id="jtNombre" alignment="0" pref="517" max="32767" attributes="1"/>
+                              <Component id="jtDireccion" alignment="1" pref="517" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -103,7 +103,7 @@
                                   <Component id="jtLatitud" min="-2" pref="214" max="-2" attributes="1"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="36" max="32767" attributes="0"/>
+                          <EmptySpace pref="42" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -269,14 +269,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="503" max="32767" attributes="0"/>
+                      <EmptySpace pref="522" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" alignment="0" pref="567" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="595" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" alignment="0" pref="567" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="0" pref="595" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -429,7 +429,6 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/interfaz/iconos/ok.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Aceptar"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAceptarActionPerformed"/>
