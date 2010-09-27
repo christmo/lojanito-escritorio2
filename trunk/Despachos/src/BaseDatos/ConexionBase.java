@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Properties;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -203,15 +203,25 @@ public class ConexionBase {
             System.out.println("EX:" + ex.getMessage());
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 System.err.println("La tabla \"SERVER\" no esta creada localmente...");
-            } else if (ex.getMessage().equals("Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.117' (10065)")) {
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
-            } else if (ex.getMessage().equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server on '200.0.29.117' (10065)' from FEDERATED")) {
-                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor...\n****************");
+                return false;
+            } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
+                System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                return false;
+            } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
+                return false;
+            } else if (ex.getMessage().substring(0, 76).equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
+                String[] ip_server = ex.getMessage().split("'");
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
+                return false;
+            } else if (ex.getMessage().substring(0, 76).equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
+                String[] ip_server = ex.getMessage().split("'");
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
+                return false;
             } else {
                 Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
-
-            return false;
         }
     }
 
@@ -627,6 +637,25 @@ public class ConexionBase {
                 + "LONGITUD=" + des.getLongitud() + ","
                 + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "' "
                 + "WHERE TELEFONO='" + des.getStrTelefono() + "'";
+
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Actualiza los datos del un cliente a partir de un nombre y direccion
+     * @param despacho
+     * @return booelan true si se actualiza
+     */
+    public boolean ActualizarClientePorNombre(Despachos des) {
+        String sql = "UPDATE CLIENTES SET "
+                + "CODIGO=" + des.getIntCodigo() + ","
+                + "TELEFONO=" + "'" + des.getStrTelefono() + "',"
+                + "SECTOR=" + "'" + des.getStrBarrio() + "',"
+                + "NUM_CASA_CLI=" + "'" + des.getStrNumeroCasa() + "',"
+                + "LATITUD=" + des.getLatitud() + ","
+                + "LONGITUD=" + des.getLongitud() + ","
+                + "INFOR_ADICIONAL=" + "'" + des.getStrReferecia() + "' "
+                + "WHERE NOMBRE_APELLIDO_CLI='" + des.getStrNombre() + "' AND DIRECCION_CLI='" + des.getStrDireccion() + "'";
 
         return ejecutarSentencia(sql);
     }
@@ -1543,7 +1572,7 @@ public class ConexionBase {
      * @return ResultSet
      */
     public ResultSet getFilasRespaldoLocalAsignaciones() {
-        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT FROM RESPALDO_ASIGNACION_SERVER";
+        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO FROM RESPALDO_ASIGNACION_SERVER";
         return rs = ejecutarConsulta(sql);
     }
 
@@ -1552,8 +1581,8 @@ public class ConexionBase {
      * el programa para activarlos para que no haya conflictos...
      * @return ResultSet
      */
-    public ResultSet getUnidadesOcupadasAsignadas(){
-        String sql ="SELECT A.N_UNIDAD, A.ID_CODIGO "
+    public ResultSet getUnidadesOcupadasAsignadas() {
+        String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO "
                 + "FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP AND A.ID_CODIGO IN ('OCU','ASI')";
         return rs = ejecutarConsulta(sql);
     }
