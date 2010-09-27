@@ -12,6 +12,7 @@ package interfaz;
 
 import BaseDatos.ConexionBase;
 import interfaz.comunicacion.mail.VentanaMail;
+import interfaz.reportes.Reportes;
 import interfaz.subVentanas.VentanaDatos;
 import java.util.Properties;
 import javax.swing.ImageIcon;
@@ -35,6 +36,8 @@ public class INICIO extends javax.swing.JFrame {
     JDialog nEstado = null;
     JDialog modEstados = null;
     JDialog modUsuarios = null;
+    JDialog reportes = null;
+
     public static String sesion[] = null;
     private ConexionBase conec;
     private Properties arcConfig;
@@ -409,7 +412,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
             newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec, arcConfig);
-            newVehiculo.setSize(680, 595);
+            newVehiculo.setSize(731, 580);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             newVehiculo.setResizable(false);
@@ -482,7 +485,13 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-        // TODO add your handling code here:
+        if ((reportes == null) || (!reportes.isDisplayable())) {
+            reportes = new Reportes(this,sesion, this.conec);
+            reportes.setLocationRelativeTo(this);
+            reportes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            reportes.setResizable(false);
+        }
+        reportes.setVisible(true);
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed

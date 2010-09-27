@@ -38,10 +38,10 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtCedula" alignment="0" min="-2" pref="102" max="-2" attributes="0"/>
                           <Component id="txtTipoSangre" min="-2" pref="57" max="-2" attributes="0"/>
-                          <Component id="txtNomApe" alignment="0" pref="358" max="32767" attributes="1"/>
-                          <Component id="txtDireccion" alignment="0" pref="358" max="32767" attributes="1"/>
+                          <Component id="txtNomApe" alignment="0" pref="356" max="32767" attributes="1"/>
+                          <Component id="txtDireccion" alignment="0" pref="356" max="32767" attributes="1"/>
                           <Component id="txtEstadoCivil" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
-                          <Component id="txtConyuge" alignment="0" pref="358" max="32767" attributes="1"/>
+                          <Component id="txtConyuge" alignment="0" pref="356" max="32767" attributes="1"/>
                           <Component id="txtemail" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblFotoEtiqueta" min="-2" pref="115" max="-2" attributes="0"/>
@@ -51,12 +51,12 @@
                           <Component id="txtNumCasa" alignment="0" min="-2" pref="82" max="-2" attributes="1"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="78" max="32767" attributes="0"/>
+                              <EmptySpace pref="76" max="32767" attributes="0"/>
                               <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblFoto" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="lblFoto" min="-2" pref="210" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="55" pref="55" max="55" attributes="0"/>
@@ -74,7 +74,7 @@
               <Component id="jLabel10" min="-2" pref="32" max="-2" attributes="0"/>
               <EmptySpace min="11" pref="11" max="11" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblFoto" min="-2" pref="248" max="-2" attributes="0"/>
+                  <Component id="lblFoto" min="-2" pref="250" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">

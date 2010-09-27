@@ -457,8 +457,13 @@ public class modAsignarMultas extends javax.swing.JDialog {
                     && dpFechaIni != null) {
 
                 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaIni = formato.format(dpFechaIni.getDate());
-                String fechaFin = formato.format(dpFechaFin.getDate());
+                String fechaIni = "";
+                String fechaFin = "";
+                try {
+                    fechaIni = formato.format(dpFechaIni.getDate());
+                    fechaFin = formato.format(dpFechaFin.getDate());
+                } catch (NullPointerException ex) {
+                }
 
                 BuscarMultas(cmbParametro.getSelectedItem().toString(),
                         "", tblResultado,
