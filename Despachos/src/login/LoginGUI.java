@@ -136,6 +136,11 @@ public class LoginGUI extends javax.swing.JFrame {
                 jbtIngresarActionPerformed(evt);
             }
         });
+        jbtIngresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jbtIngresarKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -343,6 +348,12 @@ public class LoginGUI extends javax.swing.JFrame {
     private void jtUserFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtUserFocusLost
         jtUser.setText(jtUser.getText().toUpperCase());
     }//GEN-LAST:event_jtUserFocusLost
+
+    private void jbtIngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jbtIngresarKeyPressed
+        if (evt.getKeyCode() == 10) {
+            ingresar();
+        }
+    }//GEN-LAST:event_jbtIngresarKeyPressed
 
     /**
      * @param args the command line arguments
