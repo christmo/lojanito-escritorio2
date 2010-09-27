@@ -66,7 +66,8 @@ public class ActualizarServidorKRADAC extends Thread {
                         rs.getInt("COD_CLIENTE"),
                         rs.getString("ESTADO"),
                         (int) minutos,
-                        rs.getString("FONO"));
+                        rs.getString("FONO"),
+                        rs.getString("USUARIO"));
                 if (estadoInsersionServidor) {
                     /**
                      * Borrar el respaldo ya que se ha guardado correctamente
@@ -76,7 +77,7 @@ public class ActualizarServidorKRADAC extends Thread {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -89,8 +90,8 @@ public class ActualizarServidorKRADAC extends Thread {
      * @param strTelefono
      * @return boolean
      */
-    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono) {
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR) "
+    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono,String usuario) {
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) "
                 + "VALUES ("
                 + intUnidad
                 + ","
@@ -101,7 +102,11 @@ public class ActualizarServidorKRADAC extends Thread {
                 + strTelefono
                 + "',"
                 + minutos
-                + ");";
+                + ",'"
+                + "RES"
+                + "','"
+                + usuario
+                + "');";
         return bd.ejecutarSentenciaStatement2(sql);
     }
 
