@@ -165,26 +165,26 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="68" splitType="Stretch">
+		<band height="76" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="37" width="120" height="20"/>
+				<reportElement x="0" y="46" width="120" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reporte obtenido por:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="37" width="306" height="20"/>
+				<reportElement x="120" y="46" width="306" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="120" y="0" width="306" height="30"/>
+				<reportElement x="120" y="9" width="190" height="28"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="10" width="120" height="20"/>
+				<reportElement x="0" y="19" width="120" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
 				<text><![CDATA[Total de clientes:]]></text>
 			</staticText>

@@ -234,22 +234,22 @@
 	<summary>
 		<band height="76" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="36" width="120" height="20"/>
+				<reportElement x="0" y="43" width="120" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reporte obtenido por:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="36" width="306" height="20"/>
+				<reportElement x="120" y="43" width="306" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="8" width="120" height="20"/>
+				<reportElement x="0" y="15" width="120" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
 				<text><![CDATA[Total de carreras:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="0" width="190" height="28"/>
+				<reportElement x="120" y="7" width="190" height="28"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>

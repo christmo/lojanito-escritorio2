@@ -316,14 +316,14 @@ public class ConexionBase {
     public boolean ejecutarSentenciaHilo(String sql, String unidad) {
         try {
             int rta = st.executeUpdate(sql);
-            System.err.println("Unidad: " + unidad + " --> Coordenadas Nuevas");
+            //System.err.println("Unidad: " + unidad + " --> Coordenadas Nuevas");
             if (rta >= 0) {
                 return true;
             } else {
                 return false;
             }
         } catch (SQLException ex) {
-            System.out.println("Unidad: " + unidad + " --> Coordenadas ya ingresadas");
+            //System.out.println("Unidad: " + unidad + " --> Coordenadas ya ingresadas");
             return false;
         }
     }
