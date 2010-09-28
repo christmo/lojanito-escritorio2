@@ -135,11 +135,6 @@ public class Multas extends javax.swing.JDialog {
         getContentPane().add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, 40));
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
-        cmbCodigoM.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbCodigoMMouseClicked(evt);
-            }
-        });
         cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCodigoMActionPerformed(evt);
@@ -253,11 +248,6 @@ public class Multas extends javax.swing.JDialog {
             buscarMulta(txtCodMulta.getText());
     }
 }//GEN-LAST:event_cmbCodigoMActionPerformed
-
-    private void cmbCodigoMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCodigoMMouseClicked
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_cmbCodigoMMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar2;
