@@ -145,8 +145,8 @@
 				<text><![CDATA[Total de carreras:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="5" width="100" height="20"/>
-				<textElement>
+				<reportElement x="120" y="0" width="169" height="25"/>
+				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{total}]]></textFieldExpression>
