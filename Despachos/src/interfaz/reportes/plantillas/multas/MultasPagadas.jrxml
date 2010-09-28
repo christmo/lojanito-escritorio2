@@ -209,7 +209,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="191" y="9" width="235" height="20"/>
+				<reportElement x="191" y="0" width="235" height="29"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
