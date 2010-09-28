@@ -95,7 +95,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
         dpFechaFin = new org.jdesktop.swingx.JXDatePicker();
         lblFecha1 = new javax.swing.JLabel();
 
-        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -140,11 +140,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
         tblResultado.getColumnModel().getColumn(2).setPreferredWidth(100);
 
         cmbParametro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "N_UNIDAD", "COD_MULTA", "FECHA", "USUARIO", "ESTADO" }));
-        cmbParametro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbParametroActionPerformed(evt);
-            }
-        });
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
         btnBuscar.setText("BUSCAR");
@@ -185,11 +180,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
         });
 
         cmb2Parametro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " " }));
-        cmb2Parametro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmb2ParametroActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("BUSCAR POR:");
 
@@ -512,24 +502,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tblResultadoKeyPressed
 
-    private void cmbParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbParametroActionPerformed
-
-        if (!cmbParametro.getSelectedItem().equals("FECHA")) {
-            preConsultaDeDatos(cmbParametro.getSelectedItem().toString());
-            cmb2Parametro.setVisible(true);
-            dpFechaIni.setVisible(false);
-            dpFechaFin.setVisible(false);
-            lblFecha.setVisible(false);
-            lblFecha1.setVisible(false);
-        } else {
-            dpFechaIni.setVisible(true);
-            dpFechaFin.setVisible(true);
-            lblFecha.setVisible(true);
-            cmb2Parametro.setVisible(false);
-            lblFecha1.setVisible(true);
-        }
-    }//GEN-LAST:event_cmbParametroActionPerformed
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String smj = "MULTA MODIFICADA SATISFACTORIAMENTE";
         String tipo = "ERROR";
@@ -616,10 +588,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void cmb2ParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb2ParametroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmb2ParametroActionPerformed
 
     private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
         // TODO add your handling code here:
