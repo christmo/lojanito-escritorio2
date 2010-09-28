@@ -197,26 +197,26 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="70" splitType="Stretch">
+		<band height="76" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="38" width="120" height="20"/>
+				<reportElement x="0" y="44" width="120" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reporte obtenido por:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="122" y="38" width="304" height="20"/>
+				<reportElement x="122" y="44" width="304" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="191" y="0" width="235" height="29"/>
+				<reportElement x="191" y="7" width="235" height="28"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="9" width="191" height="20"/>
+				<reportElement x="0" y="15" width="191" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
 				<text><![CDATA[Monto total de multas asignadas $:]]></text>
 			</staticText>

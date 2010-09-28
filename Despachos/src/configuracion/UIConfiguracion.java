@@ -96,6 +96,11 @@ public class UIConfiguracion extends javax.swing.JDialog {
             bw.write("\n\n#\n# Comunicacion Mapa para obtener Coordenadas\n#\n");
             bw.write("puerto_mapa = " + arcConfig.getProperty("puerto_mapa") + "\n");
 
+            bw.write("\n\n#\n# Mapa local para ver las casas\n#\n");
+            bw.write("ip_mapa_local = " + arcConfig.getProperty("ip_mapa_local") + "\n");
+            bw.write("puerto_mapa_local = " + arcConfig.getProperty("puerto_mapa_local") + "\n");
+            bw.write("url = " + arcConfig.getProperty("url") + "\n");
+
             bw.close();
 
             System.out.println("Archivo escrito en: " + url);

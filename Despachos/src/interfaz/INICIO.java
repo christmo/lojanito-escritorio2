@@ -12,6 +12,7 @@ package interfaz;
 
 import BaseDatos.ConexionBase;
 import interfaz.comunicacion.mail.VentanaMail;
+import interfaz.navegador.BrowserControl;
 import interfaz.reportes.Reportes;
 import interfaz.subVentanas.VentanaDatos;
 import java.util.Properties;
@@ -37,7 +38,6 @@ public class INICIO extends javax.swing.JFrame {
     JDialog modEstados = null;
     JDialog modUsuarios = null;
     JDialog reportes = null;
-
     public static String sesion[] = null;
     private ConexionBase conec;
     private Properties arcConfig;
@@ -126,7 +126,7 @@ public class INICIO extends javax.swing.JFrame {
 
         jbProblemas.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbProblemas.setHorizontalTextPosition(SwingConstants.CENTER);
-
+        
         jbMapa.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbMapa.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -151,7 +151,6 @@ public class INICIO extends javax.swing.JFrame {
         btnReportes = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnEditConductor = new javax.swing.JButton();
-        btnConfig = new javax.swing.JButton();
         btnBEMultas = new javax.swing.JButton();
         btnDirectorio = new javax.swing.JButton();
         btnMultas = new javax.swing.JButton();
@@ -163,6 +162,7 @@ public class INICIO extends javax.swing.JFrame {
         jbClientes = new javax.swing.JButton();
         jbProblemas = new javax.swing.JButton();
         jbMapa = new javax.swing.JButton();
+        btnConfig = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -238,14 +238,6 @@ public class INICIO extends javax.swing.JFrame {
         btnEditConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditConductorActionPerformed(evt);
-            }
-        });
-
-        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/configuracion.png"))); // NOI18N
-        btnConfig.setText("CONFIG");
-        btnConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfigActionPerformed(evt);
             }
         });
 
@@ -327,6 +319,9 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
+        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/configuracion.png"))); // NOI18N
+        btnConfig.setText("Config");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -335,14 +330,10 @@ public class INICIO extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
-                        .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE))
+                        .addComponent(lblEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -371,11 +362,16 @@ public class INICIO extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jbMapa, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                                .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(37, 37, 37))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)))
+                        .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -409,11 +405,11 @@ public class INICIO extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jbClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                         .addComponent(jbMapa, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbProblemas, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -457,9 +453,6 @@ public class INICIO extends javax.swing.JFrame {
         nEstado.setVisible(true);
     }//GEN-LAST:event_btnEstadosActionPerformed
 
-    private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
-    }//GEN-LAST:event_btnConfigActionPerformed
-
     private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
 
         if ((turnos == null) || (!turnos.isDisplayable())) {
@@ -501,7 +494,7 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         if ((reportes == null) || (!reportes.isDisplayable())) {
-            reportes = new Reportes(this,sesion, this.conec);
+            reportes = new Reportes(this, sesion, this.conec);
             reportes.setLocationRelativeTo(this);
             reportes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             reportes.setResizable(false);
@@ -592,7 +585,12 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_jbProblemasActionPerformed
 
     private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
-
+        String url = arcConfig.getProperty("ip_mapa_local")
+                + ":"
+                + arcConfig.getProperty("puerto_mapa_local")
+                + "/"
+                + arcConfig.getProperty("url");
+        BrowserControl.displayURL(url);
     }//GEN-LAST:event_jbMapaActionPerformed
 
     public static void main(String args[]) {

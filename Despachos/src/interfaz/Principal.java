@@ -2416,7 +2416,7 @@ public final class Principal extends javax.swing.JFrame {
      */
     public static void ReiniciarTurno() {
         ActualizarTurno();
-        LimpiarCargarTablaDespachados();
+        //LimpiarCargarTablaDespachados();
         //redimencionarTablaVehiculos();
         gui.setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
     }

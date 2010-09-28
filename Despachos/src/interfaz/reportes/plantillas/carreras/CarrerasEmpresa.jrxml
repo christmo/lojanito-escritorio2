@@ -113,24 +113,24 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="64" splitType="Stretch">
+		<band height="76" splitType="Stretch">
 			<textField>
-				<reportElement x="120" y="33" width="306" height="20"/>
+				<reportElement x="120" y="39" width="306" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{usuario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="33" width="120" height="20"/>
+				<reportElement x="0" y="39" width="120" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reporte obtenido por:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="7" width="120" height="20"/>
+				<reportElement x="1" y="13" width="120" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
 				<text><![CDATA[Total de carreras:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="0" width="161" height="27"/>
+				<reportElement x="120" y="6" width="100" height="28"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="16" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
