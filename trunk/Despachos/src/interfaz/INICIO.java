@@ -534,7 +534,6 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDirectorioActionPerformed
 
     private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
-        // TODO add your handling code here:
         if ((multas == null) || (!multas.isDisplayable())) {
             multas = new Multas(this, this.conec);
             multas.setSize(496, 400);
@@ -547,7 +546,6 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMultasActionPerformed
 
     private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
-        // TODO add your handling code here:
         if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
             asignarMulta = new asignarMultas(this, sesion, this.conec);
             asignarMulta.setSize(350, 354);

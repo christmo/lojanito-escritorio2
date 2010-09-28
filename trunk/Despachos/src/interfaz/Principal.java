@@ -1805,10 +1805,6 @@ public final class Principal extends javax.swing.JFrame {
         Map unidadCodigoBD = new HashMap();
 
         try {
-            /*
-             * TODO: REVISAR -> Optimizar esta consulta que obtiene demasiados datos que
-             * los que deberian
-             */
             String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {

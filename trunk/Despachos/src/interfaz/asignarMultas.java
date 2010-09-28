@@ -70,11 +70,6 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel6.setText("CODIGO MULTA:");
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
-        cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCodigoMActionPerformed(evt);
-            }
-        });
 
         txtHora.setEditable(false);
 
@@ -90,11 +85,6 @@ public class asignarMultas extends javax.swing.JDialog {
         jLabel1.setText("ASIGNAR MULTA");
 
         cmbNroUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
-        cmbNroUnidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbNroUnidadActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,7 +99,7 @@ public class asignarMultas extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(107, 107, 107)
                 .addComponent(jLabel1)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -128,7 +118,7 @@ public class asignarMultas extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,13 +187,6 @@ public class asignarMultas extends javax.swing.JDialog {
 
 }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbCodigoMActionPerformed
-
-    private void cmbNroUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNroUnidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbNroUnidadActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
