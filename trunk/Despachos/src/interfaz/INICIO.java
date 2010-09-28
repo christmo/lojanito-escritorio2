@@ -585,7 +585,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_jbProblemasActionPerformed
 
     private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
-        String url = arcConfig.getProperty("ip_mapa_local")
+        String url = "http://"+arcConfig.getProperty("ip_mapa_local")
                 + ":"
                 + arcConfig.getProperty("puerto_mapa_local")
                 + "/"

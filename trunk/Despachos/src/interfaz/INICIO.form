@@ -35,11 +35,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblNombreAplicacion" pref="572" max="32767" attributes="0"/>
+                      <Component id="lblNombreAplicacion" pref="574" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblEmpresa" pref="572" max="32767" attributes="1"/>
+                      <Component id="lblEmpresa" pref="574" max="32767" attributes="1"/>
                   </Group>
                   <Group type="102" alignment="0" max="-2" attributes="0">
                       <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
@@ -86,7 +86,7 @@
                       <Component id="jbProblemas" min="-2" pref="90" max="-2" attributes="1"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnConfig" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace pref="304" max="32767" attributes="0"/>
+                      <EmptySpace pref="306" max="32767" attributes="0"/>
                       <Component id="btnSalir" min="-2" pref="70" max="-2" attributes="0"/>
                   </Group>
               </Group>
