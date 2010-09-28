@@ -76,7 +76,10 @@
                                   <Component id="btnMultas" alignment="0" pref="110" max="32767" attributes="1"/>
                               </Group>
                               <EmptySpace pref="18" max="32767" attributes="0"/>
-                              <Component id="btnBEMultas" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jbMailKradac" min="0" pref="0" max="32767" attributes="1"/>
+                                  <Component id="btnBEMultas" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
@@ -128,6 +131,7 @@
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="jbClientes" alignment="3" pref="85" max="32767" attributes="1"/>
                       <Component id="jbMapa" alignment="3" pref="85" max="32767" attributes="1"/>
+                      <Component id="jbMailKradac" alignment="3" pref="85" max="32767" attributes="1"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
@@ -356,6 +360,17 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Config"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbMailKradac">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/mailK.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Mail Kradac"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbMailKradacActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
