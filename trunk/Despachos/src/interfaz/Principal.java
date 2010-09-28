@@ -1962,7 +1962,18 @@ public final class Principal extends javax.swing.JFrame {
     private boolean InsertarActualizarDespachoTemporalListaTMP() {
         Despachos desTMP = getDatosPorDespachar();
         if (desTMP.getIntUnidad() != 0) {
-            desTMP.setHoraDeAsignacion(funciones.getHoraEnMilis());
+            long hora = funciones.getHoraEnMilis();
+            if (hora != 0) {
+                desTMP.setHoraDeAsignacion(hora);
+            } else {
+                Calendar c = new GregorianCalendar();
+                desTMP.setHoraDeAsignacion(c.getTimeInMillis());
+            }
+
+            /**
+             * Permite sabes si arcutializar con true con false para añadir
+             * un despacho a la lista que esta en memoria
+             */
             boolean actualizar = false;
             int intFila = jtPorDespachar.getSelectedRow();
             int i = 0;
@@ -1984,6 +1995,47 @@ public final class Principal extends javax.swing.JFrame {
             }
         }
         return false;
+    }
+
+    /**
+     * Actualiza en memoria los cambios que haya en las unidades para poder calcular
+     * el tiempo de despacho y de asignacion en el servidor
+     * @param idx
+     */
+    private void ActualizarListaTMPDespachosTemporales(int idx) {
+        try {
+            String horaTbl = jtPorDespachar.getValueAt(idx, 0).toString();
+            String horaDspch = "";
+
+            for (int i = 0; i < listaDespachosTemporales.size(); i++) {
+                horaDspch = listaDespachosTemporales.get(i).getStrHora();
+                if (horaTbl.equals(horaDspch)) {
+                    String unidad = jtPorDespachar.getValueAt(idx, 6).toString();
+
+                    if (!unidad.equals("0") && !unidad.equals("")) {
+
+                        try {
+                            long hora = funciones.getHoraEnMilis();
+                            if (hora != 0) {
+                                listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
+
+                            } else {
+                                Calendar c = new GregorianCalendar();
+                                listaDespachosTemporales.get(i).setHoraDeAsignacion(c.getTimeInMillis());
+                                System.err.println("Nuevo calendario para asignar hora");
+                            }
+                            listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
+                            listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
+                        } catch (NumberFormatException ex) {
+                        }
+
+                        break;
+                    }
+                }
+            }
+        } catch (NullPointerException ex) {
+        } catch (IndexOutOfBoundsException iex) {
+        }
     }
 
     /**
@@ -2412,7 +2464,7 @@ public final class Principal extends javax.swing.JFrame {
      */
     public static void ReiniciarTurno() {
         ActualizarTurno();
-        //LimpiarCargarTablaDespachados();
+        LimpiarCargarTablaDespachados();
         //redimencionarTablaVehiculos();
         gui.setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
     }
@@ -2652,47 +2704,6 @@ public final class Principal extends javax.swing.JFrame {
     private void ActualizarClienteMapa(String cod_cli, String unidad) {
         if (!cod_cli.equals("") || !cod_cli.equals("0")) {
             bd.ActualizarUnidadClienteMapa(Integer.parseInt(cod_cli), Integer.parseInt(unidad));
-        }
-    }
-
-    /**
-     * Actualiza en memoria los cambios que haya en las unidades para poder calcular
-     * el tiempo de despacho y de asignacion en el servidor
-     * @param idx
-     */
-    private void ActualizarListaTMPDespachosTemporales(int idx) {
-        try {
-            String horaTbl = jtPorDespachar.getValueAt(idx, 0).toString();
-            String horaDspch = "";
-
-            for (int i = 0; i < listaDespachosTemporales.size(); i++) {
-                horaDspch = listaDespachosTemporales.get(i).getStrHora();
-                if (horaTbl.equals(horaDspch)) {
-                    String unidad = jtPorDespachar.getValueAt(idx, 6).toString();
-
-                    if (!unidad.equals("0") || !unidad.equals("")) {
-                        try {
-                            long hora = funciones.getHoraEnMilis();
-                            if (hora != 0) {
-                                listaDespachosTemporales.get(i).setHoraDeAsignacion(hora);
-                                //***
-                                System.err.println("Hora de asignacion en milis: " + hora);
-                                //***
-                            } else {
-                                Calendar c = new GregorianCalendar();
-                                listaDespachosTemporales.get(i).setHoraDeAsignacion(c.getTimeInMillis());
-                                System.err.println("Nuevo calendario para asignar hora");
-                            }
-                            listaDespachosTemporales.get(i).setFilaTablaTMP(idx);
-                            listaDespachosTemporales.get(i).setIntUnidad(Integer.parseInt(unidad));
-                        } catch (NumberFormatException ex) {
-                        }
-                        break;
-                    }
-                }
-            }
-        } catch (NullPointerException ex) {
-        } catch (IndexOutOfBoundsException iex) {
         }
     }
 
