@@ -75,6 +75,7 @@ public class INICIO extends javax.swing.JFrame {
         jbClientes.setText("<html><center>CLIENTES</center></html>");
         jbProblemas.setText("<html><center>PROBLEMAS</center></html>");
         jbMapa.setText("<html><center>MAPA</center></html>");
+        jbMailKradac.setText("<html><center>MAIL KRADAC</center></html>");
         btnSalir.setText("<html><center>CERRAR</center></html>");
 
         btnModEstados.setText("<html><center>EDITAR<br> ESTADOS</center></html>");
@@ -130,6 +131,9 @@ public class INICIO extends javax.swing.JFrame {
         jbMapa.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbMapa.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        jbMailKradac.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbMailKradac.setHorizontalTextPosition(SwingConstants.CENTER);
+
         btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -163,6 +167,7 @@ public class INICIO extends javax.swing.JFrame {
         jbProblemas = new javax.swing.JButton();
         jbMapa = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
+        jbMailKradac = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU PRINCIPAL");
@@ -322,6 +327,14 @@ public class INICIO extends javax.swing.JFrame {
         btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/configuracion.png"))); // NOI18N
         btnConfig.setText("Config");
 
+        jbMailKradac.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/mailK.png"))); // NOI18N
+        jbMailKradac.setText("Mail Kradac");
+        jbMailKradac.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMailKradacActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -363,7 +376,9 @@ public class INICIO extends javax.swing.JFrame {
                                     .addComponent(jbMapa, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                                .addComponent(btnBEMultas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jbMailKradac, 0, 0, Short.MAX_VALUE)
+                                    .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(37, 37, 37))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -404,7 +419,8 @@ public class INICIO extends javax.swing.JFrame {
                     .addComponent(jbUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jbClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                        .addComponent(jbMapa, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)))
+                        .addComponent(jbMapa, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                        .addComponent(jbMailKradac, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)))
                 .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -593,6 +609,11 @@ public class INICIO extends javax.swing.JFrame {
         BrowserControl.displayURL(url);
     }//GEN-LAST:event_jbMapaActionPerformed
 
+    private void jbMailKradacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMailKradacActionPerformed
+        String url = "http://mail.kradac.com";
+        BrowserControl.displayURL(url);
+    }//GEN-LAST:event_jbMailKradacActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -617,6 +638,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTurnos;
     private javax.swing.JButton jbClientes;
+    private javax.swing.JButton jbMailKradac;
     private javax.swing.JButton jbMapa;
     private javax.swing.JButton jbProblemas;
     private javax.swing.JButton jbUsuarios;
