@@ -44,6 +44,12 @@ public class Reportes extends javax.swing.JDialog {
         jcMultasMes.setEnabled(false);
         cargarComboUsuarios();
         jcUsuariosMultas.setEnabled(false);
+
+        jdEstadoTaxiDia.setFormats(new SimpleDateFormat("yyyy-MM-dd"));
+        jdEstadoTaxiDia.setDate(new GregorianCalendar().getTime());
+
+        CambiarEnfoqueEstadosTaxi(false);
+        CambiarEnfoqueEstadosTiempo();
     }
 
     /**
@@ -102,6 +108,8 @@ public class Reportes extends javax.swing.JDialog {
         rgMultas = new javax.swing.ButtonGroup();
         rgMultasOpcion = new javax.swing.ButtonGroup();
         rgUsuariosMultas = new javax.swing.ButtonGroup();
+        rgEstadosTaxi = new javax.swing.ButtonGroup();
+        rgEstadosTaxiCuando = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTabReportes = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -150,6 +158,17 @@ public class Reportes extends javax.swing.JDialog {
         jcUsuariosMultas = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jrUsuarioMultas = new javax.swing.JRadioButton();
+        jPanel7 = new javax.swing.JPanel();
+        jrEstadosTaxiTotal = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        jrEstadosTaxiUnidad = new javax.swing.JRadioButton();
+        jtEstadosTaxiUnidad = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        jdEstadoTaxiDia = new org.jdesktop.swingx.JXDatePicker();
+        jrEstadosTaxiDia = new javax.swing.JRadioButton();
+        jrEstadosTaxiMes = new javax.swing.JRadioButton();
+        jcEstadoTaxiMes = new javax.swing.JComboBox();
+        jrEstadosTaxiTodoTiempo = new javax.swing.JRadioButton();
         jbSalir = new javax.swing.JButton();
         jbGenerar = new javax.swing.JButton();
 
@@ -231,7 +250,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtCodCli, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtNomCli, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                    .addComponent(jtNomCli, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jpClientesLayout.setVerticalGroup(
@@ -272,7 +291,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jcTodosClientes)
                 .addGap(18, 18, 18)
                 .addComponent(jpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(139, 139, 139))
+                .addGap(171, 171, 171))
         );
 
         jTabReportes.addTab("Clientes", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/usuario.png")), jPanel1); // NOI18N
@@ -330,8 +349,8 @@ public class Reportes extends javax.swing.JDialog {
                             .addComponent(rUnidadDes))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtCodigoDes, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                            .addComponent(jtUnidadDes, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)))
+                            .addComponent(jtCodigoDes, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                            .addComponent(jtUnidadDes, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)))
                     .addComponent(rTodasCarrerasPorDia))
                 .addContainerGap())
         );
@@ -366,7 +385,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jdFechaIniDes, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jdFechaFinDes, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -417,7 +436,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpFechasDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Despachos", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png")), jPanel2); // NOI18N
@@ -501,7 +520,7 @@ public class Reportes extends javax.swing.JDialog {
                         .addComponent(jrTotalCarrerasUnidadMes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(216, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -524,7 +543,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrTotalCarrerasUnidadMes)
                     .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Carreras", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/carreras.png")), jPanel5); // NOI18N
@@ -612,36 +631,28 @@ public class Reportes extends javax.swing.JDialog {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jrMultasTotales)
-                        .addContainerGap())
+                    .addComponent(jrMultasTotales)
                     .addComponent(jrTodosUsuariosMultas)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addContainerGap(310, Short.MAX_VALUE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap(152, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jrMultasMensuales)
                         .addGap(18, 18, 18)
-                        .addComponent(jcMultasMes, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(272, Short.MAX_VALUE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                                .addComponent(jrUsuarioMultas)
-                                .addGap(18, 18, 18)
-                                .addComponent(jcUsuariosMultas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                                .addComponent(jrMultasAsignadas)
-                                .addGap(18, 18, 18)
-                                .addComponent(jrMultasPagadas)
-                                .addGap(18, 18, 18)
-                                .addComponent(jrMultasPorPagar))
-                            .addComponent(jrTiposMultas, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(58, 58, 58))))
+                        .addComponent(jcMultasMes, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                            .addComponent(jrUsuarioMultas)
+                            .addGap(18, 18, 18)
+                            .addComponent(jcUsuariosMultas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                            .addComponent(jrMultasAsignadas)
+                            .addGap(18, 18, 18)
+                            .addComponent(jrMultasPagadas)
+                            .addGap(18, 18, 18)
+                            .addComponent(jrMultasPorPagar))
+                        .addComponent(jrTiposMultas, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(208, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -676,6 +687,122 @@ public class Reportes extends javax.swing.JDialog {
 
         jTabReportes.addTab("Multas", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/police.png")), jPanel6); // NOI18N
 
+        rgEstadosTaxi.add(jrEstadosTaxiTotal);
+        jrEstadosTaxiTotal.setSelected(true);
+        jrEstadosTaxiTotal.setText("Todas la unidades");
+        jrEstadosTaxiTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrEstadosTaxiTotalActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Consulta de estados de los Taxis");
+
+        rgEstadosTaxi.add(jrEstadosTaxiUnidad);
+        jrEstadosTaxiUnidad.setText("Unidad");
+        jrEstadosTaxiUnidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrEstadosTaxiUnidadActionPerformed(evt);
+            }
+        });
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuando"));
+
+        rgEstadosTaxiCuando.add(jrEstadosTaxiDia);
+        jrEstadosTaxiDia.setText("Día");
+        jrEstadosTaxiDia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrEstadosTaxiDiaActionPerformed(evt);
+            }
+        });
+
+        rgEstadosTaxiCuando.add(jrEstadosTaxiMes);
+        jrEstadosTaxiMes.setText("Mes");
+        jrEstadosTaxiMes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrEstadosTaxiMesActionPerformed(evt);
+            }
+        });
+
+        jcEstadoTaxiMes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+
+        rgEstadosTaxiCuando.add(jrEstadosTaxiTodoTiempo);
+        jrEstadosTaxiTodoTiempo.setSelected(true);
+        jrEstadosTaxiTodoTiempo.setText("Todo el tiempo");
+        jrEstadosTaxiTodoTiempo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrEstadosTaxiTodoTiempoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jrEstadosTaxiTodoTiempo)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jrEstadosTaxiMes)
+                            .addComponent(jrEstadosTaxiDia))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jcEstadoTaxiMes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jdEstadoTaxiDia, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jrEstadosTaxiTodoTiempo)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrEstadosTaxiDia)
+                    .addComponent(jdEstadoTaxiDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrEstadosTaxiMes)
+                    .addComponent(jcEstadoTaxiMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jrEstadosTaxiUnidad)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtEstadosTaxiUnidad, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
+                    .addComponent(jrEstadosTaxiTotal)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addGap(18, 18, 18)
+                .addComponent(jrEstadosTaxiTotal)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrEstadosTaxiUnidad)
+                    .addComponent(jtEstadosTaxiUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jTabReportes.addTab("Estados Taxi", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/estados.png")), jPanel7); // NOI18N
+
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
         jbSalir.setText("Salir");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -696,14 +823,14 @@ public class Reportes extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabReportes, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTabReportes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jbSalir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 472, Short.MAX_VALUE)
                         .addComponent(jbGenerar)))
                 .addContainerGap())
         );
@@ -713,8 +840,8 @@ public class Reportes extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jTabReportes, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTabReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbSalir)
                     .addComponent(jbGenerar))
@@ -915,6 +1042,50 @@ public class Reportes extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jrUsuarioMultasActionPerformed
 
+    private void jrEstadosTaxiTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrEstadosTaxiTotalActionPerformed
+        CambiarEnfoqueEstadosTaxi(false);
+    }//GEN-LAST:event_jrEstadosTaxiTotalActionPerformed
+
+    private void jrEstadosTaxiMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrEstadosTaxiMesActionPerformed
+        CambiarEnfoqueEstadosTiempo();
+    }//GEN-LAST:event_jrEstadosTaxiMesActionPerformed
+
+    private void jrEstadosTaxiTodoTiempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrEstadosTaxiTodoTiempoActionPerformed
+        CambiarEnfoqueEstadosTiempo();
+    }//GEN-LAST:event_jrEstadosTaxiTodoTiempoActionPerformed
+
+    private void jrEstadosTaxiUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrEstadosTaxiUnidadActionPerformed
+        CambiarEnfoqueEstadosTaxi(true);
+    }//GEN-LAST:event_jrEstadosTaxiUnidadActionPerformed
+
+    private void jrEstadosTaxiDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrEstadosTaxiDiaActionPerformed
+        CambiarEnfoqueEstadosTiempo();
+    }//GEN-LAST:event_jrEstadosTaxiDiaActionPerformed
+
+    /**
+     * Deshabilita el control de la unidad para que no se pueda editar
+     * @param en
+     */
+    private void CambiarEnfoqueEstadosTaxi(boolean en) {
+        jtEstadosTaxiUnidad.setText("");
+        jtEstadosTaxiUnidad.setEnabled(en);
+    }
+
+    private void CambiarEnfoqueEstadosTiempo() {
+        if (jrEstadosTaxiTodoTiempo.isSelected()) {
+            jdEstadoTaxiDia.setEnabled(false);
+            jcEstadoTaxiMes.setEnabled(false);
+        } else {
+            if (jrEstadosTaxiDia.isSelected()) {
+                jdEstadoTaxiDia.setEnabled(true);
+                jcEstadoTaxiMes.setEnabled(false);
+            } else {
+                jdEstadoTaxiDia.setEnabled(false);
+                jcEstadoTaxiMes.setEnabled(true);
+            }
+        }
+    }
+
     /**
      * Habilita o deshabilita las opciones de totales o mensuales
      * @param b
@@ -927,7 +1098,7 @@ public class Reportes extends javax.swing.JDialog {
         if (jrTiposMultas.isSelected()) {
             jcMultasMes.setEnabled(b);
             jcUsuariosMultas.setEnabled(b);
-        }else{
+        } else {
             jrTodosUsuariosMultas.setSelected(b);
             jrMultasTotales.setSelected(b);
             jcUsuariosMultas.setEnabled(false);
@@ -1049,9 +1220,9 @@ public class Reportes extends javax.swing.JDialog {
             map.put("cat", "porPagar");
         }
 
-        if(jrTodosUsuariosMultas.isSelected()){
+        if (jrTodosUsuariosMultas.isSelected()) {
             map.put("usuario_filtro", "");
-        }else{
+        } else {
             map.put("usuario_filtro", jcUsuariosMultas.getSelectedItem());
         }
 
@@ -1068,6 +1239,43 @@ public class Reportes extends javax.swing.JDialog {
 
         return map;
     }
+
+    /**
+     * Obtiene los datos de los estados del taxi
+     * @return HashMap
+     */
+    private HashMap getDatosEstadosTaxi() {
+        HashMap map = new HashMap();
+        map.put("cat", "EstadosTaxi");
+
+        if (jrEstadosTaxiTotal.isSelected()) {
+            map.put("tEstado", "total");
+        } else {
+            map.put("tEstado", "unidad");
+            if (jrEstadosTaxiUnidad.isSelected()) {
+                map.put("unidad", jtEstadosTaxiUnidad.getText());
+            }
+        }
+
+        if (jrEstadosTaxiTodoTiempo.isSelected()) {
+            map.put("tiempo", "total");
+        } else {
+            if (jrEstadosTaxiDia.isSelected()) {
+                map.put("tiempo", "dia");
+                SimpleDateFormat dfFecha = new SimpleDateFormat("yyyy-MM-dd");
+                String dia = dfFecha.format(jdEstadoTaxiDia.getDate());
+                map.put("dia", dia);
+            } else {
+                map.put("tiempo", "mes");
+                String mes = "" + (jcEstadoTaxiMes.getSelectedIndex() + 1);
+                String nomMes = jcEstadoTaxiMes.getSelectedItem().toString();
+                map.put("mes", mes);
+                map.put("NombreMes", nomMes);
+            }
+        }
+
+        return map;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1075,25 +1283,35 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JTabbedPane jTabReportes;
     private javax.swing.JButton jbGenerar;
     private javax.swing.JButton jbSalir;
+    private javax.swing.JComboBox jcEstadoTaxiMes;
     private javax.swing.JComboBox jcMeses;
     private javax.swing.JComboBox jcMesesClientes;
     private javax.swing.JComboBox jcMesesUnidades;
     private javax.swing.JComboBox jcMultasMes;
     private javax.swing.JCheckBox jcTodosClientes;
     private javax.swing.JComboBox jcUsuariosMultas;
+    private org.jdesktop.swingx.JXDatePicker jdEstadoTaxiDia;
     private org.jdesktop.swingx.JXDatePicker jdFechaFinDes;
     private org.jdesktop.swingx.JXDatePicker jdFechaIniDes;
     private javax.swing.JPanel jpClientes;
     private javax.swing.JPanel jpFechasDes;
+    private javax.swing.JRadioButton jrEstadosTaxiDia;
+    private javax.swing.JRadioButton jrEstadosTaxiMes;
+    private javax.swing.JRadioButton jrEstadosTaxiTodoTiempo;
+    private javax.swing.JRadioButton jrEstadosTaxiTotal;
+    private javax.swing.JRadioButton jrEstadosTaxiUnidad;
     private javax.swing.JRadioButton jrMultasAsignadas;
     private javax.swing.JRadioButton jrMultasMensuales;
     private javax.swing.JRadioButton jrMultasPagadas;
@@ -1110,6 +1328,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JRadioButton jrUsuarioMultas;
     private javax.swing.JTextField jtCodCli;
     private javax.swing.JTextField jtCodigoDes;
+    private javax.swing.JTextField jtEstadosTaxiUnidad;
     private javax.swing.JTextField jtNomCli;
     private javax.swing.JTextField jtTelCli;
     private javax.swing.JTextField jtUnidadDes;
@@ -1122,6 +1341,8 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.ButtonGroup rgCarerras;
     private javax.swing.ButtonGroup rgClientes;
     private javax.swing.ButtonGroup rgDespachos;
+    private javax.swing.ButtonGroup rgEstadosTaxi;
+    private javax.swing.ButtonGroup rgEstadosTaxiCuando;
     private javax.swing.ButtonGroup rgMultas;
     private javax.swing.ButtonGroup rgMultasOpcion;
     private javax.swing.ButtonGroup rgUsuariosMultas;
@@ -1149,6 +1370,11 @@ public class Reportes extends javax.swing.JDialog {
             case 3:
                 GenerarReporteMultas multas = new GenerarReporteMultas(bd, getDatosMultas(), sesion);
                 multas.Generar();
+                break;
+            case 4:
+                GenerarReporteEstadosTaxi estados = new GenerarReporteEstadosTaxi(bd, getDatosEstadosTaxi(), sesion);
+                estados.Generar();
+                break;
         }
     }
 }
