@@ -92,6 +92,25 @@ public class GenerarReporteMultas {
         parametro.put("empresa", empresa);
         parametro.put("usuario", usuario);
 
+        String sql = "SELECT "
+                + "MULTAS_ASIGNADAS.`USUARIO` AS MULTAS_ASIGNADAS_USUARIO,"
+                + "MULTAS_ASIGNADAS.`N_UNIDAD` AS MULTAS_ASIGNADAS_N_UNIDAD,"
+                + "MULTAS_ASIGNADAS.`FECHA` AS MULTAS_ASIGNADAS_FECHA,"
+                + "MULTAS_ASIGNADAS.`HORA` AS MULTAS_ASIGNADAS_HORA,"
+                + "MULTAS_ASIGNADAS.`COD_MULTA` AS MULTAS_ASIGNADAS_COD_MULTA,"
+                + "COD_MULTAS.`VALOR` AS COD_MULTAS_VALOR "
+                + "FROM "
+                + "`MULTAS_ASIGNADAS` MULTAS_ASIGNADAS,"
+                + "`COD_MULTAS` COD_MULTAS "
+                + "WHERE "
+                + "MULTAS_ASIGNADAS.COD_MULTA = COD_MULTAS.COD_MULTA "
+                + "AND "
+                + "MULTAS_ASIGNADAS.`USUARIO` LIKE '$P!{usuario_filtro}%'";
+
+        parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
+
         GenerarReporte.Generar(parametro, RutaJasper, bd);
     }
 
@@ -113,7 +132,9 @@ public class GenerarReporteMultas {
                 + "WHERE "
                 + "MULTAS_ASIGNADAS.`COD_MULTA` = COD_MULTAS.`COD_MULTA` "
                 + "AND "
-                + "MONTH(MULTAS_ASIGNADAS.`FECHA`) = '$P!{mes}'";
+                + "MONTH(MULTAS_ASIGNADAS.`FECHA`) = '$P!{mes}'"
+                + "AND "
+                + "MULTAS_ASIGNADAS.`USUARIO` LIKE '$P!{usuario_filtro}%'";
 
         System.out.println(sql);
 
@@ -121,6 +142,8 @@ public class GenerarReporteMultas {
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
 
         parametro.put("mes", campos.get("mes"));
         parametro.put("NombreMes", campos.get("NombreMes"));
@@ -139,6 +162,29 @@ public class GenerarReporteMultas {
         Map parametro = new HashMap();
         parametro.put("empresa", empresa);
         parametro.put("usuario", usuario);
+
+        String sql = "SELECT "
+                + "MULTAS_PAGADAS.`USUARIO` AS MULTAS_PAGADAS_USUARIO,"
+                + "MULTAS_ASIGNADAS.`N_UNIDAD` AS MULTAS_ASIGNADAS_N_UNIDAD,"
+                + "MULTAS_ASIGNADAS.`FECHA` AS MULTAS_ASIGNADAS_FECHA,"
+                + "MULTAS_PAGADAS.`FECHA` AS MULTAS_PAGADAS_FECHA,"
+                + "MULTAS_PAGADAS.`HORA` AS MULTAS_PAGADAS_HORA,"
+                + "MULTAS_ASIGNADAS.`HORA` AS MULTAS_ASIGNADAS_HORA,"
+                + "MULTAS_ASIGNADAS.`COD_MULTA` AS MULTAS_ASIGNADAS_COD_MULTA,"
+                + "COD_MULTAS.`VALOR` AS COD_MULTAS_VALOR "
+                + "FROM "
+                + "`MULTAS_PAGADAS` MULTAS_PAGADAS,"
+                + "`MULTAS_ASIGNADAS` MULTAS_ASIGNADAS,"
+                + "`COD_MULTAS` COD_MULTAS "
+                + "WHERE "
+                + "MULTAS_PAGADAS.`ID_ASIG` = MULTAS_ASIGNADAS.`ID_ASIG` "
+                + "AND MULTAS_ASIGNADAS.`COD_MULTA` = COD_MULTAS.`COD_MULTA`"
+                + "AND "
+                + "MULTAS_ASIGNADAS.`USUARIO` LIKE '$P!{usuario_filtro}%'";
+
+        parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
 
         GenerarReporte.Generar(parametro, RutaJasper, bd);
     }
@@ -164,7 +210,9 @@ public class GenerarReporteMultas {
                 + "MULTAS_PAGADAS.`ID_ASIG` = MULTAS_ASIGNADAS.`ID_ASIG` "
                 + "AND MULTAS_ASIGNADAS.`COD_MULTA` = COD_MULTAS.`COD_MULTA`"
                 + "AND "
-                + "MONTH(MULTAS_PAGADAS.`FECHA`) = '$P!{mes}'";
+                + "MONTH(MULTAS_PAGADAS.`FECHA`) = '$P!{mes}'"
+                + "AND "
+                + "MULTAS_ASIGNADAS.`USUARIO` LIKE '$P!{usuario_filtro}%'";
 
         System.out.println(sql);
 
@@ -172,6 +220,8 @@ public class GenerarReporteMultas {
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
 
         parametro.put("mes", campos.get("mes"));
         parametro.put("NombreMes", campos.get("NombreMes"));
@@ -199,12 +249,16 @@ public class GenerarReporteMultas {
                 + "WHERE "
                 + "MA.`COD_MULTA` = COD_MULTAS.`COD_MULTA` "
                 + "AND "
-                + "MA.`ID_ASIG` <> ALL (SELECT MP.`ID_ASIG` FROM `MULTAS_PAGADAS` MP);";
+                + "MA.`ID_ASIG` <> ALL (SELECT MP.`ID_ASIG` FROM `MULTAS_PAGADAS` MP)"
+                + "AND "
+                + "MA.`USUARIO` LIKE '$P!{usuario_filtro}%'";
 
         System.out.println(sql);
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
 
         parametro.put("empresa", empresa);
         parametro.put("usuario", usuario);
@@ -216,6 +270,40 @@ public class GenerarReporteMultas {
      * Genera un reporte de todas las multas por pagar de un mes determinado
      */
     private void GenerarTotalMultasPorPagarMensual() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        String sql = "SELECT "
+                + "MA.`USUARIO` AS MULTAS_ASIGNADAS_USUARIO,"
+                + "MA.`N_UNIDAD` AS MULTAS_ASIGNADAS_N_UNIDAD,"
+                + "MA.`FECHA` AS MULTAS_ASIGNADAS_FECHA,"
+                + "MA.`HORA` AS MULTAS_ASIGNADAS_HORA,"
+                + "MA.`COD_MULTA` AS MULTAS_ASIGNADAS_COD_MULTA, "
+                + "COD_MULTAS.`VALOR` AS COD_MULTAS_VALOR "
+                + "FROM "
+                + "`MULTAS_ASIGNADAS` MA, "
+                + "`COD_MULTAS` COD_MULTAS "
+                + "WHERE "
+                + "MA.`COD_MULTA` = COD_MULTAS.`COD_MULTA` "
+                + "AND "
+                + "MA.`ID_ASIG` <> ALL (SELECT MP.`ID_ASIG` FROM `MULTAS_PAGADAS` MP)"
+                + "AND "
+                + "MONTH(MA.`FECHA`) = '$P!{mes}'"
+                + "AND "
+                + "MA.`USUARIO` LIKE '$P!{usuario_filtro}%'";
+
+        System.out.println(sql);
+
+        System.out.println("Mes: " + campos.get("NombreMes"));
+
+        Map parametro = new HashMap();
+        parametro.put("sql", sql);
+
+        parametro.put("usuario_filtro", campos.get("usuario_filtro"));
+
+        parametro.put("mes", campos.get("mes"));
+        parametro.put("NombreMes", campos.get("NombreMes"));
+
+        parametro.put("empresa", empresa);
+        parametro.put("usuario", usuario);
+
+        GenerarReporte.Generar(parametro, RutaJasper, bd);
     }
 }

@@ -7,18 +7,12 @@
 package interfaz.reportes;
 
 import BaseDatos.ConexionBase;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
@@ -48,6 +42,18 @@ public class Reportes extends javax.swing.JDialog {
         jcMesesClientes.setEnabled(false);
         jcMesesUnidades.setEnabled(false);
         jcMultasMes.setEnabled(false);
+        cargarComboUsuarios();
+        jcUsuariosMultas.setEnabled(false);
+    }
+
+    /**
+     * Carga el combo de usuarios con los datos de la base
+     */
+    private void cargarComboUsuarios() {
+        String[] usuarios = bd.getUsuarios();
+        for (String user : usuarios) {
+            jcUsuariosMultas.addItem(user);
+        }
     }
 
     /**
@@ -95,6 +101,7 @@ public class Reportes extends javax.swing.JDialog {
         rgCarerras = new javax.swing.ButtonGroup();
         rgMultas = new javax.swing.ButtonGroup();
         rgMultasOpcion = new javax.swing.ButtonGroup();
+        rgUsuariosMultas = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTabReportes = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -139,6 +146,10 @@ public class Reportes extends javax.swing.JDialog {
         jcMultasMes = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jrTodosUsuariosMultas = new javax.swing.JRadioButton();
+        jcUsuariosMultas = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jrUsuarioMultas = new javax.swing.JRadioButton();
         jbSalir = new javax.swing.JButton();
         jbGenerar = new javax.swing.JButton();
 
@@ -261,7 +272,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jcTodosClientes)
                 .addGap(18, 18, 18)
                 .addComponent(jpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(123, 123, 123))
+                .addGap(139, 139, 139))
         );
 
         jTabReportes.addTab("Clientes", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/usuario.png")), jPanel1); // NOI18N
@@ -406,7 +417,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpFechasDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Despachos", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png")), jPanel2); // NOI18N
@@ -513,7 +524,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrTotalCarrerasUnidadMes)
                     .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Carreras", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/carreras.png")), jPanel5); // NOI18N
@@ -575,6 +586,25 @@ public class Reportes extends javax.swing.JDialog {
 
         jLabel4.setText("Seleccionar el tipo de reporte que desee:");
 
+        rgUsuariosMultas.add(jrTodosUsuariosMultas);
+        jrTodosUsuariosMultas.setSelected(true);
+        jrTodosUsuariosMultas.setText("Todos");
+        jrTodosUsuariosMultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrTodosUsuariosMultasActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("¿Multas que puso que usuario?");
+
+        rgUsuariosMultas.add(jrUsuarioMultas);
+        jrUsuarioMultas.setText("Usuarios");
+        jrUsuarioMultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrUsuarioMultasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -583,20 +613,35 @@ public class Reportes extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jrMultasAsignadas)
-                        .addGap(18, 18, 18)
-                        .addComponent(jrMultasPagadas)
-                        .addGap(18, 18, 18)
-                        .addComponent(jrMultasPorPagar))
-                    .addComponent(jrTiposMultas)
-                    .addComponent(jrMultasTotales)
+                        .addComponent(jrMultasTotales)
+                        .addContainerGap())
+                    .addComponent(jrTodosUsuariosMultas)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addContainerGap(310, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(152, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jrMultasMensuales)
                         .addGap(18, 18, 18)
-                        .addComponent(jcMultasMes, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addContainerGap(58, Short.MAX_VALUE))
+                        .addComponent(jcMultasMes, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(272, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                                .addComponent(jrUsuarioMultas)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcUsuariosMultas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                                .addComponent(jrMultasAsignadas)
+                                .addGap(18, 18, 18)
+                                .addComponent(jrMultasPagadas)
+                                .addGap(18, 18, 18)
+                                .addComponent(jrMultasPorPagar))
+                            .addComponent(jrTiposMultas, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(58, 58, 58))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,7 +655,15 @@ public class Reportes extends javax.swing.JDialog {
                     .addComponent(jrMultasAsignadas)
                     .addComponent(jrMultasPagadas)
                     .addComponent(jrMultasPorPagar))
-                .addGap(29, 29, 29)
+                .addGap(17, 17, 17)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jrTodosUsuariosMultas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrUsuarioMultas)
+                    .addComponent(jcUsuariosMultas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jrMultasTotales)
@@ -618,7 +671,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrMultasMensuales)
                     .addComponent(jcMultasMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabReportes.addTab("Multas", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/police.png")), jPanel6); // NOI18N
@@ -660,7 +713,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jTabReportes, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addComponent(jTabReportes, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbSalir)
@@ -850,6 +903,18 @@ public class Reportes extends javax.swing.JDialog {
         OpcionMultasReporte(true);
     }//GEN-LAST:event_jrMultasPorPagarActionPerformed
 
+    private void jrTodosUsuariosMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTodosUsuariosMultasActionPerformed
+        if (jrTodosUsuariosMultas.isSelected()) {
+            jcUsuariosMultas.setEnabled(false);
+        }
+    }//GEN-LAST:event_jrTodosUsuariosMultasActionPerformed
+
+    private void jrUsuarioMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrUsuarioMultasActionPerformed
+        if (jrUsuarioMultas.isSelected()) {
+            jcUsuariosMultas.setEnabled(true);
+        }
+    }//GEN-LAST:event_jrUsuarioMultasActionPerformed
+
     /**
      * Habilita o deshabilita las opciones de totales o mensuales
      * @param b
@@ -857,8 +922,16 @@ public class Reportes extends javax.swing.JDialog {
     private void OpcionMultasReporte(boolean b) {
         jrMultasTotales.setEnabled(b);
         jrMultasMensuales.setEnabled(b);
+        jrTodosUsuariosMultas.setEnabled(b);
+        jrUsuarioMultas.setEnabled(b);
         if (jrTiposMultas.isSelected()) {
             jcMultasMes.setEnabled(b);
+            jcUsuariosMultas.setEnabled(b);
+        }else{
+            jrTodosUsuariosMultas.setSelected(b);
+            jrMultasTotales.setSelected(b);
+            jcUsuariosMultas.setEnabled(false);
+            jcMultasMes.setEnabled(false);
         }
     }
 
@@ -976,6 +1049,11 @@ public class Reportes extends javax.swing.JDialog {
             map.put("cat", "porPagar");
         }
 
+        if(jrTodosUsuariosMultas.isSelected()){
+            map.put("usuario_filtro", "");
+        }else{
+            map.put("usuario_filtro", jcUsuariosMultas.getSelectedItem());
+        }
 
         if (jrMultasTotales.isSelected()) {
             map.put("op", "total");
@@ -996,6 +1074,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1010,6 +1089,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JComboBox jcMesesUnidades;
     private javax.swing.JComboBox jcMultasMes;
     private javax.swing.JCheckBox jcTodosClientes;
+    private javax.swing.JComboBox jcUsuariosMultas;
     private org.jdesktop.swingx.JXDatePicker jdFechaFinDes;
     private org.jdesktop.swingx.JXDatePicker jdFechaIniDes;
     private javax.swing.JPanel jpClientes;
@@ -1020,12 +1100,14 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JRadioButton jrMultasPorPagar;
     private javax.swing.JRadioButton jrMultasTotales;
     private javax.swing.JRadioButton jrTiposMultas;
+    private javax.swing.JRadioButton jrTodosUsuariosMultas;
     private javax.swing.JRadioButton jrTotalCarerrasEmpresa;
     private javax.swing.JRadioButton jrTotalCarrerasClientesMes;
     private javax.swing.JRadioButton jrTotalCarrerasEmpresaMes;
     private javax.swing.JRadioButton jrTotalCarrerasPorCliente;
     private javax.swing.JRadioButton jrTotalCarrerasUnidad;
     private javax.swing.JRadioButton jrTotalCarrerasUnidadMes;
+    private javax.swing.JRadioButton jrUsuarioMultas;
     private javax.swing.JTextField jtCodCli;
     private javax.swing.JTextField jtCodigoDes;
     private javax.swing.JTextField jtNomCli;
@@ -1042,6 +1124,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.ButtonGroup rgDespachos;
     private javax.swing.ButtonGroup rgMultas;
     private javax.swing.ButtonGroup rgMultasOpcion;
+    private javax.swing.ButtonGroup rgUsuariosMultas;
     // End of variables declaration//GEN-END:variables
 
     /**
