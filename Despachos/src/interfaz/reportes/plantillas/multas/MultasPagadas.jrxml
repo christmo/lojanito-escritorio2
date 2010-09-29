@@ -27,6 +27,9 @@
 	<parameter name="NombreMes" class="java.lang.String">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="usuario_filtro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
