@@ -197,11 +197,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
         });
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
-        cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCodigoMActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Nro. UNIDAD:");
 
@@ -588,10 +583,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_cmbCodigoMActionPerformed
 
     private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
         if (cmbEstado.getSelectedItem().toString().equals("Pendiente")) {
