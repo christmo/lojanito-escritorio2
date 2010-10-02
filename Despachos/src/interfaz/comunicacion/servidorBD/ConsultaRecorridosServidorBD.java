@@ -9,15 +9,21 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.swing.Icon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kradac
  */
 public class ConsultaRecorridosServidorBD extends Thread {
 
+    /**
+     * Logger para guardar los log en un archivo y enviar por mail los de error
+     */
+    private static final Logger log = LoggerFactory.getLogger(GuardarServidorKRADAC.class);
     private static int PUERTO;// = 666;
     private static String DIRECCION;
     private static Socket echoSocket;
@@ -55,7 +61,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
                 AbrirPuerto();
-                Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("{}", Principal.sesion[1]);
             } catch (IOException ex) {
                 //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 PonerIconoNOSenal();
@@ -66,7 +73,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
                         Thread.sleep(1000);
                         AbrirPuerto();
                     } catch (InterruptedException ex1) {
-                        Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex1);
+                        //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex1);
+                        log.error("{}", Principal.sesion[1]);
                     }
                 }
             }
@@ -200,7 +208,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {
-            Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("{}", Principal.sesion[1]);
         }
     }
 
@@ -211,6 +220,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
         int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
+        log.info("Numero de filas respaldadas: {}", filasRespaldadas);
         ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas);
         actualizarServer.start();
     }

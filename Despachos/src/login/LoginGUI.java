@@ -11,6 +11,8 @@
 package login;
 
 import BaseDatos.ConexionBase;
+
+
 import configuracion.UIConfiguracion;
 import interfaz.Principal;
 import java.io.File;
@@ -24,11 +26,20 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+
+//import org.slf4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
 /**
  *
  * @author christmo
  */
 public class LoginGUI extends javax.swing.JFrame {
+
+    private static final Logger log = LoggerFactory.getLogger(LoginGUI.class);
 
     private String strUser = null;
     private char[] chrPass = null;
@@ -54,6 +65,7 @@ public class LoginGUI extends javax.swing.JFrame {
             UIConfiguracion.CrearArchivoPropiedades(url_config);
         }
         existenDirectorios();
+        
         //System.out.println(System.getProperty("java.library.path"));
     }
 
@@ -264,8 +276,8 @@ public class LoginGUI extends javax.swing.JFrame {
 
                         //Principal pantalla = new Principal(sesion, cb);
                         Principal pantalla = new Principal(sesion, cb, arcConfig);
-
-                        //his.setVisible(false);
+                        log.debug("Ingresar al Sistema...");
+                        
                         System.out.println("Ingresar a Principal");
                         this.dispose();
                     } else {

@@ -9,8 +9,10 @@ import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +20,10 @@ import java.util.logging.Logger;
  */
 public class ActualizarServidorKRADAC extends Thread {
 
+    /**
+     * Logger para guardar los log en un archivo y enviar por mail los de error
+     */
+    private static final Logger log = LoggerFactory.getLogger(ActualizarServidorKRADAC.class);
     private ConexionBase bd;
     private ResultSet rs;
     private funcionesUtilidad funciones = new funcionesUtilidad();
@@ -39,6 +45,7 @@ public class ActualizarServidorKRADAC extends Thread {
     private void ActualizarServidorConConexion() {
         if (ConexionServidorKRADAC()) {
             if (intFilasRespaldadas > 0) {
+                log.debug("Empezar Actualizacion al servidor de Kradac filas a insertar:{}", intFilasRespaldadas);
                 System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
                 this.bd = new ConexionBase(Principal.arcConfig);
                 InsertarFilasRespaldadasLocalesEnServidorKRADAC();
@@ -68,19 +75,23 @@ public class ActualizarServidorKRADAC extends Thread {
                         (int) minutos,
                         rs.getString("FONO"),
                         rs.getString("USUARIO"));
+
                 if (estadoInsersionServidor) {
                     /**
                      * Borrar el respaldo ya que se ha guardado correctamente
-                     * en els ervidor de KRADAC
+                     * en el servidor de KRADAC
                      */
                     BorrarRespadoLocal(HoraInsert);
+                    log.trace("Insercion en el servidor correcta borrar el respaldo local: {}", HoraInsert);
+                } else {
+                    log.trace("No se pudo insertar en el servidor KRADAC sigue el respaldo local...");
                 }
             }
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-                
             } else {
-                Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("{}", Principal.sesion[1]);
             }
         }
     }
@@ -121,6 +132,7 @@ public class ActualizarServidorKRADAC extends Thread {
     private void BorrarRespadoLocal(long HoraInsert) {
         String sql = "DELETE FROM RESPALDO_ASIGNACION_SERVER WHERE HORA_INSERT = " + HoraInsert;
         bd.ejecutarSentenciaStatement2(sql);
+        log.trace("Respaldo borrado correctamente...");
     }
 
     /**

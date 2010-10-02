@@ -4,15 +4,21 @@ import BaseDatos.ConexionBase;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 /**
  *
  * @author christmo
  */
 public class GuardarServidorKRADAC extends Thread {
 
+    /**
+     * Logger para guardar los log en un archivo y enviar por mail los de error
+     */
+    private static final Logger log = LoggerFactory.getLogger(GuardarServidorKRADAC.class);
     private ConexionBase bd;
     private Despachos desp;
     private boolean accion;
@@ -28,6 +34,7 @@ public class GuardarServidorKRADAC extends Thread {
         this.bd = new ConexionBase(Principal.arcConfig);
         this.desp = d;
         this.accion = accion;
+        log.debug("Enpezar a Guardar al servidor Kradac...");
     }
 
     @Override
@@ -78,13 +85,17 @@ public class GuardarServidorKRADAC extends Thread {
                     + Principal.sesion[2]
                     + "');";
             cb.ejecutarSentencia(sql2);
+            log.trace("Fallo Asignacion, Respaldo insert Server Kradac: {}", sql2);
             cb.CerrarConexion();
+        } else {
+            log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
         }
         System.err.println("KRADAC: " + sql);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("{}", Principal.sesion[1]);
         }
         InsertarDespachoServidorKRADAC();
     }
@@ -129,7 +140,10 @@ public class GuardarServidorKRADAC extends Thread {
                     + Principal.sesion[2]
                     + "');";
             cb.ejecutarSentencia(sql2);
+            log.trace("Fallo Despacho, Respaldo insert Server Kradac: {}", sql2);
             cb.CerrarConexion();
+        }else {
+            log.trace("Exito Despacho guardada server KRADAC: {}", sql);
         }
     }
 
@@ -175,7 +189,10 @@ public class GuardarServidorKRADAC extends Thread {
                     + Principal.sesion[2]
                     + "');";
             cb.ejecutarSentencia(sql2);
+            log.trace("Fallo Liberacion, Respaldo insert Server Kradac: {}", sql2);
             cb.CerrarConexion();
+        }else {
+            log.trace("Exito Liberacion guardada server KRADAC: {}", sql);
         }
     }
 }
