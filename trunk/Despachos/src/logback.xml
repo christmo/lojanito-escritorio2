@@ -178,6 +178,7 @@
 
     <logger name="BaseDatos.ConexionBase" level="TRACE">
         <appender-ref ref="TRACE"/>
+        <appender-ref ref="EMAIL"/>
     </logger>
 
     <logger name="login" level="ALL">

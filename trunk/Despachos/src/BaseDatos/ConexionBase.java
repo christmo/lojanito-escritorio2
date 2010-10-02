@@ -1,6 +1,7 @@
 package BaseDatos;
 
 import com.mysql.jdbc.Statement;
+import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
@@ -250,12 +251,14 @@ public class ConexionBase {
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
                     //System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.trace("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************",ex);
+                    log.trace("MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...",ex);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
                     //System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
-                    log.trace("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************",ex);
+                    log.trace("NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3],ex);
+                    System.err.println("Error enviar");
+                    log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3],Principal.sesion[1],ex);
                     return false;
                 } else {
                     txt = ex.getMessage().substring(0, 15);
