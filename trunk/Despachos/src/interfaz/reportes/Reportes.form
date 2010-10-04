@@ -44,11 +44,11 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jTabReportes" alignment="0" pref="702" max="32767" attributes="0"/>
-                  <Component id="jLabel1" alignment="0" pref="702" max="32767" attributes="0"/>
+                  <Component id="jTabReportes" alignment="0" pref="707" max="32767" attributes="0"/>
+                  <Component id="jLabel1" alignment="0" pref="707" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="472" max="32767" attributes="0"/>
+                      <EmptySpace pref="477" max="32767" attributes="0"/>
                       <Component id="jbGenerar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -160,7 +160,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jtTelCli" min="-2" pref="160" max="-2" attributes="0"/>
                               <Component id="jtCodCli" alignment="0" min="-2" pref="159" max="-2" attributes="0"/>
-                              <Component id="jtNomCli" alignment="0" pref="484" max="32767" attributes="0"/>
+                              <Component id="jtNomCli" alignment="0" pref="489" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -314,8 +314,8 @@
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jtCodigoDes" pref="488" max="32767" attributes="1"/>
-                                      <Component id="jtUnidadDes" alignment="0" pref="488" max="32767" attributes="1"/>
+                                      <Component id="jtCodigoDes" pref="493" max="32767" attributes="1"/>
+                                      <Component id="jtUnidadDes" alignment="0" pref="493" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
                               <Component id="rTodasCarrerasPorDia" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -435,7 +435,7 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jdFechaIniDes" min="-2" pref="145" max="-2" attributes="1"/>
-                              <EmptySpace pref="229" max="32767" attributes="0"/>
+                              <EmptySpace pref="234" max="32767" attributes="0"/>
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jdFechaFinDes" min="-2" pref="145" max="-2" attributes="1"/>
@@ -524,7 +524,7 @@
                               <Component id="jcMesesUnidades" min="-2" pref="156" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="216" max="32767" attributes="0"/>
+                      <EmptySpace pref="221" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -737,7 +737,7 @@
                               <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="208" max="32767" attributes="0"/>
+                      <EmptySpace pref="213" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -934,7 +934,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jrEstadosTaxiUnidad" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="jtEstadosTaxiUnidad" pref="580" max="32767" attributes="0"/>
+                              <Component id="jtEstadosTaxiUnidad" pref="585" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jrEstadosTaxiTotal" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel8" alignment="0" min="-2" max="-2" attributes="0"/>

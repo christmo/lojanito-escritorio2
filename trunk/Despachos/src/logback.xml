@@ -26,7 +26,7 @@
         </layout>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}.t.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}-base.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- mantener 5 días de historia -->
             <MaxHistory>5</MaxHistory>
         </rollingPolicy>

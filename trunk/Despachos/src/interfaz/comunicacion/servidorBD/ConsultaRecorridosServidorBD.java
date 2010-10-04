@@ -220,7 +220,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
         int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
-        log.info("Numero de filas respaldadas: {}", filasRespaldadas);
+        //log.info("Numero de filas respaldadas: {}", filasRespaldadas);
         ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas);
         actualizarServer.start();
     }

@@ -245,20 +245,20 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 76);
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************",ex);
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
+                    log.trace("MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...", ex);
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.trace("MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...",ex);
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
+                    //log.trace("MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", ex);
+                    log.error("[Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
-                    log.trace("NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3],ex);
-                    System.err.println("Error enviar");
-                    log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3],Principal.sesion[1],ex);
+                    System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
+                    //log.trace("NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], ex);
+                    log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], Principal.sesion[1], ex);
                     return false;
                 } else {
                     txt = ex.getMessage().substring(0, 15);
@@ -267,20 +267,20 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 15);
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
-                log.trace("La tabla \"SERVER\" no esta creada localmente...",ex);
+                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
+                log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
-                //System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...",ex);
+                System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...", ex);
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
-                //System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                log.trace("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************",ex);
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
+                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...", ex);
                 return false;
             } else if (txt.equals("Duplicate entry")) {
-//                System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
-                log.trace("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************",ex);
+                System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
+                log.trace("Error de Clave Primaria -> Usuario ya ingresado...", ex);
                 return false;
             } else {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
@@ -300,7 +300,7 @@ public class ConexionBase {
             Statement st1 = (Statement) conexion.createStatement();
 
             //System.out.println("Ejecutar: " + sql);
-            //log.info("Ejecutar: {}",sql);
+            log.info("Ejecutar: {}",sql);
 
             int rta = st1.executeUpdate(sql);
             if (rta >= 0) {
@@ -316,18 +316,20 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 76);
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************",ex);
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
+                    log.trace("MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...", ex);
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.trace("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************",ex);
+                    System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
+                    //log.trace("MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", ex);
+                    log.error("[Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
-                    log.trace("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************",ex);
+                    System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
+                    //log.trace("NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], ex);
+                    log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], Principal.sesion[1], ex);
                     return false;
                 } else {
                     txt = ex.getMessage().substring(0, 15);
@@ -336,20 +338,20 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 15);
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
-                log.trace("La tabla \"SERVER\" no esta creada localmente...",ex);
+                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
+                log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
-                //System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...",ex);
+                System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...", ex);
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
-                //System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                log.trace("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************",ex);
+                System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
+                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...", ex);
                 return false;
             } else if (txt.equals("Duplicate entry")) {
-//                System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
-                log.trace("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************",ex);
+                System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
+                log.trace("Error de Clave Primaria -> Usuario ya ingresado...", ex);
                 return false;
             } else {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
