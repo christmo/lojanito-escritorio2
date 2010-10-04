@@ -11,12 +11,13 @@
     <property name="appName" value="kradac" />
     <property name="logPath" value="${dir_proyecto}/KradacLogs" />
 
+    <!-- Trace seguir los movimientos de la aplicacion-->
     <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
         </filter>
 
-        <File>${logPath}/${fecha}/${appName}.t.log</File>
+        <File>${logPath}/${fecha}/${appName}.trace.log</File>
 
         <!-- full stacktrace para las excepciones -->
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -26,7 +27,7 @@
         </layout>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}-base.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}.trace.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- mantener 5 días de historia -->
             <MaxHistory>5</MaxHistory>
         </rollingPolicy>
@@ -118,6 +119,28 @@
         </rollingPolicy>
     </appender>
 
+    <!-- Trace para Seguir los movimientos de la base de datos-->
+    <appender name="TRACE_BD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+
+        <File>${logPath}/${fecha}/${appName}-base.log</File>
+
+        <!-- full stacktrace para las excepciones -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                [%p][%d{dd/MM/yyyy HH:mm:ss}][%F][%thread][linea %L][Metodo %M] %logger{36} - %msg%n[excepciones] %exception{full}%n{2}
+            </Pattern>
+        </layout>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}-base.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- mantener 5 días de historia -->
+            <MaxHistory>5</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
     <!--
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -177,7 +200,7 @@
     </logger>
 
     <logger name="BaseDatos.ConexionBase" level="TRACE">
-        <appender-ref ref="TRACE"/>
+        <appender-ref ref="TRACE_BD"/>
         <appender-ref ref="EMAIL"/>
     </logger>
 
