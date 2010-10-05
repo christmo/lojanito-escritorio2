@@ -398,7 +398,7 @@ public final class Principal extends javax.swing.JFrame {
             horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         }
     }
 
@@ -512,7 +512,7 @@ public final class Principal extends javax.swing.JFrame {
             return strCabecerasColumnasVehiculos;
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         } catch (NullPointerException npe) {
             JOptionPane.showMessageDialog(null, "No se pudo recuperar las cabeceras de las unidades para este usuario!!!", "Error", 0);
             System.err.println("No se pudo recuperar el número de unidades para este usuario!!!");
@@ -535,7 +535,7 @@ public final class Principal extends javax.swing.JFrame {
             return rs.getString(1);
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         }
         return null;
     }
@@ -1074,7 +1074,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         }
     }
 
@@ -1183,7 +1183,6 @@ public final class Principal extends javax.swing.JFrame {
         String cod_cli = "";
         try {
             cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-            System.out.println("Cli: " + cod_cli);
         } catch (NullPointerException ex) {
             System.out.println("No tiene Codigo de Cliente");
         } catch (ArrayIndexOutOfBoundsException aex) {
@@ -1193,7 +1192,6 @@ public final class Principal extends javax.swing.JFrame {
 
         try {
             unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-            System.out.println("Unidad: " + unidad);
         } catch (NullPointerException ex) {
             System.out.println("No tiene Unidad");
         } catch (ArrayIndexOutOfBoundsException aex) {
@@ -1322,7 +1320,6 @@ public final class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Se debe ingresar una hora de despacho...", "Error...", 0);
             try {
                 jtPorDespachar.setValueAt(funciones.getHora(), fila, 0);
-                log.info("Poner una hora...");
             } catch (IndexOutOfBoundsException iex) {
             }
         } else if (d.getStrNombre() == null || d.getStrNombre().equals("")) {
@@ -1626,10 +1623,12 @@ public final class Principal extends javax.swing.JFrame {
                 strHora = funciones.getHora();
                 despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
+                System.err.println("Hora en milis:" + despacho.getHoraEnMilis() + " cli:" + despacho.getStrNombre());
+
                 if (desPorTabla_Campo) { //Despacha por tabla
                     setDatosFila(despacho, jtPorDespachar);
                     IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
-                } else { //despacha por campo
+                } else { //despacha por campo telefono
                     setDatosTablas(despacho, jtPorDespachar);
                     IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
                 }
@@ -1641,6 +1640,7 @@ public final class Principal extends javax.swing.JFrame {
             System.err.println("No hay ningún cliente con ese Teléfono...");
             if (desPorTabla_Campo) {
                 despacho = new Despachos(
+                        funciones.getHoraEnMilis(),
                         "",
                         funciones.getFecha(),
                         funciones.getHora(),
@@ -1703,12 +1703,13 @@ public final class Principal extends javax.swing.JFrame {
 
             despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
+            System.err.println("Hora en milis:" + despacho.getHoraEnMilis() + " cli:" + despacho.getStrNombre());
 
             setDatosTablas(despacho, jtPorDespachar);
             IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("No devuelve valores esa consulta...");
+            //System.err.println("No devuelve valores esa consulta...");
             jtTelefono.setText("");
         }
         return strTelefono;
@@ -1803,7 +1804,7 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         }
     }
 
@@ -1831,7 +1832,11 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
+                log.trace("ResultSet cerrado");
+            } else {
+                log.error("{}", sesion[1], ex);
+            }
         }
 
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
@@ -1977,14 +1982,12 @@ public final class Principal extends javax.swing.JFrame {
         Despachos desTMP = getDatosPorDespachar();
         if (desTMP.getIntUnidad() != 0) {
             long hora = funciones.getHoraEnMilis();
-            log.info("Hora de asignación: {}", hora);
+
             if (hora != 0) {
                 desTMP.setHoraDeAsignacion(hora);
-                log.info("Hora de asignacion seteada correctamente...");
             } else {
                 Calendar c = new GregorianCalendar();
                 desTMP.setHoraDeAsignacion(c.getTimeInMillis());
-                log.info("Hora de asignacion seteada con nuevo calendario hora generada anteriormente fue 0: {}", c.getTimeInMillis());
             }
 
             /**
@@ -2003,11 +2006,19 @@ public final class Principal extends javax.swing.JFrame {
             }
 
             if (actualizar) {
+                desTMP.setHoraEnMilis(listaDespachosTemporales.get(i).getHoraEnMilis());
                 listaDespachosTemporales.remove(i);
                 listaDespachosTemporales.add(desTMP);
+                System.err.println("Hora en milis:" + desTMP.getHoraEnMilis() + " cli:" + desTMP.getStrNombre());
+                log.info("Hora asignacion para: {} id:{}", desTMP.getStrNombre(), desTMP.getHoraEnMilis());
+                log.info("Hora de asignación: {} id:{}", hora, desTMP.getHoraEnMilis());
                 return false;
             } else {
+                desTMP.setHoraEnMilis(funciones.getHoraEnMilis());
                 listaDespachosTemporales.add(desTMP);
+                System.err.println("Hora en milis:" + desTMP.getHoraEnMilis() + " cli:" + desTMP.getStrNombre());
+                log.info("Hora asignacion para: {} id:{}", desTMP.getStrNombre(), desTMP.getHoraEnMilis());
+                log.info("Hora de asignación: {} id:{}", hora, desTMP.getHoraEnMilis());
                 return true;
             }
         }
@@ -2546,8 +2557,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param des
      * @param tabla
      */
-    private void setDatosFila(Despachos des, JTable tabla) {
-        //jtTelefono.setText(des.getStrTelefono());
+    private void setDatosFila(Despachos des, JTable tabla) {       
         listaDespachosTemporales.add(des);
         LlenarFila(filaAnt, tabla, des);
     }
@@ -2693,7 +2703,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            log.error("{}", sesion[1]);
+            log.error("{}", sesion[1], ex);
         }
     }
 
@@ -2754,42 +2764,47 @@ public final class Principal extends javax.swing.JFrame {
         for (Despachos d : listaDespachosTemporales) {
             String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
 
+            System.err.println("desp " + d.getStrHora() + "=" + horaTabla + " tabl");
+            
+
             if (d.getStrHora().equals(horaTabla)) {
                 long horaDespacho = funciones.getHoraEnMilis();
-                log.info("Asignar hora de despacho: {}", horaDespacho);
+
                 if (horaDespacho != 0) {
                     d.setHoraDeDespacho(horaDespacho);
-                    log.info("Hora de despacho correcta...");
+                    log.info("Hora despacho para: {} id:{}", d.getStrNombre(), d.getHoraEnMilis());
+                    log.info("Asignar hora de despacho: {} id:{}", horaDespacho, d.getHoraEnMilis());
                 } else {
                     Calendar c = new GregorianCalendar();
                     long horaDes = c.getTimeInMillis();
                     d.setHoraDeDespacho(horaDes);
-                    log.info("Hora de despacho fue 0 generar hora calendario: {}", horaDes);
+                    log.info("Hora despacho para: {} id:{}", d.getStrNombre(), d.getHoraEnMilis());
+                    log.info("Hora de despacho fue 0 generar hora calendario: {} id:{}", horaDes, d.getHoraEnMilis());
                 }
-                log.info("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
+
+                log.info("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60 + " id:{}", d.getHoraEnMilis());
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
 
                 /**
                  * Temporal hasta encontrar el Error...
                  * ----------------------------------------------
                  */
-                if (Math.abs((int) minutos) > 10080) {
-                    //JOptionPane.showMessageDialog(this, "Error Grave revisar --> Minutos entre asignacion y despacho es > a 500: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
-                    log.info("Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080: {}", minutos);
-                    Thread a = new Thread(new Runnable() {
-
-                        public void run() {
-                            log.error("Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080: {}, Emp:{}", sesion[1]);
-                        }
-                    }, "christmo");
-                    a.start();
-
-                    minutos = 0;
-                }
+//                if (Math.abs((int) minutos) > 10080) {
+//                    //JOptionPane.showMessageDialog(this, "Error Grave revisar --> Minutos entre asignacion y despacho es > a 500: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
+//                    log.info("Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080: {}", minutos);
+//                    Thread a = new Thread(new Runnable() {
+//
+//                        public void run() {
+//                            log.error("[Emp:{}]Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080", sesion[1]);
+//                        }
+//                    }, "christmo");
+//                    a.start();
+//
+//                    minutos = 0;
+//                }
 
                 if (d.getHoraDeDespacho() == 0) {
                     //JOptionPane.showMessageDialog(this, "Hora de despacho = 0: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
-                    log.info("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
                     Thread a = new Thread(new Runnable() {
 
                         public void run() {
@@ -2797,14 +2812,13 @@ public final class Principal extends javax.swing.JFrame {
                         }
                     }, "christmo");
                     a.start();
-                    
+
                     minutos = 0;
                     //System.exit(0);
                 }
 
                 if (d.getHoraDeAsignacion() == 0) {
                     //JOptionPane.showMessageDialog(this, "Hora de asignacion = 0: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
-                    log.info("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeAsignacion() - d.getHoraDeDespacho()) / 1000) / 60);
                     Thread a = new Thread(new Runnable() {
 
                         public void run() {

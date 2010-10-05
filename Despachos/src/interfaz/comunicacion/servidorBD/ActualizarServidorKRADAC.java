@@ -46,7 +46,7 @@ public class ActualizarServidorKRADAC extends Thread {
         if (ConexionServidorKRADAC()) {
             if (intFilasRespaldadas > 0) {
                 log.debug("Empezar Actualizacion al servidor de Kradac filas a insertar:{}", intFilasRespaldadas);
-                System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
+                //System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
                 this.bd = new ConexionBase(Principal.arcConfig);
                 InsertarFilasRespaldadasLocalesEnServidorKRADAC();
                 bd.CerrarConexion();

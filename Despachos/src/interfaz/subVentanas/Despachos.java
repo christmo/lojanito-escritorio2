@@ -96,7 +96,7 @@ public class Despachos {
         this.strNota = nota;
     }
 
-    public Despachos(//long horaEnMilis,
+    public Despachos(long horaEnMilis,
             String cod_cliente,
             String fecha,
             String hora,
@@ -117,7 +117,7 @@ public class Despachos {
             this.intCodigo = 0;
         }
         this.strFecha = fecha;
-        //this.horaEnMilis = horaEnMilis;
+        this.horaEnMilis = horaEnMilis;
         this.strHora = hora;
         this.strTelefono = tel;
         this.strNombre = nom;
