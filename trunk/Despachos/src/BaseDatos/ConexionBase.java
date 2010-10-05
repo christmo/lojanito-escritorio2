@@ -53,7 +53,7 @@ public class ConexionBase {
      * maquina local
      */
     public ConexionBase(Properties conf) {
-        System.out.println("Conexion a la base con Archivo de Configuracion...");
+        //System.out.println("Conexion a la base con Archivo de Configuracion...");
         try {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";
@@ -86,7 +86,7 @@ public class ConexionBase {
             } catch (SQLException ex) {
                 java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Conexion a Base de Datos: " + bd + " Ok");
+            //System.out.println("Conexion a Base de Datos: " + bd + " Ok");
 
             log.info("Iniciar conexion a la base de datos...");
         } catch (NullPointerException ex) {
@@ -171,7 +171,7 @@ public class ConexionBase {
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-                log.trace("Statement cerrado", ex);
+                log.trace("Statement cerrado");
             }
         }
         return rs;
@@ -239,7 +239,7 @@ public class ConexionBase {
                 return false;
             }
         } catch (SQLException ex) {
-            System.out.println("EX:" + ex.getMessage());
+            //System.out.println("EX:" + ex.getMessage());
             String txt = ex.getMessage();
             try {
                 txt = ex.getMessage().substring(0, 76);
@@ -267,7 +267,7 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 15);
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
+                //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
                 log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
@@ -280,7 +280,7 @@ public class ConexionBase {
                 return false;
             } else if (txt.equals("Duplicate entry")) {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
-                log.trace("Error de Clave Primaria -> Usuario ya ingresado...", ex);
+                log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
                 return false;
             } else {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
@@ -310,7 +310,7 @@ public class ConexionBase {
             }
 
         } catch (SQLException ex) {
-            System.out.println("EX:" + ex.getMessage());
+            //System.out.println("EX:" + ex.getMessage());
             String txt = ex.getMessage();
             try {
                 txt = ex.getMessage().substring(0, 76);
@@ -338,7 +338,7 @@ public class ConexionBase {
                 txt = ex.getMessage().substring(0, 15);
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                System.err.println("La tabla \"SERVER\" no esta creada localmente...");
+                //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
                 log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
@@ -417,7 +417,7 @@ public class ConexionBase {
     public Connection CerrarConexion() {
         try {
             conexion.close();
-            System.out.println("Base de datos Cerrada...");
+            //System.out.println("Base de datos Cerrada...");
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             log.trace("", ex);

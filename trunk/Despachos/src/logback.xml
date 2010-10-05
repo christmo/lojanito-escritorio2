@@ -66,7 +66,7 @@
         <!-- 5 líneas de stacktrace para las excepciones -->
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                [%p][%d{dd/MM/yyyy HH:mm:ss}][%F][%thread][linea %L][Metodo %M] %logger{36} - %msg%n
+                [%p][%d{dd/MM/yyyy HH:mm:ss}][%F][linea %L] %msg%n
             </Pattern>
         </layout>
 
