@@ -181,37 +181,11 @@ public final class Principal extends javax.swing.JFrame {
         jtPorDespachar.getActionMap().put("Despachar", new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                try {
-                    jtPorDespachar.getCellEditor().stopCellEditing();
-                } catch (NullPointerException ex) {
-                }
-
-                int intFila = jtPorDespachar.getSelectedRow();
-                try {
-                    String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-                    String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-
-                    try {
-                        String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
-                        if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
-                            /**
-                             * Comprueba si se despacho correctamente para
-                             * quitar los datos del cliente del mapa
-                             */
-                            boolean seDespacho = DespacharCliente(intFila);
-                            if (seDespacho) {
-                                QuitarClienteMapa(cod_cli, unidad);
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
-                        }
-                    } catch (NullPointerException ex) {
-                        JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada...\na recoger el pasajero...", "Error...", 0);
-                    }
-                } catch (NullPointerException ex) {
-                    //JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
-                    JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
-                }
+                /**
+                 * Metodo generico para despachar se lo utiliza en todos los
+                 * lugares donde se despacha carreras
+                 */
+                ValidarDespacharCliente();
             }
         });
 
@@ -238,12 +212,12 @@ public final class Principal extends javax.swing.JFrame {
         jtPorDespachar.getActionMap().put("EliminarFila", new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                try {
-                    jtPorDespachar.getCellEditor().stopCellEditing();
-                } catch (NullPointerException ex) {
-                }
-                int intFila = jtPorDespachar.getSelectedRow();
-                BorrarFilaSeleccionadaPorDespachar(intFila);
+                /**
+                 * Metodo generico para borrar las filas de una manera segura
+                 * llamarlo desde todos los lugares donde se hagan borrado de
+                 * filas
+                 */
+                BorradoFilasFormaSegura();
             }
         });
 
@@ -1284,6 +1258,46 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
+     * Metodo Generico para despachar clientes este se debe llamar en todos los
+     * lugares por los que se despache clientes, en el boton del taxi y con f12
+     * por ahora si se implementara una nueva forma de despachar se lo deberia
+     * llamar a este metodo.
+     */
+    private void ValidarDespacharCliente() {
+        try {
+            jtPorDespachar.getCellEditor().stopCellEditing();
+        } catch (NullPointerException ex) {
+        }
+
+        int intFila = jtPorDespachar.getSelectedRow();
+        try {
+            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+
+            try {
+                String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
+                if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
+                    /**
+                     * Comprueba si se despacho correctamente para
+                     * quitar los datos del cliente del mapa
+                     */
+                    boolean seDespacho = DespacharCliente(intFila);
+                    if (seDespacho) {
+                        QuitarClienteMapa(cod_cli, unidad);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                }
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada...\na recoger el pasajero...", "Error...", 0);
+            }
+        } catch (NullPointerException ex) {
+            //JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+            JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
+        }
+    }
+
+    /**
      * Guarda un cliente que llamo pero que no tiene codigo, para que cuando
      * vuelva a llamar sepa que cliente es.
      * @param Despacho
@@ -2174,9 +2188,22 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarFilaActionPerformed
+        BorradoFilasFormaSegura();
+    }//GEN-LAST:event_jbEliminarFilaActionPerformed
+
+    /**
+     * Permite utilizar un metodo generico para borrar las filas para llamarlo
+     * desde donde se proceda a borrar las filas de la tabla de clietnes por
+     * despachar
+     */
+    private void BorradoFilasFormaSegura() {
+        try {
+            jtPorDespachar.getCellEditor().stopCellEditing();
+        } catch (NullPointerException ex) {
+        }
         int intFila = jtPorDespachar.getSelectedRow();
         BorrarFilaSeleccionadaPorDespachar(intFila);
-    }//GEN-LAST:event_jbEliminarFilaActionPerformed
+    }
 
     private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpiarCamposActionPerformed
         int intFila = jtPorDespachar.getSelectedRow();
@@ -2188,14 +2215,7 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jbNuevoDespachoActionPerformed
 
     private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
-        int intFila = jtPorDespachar.getSelectedRow();
-        DespacharCliente(intFila);
-        try {
-            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-            QuitarClienteMapa(cod_cli, unidad);
-        } catch (NullPointerException ex) {
-        }
+        ValidarDespacharCliente();
     }//GEN-LAST:event_jbDespacharActionPerformed
 
     private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDespachadosMousePressed
@@ -2557,7 +2577,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param des
      * @param tabla
      */
-    private void setDatosFila(Despachos des, JTable tabla) {       
+    private void setDatosFila(Despachos des, JTable tabla) {
         listaDespachosTemporales.add(des);
         LlenarFila(filaAnt, tabla, des);
     }
@@ -2765,7 +2785,7 @@ public final class Principal extends javax.swing.JFrame {
             String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
 
             System.err.println("desp " + d.getStrHora() + "=" + horaTabla + " tabl");
-            
+
 
             if (d.getStrHora().equals(horaTabla)) {
                 long horaDespacho = funciones.getHoraEnMilis();
@@ -2789,20 +2809,6 @@ public final class Principal extends javax.swing.JFrame {
                  * Temporal hasta encontrar el Error...
                  * ----------------------------------------------
                  */
-//                if (Math.abs((int) minutos) > 10080) {
-//                    //JOptionPane.showMessageDialog(this, "Error Grave revisar --> Minutos entre asignacion y despacho es > a 500: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
-//                    log.info("Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080: {}", minutos);
-//                    Thread a = new Thread(new Runnable() {
-//
-//                        public void run() {
-//                            log.error("[Emp:{}]Error Grave revisar --> Minutos entre asignacion y despacho es > a 10080", sesion[1]);
-//                        }
-//                    }, "christmo");
-//                    a.start();
-//
-//                    minutos = 0;
-//                }
-
                 if (d.getHoraDeDespacho() == 0) {
                     //JOptionPane.showMessageDialog(this, "Hora de despacho = 0: " + minutos + "\nInformar a Kradac inmediatamente -> se cerrara el programa no precionar nada", "error...", 0);
                     Thread a = new Thread(new Runnable() {
