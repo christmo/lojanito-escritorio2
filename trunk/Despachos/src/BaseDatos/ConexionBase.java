@@ -17,11 +17,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Properties;
-//import java.util.ResourceBundle;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
+
 import java.util.logging.Level;
-import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +76,10 @@ public class ConexionBase {
             try {
                 conexion = DriverManager.getConnection(url, usr, pass);
             } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                //java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                if (ex.getMessage().equals("Communications link failure")) {
+                    log.trace("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
+                }
             }
             try {
                 st = (Statement) conexion.createStatement();
@@ -150,9 +150,13 @@ public class ConexionBase {
 
         } catch (SQLException ex) {
             //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-            log.trace("Error el consultar", ex);
+            if(ex.getMessage().equals("No operations allowed after statement closed.")){
+                log.trace("Statement cerrado...");
+            }else{
+                log.trace("Error el consultar",ex);
+            }
         } catch (NullPointerException ex) {
-            log.trace("Null es statement", ex);
+            log.trace("Null es statement");
         }
         return rs;
     }
@@ -192,7 +196,7 @@ public class ConexionBase {
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-                log.trace("Statement cerrado", ex);
+                log.trace("Statement cerrado");
             }
         }
         return rs;
@@ -268,15 +272,15 @@ public class ConexionBase {
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
-                log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
+                log.trace("La tabla \"SERVER\" no esta creada localmente...");
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
                 System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...", ex);
+                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...", ex);
+                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
                 return false;
             } else if (txt.equals("Duplicate entry")) {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
@@ -300,7 +304,7 @@ public class ConexionBase {
             Statement st1 = (Statement) conexion.createStatement();
 
             //System.out.println("Ejecutar: " + sql);
-            log.info("Ejecutar: {}",sql);
+            log.info("Ejecutar: {}", sql);
 
             int rta = st1.executeUpdate(sql);
             if (rta >= 0) {
@@ -339,19 +343,19 @@ public class ConexionBase {
             }
             if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
                 //System.err.println("La tabla \"SERVER\" no esta creada localmente...");
-                log.trace("La tabla \"SERVER\" no esta creada localmente...", ex);
+                log.trace("La tabla \"SERVER\" no esta creada localmente...");
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
                 System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...", ex);
+                log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...", ex);
+                log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
                 return false;
             } else if (txt.equals("Duplicate entry")) {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
-                log.trace("Error de Clave Primaria -> Usuario ya ingresado...", ex);
+                log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
                 return false;
             } else {
                 //Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
@@ -577,9 +581,21 @@ public class ConexionBase {
      * @throws SQLException
      */
     public String generarCodigo() throws SQLException {
-        String sql = "SELECT IFNULL(MAX(CODIGO),0) AS COD FROM CLIENTES";
-        ejecutarConsultaUnDato(sql);
-        return rs.getString("COD");
+        //String sql = "SELECT IFNULL(MAX(CODIGO),0) AS COD FROM CLIENTES";
+        //ejecutarConsultaUnDato(sql);
+        String sql = "SELECT DISTINCT CODIGO FROM CLIENTES ORDER BY CODIGO ASC";
+        ResultSet r = ejecutarConsulta(sql);
+        int i = 0;
+        int cod = 0;
+        while (r.next()) {
+            cod = rs.getInt("CODIGO");
+            if (i != cod) {
+                return "" + i;
+            } else {
+                i++;
+            }
+        }
+        return "";
     }
 
     /**
@@ -616,7 +632,6 @@ public class ConexionBase {
              * Hace si el codigo NO es 0 y el cliente NO esta ingresado
              * en la base de datos
              */
-            System.out.println("Entrar Por aqui si el codigo NO es 0");
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"

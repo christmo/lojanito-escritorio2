@@ -199,6 +199,10 @@ public class VentanaDatos extends javax.swing.JFrame {
      * @param despacho
      */
     private void cargarDatos(Despachos despacho) {
+        /**
+         * El despacho tiene telefono
+         */
+        boolean booTelefono=false;
         String cod = "" + despacho.getIntCodigo();
         if (cod == null || cod.equals("") || cod.equals("0")) {
             //si no tiene codigo pero el cliente existe o no
@@ -208,13 +212,16 @@ public class VentanaDatos extends javax.swing.JFrame {
             menu = false;
             try {
                 String tel = despacho.getStrTelefono();
-                if (tel.equals("") || tel.equals("null")) {
+                if (tel.equals("")||tel.equals("null")) {
                     jtNombre.setEditable(false);
                     jtDireccion.setEditable(false);
                     actualizarConNombre = true; //actualiza con nombre
+                    booTelefono = true;
                 }
             } catch (NullPointerException ex) {
+                //Telefono es null no hacer nada
             }
+
         } else {
             //si tiene codigo el cliente actualizar de ley
             jbCodigo.setVisible(false);
@@ -233,23 +240,22 @@ public class VentanaDatos extends javax.swing.JFrame {
         if (despacho.getIntCodigo() != 0) {
             ObtenerDatosClienteConCodigo(despacho.getIntCodigo());
         } else {
-            try {
-                if (!despacho.getStrTelefono().equals("")) {
-                    /**
-                     * La accion sera si con el telefono retorna datos hay que
-                     * actualizar la info caso contrario hay que insertar los
-                     * datos en la tabla de clientes
-                     */
-                    accion = ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
+
+            if (booTelefono) {
+                /**
+                 * La accion sera si con el telefono retorna datos hay que
+                 * actualizar la info caso contrario hay que insertar los
+                 * datos en la tabla de clientes
+                 */
+                accion = ObtenerDatosClienteConTelefono(despacho.getStrTelefono());
+            } else {
+                if (ObtenerDatosClienteConNombreYDireccion(despacho.getStrNombre(), despacho.getStrDireccion())) {
+                    accion = false; //Actualizar la inforamcion
                 } else {
-                    if (ObtenerDatosClienteConNombreYDireccion(despacho.getStrNombre(), despacho.getStrDireccion())) {
-                        accion = false; //Actualizar la inforamcion
-                    } else {
-                        accion = true; //-> insertar
-                    }
+                    accion = true; //-> insertar
                 }
-            } catch (NullPointerException ex) {
             }
+
         }
     }
     /**
@@ -690,16 +696,11 @@ public class VentanaDatos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarActionPerformed
-        /*if (jtCodigo.getText().equals("") || jtCodigo.getText() == null) {
-        CerrarPuertoCoordenadas();
-        this.dispose();
-        } else {*/
         CerrarPuertoCoordenadas();
         GuardarDatos();
         String cod = jtCodigo.getText();
         IngresarClienteMapa(cod);
         this.dispose();
-        //}
     }//GEN-LAST:event_jbAceptarActionPerformed
 
     /**
@@ -821,7 +822,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     private void jbCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCodigoActionPerformed
         if (jtCodigo.getText() == null || jtCodigo.getText().equals("")) {
             try {
-                int cod = Integer.parseInt(bd.generarCodigo()) + 1;
+                int cod = Integer.parseInt(bd.generarCodigo());
                 jtCodigo.setText("" + cod);
                 insertarDatosTabla(jtCodigo.getText(), 2);
             } catch (SQLException ex) {
