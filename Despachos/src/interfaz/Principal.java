@@ -1827,6 +1827,8 @@ public final class Principal extends javax.swing.JFrame {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
                 log.trace("ResultSet cerrado...");
+            } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
+                log.trace("No se obtuvieron campos para el ResultSet...");
             } else {
                 log.error("{}", sesion[1], ex);
             }
@@ -1859,7 +1861,9 @@ public final class Principal extends javax.swing.JFrame {
             //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
                 log.trace("ResultSet cerrado");
-            } else {
+            } else if(ex.getMessage().equals("Query generated no fields for ResultSet")){
+                log.trace("NO hay campos para el resulset");
+            }else{
                 log.error("{}", sesion[1], ex);
             }
         }
