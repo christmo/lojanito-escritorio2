@@ -26,6 +26,7 @@ import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
 import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
+import interfaz.comunicacion.servidorBD.EnvioMensajesUnidades;
 import interfaz.comunicacion.servidorBD.GuardarServidorKRADAC;
 
 import interfaz.subVentanas.Clientes;
@@ -39,7 +40,6 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-//import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author kradac
+ * @author christmo
  */
 public final class Principal extends javax.swing.JFrame {
 
@@ -116,8 +116,6 @@ public final class Principal extends javax.swing.JFrame {
      */
     public static Principal gui;
 
-    /*Leer archivo de configuraciones*/
-    //private ResourceBundle rb;
     /*Archivo de configuraciones*/
     public static Properties arcConfig;
 
@@ -264,9 +262,7 @@ public final class Principal extends javax.swing.JFrame {
      * Abre la comunicación serial para leer el numero de telefono del cliente
      */
     public void IdentificadorLlamadas() {
-        //rb = ResourceBundle.getBundle("configuracion.configsystem");
         String puerto = arcConfig.getProperty("comm");
-        //String puerto = rb.getString("comm");
         System.out.println("Puerto COMM: " + puerto);
         System.out.println("Empresa: " + sesion[1]);
         if (!puerto.equals("0")) {
@@ -371,7 +367,6 @@ public final class Principal extends javax.swing.JFrame {
         try {
             horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", sesion[1], ex);
         }
     }
@@ -485,7 +480,6 @@ public final class Principal extends javax.swing.JFrame {
             strCabecerasColumnasVehiculos = strEncabezados.toArray(datosCast);
             return strCabecerasColumnasVehiculos;
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", sesion[1], ex);
         } catch (NullPointerException npe) {
             JOptionPane.showMessageDialog(null, "No se pudo recuperar las cabeceras de las unidades para este usuario!!!", "Error", 0);
@@ -508,7 +502,6 @@ public final class Principal extends javax.swing.JFrame {
             rs = bd.ejecutarConsultaUnDato(sql);
             return rs.getString(1);
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", sesion[1], ex);
         }
         return null;
@@ -1047,7 +1040,6 @@ public final class Principal extends javax.swing.JFrame {
                 bd.ejecutarSentenciaStatement2(sql);
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
                 log.trace("ResultSet cerrado...");
             } else {
@@ -1110,8 +1102,6 @@ public final class Principal extends javax.swing.JFrame {
                     } else {
                         CampoUnidadCambio = false;
                     }
-                    //String campoAnt = tmp;
-                    //System.out.println("Campo Ant: " + campoAnt);
                 }
                 jtPorDespachar.setValueAt("", intFila, intCol);
             } catch (ArrayIndexOutOfBoundsException aidx) {
@@ -1204,13 +1194,6 @@ public final class Principal extends javax.swing.JFrame {
             jtBuscarPorTelefono.setText("");
             jtBuscarPorCodigo.setText("");
             LimpiarCargarTablaDespachados();
-            /*try {
-            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-            QuitarClienteMapa(cod_cli, UnidadAntesDeBorrar);
-            AsignarColorDespachoVehiculo(UnidadAntesDeBorrar, "ACTIVO");
-            } catch (NumberFormatException nfex) {
-            } catch (NullPointerException ex) {
-            }*/
         } catch (IndexOutOfBoundsException iex) {
             jtBuscarPorNombre.setText("");
             jtBuscarPorTelefono.setText("");
@@ -1296,7 +1279,6 @@ public final class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada...\na recoger el pasajero...", "Error...", 0);
             }
         } catch (NullPointerException ex) {
-            //JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
             JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
         }
     }
@@ -1577,8 +1559,6 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 intMinutos = Integer.parseInt(jtPorDespachar.getValueAt(fila, 7).toString());
             } catch (NumberFormatException nfe) {
-                //System.err.println("No hay Minutos...");
-                //JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Minutos(MIN)...", "Error...", 0);
                 intMinutos = 0;
                 jtPorDespachar.setValueAt("", fila, 7);
             } catch (NullPointerException ex) {
@@ -1587,8 +1567,6 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 intUnidad = Integer.parseInt(jtPorDespachar.getValueAt(fila, 6).toString());
             } catch (NumberFormatException nfe) {
-                //System.err.println("No hay Unidad...");
-                //JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Unidad(UNI)...", "Error...", 0);
                 jtPorDespachar.setValueAt("", fila, 6);
                 intUnidad = 0;
             } catch (NullPointerException ex) {
@@ -1597,7 +1575,6 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 intAtraso = Integer.parseInt(jtPorDespachar.getValueAt(fila, 8).toString());
             } catch (NumberFormatException nfe) {
-                //System.err.println("No hay Atraso...");
                 JOptionPane.showMessageDialog(this, "Solo debe ser número los campos de Atraso(ATR)...", "Error...", 0);
                 jtPorDespachar.setValueAt("0", fila, 8);
                 intAtraso = 0;
@@ -1611,7 +1588,6 @@ public final class Principal extends javax.swing.JFrame {
                     intMinutos, intUnidad, intAtraso, strNota, id_Turno, sesion[0]);
 
         } catch (ArrayIndexOutOfBoundsException aiobe) {
-            //System.err.println("Error de NULL -> No hay datos Seleccionados...");
             datos = new Despachos(null, null, null, "", "", "", 0, 0, 0, "", id_Turno, sesion[0]);
         }
 
@@ -1640,8 +1616,6 @@ public final class Principal extends javax.swing.JFrame {
                 strBarrio = rs.getString("SECTOR");
                 strHora = funciones.getHora();
                 despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
-
-                System.err.println("Hora en milis:" + despacho.getHoraEnMilis() + " cli:" + despacho.getStrNombre());
 
                 if (desPorTabla_Campo) { //Despacha por tabla
                     setDatosFila(despacho, jtPorDespachar);
@@ -1721,13 +1695,9 @@ public final class Principal extends javax.swing.JFrame {
 
             despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
-            System.err.println("Hora en milis:" + despacho.getHoraEnMilis() + " cli:" + despacho.getStrNombre());
-
             setDatosTablas(despacho, jtPorDespachar);
             IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            //System.err.println("No devuelve valores esa consulta...");
             jtTelefono.setText("");
         }
         return strTelefono;
@@ -1824,7 +1794,6 @@ public final class Principal extends javax.swing.JFrame {
             } while (rs.next());
 
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
                 log.trace("ResultSet cerrado...");
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
@@ -1858,12 +1827,11 @@ public final class Principal extends javax.swing.JFrame {
             colorCodigosBD();
 
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
                 log.trace("ResultSet cerrado");
-            } else if(ex.getMessage().equals("Query generated no fields for ResultSet")){
+            } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
                 log.trace("NO hay campos para el resulset");
-            }else{
+            } else {
                 log.error("{}", sesion[1], ex);
             }
         }
@@ -1965,6 +1933,9 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
 
+            /**
+             * CAMBIO EN LA CELDA DE UNIDAD
+             */
             if (intCol == 6) { // cambio de la celda de unidad
                 //------ Poner el icono de colgar el telefono
                 Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
@@ -1977,7 +1948,6 @@ public final class Principal extends javax.swing.JFrame {
                  * para su despacho
                  */
                 InsertarActualizarDespachoTemporalListaTMP();
-
 
                 try {
                     String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
@@ -1992,6 +1962,11 @@ public final class Principal extends javax.swing.JFrame {
                             } else {
                                 ActualizarAsignacion(intFila, intCol, cod_cli);
                             }
+                            /**
+                             * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                             */
+                            enviarMensajeUnidadAsignada(intFila, intCol);
+
                         } catch (ArrayIndexOutOfBoundsException aex) {
                         } catch (NullPointerException ex) {
                             JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
@@ -2001,11 +1976,32 @@ public final class Principal extends javax.swing.JFrame {
                 } catch (NullPointerException ex) {
                     jtPorDespachar.setValueAt("", intFila, 2);
                 }
-
             }
             Mayuculas(jtPorDespachar, intFila);
         }
     }//GEN-LAST:event_jtPorDespacharPropertyChange
+
+    /**
+     * Permite enviar el mensaje con la información del cliente a la unidad
+     * asignada
+     */
+    private void enviarMensajeUnidadAsignada(int intFila, int intCol) {
+        String unidad = "0";
+        String nombreCliente = "";
+        String dirCliente = "";
+        String barrioCliente = "";
+        try {
+            unidad = jtPorDespachar.getValueAt(intFila, intCol).toString();
+            nombreCliente = jtPorDespachar.getValueAt(intFila, 3).toString();
+            dirCliente = jtPorDespachar.getValueAt(intFila, 5).toString();
+            barrioCliente = jtPorDespachar.getValueAt(intFila, 4).toString();
+        } catch (NullPointerException ex) {
+        }
+
+        String mensaje = "CLIENTE: " + nombreCliente + "|DIR: " + dirCliente + "|BARRIO: " + barrioCliente;
+        EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
+        enviarMensajeUnidad.start();
+    }
 
     /**
      * Agrega el despacho que se inserte por la tabla que no tenga codigo ni telefono
@@ -2045,16 +2041,10 @@ public final class Principal extends javax.swing.JFrame {
                 desTMP.setHoraEnMilis(listaDespachosTemporales.get(i).getHoraEnMilis());
                 listaDespachosTemporales.remove(i);
                 listaDespachosTemporales.add(desTMP);
-                System.err.println("Hora en milis:" + desTMP.getHoraEnMilis() + " cli:" + desTMP.getStrNombre());
-                log.info("Hora asignacion para: {} id:{}", desTMP.getStrNombre(), desTMP.getHoraEnMilis());
-                log.info("Hora de asignación: {} id:{}", hora, desTMP.getHoraEnMilis());
                 return false;
             } else {
                 desTMP.setHoraEnMilis(funciones.getHoraEnMilis());
                 listaDespachosTemporales.add(desTMP);
-                System.err.println("Hora en milis:" + desTMP.getHoraEnMilis() + " cli:" + desTMP.getStrNombre());
-                log.info("Hora asignacion para: {} id:{}", desTMP.getStrNombre(), desTMP.getHoraEnMilis());
-                log.info("Hora de asignación: {} id:{}", hora, desTMP.getHoraEnMilis());
                 return true;
             }
         }
@@ -2415,7 +2405,6 @@ public final class Principal extends javax.swing.JFrame {
             datos = new Despachos(strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio,
                     intMinutos, intUnidad, intAtraso, strNota, id_Turno, sesion[0]);
         } catch (ArrayIndexOutOfBoundsException aiobe) {
-            //System.err.println("Error de NULL -> No hay datos Seleccionados...");
         }
         return datos;
     }
@@ -2573,9 +2562,6 @@ public final class Principal extends javax.swing.JFrame {
         tabla.setValueAt(d.getStrNombre(), fila, 3);
         tabla.setValueAt(d.getStrBarrio(), fila, 4);
         tabla.setValueAt(d.getStrDireccion(), fila, 5);
-        //tabla.setValueAt("", fila, 6);
-        //tabla.setValueAt("", fila, 7);
-        //tabla.setValueAt("0", fila, 8);
         tabla.setValueAt(d.getStrNota(), fila, 9);
     }
 
@@ -2678,10 +2664,7 @@ public final class Principal extends javax.swing.JFrame {
         despacharClienteNombre.setStrDireccion(cliente.getDireccion());
         despacharClienteNombre.setStrBarrio(cliente.getBarrio());
         despacharClienteNombre.setStrNota(cliente.getReferencia());
-
-        //-
         despacharClienteNombre.setStrNumeroCasa(cliente.getN_casa());
-        //-
         setDatosTablas(despacharClienteNombre, jtPorDespachar);
     }
 
@@ -2702,7 +2685,6 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", sesion[1], ex);
         }
     }
@@ -2762,66 +2744,19 @@ public final class Principal extends javax.swing.JFrame {
         long minutos;
 
         for (Despachos d : listaDespachosTemporales) {
-            //String horaTabla = jtPorDespachar.getValueAt(intFila, 0).toString();
-
             int unidadTabla = Integer.parseInt(jtPorDespachar.getValueAt(intFila, 6).toString());
-
-            //System.err.println("desp " + d.getStrHora() + "=" + horaTabla + " tabl");
-
-
-            //if (d.getStrHora().equals(horaTabla)) {
             if (d.getIntUnidad() == unidadTabla) {
                 long horaDespacho = funciones.getHoraEnMilis();
 
                 if (horaDespacho != 0) {
                     d.setHoraDeDespacho(horaDespacho);
-                    log.info("Hora despacho para: {} id:{}", d.getStrNombre(), d.getHoraEnMilis());
-                    log.info("Asignar hora de despacho: {} id:{}", horaDespacho, d.getHoraEnMilis());
                 } else {
                     Calendar c = new GregorianCalendar();
                     long horaDes = c.getTimeInMillis();
                     d.setHoraDeDespacho(horaDes);
-                    log.info("Hora despacho para: {} id:{}", d.getStrNombre(), d.getHoraEnMilis());
-                    log.info("Hora de despacho fue 0 generar hora calendario: {} id:{}", horaDes, d.getHoraEnMilis());
                 }
-
-                log.info("Restar: " + d.getHoraDeDespacho() + " - " + d.getHoraDeAsignacion() + " = " + ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60 + " id:{}", d.getHoraEnMilis());
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
-
-                /**
-                 * Temporal hasta encontrar el Error...
-                 * ----------------------------------------------
-                 */
-                if (d.getHoraDeDespacho() == 0) {
-                    Thread a = new Thread(new Runnable() {
-
-                        public void run() {
-                            log.error("[Emp:{}]Hora de despacho = 0", sesion[1]);
-                        }
-                    }, "christmo");
-                    a.start();
-
-                    minutos = 0;
-                    //System.exit(0);
-                }
-
-                if (d.getHoraDeAsignacion() == 0) {
-                    Thread a = new Thread(new Runnable() {
-
-                        public void run() {
-                            log.error("[Emp:{}]Hora de asignacion = 0", sesion[1]);
-                        }
-                    }, "christmo");
-                    a.start();
-
-                    minutos = 0;
-                    //System.exit(0);
-                }
-                /**
-                 * ---------------------------------------------
-                 */
                 d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
-
                 GuardarServidorKRADAC server = new GuardarServidorKRADAC(d, true);
                 server.start();
 
