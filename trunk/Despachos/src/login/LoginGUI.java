@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Este proyecto pertenece a KRADAC soluciones tecnologicas
+ * Creando Tecnologia de Loja para el Mundo ;-)
  */
 
 /*
@@ -15,6 +15,7 @@ import BaseDatos.ConexionBase;
 
 import configuracion.UIConfiguracion;
 import interfaz.Principal;
+import interfaz.funcionesUtilidad;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,21 +27,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-
-//import org.slf4j.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
- *
  * @author christmo
  */
 public class LoginGUI extends javax.swing.JFrame {
 
     private static final Logger log = LoggerFactory.getLogger(LoginGUI.class);
-
     private String strUser = null;
     private char[] chrPass = null;
     private String strPass = "";
@@ -48,6 +43,7 @@ public class LoginGUI extends javax.swing.JFrame {
     ResultSet rs = null;
     private Properties arcConfig;
     private String url_config = CargarRutaArchivoPropiedades();
+    private funcionesUtilidad funciones = new funcionesUtilidad();
 
     /** Creates new form LoginGUI */
     public LoginGUI() {
@@ -61,12 +57,9 @@ public class LoginGUI extends javax.swing.JFrame {
             arcConfig.load(new FileInputStream(url_config));
             System.out.println("Cargado: " + url_config);
         } catch (IOException ex) {
-            //Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
             UIConfiguracion.CrearArchivoPropiedades(url_config);
         }
         existenDirectorios();
-        
-        //System.out.println(System.getProperty("java.library.path"));
     }
 
     public LoginGUI(Properties arcConfig) {
@@ -232,7 +225,6 @@ public class LoginGUI extends javax.swing.JFrame {
         strPass = "";
         boolean entrar = false;
 
-
         strUser = jtUser.getText();
         chrPass = jpPass.getPassword();
 
@@ -256,6 +248,11 @@ public class LoginGUI extends javax.swing.JFrame {
         }
         if (entrar) {
             try {
+                /**
+                 * Semilla del password: KOMPRESORKR@D@C
+                 * MD5(MD5(MD5(clave)  + MD5(semil)));
+                 */
+                strPass = funciones.encriptar(strPass, "KOMPRESORKR@D@C");
                 String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO FROM USUARIOS WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
 
                 rs = cb.ejecutarConsultaUnDato(sql);
@@ -264,7 +261,7 @@ public class LoginGUI extends javax.swing.JFrame {
                 String claveBase = rs.getString("CLAVE");
 
                 boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
-                boolean boolClave = (claveBase.toUpperCase().equals(strPass.toUpperCase()));
+                boolean boolClave = (claveBase.equals(strPass));
 
                 if (boolUsuario) {
                     if (boolClave) {
@@ -274,10 +271,9 @@ public class LoginGUI extends javax.swing.JFrame {
                          */
                         String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
 
-                        //Principal pantalla = new Principal(sesion, cb);
                         Principal pantalla = new Principal(sesion, cb, arcConfig);
                         log.debug("Ingresar al Sistema...");
-                        
+
                         System.out.println("Ingresar a Principal");
                         this.dispose();
                     } else {
@@ -317,7 +313,6 @@ public class LoginGUI extends javax.swing.JFrame {
                     } else {
                         System.out.println("Directorio: " + con + " ya existe...");
                     }
-
                 }
 
                 String veh = arcConfig.getProperty("dirImgVehiculos");
