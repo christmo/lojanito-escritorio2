@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * INICIO.java
  *
  * Created on 09/08/2010, 04:04:21 PM
@@ -22,7 +17,7 @@ import javax.swing.SwingConstants;
 
 /**
  *
- * @author Usuario
+ * @author christmo
  */
 public class INICIO extends javax.swing.JFrame {
 
@@ -53,7 +48,6 @@ public class INICIO extends javax.swing.JFrame {
         this.arcConfig = archivo;
         initComponents();
 
-        //this.setLocationRelativeTo(null);
         try {
             lblEmpresa.setText(bd.getEmpresa(Principal.sesion[1]));
         } catch (NullPointerException ex) {
@@ -278,7 +272,9 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
-        lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 24));
+        lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 36)); // NOI18N
+        lblNombreAplicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNombreAplicacion.setText("KOMPRESOR");
 
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
         lblEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -339,15 +335,15 @@ public class INICIO extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
@@ -380,12 +376,12 @@ public class INICIO extends javax.swing.JFrame {
                                     .addComponent(jbMailKradac, 0, 0, Short.MAX_VALUE)
                                     .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(37, 37, 37))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jbProblemas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -393,8 +389,8 @@ public class INICIO extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addComponent(lblNombreAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEmpresa)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
