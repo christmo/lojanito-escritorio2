@@ -362,12 +362,20 @@ public final class Principal extends javax.swing.JFrame {
      */
     public static void ActualizarTurno() {
         turno = validarTurno();
-        id_Turno = bd.getIdTurno(validarTurno());
-        ActualizarTurnoUsuario(sesion[0], id_Turno);
         try {
-            horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
-        } catch (SQLException ex) {
-            log.error("{}", sesion[1], ex);
+            id_Turno = bd.getIdTurno(validarTurno());
+            ActualizarTurnoUsuario(sesion[0], id_Turno);
+            try {
+                horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
+            } catch (SQLException ex) {
+                log.error("{}", sesion[1], ex);
+            }
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Iniciar nuevamente - Creando turnos por defecto...", "Error...", 1);
+            bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(1,'6:0:0','13:59:59')");
+            bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(2,'14:0:0','21:59:59')");
+            bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(3,'22:0:0','5:59:59')");
+            System.exit(0);
         }
     }
 
@@ -1798,6 +1806,12 @@ public final class Principal extends javax.swing.JFrame {
                 log.trace("ResultSet cerrado...");
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
                 log.trace("No se obtuvieron campos para el ResultSet...");
+            } else if (ex.getMessage().equals("Illegal operation on empty result set.")) {
+                JOptionPane.showMessageDialog(null, "Reiniciar el programa - Creando los estados de los taxis por defecto...", "Error...", 1);
+                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('AC', 'ACTIVO', '-13369549')");
+                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('ASI', 'ASIGNADO', '-23123326')");
+                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('OCU', 'OCUPADO', '-34512')");
+                System.exit(0);
             } else {
                 log.error("{}", sesion[1], ex);
             }
@@ -2663,7 +2677,7 @@ public final class Principal extends javax.swing.JFrame {
         despacharClienteNombre.setStrNombre(cliente.getNombre());
         despacharClienteNombre.setStrDireccion(cliente.getDireccion());
         despacharClienteNombre.setStrBarrio(cliente.getBarrio());
-        despacharClienteNombre.setStrNota(cliente.getReferencia());
+        despacharClienteNombre.setStrReferecia(cliente.getReferencia());
         despacharClienteNombre.setStrNumeroCasa(cliente.getN_casa());
         setDatosTablas(despacharClienteNombre, jtPorDespachar);
     }

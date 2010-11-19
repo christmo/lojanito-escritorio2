@@ -142,8 +142,10 @@ public class ConexionBase {
         } catch (SQLException ex) {
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado...");
+            } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
+                log.trace("Statement cerrado...");
             } else {
-                log.trace("Error el consultar", ex);
+                log.trace("Error al consultar", ex);
             }
         } catch (NullPointerException ex) {
             log.trace("Null es statement");
@@ -1379,7 +1381,7 @@ public class ConexionBase {
         String sql = "CALL SP_INSERTAR_USUARIOS('"
                 + emp + "','"
                 + user + "','"
-                + funciones.encriptar(pass,"KOMPRESORKR@D@C") + "','"
+                + funciones.encriptar(pass, "KOMPRESORKR@D@C") + "','"
                 + nombre + "','"
                 + dir + "','"
                 + tel + "',"
@@ -1443,7 +1445,11 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("NOMBRE_EMP");
         } catch (SQLException ex) {
-            log.trace("", ex);
+            if (ex.getMessage().equals("Illegal operation on empty result set.")) {
+                log.trace("Falta el nombre de la empresa en la base de datos...");
+            } else {
+                log.trace("", ex);
+            }
         }
         return null;
     }
@@ -1663,7 +1669,7 @@ public class ConexionBase {
                 + ")";
         return ejecutarSentenciaHilo(sql, unidad);
     }
-  
+
     /**
      * Obtiene el nombre de los estados de los vehiculos dependiendo del estado
      * @param codigo
@@ -1675,7 +1681,7 @@ public class ConexionBase {
         try {
             return rs.getString("ETIQUETA");
         } catch (SQLException ex) {
-            log.trace("SQL:{}",sql, ex);
+            log.trace("SQL:{}", sql, ex);
         }
         return "";
     }

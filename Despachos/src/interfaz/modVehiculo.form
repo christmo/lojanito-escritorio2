@@ -40,27 +40,27 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" pref="355" max="32767" attributes="0"/>
-                  <Component id="txtRegistroMunicipal" pref="355" max="32767" attributes="0"/>
-                  <Component id="txtNumChasis" pref="355" max="32767" attributes="0"/>
-                  <Component id="txtNumMotor" pref="355" max="32767" attributes="0"/>
-                  <Component id="txtMarca" pref="355" max="32767" attributes="0"/>
-                  <Component id="txtPropietario" pref="355" max="32767" attributes="2"/>
-                  <Component id="cmbConductorAux" pref="355" max="32767" attributes="2"/>
-                  <Component id="cmbConductor" pref="355" max="32767" attributes="2"/>
+                  <Component id="jScrollPane2" pref="408" max="32767" attributes="0"/>
+                  <Component id="txtRegistroMunicipal" pref="408" max="32767" attributes="0"/>
+                  <Component id="txtNumChasis" pref="408" max="32767" attributes="0"/>
+                  <Component id="txtNumMotor" pref="408" max="32767" attributes="0"/>
+                  <Component id="txtMarca" pref="408" max="32767" attributes="0"/>
+                  <Component id="txtPropietario" pref="408" max="32767" attributes="2"/>
+                  <Component id="cmbConductorAux" pref="408" max="32767" attributes="2"/>
+                  <Component id="cmbConductor" pref="408" max="32767" attributes="2"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="txtModelo" min="-2" pref="171" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jLabel9" pref="57" max="32767" attributes="0"/>
+                      <Component id="jLabel9" pref="92" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="spAño" pref="97" max="32767" attributes="0"/>
+                      <Component id="spAño" pref="131" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblPlaca" pref="89" max="32767" attributes="0"/>
+                      <Component id="lblPlaca" pref="109" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                      <Component id="jLabel3" pref="107" max="32767" attributes="0"/>
+                      <Component id="jLabel3" pref="127" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtNUnidad" pref="89" max="32767" attributes="0"/>
+                      <Component id="txtNUnidad" pref="110" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -80,7 +80,7 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel10" pref="766" max="32767" attributes="0"/>
+              <Component id="jLabel10" pref="770" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
@@ -92,7 +92,7 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="1">
                       <Component id="cmbParametro" min="-2" pref="127" max="-2" attributes="0"/>
-                      <EmptySpace pref="45" max="32767" attributes="0"/>
+                      <EmptySpace pref="61" max="32767" attributes="0"/>
                       <Component id="txtCoincidencia" min="-2" pref="221" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>

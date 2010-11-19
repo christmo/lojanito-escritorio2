@@ -56,6 +56,7 @@ public class LoginGUI extends javax.swing.JFrame {
             arcConfig = new Properties();
             arcConfig.load(new FileInputStream(url_config));
             System.out.println("Cargado: " + url_config);
+            // arcConfig = funcionesUtilidad.obtenerArchivoPropiedades("configsystem.properties");
         } catch (IOException ex) {
             UIConfiguracion.CrearArchivoPropiedades(url_config);
         }

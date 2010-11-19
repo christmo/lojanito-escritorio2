@@ -25,10 +25,8 @@ import javax.swing.table.DefaultTableModel;
 public class modConductor extends javax.swing.JDialog {
 
     ArrayList<String[]> conductores;
-    //private ResourceBundle rb;
     private File Ffoto = null;
     private funcionesUtilidad funciones = new funcionesUtilidad();
-    private String img;
     ConexionBase bd;
     ResultSet rs;
     private Properties arcConfig;
@@ -607,12 +605,7 @@ public class modConductor extends javax.swing.JDialog {
         txtemail.setText(aux[7]);
         lblEtiquetaImagen.setText(aux[8]);
 
-        img = aux[8];
-
-//        leerProperties();
-
         if (aux[8] == null || aux[8].equals("")) {
-
             Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
             lblFoto.setIcon(fot);
             lblEtiquetaImagen.setText("defaultcon.jpg");
@@ -624,7 +617,8 @@ public class modConductor extends javax.swing.JDialog {
 
             if (fot.getIconWidth() == -1) {
                 lblFoto.setText("IMAGEN NO ENCONTRADA");
-                lblFoto.setIcon(null);
+                Icon foto = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
+                lblFoto.setIcon(foto);
             } else {
                 lblFoto.setIcon(fot);
                 lblFoto.setText("");
@@ -632,12 +626,6 @@ public class modConductor extends javax.swing.JDialog {
         }
     }
 
-    /**
-     * Carga el archivo de propiedades del sistema
-     */
-    /*private void leerProperties() {
-    rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }*/
     /**
      * Limpia contenido de las cajas
      */
@@ -665,7 +653,6 @@ public class modConductor extends javax.swing.JDialog {
      */
     private void preBuscar(int id, String parametro) {
         funcionesUtilidad objFun = new funcionesUtilidad();
-
 
         if ((cmbParametro.getSelectedIndex() == 0) && (objFun.esCedulaValida(parametro))) {
             buscarConductores(id, parametro, tblResultado);
@@ -703,7 +690,7 @@ public class modConductor extends javax.swing.JDialog {
      * @param con
      * @param mail
      * @param foto
-     * @return
+     * @return boolean
      */
     private boolean guardarRegistro(String ced,
             String nom,
@@ -737,6 +724,14 @@ public class modConductor extends javax.swing.JDialog {
             }
             return false;
         } else {
+            String sql = "UPDATE CONDUCTORES SET NOMBRE_APELLIDO_CON = '" + nom + "', "
+                    + "DIRECCION_CON = '" + dir + "', NUM_CASA_CON = '" + numc + "', "
+                    + "TIPO_SANGRE = '" + tipos + "', ESTADO_CIVIL = '" + estcivil + "', "
+                    + "CONYUGE = '" + con + "', MAIL = '" + mail + "' "
+                    + "WHERE CEDULA_CONDUCTOR = '" + ced + "'";
+            if (bd.ejecutarSentencia(sql)) {
+                return true;
+            }
             return false;
         }
     }

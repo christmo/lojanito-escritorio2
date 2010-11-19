@@ -103,10 +103,12 @@ public class ConsultaRecorridosServidorBD extends Thread {
      */
     public void GuardarDatosRecorridos() {
         try {
-            String[] tramas = getDatosServidor(empresa);
+            //String[] tramas = getDatosServidor(empresa);
+            String[] tramas = getDatosServidorNuevo(empresa);
             for (String trama : tramas) {
                 //System.out.println("" + trama);
-                GuardarDatosRecorridos(trama, bd);
+                //GuardarDatosRecorridos(trama, bd);
+                GuardarDatosRecorridosNuevo(trama, bd);
             }
             crono.reiniciar();
         } catch (NullPointerException ex) {
@@ -116,6 +118,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
     /**
      * Guarda los datos de los recorridos
+     * @deprecated 
      * @param datoVehiculo
      * @param bd
      */
@@ -144,10 +147,37 @@ public class ConsultaRecorridosServidorBD extends Thread {
         }
     }
 
+    private void GuardarDatosRecorridosNuevo(String datoVehiculo, ConexionBase bd) {
+        String[] recorrido = datoVehiculo.split(",");
+
+        PonerIconoSenal();
+        /**
+        ----
+        ID PARTICION: 20100909
+        N_UNIDAD: 43
+        ID_EMPRESA: LN
+        LAT: -3.99473
+        LON: -79.2105116666667
+        FECHA: 2010-09-09
+        HORA: 09:44:36
+        VEL: 0.14
+        G1: estado del TAXIMETRO pudiendo ser 1 (ON) || 0 (OFF)
+        G2: estado del TAXI pudiendo ser 1 (LIBRE) || 0 (OCUPADO)
+        ----
+         */
+        try {
+            //bd.InsertarRecorridoTaxi(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
+            bd.InsertarRecorridoTaxiNuevo(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            //System.out.println("No se recuperaron datos para esa compañia...");
+        }
+    }
+
     /**
      * Se conectar al servidor de Kradac a obtener las ultimas posiciones de todos
      * los vehiculos de la empresa para guardarlos en la tabla de recorridos local
      * para mostrar esos vehiculos en el mapa
+     * @deprecated
      * @param empresa
      * @return String[]
      */
@@ -163,6 +193,46 @@ public class ConsultaRecorridosServidorBD extends Thread {
             //System.out.println("Empresa:" + empresa);
 
             salida.print(empresa + "\r\n");
+            boolean salir = false;
+            String dato;
+            while (!salir) {
+                if ((dato = entrada.readLine()) != null) {
+                    String[] pos = dato.split("#");
+                    for (int i = 0; i < pos.length; i++) {
+                        nuevosDatos.add(pos[i]);
+                        if (i == pos.length - 1) {
+                            salir = true;
+                        } else {
+                            salir = false;
+                        }
+                    }
+                }
+            }
+
+            cast = new String[nuevosDatos.size()];
+
+            datos = nuevosDatos.toArray(cast);
+            //System.out.println("Datos Recuperados: " + datos.length);
+            return datos;
+        } catch (Exception e) {
+            cerrarConexionServerKradac();
+            AbrirPuerto();
+        }
+        return null;
+    }
+
+    private String[] getDatosServidorNuevo(String empresa) {
+        ArrayList<String> nuevosDatos = new ArrayList<String>();
+        String[] cast = null;
+        String[] datos = null;
+        try {
+
+            entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+            salida = new PrintStream(echoSocket.getOutputStream(), true);
+
+            //System.out.println("Empresa:" + empresa);
+
+            salida.print("$$1##" + empresa + "$$\n");
             boolean salir = false;
             String dato;
             while (!salir) {

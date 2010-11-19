@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Kradac
+ * @author christmo
  */
 public class Multas extends javax.swing.JDialog {
 
@@ -336,7 +336,6 @@ public class Multas extends javax.swing.JDialog {
             strCod_multa = rs.getString(1);
             System.out.println("el codigo de la multa obtenido es: " + strCod_multa);
         } catch (SQLException ex) {
-            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try{
@@ -351,8 +350,6 @@ public class Multas extends javax.swing.JDialog {
 
     private void consultarCodigoMultas() {
         String sql = "select COD_MULTA from COD_MULTAS";
-        System.out.println("consulta realizada");
-        //ArrayList arrayCodigos= new ArrayList();
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
