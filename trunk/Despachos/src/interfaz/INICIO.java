@@ -435,7 +435,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
             newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec, arcConfig);
-            newVehiculo.setSize(731, 580);
+            newVehiculo.setSize(731, 590);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             newVehiculo.setResizable(false);
@@ -517,7 +517,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
             beasignarMulta = new modAsignarMultas(this, this.conec, sesion);
-            beasignarMulta.setSize(700, 700);
+            beasignarMulta.setSize(538, 635);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             beasignarMulta.setResizable(false);

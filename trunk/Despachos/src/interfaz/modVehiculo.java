@@ -811,9 +811,6 @@ public class modVehiculo extends javax.swing.JDialog {
             lblFoto.setText("");
 
         } else {
-
-//            Icon fot = new ImageIcon(rb.getString("dirImgVehiculos") + "\\" + aux[10]);
-
             Icon fot = new ImageIcon(arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos") + System.getProperty("file.separator") + aux[10]);
 
             img = aux[10];

@@ -202,7 +202,7 @@ public class VentanaDatos extends javax.swing.JFrame {
         /**
          * El despacho tiene telefono
          */
-        boolean booTelefono=false;
+        boolean booTelefono = false;
         String cod = "" + despacho.getIntCodigo();
         if (cod == null || cod.equals("") || cod.equals("0")) {
             //si no tiene codigo pero el cliente existe o no
@@ -212,7 +212,7 @@ public class VentanaDatos extends javax.swing.JFrame {
             menu = false;
             try {
                 String tel = despacho.getStrTelefono();
-                if (tel.equals("")||tel.equals("null")) {
+                if (tel.equals("") || tel.equals("null")) {
                     jtNombre.setEditable(false);
                     jtDireccion.setEditable(false);
                     actualizarConNombre = true; //actualiza con nombre
@@ -826,6 +826,8 @@ public class VentanaDatos extends javax.swing.JFrame {
                 jtCodigo.setText("" + cod);
                 insertarDatosTabla(jtCodigo.getText(), 2);
             } catch (SQLException ex) {
+                Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NumberFormatException ex) {
                 Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

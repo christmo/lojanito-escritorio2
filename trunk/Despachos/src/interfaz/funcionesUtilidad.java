@@ -4,16 +4,24 @@
  */
 package interfaz;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
+import java.security.CodeSource;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -182,6 +190,8 @@ public class funcionesUtilidad {
         } catch (IOException ex) {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
             return null;
+        } catch (NullPointerException ex) {
+            return null;
         }
         return nombreFoto + ".jpg";
     }
@@ -294,5 +304,121 @@ public class funcionesUtilidad {
         }
         puertos = new String[p.size()];
         return (String[]) p.toArray(puertos);
+    }
+
+    /**
+     * Procesa el mensaje que se va a enviar a la unidad para que no sobre pase
+     * el numero maximo de caracteres a enviar. POR AHORA 100
+     * @param mensaje
+     * @return String
+     */
+    public String procesarMensaje(String mensaje) {
+        int max = 100;//numero maximo de caracteres por mensaje
+        String strMenAux = mensaje;
+
+        strMenAux = eliminarEspaciosMayoresA1(strMenAux);
+        strMenAux = eliminarEspaciosInicialesFinales(strMenAux);
+
+        int intLonMensaje = strMenAux.length();
+
+        System.out.println("LonMen:" + intLonMensaje);
+
+        if (intLonMensaje <= max) {
+            return strMenAux;
+        } else {
+            strMenAux = limitarTamanoMensaje(mensaje, max);
+            return strMenAux;
+        }
+    }
+
+    /**
+     * Limita el mensaje a un numero maximo de caracteres
+     * @param mensaje
+     * @param max
+     * @return String
+     */
+    private String limitarTamanoMensaje(String mensaje, int max) {
+        int lon = mensaje.length();
+        String strTexto = "";
+        if (lon > max) {
+            for (int i = 0; i < max; i++) {
+                strTexto += mensaje.charAt(i);
+            }
+        } else {
+            strTexto = mensaje;
+        }
+        return strTexto;
+    }
+
+    /**
+     * Elimina los espacios en blanco que pudieran encontrarse al inicio o al
+     * final de un mensaje
+     * @param mensaje
+     * @return String
+     */
+    private String eliminarEspaciosInicialesFinales(String mensaje) {
+        //Elimina todos los espacios que se encuentren al inicio o al final de la frace
+        Pattern patron = Pattern.compile("^[ ]+|[ ]+$");
+        Matcher encaja = patron.matcher(mensaje);
+        String resultado = encaja.replaceAll("");
+        return resultado;
+    }
+
+    /**
+     * Elimina todos los espacios que esten entre el texto del mensaje para solo
+     * dejar uno entre las separaciones de las palabras
+     * @param mensaje
+     * @return String
+     */
+    private String eliminarEspaciosMayoresA1(String mensaje) {
+        //Elimina todos los espacios mayores a 1 que se encuentren dentro del mensaje
+        Pattern patron = Pattern.compile("[ ]+");
+        Matcher encaja = patron.matcher(mensaje);
+        String resultado = encaja.replaceAll(" ");
+        return resultado;
+    }
+
+    //Principal
+    public String encriptar(String clave, String semil) {
+        try {
+            String md5Clave = MD5(MD5(MD5(clave) + MD5(semil)));
+            return md5Clave;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+            return clave;
+        }
+    }
+
+    //Auxiliar
+    private String MD5(String clave) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(clave.getBytes(), 0, clave.length());
+        String md5 = new BigInteger(1, md.digest()).toString(16);
+        return md5;
+    }
+
+    /**
+     * Trae el archivo properties que se encuentre en el direcctorio del jar
+     * @param arc -> "configsystem.properties" nombre del archivo properties
+     * @return Properties
+     */
+    public static Properties obtenerArchivoPropiedades(String arc) {
+        Properties prop = null;
+        try {
+            CodeSource codeSource = funcionesUtilidad.class.getProtectionDomain().getCodeSource();
+            File jarFile = new File(codeSource.getLocation().toURI().getPath());
+            File jarDir = jarFile.getParentFile();
+
+            if (jarDir != null && jarDir.isDirectory()) {
+                File propFile = new File(jarDir, arc);
+                prop = new Properties();
+                prop.load(new BufferedReader(new FileReader(propFile.getAbsoluteFile())));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return prop;
     }
 }

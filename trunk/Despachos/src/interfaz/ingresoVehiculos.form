@@ -31,42 +31,37 @@
                   <Group type="102" max="-2" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="1" max="-2" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabel15" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel16" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel14" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel10" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel13" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel11" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel5" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel12" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="txtModelo" min="-2" pref="140" max="-2" attributes="0"/>
-                                      <EmptySpace min="18" pref="18" max="18" attributes="0"/>
-                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="11" pref="11" max="11" attributes="0"/>
-                                      <Component id="spAño" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtRegistroMunicipal" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="txtNumChasis" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="txtPropietario" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="txtMarca" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="txtNumMotor" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="cmbCondAux" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="cmbConductor" alignment="0" pref="288" max="32767" attributes="1"/>
-                                  <Component id="jScrollPane1" alignment="1" min="-2" pref="288" max="-2" attributes="0"/>
-                              </Group>
+                          <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel15" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel16" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel14" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel10" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel13" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel11" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel5" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel12" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="txtModelo" min="-2" pref="140" max="-2" attributes="0"/>
+                              <EmptySpace min="18" pref="18" max="18" attributes="0"/>
+                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                              <Component id="spAño" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="txtRegistroMunicipal" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="txtNumChasis" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="txtPropietario" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="txtMarca" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="txtNumMotor" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="cmbCondAux" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="cmbConductor" alignment="0" pref="288" max="32767" attributes="1"/>
+                          <Component id="jScrollPane1" alignment="1" min="-2" pref="288" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="1">
                               <Component id="txtPlaca" min="-2" pref="74" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="4" pref="4" max="4" attributes="0"/>
                               <Component id="txtNUnidad" min="-2" pref="74" max="-2" attributes="0"/>
