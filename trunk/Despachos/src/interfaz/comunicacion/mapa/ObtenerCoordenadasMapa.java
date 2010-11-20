@@ -51,7 +51,6 @@ public class ObtenerCoordenadasMapa extends Thread {
                     is = s.getInputStream();
 
                     cod = is.read();
-                    //System.out.println("Cod: " + cod);
                     if (cod == 10) {
                         s.close();
                         s = ss.accept();
@@ -64,11 +63,9 @@ public class ObtenerCoordenadasMapa extends Thread {
                             contarSeparador++;
                         }
                         if (contarSeparador == 2) {
-                            System.out.println("Coordenadas: " + datosMapa);
                             procesarCoordenadas(datosMapa);
                         } else {
                             datosMapa += "" + caracter;
-                            //System.out.println("" + datosMapa);
                         }
 
                     }
@@ -77,18 +74,16 @@ public class ObtenerCoordenadasMapa extends Thread {
                 }
             }
         } catch (IOException ex) {
-            //Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void PararDeEscuchar() {
         try {
-            System.out.println("Cerrar conexion al parar el hilo...");
             s.close();
             ss.close();
             this.escuchar = false;
         } catch (IOException ex) {
-            Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
         }
     }
@@ -101,7 +96,6 @@ public class ObtenerCoordenadasMapa extends Thread {
         try {
             VentanaDatos.setCoordenadasMapa(coord[1], coord[0]);
         } catch (NullPointerException ex) {
-            System.out.println("No hay ventana de datos...");
         }
     }
 }

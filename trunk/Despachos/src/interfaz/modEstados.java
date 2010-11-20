@@ -235,7 +235,7 @@ public class modEstados extends javax.swing.JDialog {
 
         if (color != null) {
             txtColor.setBackground(color);
-            System.out.println(color.getRGB());
+            //System.out.println(color.getRGB());
         }
 
     }//GEN-LAST:event_btnCambiarColorActionPerformed

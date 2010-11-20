@@ -158,16 +158,16 @@ public class Multas extends javax.swing.JDialog {
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
         cmbCodigoM.setVisible(true);
         /*if (!txtCodMulta.getText().equals("")) {
-            buscarMulta(txtCodMulta.getText());
+        buscarMulta(txtCodMulta.getText());
         } else {
-            JOptionPane.showMessageDialog(this, "INGRESE UN CODIGO DE MULTA PARA BUSCAR",
-                    "FALTA INFORMACION",
-                    JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "INGRESE UN CODIGO DE MULTA PARA BUSCAR",
+        "FALTA INFORMACION",
+        JOptionPane.ERROR_MESSAGE);
         }*/
 }//GEN-LAST:event_btnBuscar2ActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-       if (!txtCodMulta.getText().equals("") && objUtilidad.isDouble(txtValor.getText())) {
+        if (!txtCodMulta.getText().equals("") && objUtilidad.isDouble(txtValor.getText())) {
             if (verificarCodMulta(txtCodMulta.getText())) {
 
                 if (modificarRegistro(txtCodMulta.getText(), txtDescripcion.getText(), Double.parseDouble(txtValor.getText()))) {
@@ -231,10 +231,11 @@ public class Multas extends javax.swing.JDialog {
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
-            }else
+            } else {
                 JOptionPane.showMessageDialog(this, "EL CODIGO DE MULTA INGRESADO NO EXISTE",
-                    "NO SE PUDO ELIMINAR EL REGISTRO",
-                    JOptionPane.ERROR_MESSAGE);
+                        "NO SE PUDO ELIMINAR EL REGISTRO",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "DEBE INGRESAR UN CODIGO DE MULTA PARA ELIMINAR REGISTRO",
                     "NO SE PUDO ELIMINAR EL REGISTRO",
@@ -243,12 +244,11 @@ public class Multas extends javax.swing.JDialog {
 }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
-    if(cmbCodigoM.getSelectedIndex()>0){
+        if (cmbCodigoM.getSelectedIndex() > 0) {
             txtCodMulta.setText(cmbCodigoM.getSelectedItem().toString());
             buscarMulta(txtCodMulta.getText());
-    }
+        }
 }//GEN-LAST:event_cmbCodigoMActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;
@@ -276,7 +276,7 @@ public class Multas extends javax.swing.JDialog {
     private boolean guardarRegistro(String codMulta, String strDescripcion, double dblValor) {
         String sql = "INSERT INTO COD_MULTAS(COD_MULTA,DESCRIPCION,VALOR) "
                 + "VALUES('" + codMulta + "','" + strDescripcion + "'," + dblValor + ")";
-        System.out.println("consulta realizada");
+
         if (bd.ejecutarSentencia(sql)) {
             return true;
         }
@@ -285,7 +285,7 @@ public class Multas extends javax.swing.JDialog {
 
     private boolean modificarRegistro(String codMulta, String strDescripcion, double dblValor) {
         String sql = "UPDATE COD_MULTAS SET DESCRIPCION='" + strDescripcion + "', VALOR=" + dblValor + " WHERE COD_MULTA='" + codMulta + "'";
-        System.out.println("consulta realizada");
+
         if (bd.ejecutarSentencia(sql)) {
             return true;
         }
@@ -293,13 +293,11 @@ public class Multas extends javax.swing.JDialog {
     }
 
     private boolean eliminarRegistro(String strCodMulta) {
-
         String sql = "delete from COD_MULTAS where COD_MULTA='" + strCodMulta + "'";
-        System.out.println("consulta realizada");
+
         if (bd.ejecutarSentencia(sql)) {
             return true;
         } else {
-
             JOptionPane.showMessageDialog(this, "NO SE PUDO ELIMINAR EL REGISTRO DE LA BASE DE DATOS",
                     "NO SE PUDO ELIMINAR EL REGISTRO",
                     JOptionPane.ERROR_MESSAGE);
@@ -310,7 +308,7 @@ public class Multas extends javax.swing.JDialog {
 
     private void buscarMulta(String strCodMulta) {
         String sql = "select * from COD_MULTAS where COD_MULTA='" + strCodMulta + "' ";
-        System.out.println("consulta realizada");
+
         try {
             rs = bd.ejecutarConsultaUnDato(sql);
             if (rs != null) {
@@ -319,7 +317,6 @@ public class Multas extends javax.swing.JDialog {
                 txtValor.setText(rs.getString(4));
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "EL CODIGO DE MULTA INGRESADO NO EXISTE",
                     "REGISTRO NO ENCONTRADO",
                     JOptionPane.ERROR_MESSAGE);
@@ -331,19 +328,18 @@ public class Multas extends javax.swing.JDialog {
         String strCod_multa = null;
         try {
             String sql = "select COD_MULTA from COD_MULTAS where COD_MULTA='" + strCodMulta + "'";
-            System.out.println("consulta realizada");
+
             rs = bd.ejecutarConsultaUnDato(sql);
             strCod_multa = rs.getString(1);
-            System.out.println("el codigo de la multa obtenido es: " + strCod_multa);
+
         } catch (SQLException ex) {
         }
 
-        try{
+        try {
             if (strCod_multa.equals(strCodMulta)) {
                 return true;
             }
-        }catch(NullPointerException ex){         
-
+        } catch (NullPointerException ex) {
         }
         return false;
     }

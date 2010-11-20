@@ -125,7 +125,7 @@ public class ConexionBase {
         } catch (NullPointerException ex) {
             log.trace("Conexión es NULL", ex);
         }
-        System.out.println("Conexion a Base de Datos: " + bd + " Ok");
+        log.trace("Conexion a Base de Datos OK: {}",bd);
     }
 
     /**
@@ -575,7 +575,7 @@ public class ConexionBase {
              * Hace esto si el codigo es 0 y el cliente NO esta ingresado en la
              * base de datos
              */
-            System.out.println("Entrar Por aqui si el codigo es 0");
+
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
@@ -1176,7 +1176,8 @@ public class ConexionBase {
                     + "INFOR_ADICIONAL "
                     + "FROM CLIENTES "
                     + "WHERE NOMBRE_APELLIDO_CLI LIKE '" + nombre + "%'";
-            System.out.println(sql);
+
+
             rs = ejecutarConsulta(sql);
 
             while (rs.next()) {

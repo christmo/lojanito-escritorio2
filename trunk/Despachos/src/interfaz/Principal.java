@@ -137,6 +137,8 @@ public final class Principal extends javax.swing.JFrame {
         Principal.main(null);
         Principal.bd = conec;
         Principal.arcConfig = archivo;
+        log.trace("Iniciar la aplicacion de despachos...");
+        log.trace("Usuario: {}", sesion[2]);
     }
 
     /**
@@ -263,15 +265,19 @@ public final class Principal extends javax.swing.JFrame {
      */
     public void IdentificadorLlamadas() {
         String puerto = arcConfig.getProperty("comm");
-        System.out.println("Puerto COMM: " + puerto);
-        System.out.println("Empresa: " + sesion[1]);
+        //System.out.println("Puerto COMM: " + puerto);
+        log.trace("Puerto COMM: {}", puerto);
+        //System.out.println("Empresa: " + sesion[1]);
+        log.trace("Empresa: {}", sesion[1]);
+
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
 
             comm.enviarDatos("at\n\r");
 
             String comando = bd.getComandoActivarModem(sesion[1]);
-            System.out.println("Comando MODEM: " + comando);
+            //System.out.println("Comando MODEM: " + comando);
+            log.trace("Comando MODEM: {}", comando);
 
             /**
              * Utilizar 3 porque la ejecusion es muy rapida
@@ -372,6 +378,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Iniciar nuevamente - Creando turnos por defecto...", "Error...", 1);
+            log.trace("Creando turnos por defecto - Cerrar Aplicación...");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(1,'6:0:0','13:59:59')");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(2,'14:0:0','21:59:59')");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(3,'22:0:0','5:59:59')");
@@ -425,7 +432,6 @@ public final class Principal extends javax.swing.JFrame {
                 fireTableDataChanged();
             }
         };
-
 
         jtVehiculos.setModel(tm);
 
@@ -490,8 +496,9 @@ public final class Principal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             log.error("{}", sesion[1], ex);
         } catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(null, "No se pudo recuperar las cabeceras de las unidades para este usuario!!!", "Error", 0);
-            System.err.println("No se pudo recuperar el número de unidades para este usuario!!!");
+            JOptionPane.showMessageDialog(null, "No se pudo recuperar las unidades para este usuario!!!", "Error", 0);
+            //System.err.println("No se pudo recuperar el número de unidades para este usuario!!!");
+            log.trace("No se pudo recuperar el número de unidades para este usuario!!!");
         }
 
         return strCabecerasColumnasVehiculos;
@@ -1033,6 +1040,7 @@ public final class Principal extends javax.swing.JFrame {
             comm.CerrarPuerto();
         } catch (NullPointerException ex) {
         }
+        log.trace("Salir de la aplicacion de despachos...");
         System.exit(0);
     }
 
@@ -1076,7 +1084,7 @@ public final class Principal extends javax.swing.JFrame {
              * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
              */
             if (intCol == 0 || intCol == 2 || intCol == 8 || intCol == 6) {
-                System.out.println("No borrar esos campos...");
+                //System.out.println("No borrar esos campos...");
             } else {
                 Tabla.setValueAt("", intFila, intCol);
             }
@@ -1160,7 +1168,7 @@ public final class Principal extends javax.swing.JFrame {
         try {
             cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
         } catch (NullPointerException ex) {
-            System.out.println("No tiene Codigo de Cliente");
+            //System.out.println("No tiene Codigo de Cliente");
         } catch (ArrayIndexOutOfBoundsException aex) {
         }
 
@@ -1169,7 +1177,7 @@ public final class Principal extends javax.swing.JFrame {
         try {
             unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
         } catch (NullPointerException ex) {
-            System.out.println("No tiene Unidad");
+            //System.out.println("No tiene Unidad");
         } catch (ArrayIndexOutOfBoundsException aex) {
         }
 
@@ -1637,7 +1645,6 @@ public final class Principal extends javax.swing.JFrame {
                 jtTelefono.setText("");
             }
         } catch (SQLException ex) {
-            System.err.println("No hay ningún cliente con ese Teléfono...");
             if (desPorTabla_Campo) {
                 despacho = new Despachos(
                         funciones.getHoraEnMilis(),
@@ -1763,7 +1770,7 @@ public final class Principal extends javax.swing.JFrame {
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
-        System.out.println("Estado: " + codig);
+        //System.out.println("Estado: " + codig);
 
         for (String i : codVh) {
             /*
@@ -1808,6 +1815,7 @@ public final class Principal extends javax.swing.JFrame {
                 log.trace("No se obtuvieron campos para el ResultSet...");
             } else if (ex.getMessage().equals("Illegal operation on empty result set.")) {
                 JOptionPane.showMessageDialog(null, "Reiniciar el programa - Creando los estados de los taxis por defecto...", "Error...", 1);
+                log.trace("Creando los estados de los taxis por defecto - Reiniciar el programa...");
                 bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('AC', 'ACTIVO', '-13369549')");
                 bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('ASI', 'ASIGNADO', '-23123326')");
                 bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('OCU', 'OCUPADO', '-34512')");
@@ -1835,7 +1843,7 @@ public final class Principal extends javax.swing.JFrame {
                 try {
                     unidadCodigoBD.put(rs.getString(1), rs.getString(2));
                 } catch (NullPointerException ex) {
-                    System.err.println("Null al obtener unidad y y id_cod...");
+                    //System.err.println("Null al obtener unidad y id_cod...");
                 }
             } // ArrayList codigo color
             colorCodigosBD();
@@ -1921,7 +1929,7 @@ public final class Principal extends javax.swing.JFrame {
                         actualizarFilaCampoTelefono(intFila, intCol);
                     }
                 } catch (NullPointerException nex) {
-                    System.err.println("No hay telefono recuperado de la celda...");
+                    //System.err.println("No hay telefono recuperado de la celda...");
                 }
                 filaAnt = intFila;
             }
@@ -2622,7 +2630,7 @@ public final class Principal extends javax.swing.JFrame {
         try {
             intFilaSeleccionada = jtPorDespachar.getSelectedRow();
         } catch (NullPointerException ex) {
-            System.out.println("No hay fila");
+            //System.out.println("No hay fila");
         }
         return intFilaSeleccionada;
     }

@@ -111,8 +111,6 @@ public class GenerarReporteCarreras {
 
         System.out.println(sql);
 
-        System.out.println("Mes: " + campos.get("NombreMes"));
-
         Map parametro = new HashMap();
         parametro.put("sql", sql);
 
@@ -162,8 +160,6 @@ public class GenerarReporteCarreras {
                 + "ORDER BY TOTAL DESC";
 
         System.out.println(sql);
-
-        System.out.println("Mes: " + campos.get("NombreMesCli"));
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);
@@ -215,8 +211,6 @@ public class GenerarReporteCarreras {
                 + "ORDER BY ASIGNADOS.`N_UNIDAD` ASC";
 
         System.out.println(sql);
-
-        System.out.println("Mes: " + campos.get("NombreMesUni"));
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);

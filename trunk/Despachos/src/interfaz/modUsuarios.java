@@ -456,7 +456,6 @@ public class modUsuarios extends javax.swing.JDialog {
 
     private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelefonoFocusLost
         String tel = fun.validarTelefono(jtTelefono.getText());
-        System.out.println("tel: " + tel);
         if (!fun.isNumeric(tel)) {
             jtTelefono.setText("");
         } else {

@@ -9,14 +9,12 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import javax.swing.Icon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author kradac
+ * @author christmo
  */
 public class ConsultaRecorridosServidorBD extends Thread {
 
@@ -31,7 +29,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static ConexionBase bd;
     private static BufferedReader entrada;
     private static PrintStream salida;
-    CronometroReconexion crono = new CronometroReconexion();
+    private CronometroReconexion crono = new CronometroReconexion();
     private static Icon senal = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/senal.png"));
     private static Icon nosenal = new javax.swing.ImageIcon(ConsultaRecorridosServidorBD.class.getResource("/interfaz/iconos/nosenal.png"));
     /**
@@ -57,14 +55,12 @@ public class ConsultaRecorridosServidorBD extends Thread {
         try {
             try {
                 echoSocket = new Socket(DIRECCION, PUERTO);
-                System.err.println("Iniciar conexion con el server BD...");
+                //System.err.println("Iniciar conexion con el server BD...");
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
                 AbrirPuerto();
-                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 log.error("{}", Principal.sesion[1]);
             } catch (IOException ex) {
-                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 PonerIconoNOSenal();
                 if (ex.getMessage().equals("No route to host: connect")) {
                     System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
@@ -73,13 +69,11 @@ public class ConsultaRecorridosServidorBD extends Thread {
                         Thread.sleep(1000);
                         AbrirPuerto();
                     } catch (InterruptedException ex1) {
-                        //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex1);
                         log.error("{}", Principal.sesion[1]);
                     }
                 }
             }
         } catch (StackOverflowError m) {
-            System.out.println("Memoria Chao:" + m.getMessage());
         }
     }
 
@@ -91,7 +85,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 GuardarDatosRecorridos();
                 ConsultaRecorridosServidorBD.sleep(5000);
             } catch (InterruptedException ex) {
-                //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
                 System.err.println("" + ex.getMessage());
             }
         }
@@ -106,13 +99,11 @@ public class ConsultaRecorridosServidorBD extends Thread {
             //String[] tramas = getDatosServidor(empresa);
             String[] tramas = getDatosServidorNuevo(empresa);
             for (String trama : tramas) {
-                //System.out.println("" + trama);
                 //GuardarDatosRecorridos(trama, bd);
                 GuardarDatosRecorridosNuevo(trama, bd);
             }
             crono.reiniciar();
         } catch (NullPointerException ex) {
-            //System.err.println("NO se recuperaron datos -> No se guardo nada...");
         }
     }
 
@@ -143,7 +134,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
         try {
             bd.InsertarRecorridoTaxi(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
         } catch (ArrayIndexOutOfBoundsException ex) {
-            //System.out.println("No se recuperaron datos para esa compañia...");
         }
     }
 
@@ -169,7 +159,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
             //bd.InsertarRecorridoTaxi(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
             bd.InsertarRecorridoTaxiNuevo(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
         } catch (ArrayIndexOutOfBoundsException ex) {
-            //System.out.println("No se recuperaron datos para esa compañia...");
         }
     }
 
@@ -189,8 +178,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
             entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
             salida = new PrintStream(echoSocket.getOutputStream(), true);
-
-            //System.out.println("Empresa:" + empresa);
 
             salida.print(empresa + "\r\n");
             boolean salir = false;
@@ -212,7 +199,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
             cast = new String[nuevosDatos.size()];
 
             datos = nuevosDatos.toArray(cast);
-            //System.out.println("Datos Recuperados: " + datos.length);
             return datos;
         } catch (Exception e) {
             cerrarConexionServerKradac();
@@ -229,8 +215,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
             entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
             salida = new PrintStream(echoSocket.getOutputStream(), true);
-
-            //System.out.println("Empresa:" + empresa);
 
             salida.print("$$1##" + empresa + "$$\n");
             boolean salir = false;
@@ -252,7 +236,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
             cast = new String[nuevosDatos.size()];
 
             datos = nuevosDatos.toArray(cast);
-            //System.out.println("Datos Recuperados: " + datos.length);
             return datos;
         } catch (Exception e) {
             cerrarConexionServerKradac();
@@ -274,11 +257,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
             }
             try {
                 echoSocket.close();
-                System.out.println("Socket cerrado con servidor KRADAC...");
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {
-            //Logger.getLogger(ConsultaRecorridosServidorBD.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", Principal.sesion[1]);
         }
     }

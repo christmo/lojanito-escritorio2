@@ -11,12 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 
 /**
- *
- * @author root
+ * @author christmo
  */
 public class ActualizarServidorKRADAC extends Thread {
 
@@ -46,7 +43,6 @@ public class ActualizarServidorKRADAC extends Thread {
         if (ConexionServidorKRADAC()) {
             if (intFilasRespaldadas > 0) {
                 log.debug("Empezar Actualizacion al servidor de Kradac filas a insertar:{}", intFilasRespaldadas);
-                //System.err.println("Actualizar el Servidor KRADAC -> Despachos sin conexion...");
                 this.bd = new ConexionBase(Principal.arcConfig);
                 InsertarFilasRespaldadasLocalesEnServidorKRADAC();
                 bd.CerrarConexion();
@@ -67,7 +63,6 @@ public class ActualizarServidorKRADAC extends Thread {
                 long HoraInsert = rs.getLong("HORA_INSERT");
                 int MinDespacho = rs.getInt("HORA");
                 minutos = (((HoraAct - HoraInsert) / 1000) / 60) + MinDespacho;
-                //System.err.println("Minutos desde la Desconexion:" + minutos);
                 boolean estadoInsersionServidor = InsertServidorKRADAC(
                         rs.getInt("N_UNIDAD"),
                         rs.getInt("COD_CLIENTE"),
@@ -90,7 +85,6 @@ public class ActualizarServidorKRADAC extends Thread {
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
             } else {
-                //Logger.getLogger(ActualizarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
                 log.error("{}", Principal.sesion[1]);
             }
         }
@@ -141,7 +135,6 @@ public class ActualizarServidorKRADAC extends Thread {
      * @return boolean
      */
     private boolean ConexionServidorKRADAC() {
-        //System.err.println("Insertar server KRADAC: " + ConsultaRecorridosServidorBD.HayInternet);
         return ConsultaRecorridosServidorBD.HayInternet;
     }
 }

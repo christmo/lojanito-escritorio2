@@ -17,8 +17,6 @@ import configuracion.UIConfiguracion;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -27,20 +25,19 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 /**
  * @author christmo
  */
 public class LoginGUI extends javax.swing.JFrame {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginGUI.class);
+    //private static final Logger log = LoggerFactory.getLogger(LoginGUI.class);
     private String strUser = null;
     private char[] chrPass = null;
     private String strPass = "";
-    ConexionBase cb = null;
-    ResultSet rs = null;
+    private ConexionBase cb = null;
+    private ResultSet rs = null;
     private Properties arcConfig;
     private String url_config = CargarRutaArchivoPropiedades();
     private funcionesUtilidad funciones = new funcionesUtilidad();
@@ -52,14 +49,14 @@ public class LoginGUI extends javax.swing.JFrame {
         jbtIngresar.setText("<html><center>INGRESAR</center></html>");
         jbtIngresar.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbtIngresar.setHorizontalTextPosition(SwingConstants.CENTER);
-        try {
-            arcConfig = new Properties();
-            arcConfig.load(new FileInputStream(url_config));
-            System.out.println("Cargado: " + url_config);
-            // arcConfig = funcionesUtilidad.obtenerArchivoPropiedades("configsystem.properties");
-        } catch (IOException ex) {
-            UIConfiguracion.CrearArchivoPropiedades(url_config);
-        }
+//        try {
+//            arcConfig = new Properties();
+//            arcConfig.load(new FileInputStream(url_config));
+//            System.out.println("Cargado: " + url_config);
+        arcConfig = funcionesUtilidad.obtenerArchivoPropiedades("configsystem.properties");
+//        } catch (IOException ex) {
+//            UIConfiguracion.CrearArchivoPropiedades(url_config);
+//        }
         existenDirectorios();
     }
 
@@ -273,9 +270,7 @@ public class LoginGUI extends javax.swing.JFrame {
                         String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
 
                         Principal pantalla = new Principal(sesion, cb, arcConfig);
-                        log.debug("Ingresar al Sistema...");
 
-                        System.out.println("Ingresar a Principal");
                         this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);

@@ -533,8 +533,8 @@ public class modVehiculo extends javax.swing.JDialog {
 
                             String imgActual = lblEtiquetaImagen.getText();
 
-                            System.out.println("[" + imgOriginal + "]");
-                            System.out.println("[" + imgActual + "]");
+                            //System.out.println("[" + imgOriginal + "]");
+                            //System.out.println("[" + imgActual + "]");
 
                             if (!imgOriginal.equals(imgActual) && !(imgActual.equals("defaultveh.png"))) {
                                 imgActual = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
