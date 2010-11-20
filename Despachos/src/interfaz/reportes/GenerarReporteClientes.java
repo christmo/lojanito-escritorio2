@@ -37,19 +37,15 @@ public class GenerarReporteClientes {
      */
     public void Generar() {
         if (campos.get("todo").toString().equals("true")) {
-            //System.out.println("" + campos.get("todo"));
             GenerarTodosLosClientes();
         } else {
             if (!campos.get("cod").equals("")) {
-                //System.out.println("" + campos.get("cod"));
                 GenerarPorCodigo();
             } else {
                 if (!campos.get("tel").equals("")) {
-                    //System.out.println("" + campos.get("tel"));
                     GenerarPorTelefono();
                 } else {
                     if (!campos.get("nom").equals("")) {
-                        //System.out.println("" + campos.get("nom"));
                         GenerarPorNombre();
                     }
                 }

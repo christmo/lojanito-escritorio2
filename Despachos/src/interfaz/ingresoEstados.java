@@ -141,7 +141,6 @@ public class ingresoEstados extends javax.swing.JDialog {
                             "ERROR",
                             JOptionPane.INFORMATION_MESSAGE,
                             ic);
-                    System.out.println("Clase: ingresoEstados.java Metodo: btnGuardarActionPerformed");
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "DEBE ESPECIFICAR UNA ETIQUETA",

@@ -864,7 +864,6 @@ public class modAsignarMultas extends javax.swing.JDialog {
             }
 
         } catch (SQLException ex) {
-            System.out.println("PROBLEMAS AL EJECUTAR CONSULTA PARA MULTAS PAGADAS");
         }
 
         if (fechaP != null && horaP != null) {
@@ -967,8 +966,7 @@ public class modAsignarMultas extends javax.swing.JDialog {
 
     private void consultarCodigoMultas() {
         String sql = "select COD_MULTA from COD_MULTAS";
-        System.out.println("consulta realizada");
-        //ArrayList arrayCodigos= new ArrayList();
+
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {

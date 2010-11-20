@@ -209,25 +209,22 @@ public class asignarMultas extends javax.swing.JDialog {
     private boolean guardarRegistro(int intNroUnidad, String strFecha, String strHora, String strCodMulta) {
         String sql = "INSERT INTO MULTAS_ASIGNADAS(USUARIO, N_UNIDAD, FECHA, HORA, COD_MULTA )"
                 + "VALUES('" + strUsuario + "'," + intNroUnidad + ",'" + strFecha + "','" + strHora + "','" + strCodMulta + "')";
-        System.out.println(sql);
+
         if (bd.ejecutarSentencia(sql)) {
             return true;
         }
+        
         return false;
     }
 
     private void consultarCodigoMultas() {
         String sql = "select COD_MULTA from COD_MULTAS";
-        System.out.println("consulta realizada");
-        //ArrayList arrayCodigos= new ArrayList();
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
                 cmbCodigoM.addItem(rs.getString("COD_MULTA"));
             }
-            //return arrayCodigos;
         } catch (SQLException ex) {
-            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "NO EXISTEN AUN MULTAS REGISTRADAS",
                     "NO EXISTEN MULTAS",
                     JOptionPane.ERROR_MESSAGE);
@@ -237,16 +234,12 @@ public class asignarMultas extends javax.swing.JDialog {
 
     private void consultarNrosUnidad() {
         String sql = "SELECT N_UNIDAD FROM VEHICULOS";
-        System.out.println("consulta realizada");
-        //ArrayList arrayCodigos= new ArrayList();
         try {
             rs = bd.ejecutarConsulta(sql);
             while (rs.next()) {
                 cmbNroUnidad.addItem(rs.getString("N_UNIDAD"));
             }
-            //return arrayCodigos;
         } catch (SQLException ex) {
-            //Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "NO EXISTEN UNIDADES INGRESADAS",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE);

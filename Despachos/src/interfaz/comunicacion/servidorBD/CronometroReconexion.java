@@ -24,7 +24,6 @@ public class CronometroReconexion extends Thread {
     @Override
     public void run() {
         while (seguir) {
-            //System.out.println("T:" + i);
             i++;
             if (i == 60) {
                 System.err.println("Reiniciar la conexion con el servidor...");

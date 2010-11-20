@@ -203,7 +203,6 @@ public class funcionesUtilidad {
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
-        //System.out.println("Hora: " + sdf.format(calendario.getTime()));
         return sdf.format(calendario.getTime());
     }
 
@@ -258,10 +257,8 @@ public class funcionesUtilidad {
      */
     public boolean validarTel(String text) {
         if (text.length() == 9) {
-            System.out.println("tiene 9");
             return true;
         } else {
-            System.out.println("NO tiene 9");
             return false;
         }
     }
@@ -296,7 +293,6 @@ public class funcionesUtilidad {
         int i = 0;
         while (listaPuertos.hasMoreElements()) {
             id_Puerto = (CommPortIdentifier) listaPuertos.nextElement();
-            //System.out.println("Id: " + id_Puerto.getName() + " tipo: " + id_Puerto.getPortType());
             if (id_Puerto.getPortType() == 1) {
                 p.add(id_Puerto.getName());
             }
@@ -320,8 +316,6 @@ public class funcionesUtilidad {
         strMenAux = eliminarEspaciosInicialesFinales(strMenAux);
 
         int intLonMensaje = strMenAux.length();
-
-        System.out.println("LonMen:" + intLonMensaje);
 
         if (intLonMensaje <= max) {
             return strMenAux;

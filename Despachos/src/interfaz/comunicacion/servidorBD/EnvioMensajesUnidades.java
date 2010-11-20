@@ -51,9 +51,7 @@ public class EnvioMensajesUnidades extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Iniciar el hilo del mensaje....");
         enviarMensajeUnidad();
-        System.out.println("Fin hilo mensaje");
     }
 
     private void enviarMensajeUnidad() {
@@ -63,15 +61,19 @@ public class EnvioMensajesUnidades extends Thread {
 
             String cmdMensaje = "$$2##" + empresa + "##" + unidad + "##" + mensaje + "$$\n";
             salida.print(cmdMensaje);
+            log.trace("Mensaje: {} Unidad: {}", mensaje, unidad);
 
             String respuesta;
             if ((respuesta = entrada.readLine()) != null) {
-                System.out.println("Mensaje Enviado: " + respuesta);
+                log.trace("Enviado: {}", respuesta);
+            } else {
+                log.trace("NO hay conexión con el servidor...");
             }
 
+            cerrarConexionServerKradac();
+
         } catch (Exception e) {
-            System.out.println("Error al enviar el mensaje");
-            log.trace("Error al enviar un mensaje\n {}", e);
+            log.trace("Error al enviar un mensaje {}", e.getMessage());
         }
     }
 
@@ -82,25 +84,15 @@ public class EnvioMensajesUnidades extends Thread {
         try {
             try {
                 mensajeSocket = new Socket(DIRECCION, PUERTO);
-                System.err.println("Iniciar conexion con el server BD...");
+                log.trace("Iniciar conexion con el server {}", DIRECCION);
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
-                AbrirPuerto();
-                log.error("{}", Principal.sesion[1]);
             } catch (IOException ex) {
                 if (ex.getMessage().equals("No route to host: connect")) {
-                    System.err.println("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...");
                     cerrarConexionServerKradac();
-                    try {
-                        Thread.sleep(1000);
-                        AbrirPuerto();
-                    } catch (InterruptedException ex1) {
-                        log.error("{}", Principal.sesion[1]);
-                    }
                 }
             }
         } catch (StackOverflowError m) {
-            System.out.println("Memoria Chao:" + m.getMessage());
         }
     }
 
@@ -116,11 +108,10 @@ public class EnvioMensajesUnidades extends Thread {
             }
             try {
                 mensajeSocket.close();
-                System.out.println("Socket cerrado con servidor KRADAC...");
+                log.trace("Cerrar conexion con el server");
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {
-            log.error("{}", Principal.sesion[1]);
         }
     }
 }

@@ -138,8 +138,6 @@ public class GenerarReporteMultas {
 
         System.out.println(sql);
 
-        System.out.println("Mes: " + campos.get("NombreMes"));
-
         Map parametro = new HashMap();
         parametro.put("sql", sql);
 
@@ -216,8 +214,6 @@ public class GenerarReporteMultas {
 
         System.out.println(sql);
 
-        System.out.println("Mes: " + campos.get("NombreMes"));
-
         Map parametro = new HashMap();
         parametro.put("sql", sql);
 
@@ -290,8 +286,6 @@ public class GenerarReporteMultas {
                 + "MA.`USUARIO` LIKE '$P!{usuario_filtro}%'";
 
         System.out.println(sql);
-
-        System.out.println("Mes: " + campos.get("NombreMes"));
 
         Map parametro = new HashMap();
         parametro.put("sql", sql);

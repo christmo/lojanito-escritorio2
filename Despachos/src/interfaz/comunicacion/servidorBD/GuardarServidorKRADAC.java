@@ -103,11 +103,12 @@ public class GuardarServidorKRADAC extends Thread {
         } else {
             log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
         }
-        System.err.println("KRADAC: " + sql);
+        
+        //System.err.println("KRADAC: " + sql);
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            //Logger.getLogger(GuardarServidorKRADAC.class.getName()).log(Level.SEVERE, null, ex);
             log.error("{}", Principal.sesion[1]);
         }
         InsertarDespachoServidorKRADAC();
@@ -146,7 +147,9 @@ public class GuardarServidorKRADAC extends Thread {
                     + Principal.sesion[2]
                     + "');";
         }
-        System.err.println("KRADAC: " + sql);
+
+        //System.err.println("KRADAC: " + sql);
+
         if (!bd.ejecutarSentencia(sql)) {
             ConexionBase cb = new ConexionBase(Principal.arcConfig);
             String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO) "
@@ -209,7 +212,9 @@ public class GuardarServidorKRADAC extends Thread {
                     + Principal.sesion[2]
                     + "');";
         }
-        System.err.println("KRADAC: " + sql);
+
+        //System.err.println("KRADAC: " + sql);
+
         if (!bd.ejecutarSentencia(sql)) {
             ConexionBase cb = new ConexionBase(Principal.arcConfig);
             String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO) "

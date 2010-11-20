@@ -717,7 +717,6 @@ public class VentanaDatos extends javax.swing.JFrame {
 
         if (lon != 0 && lat != 0) {
             if (!codigoCliente.equals("") || !codigoCliente.equals("0")) {
-                System.out.println("Entro");
                 bd.InsertarClienteMapa(datos.getIntCodigo(), datos.getStrNombre(),
                         datos.getStrBarrio(), datos.getStrTelefono(), lat, lon);
             }

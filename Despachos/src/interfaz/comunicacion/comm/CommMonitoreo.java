@@ -136,7 +136,7 @@ public class CommMonitoreo extends Thread {
                 if (celular) {
                     if (tel.length() == 9) {
                         strCelular = strNumero.substring(0, 9);
-                        System.out.println("Numero Celular: " + strCelular);
+                        //System.out.println("Numero Celular: " + strCelular);
                         timbrar(true, strCelular);
                         if (!strNumeroCelularAnterior.equals(strCelular)) {
                             try {
@@ -341,7 +341,7 @@ public class CommMonitoreo extends Thread {
             return true;
         } catch (UnsupportedCommOperationException ex) {
             Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Cerrar Apicación");
+            //System.out.println("Cerrar Apicación");
             System.exit(0);
         }
         return false;
