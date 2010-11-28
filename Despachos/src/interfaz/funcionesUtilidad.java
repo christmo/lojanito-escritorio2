@@ -7,6 +7,7 @@ package interfaz;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -408,9 +409,11 @@ public class funcionesUtilidad {
                 prop = new Properties();
                 prop.load(new BufferedReader(new FileReader(propFile.getAbsoluteFile())));
             }
-        } catch (IOException ex) {
-            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            System.err.println("No se encuentra el archivo: " + ex.getMessage());
+        } catch (IOException ex) {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         }
         return prop;
