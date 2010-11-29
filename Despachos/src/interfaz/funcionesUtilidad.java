@@ -316,6 +316,8 @@ public class funcionesUtilidad {
         strMenAux = eliminarEspaciosMayoresA1(strMenAux);
         strMenAux = eliminarEspaciosInicialesFinales(strMenAux);
 
+        strMenAux = quitarCaracteresNoImprimibles(strMenAux);
+
         int intLonMensaje = strMenAux.length();
 
         if (intLonMensaje <= max) {
@@ -324,6 +326,23 @@ public class funcionesUtilidad {
             strMenAux = limitarTamanoMensaje(mensaje, max);
             return strMenAux;
         }
+    }
+
+    /**
+     * Quita los caracteres no imprimibles < 32 && > 128
+     * @param mensaje
+     * @return
+     */
+    private String quitarCaracteresNoImprimibles(String mensaje) {
+        String newMensaje = "";
+        int codigoLetra = 0;
+        for (char letra : mensaje.toCharArray()) {
+            codigoLetra = (int) letra;
+            if (codigoLetra >= 32 && codigoLetra <= 128) {
+                newMensaje += letra;
+            }
+        }
+        return newMensaje;
     }
 
     /**
