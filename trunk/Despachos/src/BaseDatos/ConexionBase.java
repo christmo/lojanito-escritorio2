@@ -125,7 +125,7 @@ public class ConexionBase {
         } catch (NullPointerException ex) {
             log.trace("Conexión es NULL", ex);
         }
-        log.trace("Conexion a Base de Datos OK: {}",bd);
+        log.trace("Conexion a Base de Datos OK: {}", bd);
     }
 
     /**
@@ -138,7 +138,7 @@ public class ConexionBase {
         //System.out.println("Consultar: " + sql);
         try {
             rs = st.executeQuery(sql);
-
+            log.trace(sql);
         } catch (SQLException ex) {
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado...");
@@ -548,17 +548,44 @@ public class ConexionBase {
         //ejecutarConsultaUnDato(sql);
         String sql = "SELECT DISTINCT CODIGO FROM CLIENTES ORDER BY CODIGO ASC";
         ResultSet r = ejecutarConsulta(sql);
-        int i = 0;
+        log.trace(sql);
+        int i = 1;
+        int j = 0;
+        boolean inicial = true;
         int cod = 0;
         while (r.next()) {
             cod = rs.getInt("CODIGO");
-            if (i != cod) {
-                return "" + i;
+            /**
+             * hace una sola vez la comprobacion si hay cero al inicio de la
+             * lista true es que si tiene un 0
+             */
+            if (j == 0) {
+                if (cod == 0) {
+                    i = 0;
+                    inicial = true;
+                } else {
+                    i = 1;
+                    inicial = false;
+                }
+                j++;
+            }
+            if (inicial) {
+
+                if (i == cod) {
+                    i++;
+                } else {
+                    return "" + (i);
+                }
             } else {
-                i++;
+                if (i == cod) {
+                    i++;
+                } else {
+                    return "" + (i);
+                }
             }
         }
-        return "1";
+
+        return "" + i;
     }
 
     /**
@@ -575,7 +602,6 @@ public class ConexionBase {
              * Hace esto si el codigo es 0 y el cliente NO esta ingresado en la
              * base de datos
              */
-
             String sql = "INSERT INTO CLIENTES(TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI, SECTOR, NUM_CASA_CLI,LATITUD,LONGITUD,INFOR_ADICIONAL)"
                     + " VALUES("
                     + "'" + des.getStrTelefono() + "',"
