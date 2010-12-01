@@ -1188,8 +1188,11 @@ public final class Principal extends javax.swing.JFrame {
         QuitarClienteMapa(cod_cli, unidad);
 
         DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-        model.removeRow(intFila);
-
+        try {
+            model.removeRow(intFila);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            //System.out.println("Se quiere borrar algo fuera del rango");
+        }
         InicializarVariables();
 
     }
@@ -2020,7 +2023,10 @@ public final class Principal extends javax.swing.JFrame {
         } catch (NullPointerException ex) {
         }
 
-        String mensaje = "CLIENTE: " + nombreCliente + "|DIR: " + dirCliente + "|BARRIO: " + barrioCliente;
+        /**
+         * Trama para que sean leidas por el taximetro, separadas por %
+         */
+        String mensaje = "" + nombreCliente + "%" + barrioCliente + "%" + dirCliente;
         EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
         enviarMensajeUnidad.start();
     }
