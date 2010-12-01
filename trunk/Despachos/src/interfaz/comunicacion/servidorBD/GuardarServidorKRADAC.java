@@ -52,7 +52,16 @@ public class GuardarServidorKRADAC extends Thread {
     public void InsertarAsignacionServidorKRADAC() {
         String sql;
         if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,VALOR,ESTADO_INSERT,USUARIO) VALUES ("
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
+                    + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
                     + desp.getIntCodigo()
@@ -63,9 +72,21 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "')";
         } else {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) VALUES ("
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "FONO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
+                    + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
                     + desp.getIntCodigo()
@@ -77,11 +98,23 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "')";
         }
         if (!bd.ejecutarSentencia(sql)) {
             ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO) "
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "FECHA,"
+                    + "HORA,"
+                    + "FONO,"
+                    + "HORA_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -96,6 +129,8 @@ public class GuardarServidorKRADAC extends Thread {
                     + funciones.getHoraEnMilis()
                     + ",'"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Asignacion, Respaldo insert Server Kradac: {}", sql2);
@@ -103,7 +138,7 @@ public class GuardarServidorKRADAC extends Thread {
         } else {
             log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
         }
-        
+
         //System.err.println("KRADAC: " + sql);
 
         try {
@@ -120,7 +155,15 @@ public class GuardarServidorKRADAC extends Thread {
     public void InsertarDespachoServidorKRADAC() {
         String sql;
         if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,VALOR,ESTADO_INSERT,USUARIO) "
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -131,9 +174,20 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
         } else {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) "
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "FONO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -145,6 +199,8 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
         }
 
@@ -152,7 +208,17 @@ public class GuardarServidorKRADAC extends Thread {
 
         if (!bd.ejecutarSentencia(sql)) {
             ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO) "
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "FECHA,"
+                    + "HORA,"
+                    + "FONO,"
+                    + "HORA_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -169,6 +235,8 @@ public class GuardarServidorKRADAC extends Thread {
                     + funciones.getHoraEnMilis()
                     + ",'"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Despacho, Respaldo insert Server Kradac: {}", sql2);
@@ -184,7 +252,15 @@ public class GuardarServidorKRADAC extends Thread {
     public void InsertarLibreServidorKRADAC() {
         String sql;
         if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,VALOR,ESTADO_INSERT,USUARIO) "
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -195,9 +271,19 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
         } else {
-            sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) "
+            sql = "INSERT INTO server("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,FONO,"
+                    + "VALOR,"
+                    + "ESTADO_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -210,6 +296,8 @@ public class GuardarServidorKRADAC extends Thread {
                     + "ACT"
                     + "','"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
         }
 
@@ -217,7 +305,16 @@ public class GuardarServidorKRADAC extends Thread {
 
         if (!bd.ejecutarSentencia(sql)) {
             ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO) "
+            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
+                    + "N_UNIDAD,"
+                    + "COD_CLIENTE,"
+                    + "ESTADO,FECHA,"
+                    + "HORA,"
+                    + "FONO,"
+                    + "HORA_INSERT,"
+                    + "USUARIO,"
+                    + "DIRECCION"
+                    + ") "
                     + "VALUES ("
                     + desp.getIntUnidad()
                     + ","
@@ -234,6 +331,8 @@ public class GuardarServidorKRADAC extends Thread {
                     + funciones.getHoraEnMilis()
                     + ",'"
                     + Principal.sesion[2]
+                    + "','"
+                    + desp.getStrDireccion()
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Liberacion, Respaldo insert Server Kradac: {}", sql2);
