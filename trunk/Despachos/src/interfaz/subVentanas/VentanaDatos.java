@@ -282,7 +282,7 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtLatitud.setText(lat);
             jtLongitud.setText(lon);
         } catch (SQLException ex) {
-            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
+            //System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
             jtNumeroCasa.setText("");
             jtReferencia.setText("");
         }
@@ -311,7 +311,7 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtLongitud.setText(lon);
             return false; // -> actualizar los datos
         } catch (SQLException ex) {
-            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
+            //System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
             jtNumeroCasa.setText("");
             jtReferencia.setText("");
             return true; // -> insertar los datos
@@ -342,7 +342,7 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtLongitud.setText(lon);
             return true; // -> actualizar los datos
         } catch (SQLException ex) {
-            System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
+            //System.err.println("No hay datos en el resulSet... Clase -> VentanaDatos :-)");
             jtNumeroCasa.setText("");
             jtReferencia.setText("");
             return false; // -> insertar los datos
