@@ -2026,7 +2026,13 @@ public final class Principal extends javax.swing.JFrame {
         /**
          * Trama para que sean leidas por el taximetro, separadas por %
          */
-        String mensaje = "" + nombreCliente + "%" + barrioCliente + "%" + dirCliente;
+        String mensaje = "";
+        if (barrioCliente.equals("") || barrioCliente.equals("0")) {
+            mensaje = "" + nombreCliente + "%" + dirCliente;
+        } else {
+            mensaje = "" + nombreCliente + "%" + barrioCliente + " | " + dirCliente;
+        }
+        System.err.println("Mensaje: " + mensaje);
         EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
         enviarMensajeUnidad.start();
     }

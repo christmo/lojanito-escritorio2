@@ -310,7 +310,7 @@ public class funcionesUtilidad {
      * @return String
      */
     public String procesarMensaje(String mensaje) {
-        int max = 100;//numero maximo de caracteres por mensaje
+        int max = 95;//numero maximo de caracteres por mensaje
         String strMenAux = mensaje;
 
         strMenAux = eliminarEspaciosMayoresA1(strMenAux);
