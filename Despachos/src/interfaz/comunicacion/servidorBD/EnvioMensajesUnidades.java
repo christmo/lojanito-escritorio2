@@ -34,6 +34,13 @@ public class EnvioMensajesUnidades extends Thread {
     private PrintStream salida;
     private funcionesUtilidad funciones = new funcionesUtilidad();
 
+    /**
+     * Recive todos los parametros para enviar un mensaje de texto al taximetro
+     * @param empresa
+     * @param unidad
+     * @param mensaje -> nombre%barrio%direccion -> en este formato la trama
+     * @param db
+     */
     public EnvioMensajesUnidades(String empresa, String unidad, String mensaje, ConexionBase db) {
         this.empresa = empresa;
         this.unidad = unidad;
@@ -54,6 +61,11 @@ public class EnvioMensajesUnidades extends Thread {
         enviarMensajeUnidad();
     }
 
+    /**
+     * Permite enviar el mensaje que le llegara al taximetro del chofer,
+     * esto se debe enviar en este formato para que el servidor lo procese
+     * y lo envie
+     */
     private void enviarMensajeUnidad() {
         try {
             entrada = new BufferedReader(new InputStreamReader(mensajeSocket.getInputStream()));
@@ -61,13 +73,16 @@ public class EnvioMensajesUnidades extends Thread {
 
             String cmdMensaje = "$$2##" + empresa + "##" + unidad + "##" + mensaje + "$$\n";
             salida.print(cmdMensaje);
+            /**
+             * TODO: guardar los mensajes en una tabla para hacer auditoria
+             */
             log.trace("Mensaje: {} Unidad: {}", mensaje, unidad);
 
             String respuesta;
             if ((respuesta = entrada.readLine()) != null) {
                 log.trace("Enviado: {}", respuesta);
             } else {
-                log.trace("NO hay conexión con el servidor...");
+                log.trace("NO hay respuesta del servidor -> esta abajo el server KRADAC");
             }
 
             cerrarConexionServerKradac();
