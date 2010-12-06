@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -273,7 +274,7 @@ public final class Principal extends javax.swing.JFrame {
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
 
-            comm.enviarDatos("at\n\r");
+            comm.enviarDatos("AT\n\r");
 
             String comando = bd.getComandoActivarModem(sesion[1]);
             //System.out.println("Comando MODEM: " + comando);
@@ -283,10 +284,14 @@ public final class Principal extends javax.swing.JFrame {
              * Utilizar 3 porque la ejecusion es muy rapida
              * y el modem no se activa tan rapido
              */
-            comm.enviarDatos(comando + "\n\r");
-            comm.enviarDatos(comando + "\n\r");
-            comm.enviarDatos(comando + "\n\r");
-
+            try {
+                comm.enviarDatos(comando + "\n\r");
+                Thread.sleep(1000);
+                comm.enviarDatos(comando + "\n\r");
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
             comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
             comm.start();
         }
@@ -1853,9 +1858,10 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-                log.trace("ResultSet cerrado");
+                //log.trace("ResultSet cerrado");
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
-                log.trace("NO hay campos para el resulset");
+                //log.trace("NO hay campos para el resulset");
+            } else if (ex.getMessage().equals("After end of result set")) {
             } else {
                 log.error("{}", sesion[1], ex);
             }

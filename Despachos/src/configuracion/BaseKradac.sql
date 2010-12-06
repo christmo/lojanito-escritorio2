@@ -262,7 +262,7 @@ CREATE TABLE  `recorridos` (
   `G2` int(1) unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC
 PARTITION BY HASH (ID)
-PARTITIONS 1024 ;
+PARTITIONS 1024;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
