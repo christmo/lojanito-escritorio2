@@ -266,6 +266,7 @@ public final class Principal extends javax.swing.JFrame {
      */
     public void IdentificadorLlamadas() {
         String puerto = arcConfig.getProperty("comm");
+        String separador = arcConfig.getProperty("separador");
         //System.out.println("Puerto COMM: " + puerto);
         log.trace("Puerto COMM: {}", puerto);
         //System.out.println("Empresa: " + sesion[1]);
@@ -274,21 +275,15 @@ public final class Principal extends javax.swing.JFrame {
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
 
-            comm.enviarDatos("AT\n\r");
+            comm.enviarDatos("AT" + separador);
 
             String comando = bd.getComandoActivarModem(sesion[1]);
             //System.out.println("Comando MODEM: " + comando);
             log.trace("Comando MODEM: {}", comando);
 
-            /**
-             * Utilizar 3 porque la ejecusion es muy rapida
-             * y el modem no se activa tan rapido
-             */
             try {
-                comm.enviarDatos(comando + "\n\r");
-                Thread.sleep(1000);
-                comm.enviarDatos(comando + "\n\r");
-                Thread.sleep(1000);
+                comm.enviarDatos(comando + separador);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
