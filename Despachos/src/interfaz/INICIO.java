@@ -121,7 +121,7 @@ public class INICIO extends javax.swing.JFrame {
 
         jbProblemas.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbProblemas.setHorizontalTextPosition(SwingConstants.CENTER);
-        
+
         jbMapa.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbMapa.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -595,11 +595,12 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_jbProblemasActionPerformed
 
     private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
-        String url = "http://"+arcConfig.getProperty("ip_mapa_local")
+        String url = "http://" + arcConfig.getProperty("ip_mapa_local")
                 + ":"
                 + arcConfig.getProperty("puerto_mapa_local")
                 + "/"
-                + arcConfig.getProperty("url");
+                + arcConfig.getProperty("url")
+                + "/php/login/login.php";
         BrowserControl.displayURL(url);
     }//GEN-LAST:event_jbMapaActionPerformed
 

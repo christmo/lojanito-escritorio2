@@ -69,7 +69,8 @@ public class ActualizarServidorKRADAC extends Thread {
                         rs.getString("ESTADO"),
                         (int) minutos,
                         rs.getString("FONO"),
-                        rs.getString("USUARIO"));
+                        rs.getString("USUARIO"),
+                        rs.getString("DIRECCION"));
 
                 if (estadoInsersionServidor) {
                     /**
@@ -85,7 +86,7 @@ public class ActualizarServidorKRADAC extends Thread {
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
             } else {
-                log.error("{}", Principal.sesion[1]);
+                //log.error("{}", Principal.sesion[1]);
             }
         }
     }
@@ -99,8 +100,14 @@ public class ActualizarServidorKRADAC extends Thread {
      * @param strTelefono
      * @return boolean
      */
-    private boolean InsertServidorKRADAC(int intUnidad, int intCodCliente, String strEstado, int minutos, String strTelefono, String usuario) {
-        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO) "
+    private boolean InsertServidorKRADAC(int intUnidad, 
+            int intCodCliente,
+            String strEstado,
+            int minutos,
+            String strTelefono,
+            String usuario,
+            String direccion) {
+        String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION) "
                 + "VALUES ("
                 + intUnidad
                 + ","
@@ -115,6 +122,8 @@ public class ActualizarServidorKRADAC extends Thread {
                 + "RES"
                 + "','"
                 + usuario
+                + "','"
+                + direccion
                 + "');";
         return bd.ejecutarSentenciaStatement2(sql);
     }

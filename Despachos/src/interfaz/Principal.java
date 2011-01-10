@@ -34,6 +34,9 @@ import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.ConsultaClientes;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
+import interfaz.subVentanas.MensajePendiente;
+import interfaz.subVentanas.Pendientes;
+import interfaz.subVentanas.PendientesGUI;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -106,6 +109,10 @@ public final class Principal extends javax.swing.JFrame {
     public static ArrayList<Despachos> listaDespachosTemporales = new ArrayList<Despachos>();
     private static ArrayList<Despachos> listaDespachados = new ArrayList<Despachos>();
     /**
+     * Lista de pendientes para controlar cuando se cumpla alguna...
+     */
+    public static ArrayList<Pendientes> listaPendientesFecha = new ArrayList<Pendientes>();
+    /**
      * Encabezado de las tablas de despachos
      */
     private static DefaultTableModel dtm;
@@ -174,6 +181,8 @@ public final class Principal extends javax.swing.JFrame {
         LeerRecorridosServidorKRADAC();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
+
+        jpPendiente.setVisible(false);
 
         /**
          * Despachar con la tecla F12
@@ -304,7 +313,7 @@ public final class Principal extends javax.swing.JFrame {
      * Activa el Reloj en la interfaz
      */
     private void Reloj() {
-        Reloj r = new Reloj(lblReloj, lblFecha);
+        Reloj r = new Reloj(lblReloj, lblFecha, bd);
     }
 
     /**
@@ -510,7 +519,7 @@ public final class Principal extends javax.swing.JFrame {
      */
     private static String validarTurno() {
         Calendar calendario = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("k:m:s");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
         try {
             String sql = "SELECT SF_TURNOS('" + sdf.format(calendario.getTime()) + "')";
@@ -574,6 +583,12 @@ public final class Principal extends javax.swing.JFrame {
         jbBuscarClienteNombre = new javax.swing.JButton();
         jlSenalInternet = new javax.swing.JLabel();
         lblSenal = new javax.swing.JLabel();
+        jbPendientes = new javax.swing.JButton();
+        jpPendiente = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        lblRecordar = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -905,7 +920,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -950,6 +965,52 @@ public final class Principal extends javax.swing.JFrame {
 
         lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
 
+        jbPendientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/pendientes.png"))); // NOI18N
+        jbPendientes.setText("Pendientes");
+        jbPendientes.setActionCommand("jbPendientes");
+        jbPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPendientesActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Se debe despachar el cliente en");
+
+        lblRecordar.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblRecordar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRecordar.setText("min");
+
+        jLabel8.setText("min");
+
+        lblCliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCliente.setText("cliente");
+
+        javax.swing.GroupLayout jpPendienteLayout = new javax.swing.GroupLayout(jpPendiente);
+        jpPendiente.setLayout(jpPendienteLayout);
+        jpPendienteLayout.setHorizontalGroup(
+            jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPendienteLayout.createSequentialGroup()
+                .addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpPendienteLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblRecordar)
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel8))
+                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        jpPendienteLayout.setVerticalGroup(
+            jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPendienteLayout.createSequentialGroup()
+                .addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(lblRecordar, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -957,13 +1018,15 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -971,14 +1034,16 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
                         .addComponent(jbMenu)
                         .addGap(18, 18, 18)
                         .addComponent(jbBuscarClienteNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 459, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbPendientes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 358, Short.MAX_VALUE)
                         .addComponent(lblSenal)
                         .addGap(18, 18, 18)
                         .addComponent(jlSenalInternet)
@@ -994,29 +1059,33 @@ public final class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(11, 11, 11))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(lblReloj)
-                        .addGap(18, 18, 18)))
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(11, 11, 11)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -1717,6 +1786,8 @@ public final class Principal extends javax.swing.JFrame {
             IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
         } catch (SQLException ex) {
             jtTelefono.setText("");
+        } catch (NullPointerException ex) {
+            jtTelefono.setText("");
         }
         return strTelefono;
     }
@@ -1738,6 +1809,8 @@ public final class Principal extends javax.swing.JFrame {
             }
 
             cambiarEstadoTaxi(etiqueta, codVehiculo);
+            //insertar estado en el servidor...
+            
             jtVehiculos.setCellSelectionEnabled(false);
         } else {
             JOptionPane.showMessageDialog(this, "Este estado no se puede asignar desde aqui...", "Error...", 0);
@@ -2265,8 +2338,34 @@ public final class Principal extends javax.swing.JFrame {
     private void jtVehiculosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtVehiculosMousePressed
         if (evt.getButton() == 1 && evt.getClickCount() == 1) {
             jtVehiculos.setCellSelectionEnabled(true);
+        } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
+            String unidad = strCabecerasColumnasVehiculos[jtVehiculos.getSelectedColumn()];
+            obtenerHoraDeAsignacionEstado(unidad);
         }
     }//GEN-LAST:event_jtVehiculosMousePressed
+
+    /**
+     * Permite mostrar el mensaje de asignacion de las unidades, hora en que se
+     * asigna y hora que deberia quitarse la asignacion
+     * @param unidad
+     */
+    private void obtenerHoraDeAsignacionEstado(String unidad) {
+        rs = bd.obtenerTiempoDeAsignacionEstado(unidad);
+        try {
+            if (!rs.getString("ID_CODIGO").equals("AC")
+                    && !rs.getString("ID_CODIGO").equals("ASI")
+                    && !rs.getString("ID_CODIGO").equals("OCU")) {
+                String mensaje = "<html>La unidad <b>" + unidad + "</b> entró en estado: <b>" + rs.getString("ID_CODIGO") + "</b></html>\n"
+                        + "Hora de asignación:  " + rs.getString("HORA") + "\n"
+                        + "Hora de finalización: " + rs.getString("HORA_FIN");
+                JOptionPane.showMessageDialog(this, mensaje, "Información...", 1);
+            }
+        } catch (SQLException ex) {
+            //java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
+        }
+        jtVehiculos.setCellSelectionEnabled(false);
+    }
 
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
         if ((menu == null) || (!menu.isDisplayable())) {
@@ -2289,6 +2388,19 @@ public final class Principal extends javax.swing.JFrame {
             cliente.setResizable(false);
         }
     }//GEN-LAST:event_jbBuscarClienteNombreActionPerformed
+    /**
+     * Ventana para registrar los pendientes de despacho
+     */
+    private PendientesGUI pendientes;
+
+    private void jbPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPendientesActionPerformed
+        if ((pendientes == null) || (!pendientes.isDisplayable())) {
+            pendientes = new PendientesGUI(Principal.bd);
+            pendientes.setLocationRelativeTo(this);
+            pendientes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            pendientes.setResizable(false);
+        }
+    }//GEN-LAST:event_jbPendientesActionPerformed
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -2530,6 +2642,8 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2542,9 +2656,11 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jbLimpiarCampos;
     private javax.swing.JButton jbMenu;
     private javax.swing.JButton jbNuevoDespacho;
+    private javax.swing.JButton jbPendientes;
     private javax.swing.JButton jbSalir;
     private javax.swing.JLabel jlIndicadorLlamada;
     private javax.swing.JLabel jlSenalInternet;
+    private static javax.swing.JPanel jpPendiente;
     private javax.swing.JScrollPane jsVehiculos;
     private javax.swing.JTextField jtBuscarPorCodigo;
     private javax.swing.JTextField jtBuscarPorNombre;
@@ -2554,7 +2670,9 @@ public final class Principal extends javax.swing.JFrame {
     private static javax.swing.JTable jtPorDespachar;
     private javax.swing.JTextField jtTelefono;
     private static javax.swing.JTable jtVehiculos;
+    private static javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblFecha;
+    private static javax.swing.JLabel lblRecordar;
     private javax.swing.JLabel lblReloj;
     public static javax.swing.JLabel lblSenal;
     // End of variables declaration//GEN-END:variables
@@ -2687,10 +2805,13 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
-     * Inserta un nuevo despacho desde la tabla de buscar clientes por nombre
+     * Inserta un nuevo despacho desde la tabla de buscar clientes por nombre,
+     * alli se asigna true, si es falso se ingresa un cliente de color rojo
+     * sirve para ingresar los despachos pendientes
      * @param cliente
+     * @param desp -> true negro | false rojo
      */
-    public static void ingresarClientePorDespachar(Clientes cliente) {
+    public static void ingresarClientePorDespachar(Clientes cliente, String nota) {
         Despachos despacharClienteNombre = new Despachos();
         despacharClienteNombre.setStrHora(funciones.getHora());
         despacharClienteNombre.setIntCodigo(Integer.parseInt(cliente.getCodigo()));
@@ -2700,6 +2821,11 @@ public final class Principal extends javax.swing.JFrame {
         despacharClienteNombre.setStrBarrio(cliente.getBarrio());
         despacharClienteNombre.setStrReferecia(cliente.getReferencia());
         despacharClienteNombre.setStrNumeroCasa(cliente.getN_casa());
+        despacharClienteNombre.setStrNota(nota);
+        /**
+         * Es verdadero si se ingresa el cliente desde la tabla de busqueda de clientes
+         * por el nombre
+         */
         setDatosTablas(despacharClienteNombre, jtPorDespachar);
     }
 
@@ -2798,5 +2924,37 @@ public final class Principal extends javax.swing.JFrame {
                 break;
             }
         }
+    }
+
+    /**
+     * Muestra el mensaje de aviso que se tiene que despachar un cliente
+     * @param p
+     */
+    public static void lanzarMensajePendiente(Pendientes p) {
+//        JOptionPane.showMessageDialog(null,
+//                "En " + p.getMinRecuerdo() + " munutos se debe despachar la carrera\n"
+//                + "pendiente de: " + p.getCliente().getNombre(),
+//                "Información...", 1);
+
+        //gui.mensajePendiente(p);
+        lblRecordar.setText("" + p.getMinRecuerdo());
+        lblCliente.setText(p.getCliente().getNombre());
+        jpPendiente.setVisible(true);
+    }
+
+    private void mensajePendiente(Pendientes p) {
+        MensajePendiente m = new MensajePendiente(p);
+        m.setVisible(true);
+        m.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        m.setResizable(false);
+    }
+
+    /**
+     * Ingresa en la tabla de clientes por despachar el cliente pendiente
+     * @param p
+     */
+    public static void lanzarPendiente(Pendientes p) {
+        jpPendiente.setVisible(false);
+        ingresarClientePorDespachar(p.getCliente(), p.getNota());
     }
 }

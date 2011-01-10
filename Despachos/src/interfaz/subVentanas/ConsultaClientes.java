@@ -26,6 +26,7 @@ public class ConsultaClientes extends javax.swing.JDialog {
     private ConexionBase bd;
     private ArrayList<Clientes> listaClientes = new ArrayList<Clientes>();
     private static DefaultTableModel dtm;
+    private boolean pendientes = false;
 
     /** Creates new form ConsultaClientes */
     public ConsultaClientes() {
@@ -35,6 +36,21 @@ public class ConsultaClientes extends javax.swing.JDialog {
 
     public ConsultaClientes(ConexionBase cb) {
         initComponents();
+        this.bd = cb;
+        this.setVisible(true);
+        configuracionInicial();
+        pendientes = false;
+    }
+
+    /**
+     * Llamar desde pendientes
+     * @param bd
+     * @param string
+     */
+    ConsultaClientes(ConexionBase cb, String string) {
+        initComponents();
+        jbDespachar.setText("Pendiente");
+        pendientes = true;
         this.bd = cb;
         this.setVisible(true);
         configuracionInicial();
@@ -54,7 +70,7 @@ public class ConsultaClientes extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jtDespachar = new javax.swing.JButton();
+        jbDespachar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtBusqueda = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -65,11 +81,11 @@ public class ConsultaClientes extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda de Clientes");
 
-        jtDespachar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/up.png"))); // NOI18N
-        jtDespachar.setText("Despachar");
-        jtDespachar.addActionListener(new java.awt.event.ActionListener() {
+        jbDespachar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/up.png"))); // NOI18N
+        jbDespachar.setText("Despachar");
+        jbDespachar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtDespacharActionPerformed(evt);
+                jbDespacharActionPerformed(evt);
             }
         });
 
@@ -142,17 +158,17 @@ public class ConsultaClientes extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
                         .addComponent(jbCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtDespachar)))
+                        .addComponent(jbDespachar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -163,7 +179,7 @@ public class ConsultaClientes extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jtDespachar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(jbDespachar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                     .addComponent(jbCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,16 +209,20 @@ public class ConsultaClientes extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jtNombreClienteKeyPressed
 
-    private void jtDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtDespacharActionPerformed
+    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
         try {
             int fila = jtBusqueda.getRowCount() - (jtBusqueda.getSelectedRow() + 1);
             Clientes c = listaClientes.get(fila);
-            Principal.ingresarClientePorDespachar(c);
+            if (!pendientes) {
+                Principal.ingresarClientePorDespachar(c,"");
+            } else {
+                PendientesGUI.setCliente(c);
+            }
             this.dispose();
         } catch (IndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente para despacharlo...", "Error...", 0);
         }
-    }//GEN-LAST:event_jtDespacharActionPerformed
+    }//GEN-LAST:event_jbDespacharActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
         this.dispose();
@@ -250,8 +270,8 @@ public class ConsultaClientes extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton jbBuscar;
     private javax.swing.JButton jbCancelar;
+    private javax.swing.JButton jbDespachar;
     private static javax.swing.JTable jtBusqueda;
-    private javax.swing.JButton jtDespachar;
     private javax.swing.JTextField jtNombreCliente;
     // End of variables declaration//GEN-END:variables
 }

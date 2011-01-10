@@ -5,6 +5,7 @@ import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.Despachos;
+import interfaz.subVentanas.Pendientes;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -136,9 +137,11 @@ public class ConexionBase {
      */
     public ResultSet ejecutarConsulta(String sql) {
         //System.out.println("Consultar: " + sql);
+        ResultSet r = null;
         try {
-            rs = st.executeQuery(sql);
+            r = st.executeQuery(sql);
             log.trace(sql);
+
         } catch (SQLException ex) {
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado...");
@@ -150,7 +153,29 @@ public class ConexionBase {
         } catch (NullPointerException ex) {
             log.trace("Null es statement");
         }
-        return rs;
+        return r;
+    }
+
+    public ResultSet ejecutarConsultaStatement2(String sql) {
+        //System.out.println("Consultar: " + sql);
+        ResultSet r = null;
+        try {
+            Statement st2 = (Statement) conexion.createStatement();
+            r = st2.executeQuery(sql);
+            log.trace(sql);
+
+        } catch (SQLException ex) {
+            if (ex.getMessage().equals("No operations allowed after statement closed.")) {
+                log.trace("Statement cerrado...");
+            } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
+                log.trace("Statement cerrado...");
+            } else {
+                log.trace("Error al consultar", ex);
+            }
+        } catch (NullPointerException ex) {
+            log.trace("Null es statement");
+        }
+        return r;
     }
 
     /**
@@ -163,6 +188,7 @@ public class ConexionBase {
         //System.out.println("Consultar: " + sql);
         try {
             rs = st.executeQuery(sql);
+            log.trace(sql);
             rs.next();
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
@@ -182,6 +208,7 @@ public class ConexionBase {
     public ResultSet ejecutarConsultaUnDatoNoImprimir(String sql) {
         try {
             rs = st.executeQuery(sql);
+            //log.trace(sql);
             rs.next();
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
@@ -205,6 +232,7 @@ public class ConexionBase {
         //System.out.println("Consultar: " + sql);
         try {
             rsAux = st.executeQuery(sql);
+            log.trace(sql);
             rsAux.next();
         } catch (SQLException ex) {
             log.trace("", ex);
@@ -338,6 +366,22 @@ public class ConexionBase {
                 return false;
             }
         }
+    }
+
+    public ResultSet ejecutarConsultaUnDatoStatement2(String sql) {
+        try {
+            Statement st1 = (Statement) conexion.createStatement();
+
+            log.info("Consultar: {}", sql);
+
+            rsAux = st1.executeQuery(sql);
+            rsAux.next();
+
+            return rsAux;
+        } catch (SQLException ex) {
+            log.trace("", ex);
+        }
+        return null;
     }
 
     /**
@@ -1735,7 +1779,7 @@ public class ConexionBase {
      * @return ResultSet
      */
     public ResultSet getFilasRespaldoLocalAsignaciones() {
-        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO FROM RESPALDO_ASIGNACION_SERVER";
+        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION FROM RESPALDO_ASIGNACION_SERVER";
         return rs = ejecutarConsulta(sql);
     }
 
@@ -1797,5 +1841,150 @@ public class ConexionBase {
             e.printStackTrace();
         }
         return output;
+    }
+
+    /**
+     * Obtiene la el ultimo estado asignado a una unidad, con el tiempo en que
+     * fue asignado y el tiempo que debe de cambiar el estado
+     * @param unidad
+     * @return Resulset
+     */
+    public ResultSet obtenerTiempoDeAsignacionEstado(String unidad) {
+        String sql = "SELECT FECHA,HORA,DATE_FORMAT(DATE_ADD(CONCAT(FECHA,' ',HORA), INTERVAL 30 MINUTE),'%T') AS HORA_FIN,ID_CODIGO "
+                + "FROM REGCODESTTAXI "
+                + "WHERE  N_UNIDAD = " + unidad
+                + " AND CONCAT(FECHA,'-',HORA)=(SELECT MAX(CONCAT(FECHA,'-',HORA)) "
+                + "FROM REGCODESTTAXI "
+                + "WHERE N_UNIDAD = " + unidad + ") "
+                + "GROUP BY CONCAT(FECHA,'-',HORA)";
+        return rs = ejecutarConsultaUnDato(sql);
+    }
+
+    /**
+     * Recupera un cliente dependiendo de su codigo
+     * @param codigo
+     * @return
+     */
+    public Clientes obtenerCliente(int codigo) {
+        ResultSet res;
+        if (codigo != 0) {
+            try {
+                String sql = "SELECT TELEFONO,CODIGO,NOMBRE_APELLIDO_CLI,DIRECCION_CLI,SECTOR,NUM_CASA_CLI,INFOR_ADICIONAL,LATITUD,LONGITUD " + "FROM CLIENTES " + "WHERE CODIGO = " + codigo;
+                res = ejecutarConsultaUnDatoStatement2(sql);
+                Clientes cliente = new Clientes();
+                cliente.setCodigo("" + codigo);
+                cliente.setNombre(res.getString("NOMBRE_APELLIDO_CLI"));
+                cliente.setDireccion(res.getString("DIRECCION_CLI"));
+                cliente.setBarrio(res.getString("SECTOR"));
+                cliente.setN_casa(res.getString("NUM_CASA_CLI"));
+                cliente.setTelefono(res.getString("TELEFONO"));
+                cliente.setReferencia(res.getString("INFOR_ADICIONAL"));
+                cliente.setLatitud(res.getLong("LATITUD"));
+                cliente.setLongitud(res.getLong("LONGITUD"));
+                return cliente;
+            } catch (SQLException ex) {
+                //java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene todos los pondientes guardados
+     * @return ArrayList<Pendientes>
+     */
+    public ArrayList<Pendientes> obtenerPendientesGuardados() {
+        ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
+        ResultSet r = null;
+        try {
+            String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO FROM PENDIENTES WHERE ESTADO = 'AC'";
+            r = ejecutarConsultaStatement2(sql);
+
+            while (r.next()) {
+                Pendientes p = new Pendientes();
+                int cod = r.getInt("CODIGO");
+                Clientes c = obtenerCliente(cod);
+                p.setCliente(c);
+                p.setFechaFin(r.getString("FECHA_FIN"));
+                p.setFechaIni(r.getString("FECHA_INI"));
+                p.setHora(r.getString("HORA"));
+                p.setMinRecuerdo(r.getInt("MIN_RECUERDO"));
+                p.setCuandoRecordar(r.getString("CUANDO_RECORDAR"));
+                p.setEstado(r.getString("ESTADO"));
+                p.setNota(r.getString("NOTA"));
+                datos.add(p);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            log.trace("", ex);
+        }
+        return null;
+    }
+
+    public ArrayList<Pendientes> obtenerPendientesGuardadosPorFecha(String fecha) {
+        ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
+
+        try {
+            String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
+                    + "FROM PENDIENTES WHERE ESTADO = 'AC' AND '"
+                    + fecha + "' BETWEEN FECHA_INI AND FECHA_FIN";
+            rs = ejecutarConsulta(sql);
+
+            while (rs.next()) {
+                Pendientes p = new Pendientes();
+                int cod = rs.getInt("CODIGO");
+                Clientes c = obtenerCliente(cod);
+                p.setCliente(c);
+                p.setFechaFin(rs.getString("FECHA_FIN"));
+                p.setFechaIni(rs.getString("FECHA_INI"));
+                p.setHora(rs.getString("HORA"));
+                p.setMinRecuerdo(rs.getInt("MIN_RECUERDO"));
+                p.setCuandoRecordar(rs.getString("CUANDO_RECORDAR"));
+                p.setEstado(rs.getString("ESTADO"));
+                p.setNota(rs.getString("NOTA"));
+                datos.add(p);
+            }
+            return datos;
+        } catch (SQLException ex) {
+            if(ex.getMessage().equals("")){
+            }else{
+                    log.trace("", ex);
+            }
+        }
+        return null;
+    }
+
+    public boolean guardarPendientes(Pendientes pendiente) {
+        String sql = "CALL SP_INSERTAR_PENDIENTES("
+                + pendiente.getCliente().getCodigo()
+                + ",'"
+                + pendiente.getFechaIni()
+                + "','"
+                + pendiente.getFechaFin()
+                + "','"
+                + pendiente.getHora()
+                + "',"
+                + pendiente.getMinRecuerdo()
+                + ",'"
+                + pendiente.getCuandoRecordar()
+                + "','"
+                + pendiente.getNota()
+                + "','"
+                + "AC')";
+        return ejecutarSentencia(sql);
+    }
+
+    public boolean eliminarPendiente(String cod, String fecIni, String fecFin, String horaPend) {
+        String sql = "CALL SP_ELIMINAR_PENDIENTE("
+                + cod
+                + ",'"
+                + fecIni
+                + "','"
+                + fecFin
+                + "','"
+                + horaPend
+                + "')";
+        return ejecutarSentencia(sql);
     }
 }

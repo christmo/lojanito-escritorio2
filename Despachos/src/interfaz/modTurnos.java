@@ -167,7 +167,7 @@ public class modTurnos extends javax.swing.JDialog {
         JFormattedTextField textField = ((JSpinner.DefaultEditor) obj.getEditor()).getTextField();
         DefaultFormatterFactory dff = (DefaultFormatterFactory) textField.getFormatterFactory();
         DateFormatter formatter = (DateFormatter) dff.getDefaultFormatter();
-        formatter.setFormat(new SimpleDateFormat("kk:mm "));
+        formatter.setFormat(new SimpleDateFormat("HH:mm"));
 
         obj.setValue((new GregorianCalendar()).getTime());
     }
