@@ -226,6 +226,12 @@ public class funcionesUtilidad {
         return sdf.format(calendario.getTime());
     }
 
+    public static String fechaActual() {
+        Calendar calendario = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(calendario.getTime());
+    }
+
     /**
      * Comprueba si el numero de telefono ingresado tiene el 0 al inicio o si el
      * el numero de telefono no tiene letras

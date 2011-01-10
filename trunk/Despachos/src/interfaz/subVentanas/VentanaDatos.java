@@ -903,6 +903,7 @@ public class VentanaDatos extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 //Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NullPointerException ex) {
             }
             insertarDatosTabla(jtTelefono.getText(), 1);
         } else {
@@ -940,15 +941,14 @@ public class VentanaDatos extends javax.swing.JFrame {
     public String Mayusculas(String txt) {
         return txt.toUpperCase();
     }
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new VentanaDatos().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//
+//            public void run() {
+//                new VentanaDatos().setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

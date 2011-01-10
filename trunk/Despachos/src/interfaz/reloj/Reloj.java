@@ -4,7 +4,10 @@
  */
 package interfaz.reloj;
 
+import BaseDatos.ConexionBase;
 import interfaz.Principal;
+import interfaz.funcionesUtilidad;
+import interfaz.subVentanas.Pendientes;
 import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,13 +25,17 @@ public class Reloj {
     SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
     JLabel lblReloj;
     JLabel lblFecha;
+    private ConexionBase bd;
+    private funcionesUtilidad funciones = new funcionesUtilidad();
 
-    public Reloj(JLabel lblReloj, JLabel lblFecha) {
+    public Reloj(JLabel lblReloj, JLabel lblFecha, ConexionBase cb) {
         this.lblReloj = lblReloj;
         this.lblFecha = lblFecha;
+        this.bd = cb;
         Cronometro c = new Cronometro();
         Timer timer = new Timer();
         timer.schedule(c, 0, 1000);	// do it every second
+        Principal.listaPendientesFecha = bd.obtenerPendientesGuardadosPorFecha(funciones.getFecha());
     }
 
     class Cronometro extends TimerTask {
@@ -66,6 +73,12 @@ public class Reloj {
                     Principal.ReiniciarTurno();
                 }
             }
+
+            /**
+             * Pendientes
+             */
+            comprobarHoraPendientes(horaActual);
+
         }
 
         /**
@@ -99,6 +112,26 @@ public class Reloj {
             } catch (ParseException e) {
             }
             return null;
+        }
+
+        private void comprobarHoraPendientes(long hora) {
+            long horaPendMenosRecuerdo;
+            long horaLanzamiento;
+            Pendientes p;
+            if (Principal.listaPendientesFecha.size() > 1) {
+                for (int i = 0; i < Principal.listaPendientesFecha.size(); i++) {
+                    p = Principal.listaPendientesFecha.get(i);
+                    horaPendMenosRecuerdo = convertirHora(p.getHora()).getTime() - (p.getMinRecuerdo() * 60 * 1000);
+                    if (horaPendMenosRecuerdo == hora) {
+                        Principal.lanzarMensajePendiente(Principal.listaPendientesFecha.get(i));
+                    }
+                    horaLanzamiento = convertirHora(p.getHora()).getTime();
+                    if (horaLanzamiento == hora) {
+                        Principal.lanzarPendiente(Principal.listaPendientesFecha.get(i));
+                        Principal.listaPendientesFecha.remove(i);
+                    }
+                }
+            }
         }
     }
 }
