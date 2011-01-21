@@ -28,8 +28,8 @@ public class GuardarServidorKRADAC extends Thread {
      * @param d
      * @param accion || true ASIGNACION || false LIBRE
      */
-    public GuardarServidorKRADAC(Despachos d, boolean accion) {
-        this.bd = new ConexionBase(Principal.arcConfig);
+    public GuardarServidorKRADAC(Despachos d, boolean accion,ConexionBase cb) {
+        this.bd = cb;
         this.desp = d;
         this.accion = accion;
         log.debug("Enpezar a Guardar al servidor Kradac...");
@@ -43,7 +43,6 @@ public class GuardarServidorKRADAC extends Thread {
         } else {
             InsertarLibreServidorKRADAC();
         }
-        bd.CerrarConexion();
     }
 
     /**

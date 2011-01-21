@@ -63,7 +63,7 @@ CREATE TABLE `asignados` (
   `ID_TURNO` int(11) DEFAULT NULL,
   `USUARIO` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIGNADOS`)
-) ENGINE=MyISAM AUTO_INCREMENT=7483 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7498 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,6 +225,26 @@ CREATE TABLE `multas_pagadas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `pendientes`
+--
+
+DROP TABLE IF EXISTS `pendientes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pendientes` (
+  `codigo` int(10) NOT NULL DEFAULT '0',
+  `fecha_ini` date NOT NULL DEFAULT '0000-00-00',
+  `fecha_fin` date NOT NULL DEFAULT '0000-00-00',
+  `hora` time NOT NULL DEFAULT '00:00:00',
+  `min_recuerdo` int(10) DEFAULT NULL,
+  `cuando_recordar` varchar(50) DEFAULT NULL,
+  `nota` varchar(225) DEFAULT NULL,
+  `estado` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`fecha_ini`,`fecha_fin`,`hora`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `posicion_clientes`
 --
 
@@ -336,7 +356,7 @@ CREATE TABLE `turnos` (
   `HORA_INI` time DEFAULT NULL,
   `HORA_FIN` time DEFAULT NULL,
   PRIMARY KEY (`ID_TURNO`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -401,10 +421,6 @@ CREATE TABLE `vehiculos` (
   KEY `FK_REFERENCE_8` (`ID_CON`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

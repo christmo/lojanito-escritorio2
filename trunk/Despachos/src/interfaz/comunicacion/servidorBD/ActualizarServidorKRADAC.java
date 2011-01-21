@@ -5,7 +5,6 @@
 package interfaz.comunicacion.servidorBD;
 
 import BaseDatos.ConexionBase;
-import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +25,9 @@ public class ActualizarServidorKRADAC extends Thread {
     private funcionesUtilidad funciones = new funcionesUtilidad();
     private int intFilasRespaldadas;
 
-    public ActualizarServidorKRADAC(int filas) {
+    public ActualizarServidorKRADAC(int filas, ConexionBase cb) {
         this.intFilasRespaldadas = filas;
+        this.bd = cb;
     }
 
     @Override
@@ -43,9 +43,10 @@ public class ActualizarServidorKRADAC extends Thread {
         if (ConexionServidorKRADAC()) {
             if (intFilasRespaldadas > 0) {
                 log.debug("Empezar Actualizacion al servidor de Kradac filas a insertar:{}", intFilasRespaldadas);
-                this.bd = new ConexionBase(Principal.arcConfig);
-                InsertarFilasRespaldadasLocalesEnServidorKRADAC();
-                bd.CerrarConexion();
+                try {
+                    InsertarFilasRespaldadasLocalesEnServidorKRADAC();
+                } catch (NullPointerException ex) {
+                }
             }
         }
     }
@@ -100,7 +101,7 @@ public class ActualizarServidorKRADAC extends Thread {
      * @param strTelefono
      * @return boolean
      */
-    private boolean InsertServidorKRADAC(int intUnidad, 
+    private boolean InsertServidorKRADAC(int intUnidad,
             int intCodCliente,
             String strEstado,
             int minutos,

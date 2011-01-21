@@ -361,6 +361,9 @@ public class ConexionBase {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
                 log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
                 return false;
+            } else if (ex.getMessage().substring(0, 46).equals("Unable to connect to foreign data source: Host")) {
+                log.trace("No se puede conectar desde un sitio externo, con una IP no registrada: {}", ex.getMessage().split("'")[1]);
+                return false;
             } else {
                 log.trace("", ex);
                 return false;
@@ -1780,7 +1783,7 @@ public class ConexionBase {
      */
     public ResultSet getFilasRespaldoLocalAsignaciones() {
         String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION FROM RESPALDO_ASIGNACION_SERVER";
-        return rs = ejecutarConsulta(sql);
+        return rs = ejecutarConsultaUnDatoNoImprimir(sql);
     }
 
     /**
@@ -1947,9 +1950,9 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            if(ex.getMessage().equals("")){
-            }else{
-                    log.trace("", ex);
+            if (ex.getMessage().equals("")) {
+            } else {
+                log.trace("", ex);
             }
         }
         return null;
