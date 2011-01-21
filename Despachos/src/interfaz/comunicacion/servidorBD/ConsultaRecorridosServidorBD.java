@@ -38,9 +38,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
      */
     public static boolean HayInternet;
 
-    public ConsultaRecorridosServidorBD(String empresa, ConexionBase bd) {
+    public ConsultaRecorridosServidorBD(String empresa, ConexionBase cb) {
         this.empresa = empresa;
-        this.bd = bd;
+        bd = cb;
 
         ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
         try {
@@ -272,7 +272,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         HayInternet = true;
         int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
         //log.info("Numero de filas respaldadas: {}", filasRespaldadas);
-        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas);
+        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas,bd);
         actualizarServer.start();
     }
 

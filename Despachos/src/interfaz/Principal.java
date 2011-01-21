@@ -109,7 +109,7 @@ public final class Principal extends javax.swing.JFrame {
     public static ArrayList<Despachos> listaDespachosTemporales = new ArrayList<Despachos>();
     private static ArrayList<Despachos> listaDespachados = new ArrayList<Despachos>();
     /**
-     * Lista de pendientes para controlar cuando se cumpla alguna...
+     * Lista de pendientes de esta fecha para controlar cuando se cumpla alguna...
      */
     public static ArrayList<Pendientes> listaPendientesFecha = new ArrayList<Pendientes>();
     /**
@@ -526,7 +526,11 @@ public final class Principal extends javax.swing.JFrame {
             rs = bd.ejecutarConsultaUnDato(sql);
             return rs.getString(1);
         } catch (SQLException ex) {
-            log.error("{}", sesion[1], ex);
+            if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
+                System.out.println("ResultSet cerrado...");
+            } else {
+                log.error("{}", sesion[1], ex);
+            }
         }
         return null;
     }
@@ -1810,7 +1814,7 @@ public final class Principal extends javax.swing.JFrame {
 
             cambiarEstadoTaxi(etiqueta, codVehiculo);
             //insertar estado en el servidor...
-            
+
             jtVehiculos.setCellSelectionEnabled(false);
         } else {
             JOptionPane.showMessageDialog(this, "Este estado no se puede asignar desde aqui...", "Error...", 0);
@@ -1830,7 +1834,7 @@ public final class Principal extends javax.swing.JFrame {
                 /**
                  * Guarda la liberacion de la unidad en el servidor de Kradac
                  */
-                GuardarServidorKRADAC server = new GuardarServidorKRADAC(listaDespachosTemporales.get(i), false);
+                GuardarServidorKRADAC server = new GuardarServidorKRADAC(listaDespachosTemporales.get(i), false, bd);
                 server.start();
                 listaDespachosTemporales.remove(i);
                 break;
@@ -2918,7 +2922,7 @@ public final class Principal extends javax.swing.JFrame {
                 }
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
                 d.setMinutosEntreClienteServidor(Integer.parseInt("" + minutos));
-                GuardarServidorKRADAC server = new GuardarServidorKRADAC(d, true);
+                GuardarServidorKRADAC server = new GuardarServidorKRADAC(d, true, bd);
                 server.start();
 
                 break;

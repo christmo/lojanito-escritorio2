@@ -73,18 +73,18 @@ DELIMITER ;;
 BEGIN
 DECLARE ESTADO VARCHAR(10);
 SELECT ID_CODIGO
-INTO ESTADO 
-FROM REGCODESTTAXI 
-WHERE N_UNIDAD=UNIDAD AND 
+INTO ESTADO
+FROM REGCODESTTAXI
+WHERE N_UNIDAD=UNIDAD AND
 FECHA = (
 	SELECT MAX(FECHA)
-	FROM REGCODESTTAXI 
-	WHERE N_UNIDAD=UNIDAD 
+	FROM REGCODESTTAXI
+	WHERE N_UNIDAD=UNIDAD
 )
 AND
 HORA =(
 	SELECT MAX(HORA)
-	FROM REGCODESTTAXI 
+	FROM REGCODESTTAXI
 	WHERE N_UNIDAD=UNIDAD AND FECHA = (SELECT MAX(FECHA) FROM REGCODESTTAXI WHERE N_UNIDAD=UNIDAD)
 	GROUP BY FECHA
 );
@@ -114,7 +114,7 @@ BEGIN
 	SELECT COUNT(*)
 	INTO CARRERAS
 	FROM ASIGNADOS
-	WHERE ESTADO='F' AND N_UNIDAD = UNIDAD AND FECHA = CURDATE() 
+	WHERE ESTADO='F' AND N_UNIDAD = UNIDAD AND FECHA = CURDATE()
 	AND USUARIO = PUSUARIO AND ID_TURNO = PTURNO
 	GROUP BY N_UNIDAD;
 	RETURN CARRERAS;
@@ -144,7 +144,7 @@ DECLARE turno VARCHAR(50);
 	WHERE (hora BETWEEN HORA_INI AND HORA_FIN)
 	OR
 	(
-		HORA_INI = (SELECT MAX(HORA_INI) FROM TURNOS) AND 
+		HORA_INI = (SELECT MAX(HORA_INI) FROM TURNOS) AND
 		hora BETWEEN (SELECT MAX(HORA_INI) FROM TURNOS) AND '23:59:59'
 		OR
 		HORA_FIN = (SELECT MIN(HORA_FIN) FROM TURNOS) AND
@@ -181,7 +181,7 @@ IN PCI VARCHAR(10)
 BEGIN
 
 UPDATE USUARIOS
-SET 
+SET
 ID_EMPRESA = PID_EMPRESA,
 CLAVE = PCLAVE,
 NOMBRE_USUARIO = PNOMBRE_USUARIO,
@@ -192,6 +192,33 @@ ESTADO = PESTADO,
 OPERADOR = POPERADOR,
 CEDULA_USUARIO = PCI
 WHERE USUARIO = PUSUARIO;
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_ELIMINAR_PENDIENTE` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_ELIMINAR_PENDIENTE`(
+IN PCOD INT(10),
+IN PFI  DATE,
+IN PFF  DATE,
+IN PH   TIME
+)
+BEGIN
+
+DELETE FROM PENDIENTES
+WHERE CODIGO = PCOD AND FECHA_INI = PFI AND FECHA_FIN = PFF AND HORA = PH;
 
 END */;;
 DELIMITER ;
@@ -264,6 +291,37 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_INSERTAR_PENDIENTES` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_PENDIENTES`(
+IN PCODIGO INTEGER,
+IN PFECHA_INI DATE,
+IN PFECHA_FIN DATE,
+IN PHORA TIME,
+IN PMIN_RECUERDO INT,
+IN PCUANDO_RECORDAR VARCHAR(50),
+IN PNOTA VARCHAR(225),
+IN PESTADO  VARCHAR(10)
+)
+BEGIN
+
+INSERT INTO PENDIENTES(CODIGO, FECHA_INI, FECHA_FIN, HORA, MIN_RECUERDO, CUANDO_RECORDAR,NOTA,ESTADO)
+VALUES (PCODIGO,PFECHA_INI,PFECHA_FIN,PHORA,PMIN_RECUERDO,PCUANDO_RECORDAR,PNOTA,PESTADO);
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SP_INSERTAR_RECORRIDOS` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -274,25 +332,24 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RECORRIDOS`(
-IN PID_PART varchar(10),
-IN PN_UNIDAD INTEGER,
-IN PID_EMPRESA varchar(10),
-IN PLAT DOUBLE,
-IN PLON DOUBLE,
-IN PFECHA DATE,
-IN PHORA TIME,
-IN PVEL VARCHAR(25),
-IN PG1 DOUBLE,
-IN PG2 CHAR(10)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RECORRIDOS`(
+IN PID_PART varchar(10),
+IN PN_UNIDAD INTEGER,
+IN PID_EMPRESA varchar(10),
+IN PLAT DOUBLE,
+IN PLON DOUBLE,
+IN PFECHA DATE,
+IN PHORA TIME,
+IN PVEL VARCHAR(25),
+IN PG1 DOUBLE,
+IN PG2 CHAR(10)
 )
-BEGIN
-
-/*INSERT INTO RECORRIDOS(N_UNIDAD, ID_EMPRESA,LATITUD,LONGITUD,FECHA,HORA,EST_TAXI,VELOCIDAD,EST_TAXIM)
-VALUES (PN_UNIDAD,PID_EMPRESA,PLAT,PLON,PFECHA,PHORA,PES_TAXI,PVEL,PES_TAXIM);*/
-
-INSERT INTO RECORRIDOS(ID,N_UNIDAD, ID_EMPRESA,LATITUD,LONGITUD,FECHA,HORA,VELOCIDAD,G1,G2)
-VALUES (PID_PART,PN_UNIDAD,PID_EMPRESA,PLAT,PLON,PFECHA,PHORA,PVEL,PG1,PG2);
+BEGIN
+
+
+
+INSERT INTO RECORRIDOS(ID,N_UNIDAD, ID_EMPRESA,LATITUD,LONGITUD,FECHA,HORA,VELOCIDAD,G1,G2)
+VALUES (PID_PART,PN_UNIDAD,PID_EMPRESA,PLAT,PLON,PFECHA,PHORA,PVEL,PG1,PG2);
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -476,4 +533,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-12-09 15:27:28
+-- Dump completed on 2011-01-20 16:20:23
