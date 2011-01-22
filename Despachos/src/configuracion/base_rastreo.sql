@@ -23,9 +23,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP DATABASE IF EXISTS rastreosatelital;
-create database rastreosatelital;
-use rastreosatelital;
+DROP DATABASE IF EXISTS rastreosat;
+create database rastreosat;
+use rastreosat;
 
 --
 -- Table structure for table `accesos`
