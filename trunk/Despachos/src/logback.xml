@@ -143,13 +143,13 @@
     <logger name="BaseDatos.ConexionBase" level="TRACE">
         <appender-ref ref="TRACE_BD"/>
         <appender-ref ref="EMAIL"/>
-        <appender-ref ref="pantalla"/>
+        <!--<appender-ref ref="pantalla"/>-->
     </logger>
 
     <logger name="interfaz.Principal" level="ALL">
         <appender-ref ref="EMAIL"/>
         <appender-ref ref="TRACE_PRINCIPAL"/>
-        <appender-ref ref="pantalla"/>
+        <!--<appender-ref ref="pantalla"/>-->
     </logger>
 
     <logger name="interfaz.comunicacion.servidorBD" level="ALL">

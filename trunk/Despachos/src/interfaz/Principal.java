@@ -27,7 +27,6 @@ import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
 import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
-import interfaz.comunicacion.servidorBD.EnvioMensajesUnidades;
 import interfaz.comunicacion.servidorBD.GuardarServidorKRADAC;
 
 import interfaz.subVentanas.Clientes;
@@ -924,7 +923,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -986,7 +985,7 @@ public final class Principal extends javax.swing.JFrame {
 
         jLabel8.setText("min");
 
-        lblCliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCliente.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblCliente.setText("cliente");
 
         javax.swing.GroupLayout jpPendienteLayout = new javax.swing.GroupLayout(jpPendiente);
@@ -1022,15 +1021,15 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
                         .addGap(18, 18, 18)
                         .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1038,7 +1037,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
@@ -1047,7 +1046,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jbBuscarClienteNombre)
                         .addGap(18, 18, 18)
                         .addComponent(jbPendientes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 358, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 366, Short.MAX_VALUE)
                         .addComponent(lblSenal)
                         .addGap(18, 18, 18)
                         .addComponent(jlSenalInternet)
@@ -1079,18 +1078,17 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                        .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                        .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -1150,39 +1148,38 @@ public final class Principal extends javax.swing.JFrame {
     private void AccionesBorrado(int cod, javax.swing.JTable Tabla) {
         int intFila = Tabla.getSelectedRow();
         int intCol = Tabla.getSelectedColumn();
-
-        if (cod == 127 || cod == 8) {
-            /**
-             * borrar la celda que se haya seleccionado, esto se debe
-             * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
-             */
-            if (intCol == 0 || intCol == 2 || intCol == 8 || intCol == 6) {
-                //System.out.println("No borrar esos campos...");
-            } else {
-                Tabla.setValueAt("", intFila, intCol);
-            }
-            /**
-             * Columna de Unidad
-             */
-            if (intCol == 6) {
+        try {
+            if (cod == 127 || cod == 8) {
                 /**
-                 * Revisa cuando borra el campo que se borre la asignacion
+                 * borrar la celda que se haya seleccionado, esto se debe
+                 * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
                  */
-                //BorrarColorDespachoVehiculo(Tabla);
+                if (intCol == 0 || intCol == 2 || intCol == 8 || intCol == 6) {
+                    //System.out.println("No borrar esos campos...");
+                } else {
+                    Tabla.setValueAt("", intFila, intCol);
+                }
+                /**
+                 * Columna de Unidad
+                 */
+                if (intCol == 6) {
+                    /**
+                     * Revisa cuando borra el campo que se borre la asignacion
+                     */
+                    //BorrarColorDespachoVehiculo(Tabla);
+                }
+                /**
+                 * Columna de Minutos
+                 */
+                if (intCol == 7) {
+                    Tabla.setValueAt("", intFila, intCol);
+                    Tabla.setValueAt("0", intFila, 8);
+                }
             }
             /**
-             * Columna de Minutos
+             * Borrar el texto antes de insertar algo nuevo
              */
-            if (intCol == 7) {
-                Tabla.setValueAt("", intFila, intCol);
-                Tabla.setValueAt("0", intFila, 8);
-            }
-        }
-        /**
-         * Borrar el texto antes de insertar algo nuevo
-         */
-        if (cod >= 48 && cod <= 105) {
-            try {
+            if (cod >= 48 && cod <= 105) {
                 String tmp = "" + jtPorDespachar.getValueAt(intFila, intCol);
                 if (!tmp.equals("")) {
                     if (intCol == 6) {
@@ -1193,8 +1190,8 @@ public final class Principal extends javax.swing.JFrame {
                     }
                 }
                 jtPorDespachar.setValueAt("", intFila, intCol);
-            } catch (ArrayIndexOutOfBoundsException aidx) {
             }
+        } catch (ArrayIndexOutOfBoundsException aidx) {
         }
     }
     private boolean CampoUnidadCambio = false;
@@ -1349,11 +1346,11 @@ public final class Principal extends javax.swing.JFrame {
         }
 
         int intFila = jtPorDespachar.getSelectedRow();
-        try {
+//        try {
             String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
             String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
 
-            try {
+//            try {
                 String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
                 if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
                     /**
@@ -1367,12 +1364,13 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                 }
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada...\na recoger el pasajero...", "Error...", 0);
-            }
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
-        }
+//            } catch (NullPointerException ex) {
+//                JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada para\nrecoger el pasajero...", "Error...", 0);
+//            }
+//        } catch (NullPointerException ex) {
+//            JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
+//        } catch (ArrayIndexOutOfBoundsException aiobe) {
+//        }
     }
 
     /**
@@ -1422,8 +1420,11 @@ public final class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Se debe ingresar un barrio donde vive el cliente...", "Error...", 0);
         } else if (d.getIntMinutos() < 0) {
             JOptionPane.showMessageDialog(this, "La estimación de tiempo de llegada a recojer al cliente es incorrecta, tiene que ser mayor a 0...", "Error...", 0);
-            jtPorDespachar.setValueAt("", fila, 7);
-            jtPorDespachar.setValueAt("0", fila, 8);
+            try {
+                jtPorDespachar.setValueAt("", fila, 7);
+                jtPorDespachar.setValueAt("0", fila, 8);
+            } catch (IndexOutOfBoundsException iex) {
+            }
         } else if (!validarUnidad(d.getIntUnidad())) {
             JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
         } else {
@@ -1772,12 +1773,14 @@ public final class Principal extends javax.swing.JFrame {
 
         intCodigo = jtCodigo.getText();
         try {
-            String sql = "SELECT TELEFONO,"
+            String sql = "SELECT CODIGO,"
+                    + "TELEFONO,"
                     + "NOMBRE_APELLIDO_CLI,"
                     + "DIRECCION_CLI,"
                     + "SECTOR"
                     + " FROM CLIENTES WHERE CODIGO='" + intCodigo + "'";
             rs = bd.ejecutarConsultaUnDato(sql);
+            intCodigo = rs.getString("CODIGO");
             strTelefono = rs.getString("TELEFONO");
             strNombre = rs.getString("NOMBRE_APELLIDO_CLI");
             strDireccion = rs.getString("DIRECCION_CLI");
@@ -1850,7 +1853,7 @@ public final class Principal extends javax.swing.JFrame {
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
-        //System.out.println("Estado: " + codig);
+        System.out.println("Estado: " + codig);
 
         for (String i : codVh) {
             /*
@@ -2111,8 +2114,12 @@ public final class Principal extends javax.swing.JFrame {
             mensaje = "" + nombreCliente + "%" + barrioCliente + " | " + dirCliente;
         }
         System.err.println("Mensaje: " + mensaje);
-        EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
-        enviarMensajeUnidad.start();
+        /*
+         * TODO: Enviar los mensajes al taximetro revisar porque se demora cuando no
+         * hay conexión con els ervidor si esta con un hilo
+         */
+        //EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
+        //enviarMensajeUnidad.start();
     }
 
     /**
@@ -2850,7 +2857,7 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException ex) {
-            log.error("{}", sesion[1], ex);
+            log.trace("{} - Illegal operation on empty result set", sesion[1]);
         }
     }
 

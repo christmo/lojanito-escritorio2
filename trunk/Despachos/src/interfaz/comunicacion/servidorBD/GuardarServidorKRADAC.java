@@ -246,7 +246,8 @@ public class GuardarServidorKRADAC extends Thread {
     }
 
     /**
-     * Inserta luego de asignado el ocupado del taxi cuando se despacho
+     * Inserta luego de asignado el ocupado del taxi cuando se despacho, valor
+     * es -2 para reconocer en el servidor que es el esatado de libre
      */
     public void InsertarLibreServidorKRADAC() {
         String sql;
