@@ -281,8 +281,14 @@ public class ConexionBase {
             } catch (StringIndexOutOfBoundsException sex) {
                 txt = ex.getMessage().substring(0, 15);
             }
-            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                log.trace("La tabla \"SERVER\" no esta creada localmente...");
+            if (ex.getMessage().substring(0, 5).equals("Table")) {
+                String[] texto = ex.getMessage().split("'");
+                try {
+                    if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
+                        log.trace("La tabla no esta creada: [" + texto[1] + "]");
+                    }
+                } catch (ArrayIndexOutOfBoundsException aiob) {
+                }
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
                 System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
@@ -300,7 +306,7 @@ public class ConexionBase {
                 log.trace("", ex);
                 return false;
             }
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("NULL en [304][ejecutarSentencia] ");
             return false;
         }
@@ -352,8 +358,14 @@ public class ConexionBase {
             } catch (StringIndexOutOfBoundsException sex) {
                 txt = ex.getMessage().substring(0, 15);
             }
-            if (ex.getMessage().equals("Table 'rastreosatelital.server' doesn't exist")) {
-                log.trace("La tabla \"SERVER\" no esta creada localmente...");
+            if (ex.getMessage().substring(0, 5).equals("Table")) {
+                String[] texto = ex.getMessage().split("'");
+                try {
+                    if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
+                        log.trace("La tabla no esta creada: [" + texto[1] + "]");
+                    }
+                } catch (ArrayIndexOutOfBoundsException aiob) {
+                }
                 return false;
             } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
                 System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
@@ -605,7 +617,7 @@ public class ConexionBase {
         boolean inicial = true;
         int cod = 0;
         while (r.next()) {
-            cod = rs.getInt("CODIGO");
+            cod = r.getInt("CODIGO");
             /**
              * hace una sola vez la comprobacion si hay cero al inicio de la
              * lista true es que si tiene un 0
@@ -897,6 +909,7 @@ public class ConexionBase {
                 aux[2] = res.getString("ID_EMPRESA");
                 aux[3] = res.getString("ID_CON");
                 aux[4] = res.getString("CONDUCTOR_AUX");
+                aux[5] = res.getString("REG_MUNICIPAL");
                 aux[6] = res.getString("MODELO");
                 aux[7] = res.getString("ANIO");
                 aux[8] = res.getString("PROPIETARIO");
@@ -905,7 +918,6 @@ public class ConexionBase {
                 aux[11] = res.getString("MARCA");
                 aux[12] = res.getString("NUM_MOTOR");
                 aux[13] = res.getString("NUM_CHASIS");
-                aux[5] = res.getString("REG_MUNICIPAL");
                 rta.add(aux);
             }
         } catch (SQLException ex) {
@@ -1761,7 +1773,7 @@ public class ConexionBase {
             return nomEstadoUnidad;
         } catch (SQLException ex) {
             log.trace("SQL:{}", sql, ex);
-        } 
+        }
         return null;
     }
 
