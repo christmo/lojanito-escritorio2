@@ -590,9 +590,9 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                 + mar + "','"
                 + nummo + "','"
                 + numcha + "','"
-                + this.id_usuario + "',"
+                + this.id_usuario + "','"
                 + reg_municipal
-                + ")";
+                + "')";
 
         if (!bd.ejecutarSentencia(sql)) {
             ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));

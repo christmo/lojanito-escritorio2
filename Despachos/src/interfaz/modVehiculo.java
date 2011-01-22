@@ -730,7 +730,7 @@ public class modVehiculo extends javax.swing.JDialog {
                 String[] fil = new String[3];
                 fil[0] = con[0];
                 fil[1] = con[1];
-                fil[2] = con[2];
+                fil[2] = con[8];
                 model.addRow(fil);
             }
         }
