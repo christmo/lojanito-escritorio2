@@ -419,7 +419,7 @@ public class ConexionBase {
             int intNumero = Integer.parseInt(rs.getString(1));
             return intNumero;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.trace("ResultSet closed - getNumeroCarerasPorVehiculo");
         }
         return 0;
     }
@@ -553,10 +553,13 @@ public class ConexionBase {
     public String getCodigoEtiquetaEstadoUnidad(String nombre) {
         try {
             String sql = "SELECT ID_CODIGO FROM CODESTTAXI WHERE ETIQUETA = '" + nombre + "'";
+            System.out.println("SQL:"+sql);
             rs = ejecutarConsultaUnDato(sql);
-            return rs.getString("ID_CODIGO");
+            String codEstado = rs.getString("ID_CODIGO");
+            System.out.println("R:"+codEstado);
+            return codEstado;
         } catch (SQLException ex) {
-        }
+        } 
         return null;
     }
 
@@ -1753,11 +1756,16 @@ public class ConexionBase {
         String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO='" + codigo + "'";
         rs = ejecutarConsultaUnDato(sql);
         try {
-            return rs.getString("ETIQUETA");
+            String nomEstadoUnidad = rs.getString("ETIQUETA");
+            System.out.println("RNSU:"+nomEstadoUnidad);
+            return nomEstadoUnidad;
         } catch (SQLException ex) {
             log.trace("SQL:{}", sql, ex);
+        } catch (NullPointerException ex) {
+            System.out.println("Null RS");
+            //return "";
         }
-        return "";
+        return null;
     }
 
     /**
