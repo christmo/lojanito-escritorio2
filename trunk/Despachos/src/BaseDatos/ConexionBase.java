@@ -300,6 +300,9 @@ public class ConexionBase {
                 log.trace("", ex);
                 return false;
             }
+        }catch(NullPointerException ex){
+            System.out.println("NULL en [304][ejecutarSentencia] ");
+            return false;
         }
     }
 
@@ -340,6 +343,9 @@ public class ConexionBase {
                     System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
                     log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], Principal.sesion[1], ex);
                     return false;
+                } else if (txt.substring(0, 46).equals("Unable to connect to foreign data source: Host")) {
+                    log.trace("No se puede conectar desde un sitio externo, con una IP no registrada: {}", ex.getMessage().split("'")[1]);
+                    return false;
                 } else {
                     txt = ex.getMessage().substring(0, 15);
                 }
@@ -360,9 +366,6 @@ public class ConexionBase {
             } else if (txt.equals("Duplicate entry")) {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
                 log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
-                return false;
-            } else if (ex.getMessage().substring(0, 46).equals("Unable to connect to foreign data source: Host")) {
-                log.trace("No se puede conectar desde un sitio externo, con una IP no registrada: {}", ex.getMessage().split("'")[1]);
                 return false;
             } else {
                 log.trace("", ex);
@@ -553,13 +556,11 @@ public class ConexionBase {
     public String getCodigoEtiquetaEstadoUnidad(String nombre) {
         try {
             String sql = "SELECT ID_CODIGO FROM CODESTTAXI WHERE ETIQUETA = '" + nombre + "'";
-            System.out.println("SQL:"+sql);
-            rs = ejecutarConsultaUnDato(sql);
+            rs = ejecutarConsultaUnDatoStatement2(sql);
             String codEstado = rs.getString("ID_CODIGO");
-            System.out.println("R:"+codEstado);
             return codEstado;
         } catch (SQLException ex) {
-        } 
+        }
         return null;
     }
 
@@ -1754,17 +1755,13 @@ public class ConexionBase {
      */
     public String getNombreEstadoUnidad(String codigo) {
         String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO='" + codigo + "'";
-        rs = ejecutarConsultaUnDato(sql);
+        rs = ejecutarConsultaUnDatoStatement2(sql);
         try {
             String nomEstadoUnidad = rs.getString("ETIQUETA");
-            System.out.println("RNSU:"+nomEstadoUnidad);
             return nomEstadoUnidad;
         } catch (SQLException ex) {
             log.trace("SQL:{}", sql, ex);
-        } catch (NullPointerException ex) {
-            System.out.println("Null RS");
-            //return "";
-        }
+        } 
         return null;
     }
 

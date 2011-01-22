@@ -1853,7 +1853,6 @@ public final class Principal extends javax.swing.JFrame {
     private void cambiarEstadoTaxi(String etq, ArrayList<String> codVh) {
         int et = etiq.indexOf(etq);
         String codig = codigo.get(et);
-        System.out.println("Estado: " + codig);
 
         for (String i : codVh) {
             /*
@@ -1921,7 +1920,7 @@ public final class Principal extends javax.swing.JFrame {
 
         try {
             String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
-            rs = bd.ejecutarConsulta(sql);
+            rs = bd.ejecutarConsultaStatement2(sql);
             while (rs.next()) {
                 try {
                     unidadCodigoBD.put(rs.getString(1), rs.getString(2));
@@ -2208,9 +2207,9 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
                     if (estado != null) {
-                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
                     } else {
-                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad no está Activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
                     }
                     jtPorDespachar.setValueAt("", intFila, intCol);
                 }
