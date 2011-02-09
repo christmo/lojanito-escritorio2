@@ -14,6 +14,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import login.LoginGUI;
 
 /**
  * @author christmo
@@ -111,6 +112,12 @@ public class modUsuarios extends javax.swing.JDialog {
             }
         });
 
+        jpClave.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jpClaveFocusGained(evt);
+            }
+        });
+
         jLabel8.setText("Turnos:");
 
         jcTurnos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar Turno" }));
@@ -199,7 +206,7 @@ public class modUsuarios extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jcOperador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista de Usuarios"));
@@ -222,7 +229,7 @@ public class modUsuarios extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -279,7 +286,7 @@ public class modUsuarios extends javax.swing.JDialog {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jbAceptar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                         .addComponent(jbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,7 +370,7 @@ public class modUsuarios extends javax.swing.JDialog {
                                         boolean r = bd.insertarUsuario(
                                                 Principal.sesion[1],
                                                 user,
-                                                pass,
+                                                fun.encriptar(pass, LoginGUI.semillaPass),
                                                 nombre,
                                                 dir,
                                                 tel,
@@ -382,7 +389,7 @@ public class modUsuarios extends javax.swing.JDialog {
                                         boolean r = bd.actualizarUsuario(
                                                 Principal.sesion[1],
                                                 user,
-                                                pass,
+                                                fun.encriptar(pass, LoginGUI.semillaPass),
                                                 nombre,
                                                 dir,
                                                 tel,
@@ -470,6 +477,10 @@ public class modUsuarios extends javax.swing.JDialog {
     private void jtUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtUsuarioFocusLost
         jtUsuario.setText(jtUsuario.getText().toUpperCase());
     }//GEN-LAST:event_jtUsuarioFocusLost
+
+    private void jpClaveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jpClaveFocusGained
+        jpClave.setText("");
+    }//GEN-LAST:event_jpClaveFocusGained
 
     private void CargarDatosUsuario(String usuario) {
         try {

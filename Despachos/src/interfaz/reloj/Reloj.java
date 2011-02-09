@@ -118,20 +118,27 @@ public class Reloj {
             long horaPendMenosRecuerdo;
             long horaLanzamiento;
             Pendientes p;
-            if (Principal.listaPendientesFecha.size() > 1) {
+            System.out.println("->" + Principal.listaPendientesFecha.size());
+
+            if (Principal.listaPendientesFecha.size() > 0) {
                 for (int i = 0; i < Principal.listaPendientesFecha.size(); i++) {
                     p = Principal.listaPendientesFecha.get(i);
                     horaPendMenosRecuerdo = convertirHora(p.getHora()).getTime() - (p.getMinRecuerdo() * 60 * 1000);
+                    System.out.println("Rocordatorio Pendiente: " + horaPendMenosRecuerdo + "==" + hora);
                     if (horaPendMenosRecuerdo == hora) {
+                        System.out.println("Lanzar Recordatorio...");
                         Principal.lanzarMensajePendiente(Principal.listaPendientesFecha.get(i));
                     }
                     horaLanzamiento = convertirHora(p.getHora()).getTime();
+                    System.out.println("Pendiente: " + horaLanzamiento + "==" + hora);
                     if (horaLanzamiento == hora) {
+                        System.out.println("Lanzar Pendiente...");
                         Principal.lanzarPendiente(Principal.listaPendientesFecha.get(i));
                         Principal.listaPendientesFecha.remove(i);
                     }
                 }
             }
+
         }
     }
 }

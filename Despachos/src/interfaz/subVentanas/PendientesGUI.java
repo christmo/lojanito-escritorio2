@@ -84,39 +84,47 @@ public class PendientesGUI extends javax.swing.JFrame {
      */
     private void cargarPendientes() {
         limpiarTablaPendientes();
-        try {
-            listaPendientes = bd.obtenerPendientesGuardados();
-            dtm = (DefaultTableModel) jtPendientes.getModel();
+//        try {
+        listaPendientes = bd.obtenerPendientesGuardados();
+        dtm = (DefaultTableModel) jtPendientes.getModel();
 
-            DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-            tcr.setHorizontalAlignment(SwingConstants.CENTER);
-            //tcr.setForeground(Color.red);
-            for (int i = 0; i < 5; i++) {
-                jtPendientes.getColumnModel().getColumn(i).setCellRenderer(tcr);
-            }
-
-            DefaultTableCellRenderer tcr2 = new DefaultTableCellRenderer();
-            tcr2.setHorizontalAlignment(SwingConstants.LEFT);
-            jtPendientes.getColumnModel().getColumn(5).setCellRenderer(tcr2);
-            jtPendientes.getColumnModel().getColumn(6).setCellRenderer(tcr2);
-
-            for (int i = listaPendientes.size() - 1; i >= 0; i--) {
-                String[] datos = {
-                    listaPendientes.get(i).getCliente().getCodigo(),
-                    listaPendientes.get(i).getFechaIni(),
-                    listaPendientes.get(i).getFechaFin(),
-                    listaPendientes.get(i).getHora(),
-                    "" + listaPendientes.get(i).getMinRecuerdo(),
-                    listaPendientes.get(i).getCuandoRecordar(),
-                    listaPendientes.get(i).getNota()
-                };
-                dtm.insertRow(0, datos);
-            }
-
-            Principal.listaPendientesFecha = bd.obtenerPendientesGuardadosPorFecha(funcionesUtilidad.fechaActual());
-
-        } catch (NullPointerException nex) {
+        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        //tcr.setForeground(Color.red);
+        for (int i = 0; i < 5; i++) {
+            jtPendientes.getColumnModel().getColumn(i).setCellRenderer(tcr);
         }
+
+        DefaultTableCellRenderer tcr2 = new DefaultTableCellRenderer();
+        tcr2.setHorizontalAlignment(SwingConstants.LEFT);
+        jtPendientes.getColumnModel().getColumn(5).setCellRenderer(tcr2);
+        jtPendientes.getColumnModel().getColumn(6).setCellRenderer(tcr2);
+
+        String codigo = "";
+
+        for (int i = listaPendientes.size() - 1; i >= 0; i--) {
+
+            try {
+                codigo = listaPendientes.get(i).getCliente().getCodigo();
+            } catch (NullPointerException ex) {
+                codigo = "0";
+            }
+
+            String[] datos = {
+                codigo,
+                listaPendientes.get(i).getFechaIni(),
+                listaPendientes.get(i).getFechaFin(),
+                listaPendientes.get(i).getHora(),
+                "" + listaPendientes.get(i).getMinRecuerdo(),
+                listaPendientes.get(i).getCuandoRecordar(),
+                listaPendientes.get(i).getNota()
+            };
+            dtm.insertRow(0, datos);
+        }
+//        } catch (NullPointerException nex) {
+//        }
+        Principal.listaPendientesFecha = bd.obtenerPendientesGuardadosPorFecha(funcionesUtilidad.fechaActual());
+        System.err.println("Recargar pendientes");
     }
 
     /**
@@ -209,6 +217,7 @@ public class PendientesGUI extends javax.swing.JFrame {
         jtNota.setLineWrap(true);
         jtNota.setRows(2);
         jtNota.setTabSize(0);
+        jtNota.setText("PENDIENTE:\t ");
         jtNota.setMargin(new java.awt.Insets(3, 3, 3, 3));
         jtNota.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -294,6 +303,7 @@ public class PendientesGUI extends javax.swing.JFrame {
         jLabel9.setText("Recordar:");
 
         jtMinRecordar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtMinRecordar.setText("1");
         jtMinRecordar.setToolTipText("Tiempo en minutos antes para que muestre un mensaje de recordatorio...");
         jtMinRecordar.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -507,29 +517,34 @@ public class PendientesGUI extends javax.swing.JFrame {
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         if (!jtNombre.getText().equals("")) {
-            Pendientes pendiente = new Pendientes();
-            pendiente.setCliente(cliente);
-            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-            pendiente.setFechaIni(formato.format(fecha_ini.getDate()));
-            pendiente.setFechaFin(formato.format(fecha_fin.getDate()));
-            SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
-            pendiente.setHora(formatoHora.format(((Date) hora.getValue())));
-            pendiente.setCuandoRecordar(jcRecordarTiempo.getSelectedItem().toString());
-            pendiente.setEstado("AC");
-            try {
-                pendiente.setMinRecuerdo(Integer.parseInt(jtMinRecordar.getText()));
-            } catch (NumberFormatException ex) {
-                pendiente.setMinRecuerdo(0);
+            if (!jtCodigo.getText().equals("0")) {
+                Pendientes pendiente = new Pendientes();
+                pendiente.setCliente(cliente);
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                pendiente.setFechaIni(formato.format(fecha_ini.getDate()));
+                pendiente.setFechaFin(formato.format(fecha_fin.getDate()));
+                SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+                pendiente.setHora(formatoHora.format(((Date) hora.getValue())));
+                pendiente.setCuandoRecordar(jcRecordarTiempo.getSelectedItem().toString());
+                pendiente.setEstado("AC");
+                try {
+                    pendiente.setMinRecuerdo(Integer.parseInt(jtMinRecordar.getText()));
+                } catch (NumberFormatException ex) {
+                    pendiente.setMinRecuerdo(0);
+                }
+                pendiente.setNota(jtNota.getText());
+                if (!bd.guardarPendientes(pendiente)) {
+                    ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
+                    JOptionPane.showMessageDialog(this,
+                            "No se pudo guardar la pendiente, revisar si ya está ingresada...",
+                            "Error...", JOptionPane.ERROR_MESSAGE, ic);
+                }
+                cargarPendientes();
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se puede poner un despacho pendiente a un cliente que tiene codigo cero (0)...", "Error...", 0);
+                limpiarCampos();
             }
-            pendiente.setNota(jtNota.getText());
-            if (!bd.guardarPendientes(pendiente)) {
-                ic = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo guardar la pendiente, revisar si ya está ingresada...",
-                        "Error...", JOptionPane.ERROR_MESSAGE, ic);
-            }
-            cargarPendientes();
-            limpiarCampos();
         }
     }//GEN-LAST:event_jbGuardarActionPerformed
 
@@ -609,8 +624,8 @@ public class PendientesGUI extends javax.swing.JFrame {
         jtCodigo.setText("");
         jtNombre.setText("");
         jtTelefono.setText("");
-        jtNota.setText("");
-        jtMinRecordar.setText("");
+        jtNota.setText("PENDIENTE: ");
+        jtMinRecordar.setText("1");
         inicializarCamposTiempo();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

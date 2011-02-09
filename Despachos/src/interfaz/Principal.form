@@ -36,7 +36,7 @@
                       <Component id="jlIndicadorLlamada" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jpPendiente" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="20" max="32767" attributes="0"/>
+                      <EmptySpace pref="35" max="32767" attributes="0"/>
                       <Component id="lblReloj" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -55,7 +55,9 @@
                       <Component id="jbBuscarClienteNombre" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbPendientes" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="358" max="32767" attributes="0"/>
+                      <EmptySpace pref="276" max="32767" attributes="0"/>
+                      <Component id="lblAlarmaPendiente" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                       <Component id="lblSenal" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jlSenalInternet" min="-2" max="-2" attributes="0"/>
@@ -102,11 +104,14 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="lblSenal" max="32767" attributes="1"/>
                   <Component id="jlSenalInternet" max="32767" attributes="1"/>
-                  <Component id="jbBuscarClienteNombre" alignment="0" pref="50" max="32767" attributes="1"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="jbBuscarClienteNombre" alignment="3" pref="50" max="32767" attributes="1"/>
+                      <Component id="jbPendientes" alignment="3" min="-2" pref="49" max="-2" attributes="1"/>
+                  </Group>
                   <Component id="jbMenu" alignment="0" pref="50" max="32767" attributes="1"/>
                   <Component id="jbSalir" alignment="0" pref="50" max="32767" attributes="1"/>
                   <Component id="lblFecha" alignment="0" max="32767" attributes="1"/>
-                  <Component id="jbPendientes" alignment="0" max="32767" attributes="1"/>
+                  <Component id="lblAlarmaPendiente" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -780,16 +785,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="lblRecordar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="lblCliente" alignment="0" min="-2" pref="164" max="-2" attributes="0"/>
+                      <Component id="lblCliente" alignment="0" pref="201" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="25" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -803,6 +808,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblCliente" min="-2" pref="21" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -843,5 +849,15 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JLabel" name="lblAlarmaPendiente">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/interfaz/iconos/alarma.png"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
+    </Component>
   </SubComponents>
 </Form>

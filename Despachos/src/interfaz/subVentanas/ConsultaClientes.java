@@ -214,7 +214,7 @@ public class ConsultaClientes extends javax.swing.JDialog {
             int fila = jtBusqueda.getRowCount() - (jtBusqueda.getSelectedRow() + 1);
             Clientes c = listaClientes.get(fila);
             if (!pendientes) {
-                Principal.ingresarClientePorDespachar(c,"");
+                Principal.ingresarClientePorDespachar(c, "");
             } else {
                 PendientesGUI.setCliente(c);
             }
@@ -258,7 +258,10 @@ public class ConsultaClientes extends javax.swing.JDialog {
      * Limpia las filas de la tabla
      */
     private void limpiarTablaBusqueda() {
-        listaClientes.clear();
+        try {
+            listaClientes.clear();
+        } catch (NullPointerException ex) {
+        }
         dtm = (DefaultTableModel) jtBusqueda.getModel();
         int n_filas = jtBusqueda.getRowCount();
         for (int i = 0; i < n_filas; i++) {
