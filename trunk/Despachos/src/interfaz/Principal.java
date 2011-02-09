@@ -27,13 +27,13 @@ import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
 import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
+import interfaz.comunicacion.servidorBD.EnvioMensajesUnidades;
 import interfaz.comunicacion.servidorBD.GuardarServidorKRADAC;
 
 import interfaz.subVentanas.Clientes;
 import interfaz.subVentanas.ConsultaClientes;
 import interfaz.subVentanas.VentanaDatos;
 import interfaz.subVentanas.Despachos;
-import interfaz.subVentanas.MensajePendiente;
 import interfaz.subVentanas.Pendientes;
 import interfaz.subVentanas.PendientesGUI;
 import java.awt.event.ActionListener;
@@ -181,7 +181,7 @@ public final class Principal extends javax.swing.JFrame {
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
 
-        jpPendiente.setVisible(false);
+        ponerAlarmaPendiente(false);
 
         /**
          * Despachar con la tecla F12
@@ -592,6 +592,7 @@ public final class Principal extends javax.swing.JFrame {
         lblRecordar = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
+        lblAlarmaPendiente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -923,7 +924,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(1, 1, 1)
-                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(3, 3, 3)
@@ -1000,8 +1001,8 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(lblRecordar)
                         .addGap(6, 6, 6)
                         .addComponent(jLabel8))
-                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(lblCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jpPendienteLayout.setVerticalGroup(
             jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1011,8 +1012,11 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(lblRecordar, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13))
         );
+
+        lblAlarmaPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/alarma.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1021,15 +1025,15 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlIndicadorLlamada)
                         .addGap(18, 18, 18)
                         .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                         .addComponent(lblReloj)
                         .addGap(41, 41, 41)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1037,7 +1041,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbSalir)
                         .addGap(18, 18, 18)
@@ -1046,7 +1050,9 @@ public final class Principal extends javax.swing.JFrame {
                         .addComponent(jbBuscarClienteNombre)
                         .addGap(18, 18, 18)
                         .addComponent(jbPendientes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 366, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
+                        .addComponent(lblAlarmaPendiente)
+                        .addGap(34, 34, 34)
                         .addComponent(lblSenal)
                         .addGap(18, 18, 18)
                         .addComponent(jlSenalInternet)
@@ -1078,17 +1084,19 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(jbPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(lblAlarmaPendiente, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -1132,6 +1140,7 @@ public final class Principal extends javax.swing.JFrame {
             } else {
                 log.error("{}", sesion[1], ex);
             }
+        } catch (NullPointerException ex) {
         }
     }
 
@@ -1308,18 +1317,22 @@ public final class Principal extends javax.swing.JFrame {
                 /**
                  * Inserta el despacho en la tabla de despachados
                  */
-                boolean r = setDatosTablaDespachados(despacho, jtDespachados);
+                boolean despachar = setDatosTablaDespachados(despacho, jtDespachados);
                 GuardarClienteSinCodigo(despacho);
-                if (r) {
+                if (despachar) {
+                    String estadoOcupado = bd.getNombreEstadoUnidad("OCU");
+                    AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), estadoOcupado);
+                    setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
+
                     /**
                      * Envia los datos al servidor de Kradac, cuando el despacho
                      * se realizo correctamente
                      **********************************************/
                     InsertarAsignacionDespachoServidorKradac();
                     /**********************************************/
-                    String estadoOcupado = bd.getNombreEstadoUnidad("OCU");
-                    AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), estadoOcupado);
-                    setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
+                    /**
+                     * Remover la fila de la tabla de clientes por despachar
+                     */
                     DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
                     model.removeRow(intFila);
 
@@ -1346,11 +1359,17 @@ public final class Principal extends javax.swing.JFrame {
         }
 
         int intFila = jtPorDespachar.getSelectedRow();
-//        try {
-            String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
 
-//            try {
+        String cod_cli = null;
+        String unidad = null;
+        try {
+            try {
+                cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+            } catch (NullPointerException ex) {
+                cod_cli = "";
+            }
+            unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+            try {
                 String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
                 if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
                     /**
@@ -1364,13 +1383,13 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                 }
-//            } catch (NullPointerException ex) {
-//                JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada para\nrecoger el pasajero...", "Error...", 0);
-//            }
-//        } catch (NullPointerException ex) {
-//            JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
-//        } catch (ArrayIndexOutOfBoundsException aiobe) {
-//        }
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+            }
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
+        } catch (ArrayIndexOutOfBoundsException aiobe) {
+        }
     }
 
     /**
@@ -1855,15 +1874,16 @@ public final class Principal extends javax.swing.JFrame {
         String codig = codigo.get(et);
 
         for (String i : codVh) {
+            String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
+            bd.ejecutarSentenciaStatement2(sql);
             /*
              * Si es AC significa que va activar esa unidad por tal motivo hay que
-             * remover todo el despacho del temporal
+             * remover todo el despacho del temporal y guardar la liberacion en el
+             * servidor KRADAC
              */
             if (bd.getCodigoEtiquetaEstadoUnidad(etq).equals("AC")) {
                 RemoverDespachoDeTemporal(i);
             }
-            String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
-            bd.ejecutarSentencia(sql);
         }
         pintarEstadoTaxi(strEncabezados);
     }
@@ -1878,17 +1898,17 @@ public final class Principal extends javax.swing.JFrame {
     private static void colorCodigosBD() {
         try {
             String sql = "SELECT ID_CODIGO,COLOR,ETIQUETA  FROM CODESTTAXI";
-            rs = bd.ejecutarConsultaUnDato(sql);
+            ResultSet rsColor = bd.ejecutarConsultaUnDato(sql);
 
             codigo.clear();
             color.clear();
             etiq.clear();
             do {
-                codigo.add(rs.getString(1));
-                color.add(rs.getString(2));
-                etiq.add(rs.getString(3));
-                etiqColor.put(rs.getString(3), rs.getString(2));
-            } while (rs.next());
+                codigo.add(rsColor.getString(1));
+                color.add(rsColor.getString(2));
+                etiq.add(rsColor.getString(3));
+                etiqColor.put(rsColor.getString(3), rsColor.getString(2));
+            } while (rsColor.next());
 
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
@@ -2113,12 +2133,9 @@ public final class Principal extends javax.swing.JFrame {
             mensaje = "" + nombreCliente + "%" + barrioCliente + " | " + dirCliente;
         }
         System.err.println("Mensaje: " + mensaje);
-        /*
-         * TODO: Enviar los mensajes al taximetro revisar porque se demora cuando no
-         * hay conexión con els ervidor si esta con un hilo
-         */
-        //EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
-        //enviarMensajeUnidad.start();
+
+        EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
+        enviarMensajeUnidad.start();
     }
 
     /**
@@ -2680,6 +2697,7 @@ public final class Principal extends javax.swing.JFrame {
     private static javax.swing.JTable jtPorDespachar;
     private javax.swing.JTextField jtTelefono;
     private static javax.swing.JTable jtVehiculos;
+    public static javax.swing.JLabel lblAlarmaPendiente;
     private static javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblFecha;
     private static javax.swing.JLabel lblRecordar;
@@ -2824,7 +2842,11 @@ public final class Principal extends javax.swing.JFrame {
     public static void ingresarClientePorDespachar(Clientes cliente, String nota) {
         Despachos despacharClienteNombre = new Despachos();
         despacharClienteNombre.setStrHora(funciones.getHora());
-        despacharClienteNombre.setIntCodigo(Integer.parseInt(cliente.getCodigo()));
+        try {
+            despacharClienteNombre.setIntCodigo(Integer.parseInt(cliente.getCodigo()));
+        } catch (NullPointerException ex) {
+            despacharClienteNombre.setIntCodigo(0);
+        }
         despacharClienteNombre.setStrTelefono(cliente.getTelefono());
         despacharClienteNombre.setStrNombre(cliente.getNombre());
         despacharClienteNombre.setStrDireccion(cliente.getDireccion());
@@ -2938,33 +2960,44 @@ public final class Principal extends javax.swing.JFrame {
 
     /**
      * Muestra el mensaje de aviso que se tiene que despachar un cliente
-     * @param p
+     * @param Pendientes
      */
     public static void lanzarMensajePendiente(Pendientes p) {
-//        JOptionPane.showMessageDialog(null,
-//                "En " + p.getMinRecuerdo() + " munutos se debe despachar la carrera\n"
-//                + "pendiente de: " + p.getCliente().getNombre(),
-//                "Información...", 1);
-
-        //gui.mensajePendiente(p);
+        ponerAlarmaPendiente(true);
+        System.out.println("Lanzar mensaje Pendiente");
         lblRecordar.setText("" + p.getMinRecuerdo());
-        lblCliente.setText(p.getCliente().getNombre());
-        jpPendiente.setVisible(true);
-    }
+        String cod = "";
+        try {
+            cod = p.getCliente().getCodigo();
+        } catch (NullPointerException ex) {
+            cod = "0";
+        }
 
-    private void mensajePendiente(Pendientes p) {
-        MensajePendiente m = new MensajePendiente(p);
-        m.setVisible(true);
-        m.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        m.setResizable(false);
+        String nombre = "";
+        try {
+            nombre = p.getCliente().getNombre();
+        } catch (NullPointerException ex) {
+            nombre = "";
+        }
+        lblCliente.setText(cod + " - " + nombre + " - " + p.getHora());
     }
 
     /**
      * Ingresa en la tabla de clientes por despachar el cliente pendiente
-     * @param p
+     * @param Pendientes
      */
     public static void lanzarPendiente(Pendientes p) {
-        jpPendiente.setVisible(false);
+        ponerAlarmaPendiente(false);
         ingresarClientePorDespachar(p.getCliente(), p.getNota());
+    }
+
+    /**
+     * Pone el icono de alarma cuando hay una pendiente y muestra el panel de
+     * los datos del cliente que se va despachar
+     * @param boolean
+     */
+    private static void ponerAlarmaPendiente(boolean op) {
+        lblAlarmaPendiente.setVisible(op);
+        jpPendiente.setVisible(op);
     }
 }

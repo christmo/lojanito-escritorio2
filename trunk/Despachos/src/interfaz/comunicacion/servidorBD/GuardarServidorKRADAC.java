@@ -28,10 +28,10 @@ public class GuardarServidorKRADAC extends Thread {
      * @param d
      * @param accion || true ASIGNACION || false LIBRE
      */
-    public GuardarServidorKRADAC(Despachos d, boolean accion,ConexionBase cb) {
+    public GuardarServidorKRADAC(Despachos d, boolean accion, ConexionBase cb) {
         this.bd = cb;
         this.desp = d;
-        this.accion = accion;
+        this.accion = accion;//true ASIGNACION || false LIBRE
         log.debug("Enpezar a Guardar al servidor Kradac...");
     }
 
@@ -50,7 +50,9 @@ public class GuardarServidorKRADAC extends Thread {
      */
     public void InsertarAsignacionServidorKRADAC() {
         String sql;
-        if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
+        if (desp.getStrTelefono() == null
+                || desp.getStrTelefono().equals("null")
+                || desp.getStrTelefono().equals("")) {
             sql = "INSERT INTO server("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
@@ -133,7 +135,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Asignacion, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
+            //cb.CerrarConexion();
         } else {
             log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
         }
@@ -153,7 +155,9 @@ public class GuardarServidorKRADAC extends Thread {
      */
     public void InsertarDespachoServidorKRADAC() {
         String sql;
-        if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
+        if (desp.getStrTelefono() == null
+                || desp.getStrTelefono().equals("null")
+                || desp.getStrTelefono().equals("")) {
             sql = "INSERT INTO server("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
@@ -239,7 +243,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Despacho, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
+            //cb.CerrarConexion();
         } else {
             log.trace("Exito Despacho guardada server KRADAC: {}", sql);
         }
@@ -251,7 +255,9 @@ public class GuardarServidorKRADAC extends Thread {
      */
     public void InsertarLibreServidorKRADAC() {
         String sql;
-        if (desp.getStrTelefono() == null || desp.getStrTelefono().equals("null")) {
+        if (desp.getStrTelefono() == null
+                || desp.getStrTelefono().equals("null")
+                || desp.getStrTelefono().equals("")) {
             sql = "INSERT INTO server("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
@@ -336,7 +342,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Liberacion, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
+            //cb.CerrarConexion();
         } else {
             log.trace("Exito Liberacion guardada server KRADAC: {}", sql);
         }

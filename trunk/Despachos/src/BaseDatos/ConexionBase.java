@@ -89,6 +89,24 @@ public class ConexionBase {
         }
     }
 
+    private void reconectarBD() {
+        CerrarConexion();
+        log.info("Iniciar Reconexión a la base de datos...");
+        try {
+            conexion = DriverManager.getConnection(url, usr, pass);
+        } catch (SQLException ex) {
+            if (ex.getMessage().equals("Communications link failure")) {
+                log.trace("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
+            }
+        }
+        try {
+            st = (Statement) conexion.createStatement();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        log.info("Reconexión Base de Datos OK");
+    }
+
     /**
      * Crea una conexion a cualquier base de datos mysql, con parametros
      * de conexion indepenientes
@@ -159,21 +177,25 @@ public class ConexionBase {
     public ResultSet ejecutarConsultaStatement2(String sql) {
         //System.out.println("Consultar: " + sql);
         ResultSet r = null;
+        Statement st2 = null;
         try {
-            Statement st2 = (Statement) conexion.createStatement();
+            st2 = (Statement) conexion.createStatement();
             r = st2.executeQuery(sql);
             log.trace(sql);
-
         } catch (SQLException ex) {
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado...");
             } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
                 log.trace("Statement cerrado...");
+            } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
+                log.trace("Se desconectó el cable de RED del equipo...");
+                reconectarBD();
+                r = ejecutarConsultaStatement2(sql);
             } else {
-                log.trace("Error al consultar", ex);
+                log.trace("Error al consultar [ejecutarConsultaStatement2]", ex);
             }
         } catch (NullPointerException ex) {
-            log.trace("Null es statement");
+            log.trace("Null ese statement");
         }
         return r;
     }
@@ -192,7 +214,9 @@ public class ConexionBase {
             rs.next();
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado");
+                log.trace("Statement cerrado [Reconectar]");
+                reconectarBD();
+                return ejecutarConsultaUnDato(sql);
             }
         }
         return rs;
@@ -212,7 +236,9 @@ public class ConexionBase {
             rs.next();
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado");
+                log.trace("Statement cerrado [Reconectar]");
+                reconectarBD();
+                return ejecutarConsultaUnDatoNoImprimir(sql);
             }
         }
         return rs;
@@ -263,12 +289,12 @@ public class ConexionBase {
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...", ex);
+                    log.trace("MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...");
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.error("[Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
+                    log.error("[Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1]);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
@@ -302,12 +328,15 @@ public class ConexionBase {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
                 log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
                 return false;
+            } else if (ex.getMessage().substring(0, 27).endsWith("Communications link failure")) {
+                log.trace("Falla en la comunicación con la base de datos..");
+                return false;
             } else {
                 log.trace("", ex);
                 return false;
             }
         } catch (NullPointerException ex) {
-            System.out.println("NULL en [304][ejecutarSentencia] ");
+            System.out.println("NULL en [339][ejecutarSentencia] ");
             return false;
         }
     }
@@ -324,6 +353,7 @@ public class ConexionBase {
             log.info("Ejecutar: {}", sql);
 
             int rta = st1.executeUpdate(sql);
+
             if (rta >= 0) {
                 return true;
             } else {
@@ -379,6 +409,10 @@ public class ConexionBase {
                 System.err.println("****************\n*" + "Error de Clave Primaria -> Usuario ya ingresado..." + "...\n****************");
                 log.trace("Error de Clave Primaria -> Usuario ya ingresado...");
                 return false;
+            } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
+                log.trace("Se desconectó el cable de RED del equipo...");
+                reconectarBD();
+                return ejecutarSentenciaStatement2(sql);
             } else {
                 log.trace("", ex);
                 return false;
@@ -397,7 +431,15 @@ public class ConexionBase {
 
             return rsAux;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            String msg = ex.getMessage().substring(0, 113);
+            System.out.println(msg.length() + " - " + msg);
+            if (msg.equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
+                log.trace("Se desconectó el cable de RED del equipo...");
+                reconectarBD();
+                return ejecutarConsultaUnDatoStatement2(sql);
+            } else {
+                log.trace("", ex);
+            }
         }
         return null;
     }
@@ -457,6 +499,9 @@ public class ConexionBase {
             conexion.close();
         } catch (SQLException ex) {
             log.trace("", ex);
+        } catch (NullPointerException ex) {
+            log.error("NO está levantada la base de datos... [{}]",Principal.sesion[1],ex);
+            System.exit(0);
         }
         conexion = null;
         return conexion;
@@ -572,6 +617,8 @@ public class ConexionBase {
             String codEstado = rs.getString("ID_CODIGO");
             return codEstado;
         } catch (SQLException ex) {
+        } catch (NullPointerException ex) {
+            return "NO HAY CODIGO...";
         }
         return null;
     }
@@ -1267,7 +1314,7 @@ public class ConexionBase {
                     + "WHERE NOMBRE_APELLIDO_CLI LIKE '" + nombre + "%'";
 
 
-            rs = ejecutarConsulta(sql);
+            rs = ejecutarConsultaStatement2(sql);
 
             while (rs.next()) {
                 Clientes c = new Clientes();
@@ -1800,7 +1847,7 @@ public class ConexionBase {
      */
     public ResultSet getFilasRespaldoLocalAsignaciones() {
         String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION FROM RESPALDO_ASIGNACION_SERVER";
-        return rs = ejecutarConsultaUnDatoNoImprimir(sql);
+        return rs = ejecutarConsulta(sql);
     }
 
     /**
@@ -1942,15 +1989,20 @@ public class ConexionBase {
         return null;
     }
 
+    /**
+     * Obtiene todos los despachos pendientes de una fecha determinada
+     * @param fecha
+     * @return ArrayList<Pendientes>
+     */
     public ArrayList<Pendientes> obtenerPendientesGuardadosPorFecha(String fecha) {
         ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
 
         try {
             String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
                     + "FROM PENDIENTES WHERE ESTADO = 'AC' AND '"
-                    + fecha + "' BETWEEN FECHA_INI AND FECHA_FIN";
-            rs = ejecutarConsulta(sql);
-
+                    + fecha + "' BETWEEN FECHA_INI AND FECHA_FIN AND HORA >= NOW()";
+            rs = ejecutarConsultaStatement2(sql);
+            System.out.println("Entra "+sql);
             while (rs.next()) {
                 Pendientes p = new Pendientes();
                 int cod = rs.getInt("CODIGO");

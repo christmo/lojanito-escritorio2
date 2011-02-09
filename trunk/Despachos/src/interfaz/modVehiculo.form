@@ -407,6 +407,9 @@
     <Component class="javax.swing.JTextField" name="txtNUnidad">
     </Component>
     <Component class="javax.swing.JTextField" name="txtPropietario">
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtPropietarioFocusLost"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
       <AuxValues>

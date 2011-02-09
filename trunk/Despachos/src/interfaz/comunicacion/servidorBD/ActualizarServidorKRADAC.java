@@ -42,7 +42,7 @@ public class ActualizarServidorKRADAC extends Thread {
     private void ActualizarServidorConConexion() {
         if (ConexionServidorKRADAC()) {
             if (intFilasRespaldadas > 0) {
-                log.debug("Empezar Actualizacion al servidor de Kradac filas a insertar:{}", intFilasRespaldadas);
+                log.trace("Empezar Actualización al servidor de Kradac filas a insertar: {}", intFilasRespaldadas);
                 try {
                     InsertarFilasRespaldadasLocalesEnServidorKRADAC();
                 } catch (NullPointerException ex) {
@@ -79,9 +79,9 @@ public class ActualizarServidorKRADAC extends Thread {
                      * en el servidor de KRADAC
                      */
                     BorrarRespadoLocal(HoraInsert);
-                    log.trace("Insercion en el servidor correcta borrar el respaldo local: {}", HoraInsert);
+                    log.trace("Insercion en el servidor CORRECTA borrar el respaldo local: {} -> por actualizar [{}]", HoraInsert, rs.getRow());
                 } else {
-                    log.trace("No se pudo insertar en el servidor KRADAC sigue el respaldo local...");
+                    log.trace("No se pudo insertar en el servidor KRADAC sigue el respaldo local -> por actualizar [{}]", rs.getRow());
                 }
             }
         } catch (SQLException ex) {
@@ -108,6 +108,11 @@ public class ActualizarServidorKRADAC extends Thread {
             String strTelefono,
             String usuario,
             String direccion) {
+
+        if(strTelefono.equals("null")){
+            strTelefono = "";
+        }
+
         String sql = "INSERT INTO server(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION) "
                 + "VALUES ("
                 + intUnidad

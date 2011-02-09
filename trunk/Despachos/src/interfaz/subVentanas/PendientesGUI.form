@@ -214,6 +214,7 @@
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="2"/>
                 <Property name="tabSize" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="PENDIENTE:&#x9; "/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[3, 3, 3, 3]"/>
                 </Property>
@@ -363,6 +364,7 @@
         <Component class="javax.swing.JTextField" name="jtMinRecordar">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="1"/>
             <Property name="toolTipText" type="java.lang.String" value="Tiempo en minutos antes para que muestre un mensaje de recordatorio..."/>
           </Properties>
           <Events>

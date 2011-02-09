@@ -18,11 +18,14 @@ public class MensajePendiente extends javax.swing.JFrame {
 
     /** Creates new form MensajePendiente */
     public MensajePendiente(Pendientes p) {
-        setUndecorated(true);
+        //setUndecorated(true);
         initComponents();
-        lblRecordar.setText("" + p.getMinRecuerdo());
-        lblCliente.setText(p.getCliente().getNombre());
-        lblHora.setText(p.getHora());
+  //      lblRecordar.setText("" + p.getMinRecuerdo());
+//        lblCliente.setText(p.getCliente().getNombre());
+    //    lblHora.setText(p.getHora());
+        this.setVisible(true);
+        this.setResizable(false);
+        this.setAlwaysOnTop(true);
     }
 
     /** This method is called from within the constructor to

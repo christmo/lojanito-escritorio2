@@ -164,6 +164,7 @@
 
     <logger name="interfaz.comunicacion.servidorBD.EnvioMensajesUnidades" level="ALL">
         <appender-ref ref="TRACE_MENSAJES"/>
+        <appender-ref ref="pantalla"/>
     </logger>
 
 </configuration>

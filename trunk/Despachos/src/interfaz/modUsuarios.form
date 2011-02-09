@@ -215,6 +215,9 @@
           </Events>
         </Component>
         <Component class="javax.swing.JPasswordField" name="jpClave">
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jpClaveFocusGained"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>

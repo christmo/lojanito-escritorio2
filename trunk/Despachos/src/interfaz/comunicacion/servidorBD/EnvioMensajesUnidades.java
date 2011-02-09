@@ -46,7 +46,10 @@ public class EnvioMensajesUnidades extends Thread {
         this.unidad = unidad;
         this.mensaje = funciones.procesarMensaje(mensaje);
         this.bd = db;
+    }
 
+    @Override
+    public void run() {
         DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
         try {
             PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
@@ -54,10 +57,6 @@ public class EnvioMensajesUnidades extends Thread {
         } catch (NumberFormatException ex) {
             System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
         }
-    }
-
-    @Override
-    public void run() {
         enviarMensajeUnidad();
     }
 
@@ -80,7 +79,7 @@ public class EnvioMensajesUnidades extends Thread {
 
             String respuesta;
             if ((respuesta = entrada.readLine()) != null) {
-                log.trace("Enviado: {}", respuesta);
+                log.trace("Viende de KRADAC: {}", respuesta);
             } else {
                 log.trace("NO hay respuesta del servidor -> esta abajo el server KRADAC");
             }
@@ -99,7 +98,7 @@ public class EnvioMensajesUnidades extends Thread {
         try {
             try {
                 mensajeSocket = new Socket(DIRECCION, PUERTO);
-                log.trace("Iniciar conexion con el server {}", DIRECCION);
+                log.trace("Iniciar conexion con el server [{}]", DIRECCION);
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
             } catch (IOException ex) {

@@ -600,7 +600,7 @@ public class INICIO extends javax.swing.JFrame {
                 + arcConfig.getProperty("puerto_mapa_local")
                 + "/"
                 + arcConfig.getProperty("url")
-                + "/php/login/login.php";
+                + arcConfig.getProperty("url_home");
         BrowserControl.displayURL(url);
     }//GEN-LAST:event_jbMapaActionPerformed
 

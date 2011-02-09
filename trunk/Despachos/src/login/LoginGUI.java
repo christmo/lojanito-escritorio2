@@ -41,6 +41,7 @@ public class LoginGUI extends javax.swing.JFrame {
     private Properties arcConfig;
     private String url_config = CargarRutaArchivoPropiedades();
     private funcionesUtilidad funciones = new funcionesUtilidad();
+    public static String semillaPass = "KOMPRESORKR@D@C";
 
     /** Creates new form LoginGUI */
     public LoginGUI() {
@@ -250,7 +251,7 @@ public class LoginGUI extends javax.swing.JFrame {
                  * Semilla del password: KOMPRESORKR@D@C
                  * MD5(MD5(MD5(clave)  + MD5(semil)));
                  */
-                strPass = funciones.encriptar(strPass, "KOMPRESORKR@D@C");
+                strPass = funciones.encriptar(strPass, semillaPass);
                 String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO FROM USUARIOS WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
 
                 rs = cb.ejecutarConsultaUnDato(sql);
