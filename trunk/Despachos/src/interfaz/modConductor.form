@@ -293,11 +293,17 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Domicilio del Conductor"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNumCasaFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtTipoSangre">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Tipo de Sangre"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTipoSangreFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnGuardar">
       <Properties>
@@ -315,6 +321,9 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="En caso de ser Casado, sino dejar en blanco"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtConyugeFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
@@ -335,6 +344,9 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Si no posee dejar en blanco"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtemailFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
@@ -362,6 +374,9 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="N&#xfa;mero de Casa"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtDireccionFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCargarImagen">
       <Properties>
@@ -379,11 +394,17 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Nombres y Apellidos del Conductor"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNomApeFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtEstadoCivil">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Estado Civil"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtEstadoCivilFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>

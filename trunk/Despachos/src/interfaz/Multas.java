@@ -58,12 +58,13 @@ public class Multas extends javax.swing.JDialog {
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.setNextFocusableComponent(btnBuscar2);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, 140, 40));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 110, 40));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("INGRESAR MULTAS");
@@ -83,6 +84,8 @@ public class Multas extends javax.swing.JDialog {
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(3);
+        txtDescripcion.setTabSize(0);
+        txtDescripcion.setNextFocusableComponent(txtValor);
         txtDescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtDescripcionFocusLost(evt);
@@ -91,7 +94,17 @@ public class Multas extends javax.swing.JDialog {
         jScrollPane1.setViewportView(txtDescripcion);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 300, 60));
+
+        txtCodMulta.setNextFocusableComponent(txtDescripcion);
+        txtCodMulta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCodMultaFocusLost(evt);
+            }
+        });
         getContentPane().add(txtCodMulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 80, -1));
+
+        txtValor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtValor.setNextFocusableComponent(btnGuardar1);
         getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -109,15 +122,17 @@ public class Multas extends javax.swing.JDialog {
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modificar.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
+        btnModificar.setNextFocusableComponent(btnEliminar1);
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
+        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, -1, -1));
 
         btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
         btnGuardar1.setText("GUARDAR");
+        btnGuardar1.setNextFocusableComponent(btnModificar);
         btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardar1ActionPerformed(evt);
@@ -127,6 +142,7 @@ public class Multas extends javax.swing.JDialog {
 
         btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/rojo.png"))); // NOI18N
         btnEliminar1.setText("ELIMINAR");
+        btnEliminar1.setNextFocusableComponent(btnCancelar);
         btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminar1ActionPerformed(evt);
@@ -135,6 +151,7 @@ public class Multas extends javax.swing.JDialog {
         getContentPane().add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, 40));
 
         cmbCodigoM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
+        cmbCodigoM.setNextFocusableComponent(btnBuscar2);
         cmbCodigoM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCodigoMActionPerformed(evt);
@@ -152,7 +169,7 @@ public class Multas extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtDescripcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescripcionFocusLost
-        //txtInformacion.setText(txtInformacion.getText().toUpperCase());
+        txtDescripcion.setText(txtDescripcion.getText().toUpperCase());
 }//GEN-LAST:event_txtDescripcionFocusLost
 
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
@@ -202,6 +219,7 @@ public class Multas extends javax.swing.JDialog {
                                 "TRANSACCION EXITOSA",
                                 JOptionPane.INFORMATION_MESSAGE);
                         limpiar();
+                        this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(this, "EL REGISTRO NO SE PUDO GUARDAR EN LA BASE DE DATOS",
                                 "ERROR AL GUARDAR REGISTRO",
@@ -249,6 +267,10 @@ public class Multas extends javax.swing.JDialog {
             buscarMulta(txtCodMulta.getText());
         }
 }//GEN-LAST:event_cmbCodigoMActionPerformed
+
+    private void txtCodMultaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodMultaFocusLost
+        txtCodMulta.setText(txtCodMulta.getText().toUpperCase());        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodMultaFocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;

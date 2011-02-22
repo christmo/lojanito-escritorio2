@@ -1912,7 +1912,9 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-                log.trace("ResultSet cerrado...");
+                log.trace("ResultSet rsColor cerrado...");
+                colorCodigosBD();
+                log.trace("Reconsultar colorCodigosBD()");
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
                 log.trace("No se obtuvieron campos para el ResultSet...");
             } else if (ex.getMessage().equals("Illegal operation on empty result set.")) {
@@ -1937,13 +1939,13 @@ public final class Principal extends javax.swing.JFrame {
         //Clave valor
         //[n_unidad]==>[id_codigo]
         Map unidadCodigoBD = new HashMap();
-
+        ResultSet rsPintarEstadoTaxi = null;
         try {
             String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
-            rs = bd.ejecutarConsultaStatement2(sql);
-            while (rs.next()) {
+            rsPintarEstadoTaxi = bd.ejecutarConsultaStatement2(sql);
+            while (rsPintarEstadoTaxi.next()) {
                 try {
-                    unidadCodigoBD.put(rs.getString(1), rs.getString(2));
+                    unidadCodigoBD.put(rsPintarEstadoTaxi.getString(1), rsPintarEstadoTaxi.getString(2));
                 } catch (NullPointerException ex) {
                     //System.err.println("Null al obtener unidad y id_cod...");
                 }
@@ -1952,9 +1954,9 @@ public final class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-                //log.trace("ResultSet cerrado");
+                log.error("ResultSet rsPintarEstadoTaxi cerrado");
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
-                //log.trace("NO hay campos para el resulset");
+                log.error("NO hay campos para el resulset rsPintarEstadoTaxi");
             } else if (ex.getMessage().equals("After end of result set")) {
             } else {
                 log.error("{}", sesion[1], ex);
@@ -2081,20 +2083,23 @@ public final class Principal extends javax.swing.JFrame {
                         jtPorDespachar.getCellEditor().cancelCellEditing();
                     } else {
                         try {
-                            if (CampoUnidadCambio) {
-                                ActivarUnidadBorrada(cod_cli);
-                                ActualizarAsignacion(intFila, intCol, cod_cli);
-                            } else {
-                                ActualizarAsignacion(intFila, intCol, cod_cli);
+                            String nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
+                            String dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+                            if (!nom_cli.equals("") && !dir_cli.equals("")) {
+                                if (CampoUnidadCambio) {
+                                    ActivarUnidadBorrada(cod_cli);
+                                    ActualizarAsignacion(intFila, intCol, cod_cli);
+                                } else {
+                                    ActualizarAsignacion(intFila, intCol, cod_cli);
+                                }
+                                /**
+                                 * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                 */
+                                enviarMensajeUnidadAsignada(intFila, intCol);
                             }
-                            /**
-                             * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
-                             */
-                            enviarMensajeUnidadAsignada(intFila, intCol);
-
-                        } catch (ArrayIndexOutOfBoundsException aex) {
                         } catch (NullPointerException ex) {
-                            JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
+                            //JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
+                            JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
                             jtPorDespachar.setValueAt("", intFila, 6);
                         }
                     }
@@ -2163,9 +2168,12 @@ public final class Principal extends javax.swing.JFrame {
             int intFila = jtPorDespachar.getSelectedRow();
             int i = 0;
             for (Despachos d : listaDespachosTemporales) {
-                actualizar = d.getStrHora().equals(jtPorDespachar.getValueAt(intFila, 0));
-                if (actualizar) {
-                    break;
+                try {
+                    actualizar = d.getStrHora().equals(jtPorDespachar.getValueAt(intFila, 0));
+                    if (actualizar) {
+                        break;
+                    }
+                } catch (NullPointerException ex) {
                 }
                 i++;
             }

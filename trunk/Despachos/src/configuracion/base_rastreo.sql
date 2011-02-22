@@ -23,9 +23,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP DATABASE IF EXISTS rastreosat;
-create database rastreosat;
-use rastreosat;
+DROP DATABASE IF EXISTS rastreosatelital;
+create database rastreosatelital;
+use rastreosatelital;
 
 --
 -- Table structure for table `accesos`
@@ -361,18 +361,6 @@ CREATE TABLE `turnos` (
   `HORA_FIN` time DEFAULT NULL,
   PRIMARY KEY (`ID_TURNO`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ultimo_id`
---
-
-DROP TABLE IF EXISTS `ultimo_id`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ultimo_id` (
-  `ID` varchar(100) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
