@@ -146,8 +146,18 @@ public class modConductor extends javax.swing.JDialog {
         });
 
         txtNumCasa.setToolTipText("Domicilio del Conductor");
+        txtNumCasa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNumCasaFocusLost(evt);
+            }
+        });
 
         txtTipoSangre.setToolTipText("Tipo de Sangre");
+        txtTipoSangre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTipoSangreFocusLost(evt);
+            }
+        });
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -159,6 +169,11 @@ public class modConductor extends javax.swing.JDialog {
         });
 
         txtConyuge.setToolTipText("En caso de ser Casado, sino dejar en blanco");
+        txtConyuge.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtConyugeFocusLost(evt);
+            }
+        });
 
         jLabel7.setText("Cónyuge:");
 
@@ -167,6 +182,11 @@ public class modConductor extends javax.swing.JDialog {
         jLabel6.setText("Estado Civil:");
 
         txtemail.setToolTipText("Si no posee dejar en blanco");
+        txtemail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtemailFocusLost(evt);
+            }
+        });
 
         jLabel8.setText("E-mail: ");
 
@@ -179,6 +199,11 @@ public class modConductor extends javax.swing.JDialog {
         jLabel9.setText("Foto:");
 
         txtDireccion.setToolTipText("Número de Casa");
+        txtDireccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDireccionFocusLost(evt);
+            }
+        });
 
         btnCargarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cargar.png"))); // NOI18N
         btnCargarImagen.setText("CARGAR");
@@ -190,8 +215,18 @@ public class modConductor extends javax.swing.JDialog {
         });
 
         txtNomApe.setToolTipText("Nombres y Apellidos del Conductor");
+        txtNomApe.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNomApeFocusLost(evt);
+            }
+        });
 
         txtEstadoCivil.setToolTipText("Estado Civil");
+        txtEstadoCivil.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEstadoCivilFocusLost(evt);
+            }
+        });
 
         jLabel5.setText("Tipo de Sangre:");
 
@@ -282,7 +317,7 @@ public class modConductor extends javax.swing.JDialog {
                 .addComponent(btnEliminar)
                 .addGap(35, 35, 35)
                 .addComponent(btnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56))
         );
@@ -508,6 +543,35 @@ public class modConductor extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         super.dispose();
 }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtNomApeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNomApeFocusLost
+        txtNomApe.setText(txtNomApe.getText().toUpperCase());
+    }//GEN-LAST:event_txtNomApeFocusLost
+
+    private void txtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDireccionFocusLost
+        txtDireccion.setText(txtDireccion.getText().toUpperCase());
+    }//GEN-LAST:event_txtDireccionFocusLost
+
+    private void txtNumCasaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumCasaFocusLost
+        txtNumCasa.setText(txtNumCasa.getText().toUpperCase());
+    }//GEN-LAST:event_txtNumCasaFocusLost
+
+    private void txtTipoSangreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoSangreFocusLost
+        txtTipoSangre.setText(txtTipoSangre.getText().toUpperCase());
+    }//GEN-LAST:event_txtTipoSangreFocusLost
+
+    private void txtEstadoCivilFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEstadoCivilFocusLost
+        txtEstadoCivil.setText(txtEstadoCivil.getText().toUpperCase());
+    }//GEN-LAST:event_txtEstadoCivilFocusLost
+
+    private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost
+        txtConyuge.setText(txtConyuge.getText().toUpperCase());        // TODO add your handling code here:
+    }//GEN-LAST:event_txtConyugeFocusLost
+
+    private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
+        txtemail.setText(txtemail.getText().toLowerCase());
+    }//GEN-LAST:event_txtemailFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;

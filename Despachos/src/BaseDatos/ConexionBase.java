@@ -157,7 +157,8 @@ public class ConexionBase {
         //System.out.println("Consultar: " + sql);
         ResultSet r = null;
         try {
-            r = st.executeQuery(sql);
+            Statement stat = (Statement) conexion.createStatement();
+            r = stat.executeQuery(sql);
             log.trace(sql);
 
         } catch (SQLException ex) {
@@ -189,8 +190,8 @@ public class ConexionBase {
                 log.trace("Statement cerrado...");
             } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
                 log.trace("Se desconectó el cable de RED del equipo...");
-                reconectarBD();
-                r = ejecutarConsultaStatement2(sql);
+//                reconectarBD();
+//                r = ejecutarConsultaStatement2(sql);
             } else {
                 log.trace("Error al consultar [ejecutarConsultaStatement2]", ex);
             }
@@ -208,18 +209,29 @@ public class ConexionBase {
      */
     public ResultSet ejecutarConsultaUnDato(String sql) {
         //System.out.println("Consultar: " + sql);
+        ResultSet rsCUD = null;
         try {
-            rs = st.executeQuery(sql);
+            Statement sta = (Statement) conexion.createStatement();
+            rsCUD = sta.executeQuery(sql);
             log.trace(sql);
-            rs.next();
+            rsCUD.next();
         } catch (SQLException ex) {
+            System.out.println("ver: " + ex.getMessage());
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado [Reconectar]");
-                reconectarBD();
-                return ejecutarConsultaUnDato(sql);
+                //reconectarBD();
+                //return ejecutarConsultaUnDato(sql);
+            } else if (ex.getMessage().equals("Communications link failure\nLast packet sent to the server was 0 ms ago.")) {
+                log.trace("Base de datos cerrada intencionalmente...");
+                //reconectarBD();
+                //return ejecutarConsultaUnDato(sql);
+            } else if (ex.getMessage().equals("Server shutdown in progress")) {
+                log.trace("Base de datos cerrada intencionalmente...");
+                //reconectarBD();
+                //return ejecutarConsultaUnDato(sql);
             }
         }
-        return rs;
+        return rsCUD;
     }
 
     /**
@@ -237,8 +249,9 @@ public class ConexionBase {
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado [Reconectar]");
-                reconectarBD();
-                return ejecutarConsultaUnDatoNoImprimir(sql);
+//                reconectarBD();
+//                return ejecutarConsultaUnDatoNoImprimir(sql);
+                return null;
             }
         }
         return rs;
@@ -331,6 +344,9 @@ public class ConexionBase {
             } else if (ex.getMessage().substring(0, 27).endsWith("Communications link failure")) {
                 log.trace("Falla en la comunicación con la base de datos..");
                 return false;
+            } else if (ex.getMessage().equals("Column count doesn't match value count at row 1")) {
+                log.error("[" + Principal.sesion[1] + "]Fallo al ejecutar: {}\n[excepciones]{}", sql, ex);
+                return false;
             } else {
                 log.trace("", ex);
                 return false;
@@ -411,8 +427,9 @@ public class ConexionBase {
                 return false;
             } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
                 log.trace("Se desconectó el cable de RED del equipo...");
-                reconectarBD();
-                return ejecutarSentenciaStatement2(sql);
+//                reconectarBD();
+//                return ejecutarSentenciaStatement2(sql);
+                return false;
             } else {
                 log.trace("", ex);
                 return false;
@@ -435,8 +452,8 @@ public class ConexionBase {
             System.out.println(msg.length() + " - " + msg);
             if (msg.equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
                 log.trace("Se desconectó el cable de RED del equipo...");
-                reconectarBD();
-                return ejecutarConsultaUnDatoStatement2(sql);
+//                reconectarBD();
+//                return ejecutarConsultaUnDatoStatement2(sql);
             } else {
                 log.trace("", ex);
             }
@@ -494,17 +511,14 @@ public class ConexionBase {
      * @return Connection
      * @throws SQLException
      */
-    public Connection CerrarConexion() {
+    public void CerrarConexion() {
         try {
             conexion.close();
         } catch (SQLException ex) {
             log.trace("", ex);
         } catch (NullPointerException ex) {
-            log.error("NO está levantada la base de datos... [{}]",Principal.sesion[1],ex);
-            System.exit(0);
+            log.trace("NO está abierta la base de datos... [{}]", Principal.sesion[1]);
         }
-        conexion = null;
-        return conexion;
     }
 
     /**
@@ -1996,25 +2010,25 @@ public class ConexionBase {
      */
     public ArrayList<Pendientes> obtenerPendientesGuardadosPorFecha(String fecha) {
         ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
-
+        ResultSet rsPendiente = null;
         try {
             String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
                     + "FROM PENDIENTES WHERE ESTADO = 'AC' AND '"
                     + fecha + "' BETWEEN FECHA_INI AND FECHA_FIN AND HORA >= NOW()";
-            rs = ejecutarConsultaStatement2(sql);
-            System.out.println("Entra "+sql);
-            while (rs.next()) {
+            rsPendiente = ejecutarConsultaStatement2(sql);
+
+            while (rsPendiente.next()) {
                 Pendientes p = new Pendientes();
-                int cod = rs.getInt("CODIGO");
+                int cod = rsPendiente.getInt("CODIGO");
                 Clientes c = obtenerCliente(cod);
                 p.setCliente(c);
-                p.setFechaFin(rs.getString("FECHA_FIN"));
-                p.setFechaIni(rs.getString("FECHA_INI"));
-                p.setHora(rs.getString("HORA"));
-                p.setMinRecuerdo(rs.getInt("MIN_RECUERDO"));
-                p.setCuandoRecordar(rs.getString("CUANDO_RECORDAR"));
-                p.setEstado(rs.getString("ESTADO"));
-                p.setNota(rs.getString("NOTA"));
+                p.setFechaFin(rsPendiente.getString("FECHA_FIN"));
+                p.setFechaIni(rsPendiente.getString("FECHA_INI"));
+                p.setHora(rsPendiente.getString("HORA"));
+                p.setMinRecuerdo(rsPendiente.getInt("MIN_RECUERDO"));
+                p.setCuandoRecordar(rsPendiente.getString("CUANDO_RECORDAR"));
+                p.setEstado(rsPendiente.getString("ESTADO"));
+                p.setNota(rsPendiente.getString("NOTA"));
                 datos.add(p);
             }
             return datos;
