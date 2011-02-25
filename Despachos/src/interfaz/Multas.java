@@ -269,8 +269,10 @@ public class Multas extends javax.swing.JDialog {
 }//GEN-LAST:event_cmbCodigoMActionPerformed
 
     private void txtCodMultaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodMultaFocusLost
-        txtCodMulta.setText(txtCodMulta.getText().toUpperCase());        // TODO add your handling code here:
+        txtCodMulta.setText(txtCodMulta.getText().toUpperCase());
     }//GEN-LAST:event_txtCodMultaFocusLost
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;

@@ -7,6 +7,7 @@
 package interfaz.reportes;
 
 import BaseDatos.ConexionBase;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -43,6 +44,10 @@ public class Reportes extends javax.swing.JDialog {
         jcMesesUnidades.setEnabled(false);
         jcMultasMes.setEnabled(false);
         cargarComboUsuarios();
+        cargarComboTurnos();
+
+        mostrarFechaFinDespachos(true);
+
         jcUsuariosMultas.setEnabled(false);
 
         jdEstadoTaxiDia.setFormats(new SimpleDateFormat("yyyy-MM-dd"));
@@ -59,6 +64,17 @@ public class Reportes extends javax.swing.JDialog {
         String[] usuarios = bd.getUsuarios();
         for (String user : usuarios) {
             jcUsuariosMultas.addItem(user);
+            jcUsuariosDespachos.addItem(user);
+        }
+    }
+
+    /**
+     * Carga el combo de turnos con los datos de la base
+     */
+    private void cargarComboTurnos() {
+        String[] turnos = bd.getTurnos();
+        for (String turno : turnos) {
+            jcTurnosDespachos.addItem(turno);
         }
     }
 
@@ -128,6 +144,9 @@ public class Reportes extends javax.swing.JDialog {
         jtCodigoDes = new javax.swing.JTextField();
         jtUnidadDes = new javax.swing.JTextField();
         rTodasCarrerasPorDia = new javax.swing.JRadioButton();
+        rDespachosPorTurno = new javax.swing.JRadioButton();
+        jcUsuariosDespachos = new javax.swing.JComboBox();
+        jcTurnosDespachos = new javax.swing.JComboBox();
         jpFechasDes = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -336,6 +355,14 @@ public class Reportes extends javax.swing.JDialog {
             }
         });
 
+        rgDespachos.add(rDespachosPorTurno);
+        rDespachosPorTurno.setText("Despachos realizados por turno y usuario:");
+        rDespachosPorTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rDespachosPorTurnoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -351,13 +378,19 @@ public class Reportes extends javax.swing.JDialog {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtCodigoDes, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
                             .addComponent(jtUnidadDes, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)))
-                    .addComponent(rTodasCarrerasPorDia))
+                    .addComponent(rTodasCarrerasPorDia)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(rDespachosPorTurno)
+                        .addGap(18, 18, 18)
+                        .addComponent(jcTurnosDespachos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jcUsuariosDespachos, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rUnidadDes)
                     .addComponent(jtUnidadDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -365,9 +398,13 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rCodCliDes)
                     .addComponent(jtCodigoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(rTodasCarrerasPorDia)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rDespachosPorTurno)
+                    .addComponent(jcTurnosDespachos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcUsuariosDespachos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Fechas"));
@@ -385,11 +422,11 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jdFechaIniDes, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 281, Short.MAX_VALUE)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jdFechaFinDes, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(243, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,11 +459,11 @@ public class Reportes extends javax.swing.JDialog {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jpFechasDes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpFechasDes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -436,7 +473,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpFechasDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Despachos", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png")), jPanel2); // NOI18N
@@ -872,7 +909,7 @@ public class Reportes extends javax.swing.JDialog {
     }//GEN-LAST:event_jbGenerarActionPerformed
 
     private void jtCodCliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtCodCliFocusLost
-        if (!jtCodCli.equals("")) {
+        if (!jtCodCli.getText().equals("")) {
             try {
                 Integer.parseInt(jtCodCli.getText());
             } catch (NumberFormatException ex) {
@@ -883,7 +920,7 @@ public class Reportes extends javax.swing.JDialog {
     }//GEN-LAST:event_jtCodCliFocusLost
 
     private void jtTelCliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelCliFocusLost
-        if (!jtTelCli.equals("")) {
+        if (!jtTelCli.getText().equals("")) {
             try {
                 Integer.parseInt(jtTelCli.getText());
             } catch (NumberFormatException ex) {
@@ -936,6 +973,7 @@ public class Reportes extends javax.swing.JDialog {
             jtUnidadDes.setEditable(true);
             jtCodigoDes.setEditable(false);
             jpFechasDes.setVisible(true);
+            mostrarFechaFinDespachos(true);
         } else {
             jtUnidadDes.setEnabled(false);
         }
@@ -947,6 +985,7 @@ public class Reportes extends javax.swing.JDialog {
             jtCodigoDes.setEditable(true);
             jtUnidadDes.setEditable(false);
             jpFechasDes.setVisible(true);
+            mostrarFechaFinDespachos(true);
         } else {
             jtCodigoDes.setEnabled(false);
         }
@@ -977,6 +1016,7 @@ public class Reportes extends javax.swing.JDialog {
             jpFechasDes.setVisible(true);
             jtCodigoDes.setEditable(false);
             jtUnidadDes.setEditable(false);
+            mostrarFechaFinDespachos(true);
         }
     }//GEN-LAST:event_rTodasCarrerasPorDiaActionPerformed
 
@@ -1063,6 +1103,28 @@ public class Reportes extends javax.swing.JDialog {
         CambiarEnfoqueEstadosTiempo();
     }//GEN-LAST:event_jrEstadosTaxiDiaActionPerformed
 
+    private void rDespachosPorTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rDespachosPorTurnoActionPerformed
+        LimpiarTabDespachos();
+        if (rDespachosPorTurno.isSelected()) {
+            mostrarFechaFinDespachos(false);
+            jpFechasDes.setVisible(true);
+            jtCodigoDes.setEditable(false);
+            jtUnidadDes.setEditable(false);
+        }
+    }//GEN-LAST:event_rDespachosPorTurnoActionPerformed
+
+    /**
+     * Muestra la parte de fecha de fin de despachos para solo coger una sola
+     * fecha cuando se quiera sacar ese reporte
+     * @param op
+     */
+    private void mostrarFechaFinDespachos(boolean op) {
+        jLabel5.setVisible(op);
+        jdFechaFinDes.setVisible(op);
+        jcUsuariosDespachos.setVisible(!op);
+        jcTurnosDespachos.setVisible(!op);
+    }
+
     /**
      * Deshabilita el control de la unidad para que no se pueda editar
      * @param en
@@ -1143,10 +1205,22 @@ public class Reportes extends javax.swing.JDialog {
         String fechaIni = dfFecha.format(jdFechaIniDes.getDate());
         String fechaFin = dfFecha.format(jdFechaFinDes.getDate());
 
+        String turno_id = "" + (jcTurnosDespachos.getSelectedIndex() + 1);
+        String usuario = jcUsuariosDespachos.getSelectedItem().toString();
+
         map.put("cod", cod);
         map.put("uni", uni);
         map.put("fechaIni", fechaIni);
         map.put("fechaFin", fechaFin);
+        map.put("turno", turno_id);
+        map.put("user", usuario);
+        try {
+            map.put("nombre_user", bd.getDatosUsuario(usuario).getString("NOMBRE_USUARIO"));
+        } catch (SQLException ex) {
+            map.put("nombre_user",usuario);
+        }
+        map.put("turnotxt", jcTurnosDespachos.getSelectedItem().toString());
+
         if (rTodasCarrerasPorDia.isSelected()) {
             map.put("todo", true);
         } else {
@@ -1302,6 +1376,8 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JComboBox jcMesesUnidades;
     private javax.swing.JComboBox jcMultasMes;
     private javax.swing.JCheckBox jcTodosClientes;
+    private javax.swing.JComboBox jcTurnosDespachos;
+    private javax.swing.JComboBox jcUsuariosDespachos;
     private javax.swing.JComboBox jcUsuariosMultas;
     private org.jdesktop.swingx.JXDatePicker jdEstadoTaxiDia;
     private org.jdesktop.swingx.JXDatePicker jdFechaFinDes;
@@ -1335,6 +1411,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JTextField jtUnidadDes;
     private javax.swing.JRadioButton rCodCli;
     private javax.swing.JRadioButton rCodCliDes;
+    private javax.swing.JRadioButton rDespachosPorTurno;
     private javax.swing.JRadioButton rNomCli;
     private javax.swing.JRadioButton rTelCli;
     private javax.swing.JRadioButton rTodasCarrerasPorDia;

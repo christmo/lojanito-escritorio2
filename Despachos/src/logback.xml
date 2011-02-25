@@ -152,6 +152,12 @@
         <appender-ref ref="pantalla"/>
     </logger>
 
+    <logger name="login.LoginGUI" level="ALL">
+        <appender-ref ref="EMAIL"/>
+        <appender-ref ref="TRACE_PRINCIPAL"/>
+        <appender-ref ref="pantalla"/>
+    </logger>
+
     <logger name="interfaz.comunicacion.servidorBD" level="ALL">
         <appender-ref ref="EMAIL"/>
         <appender-ref ref="TRACE_SERVIDOR"/>

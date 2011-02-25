@@ -28,6 +28,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.comm.CommPortIdentifier;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -442,5 +445,32 @@ public class funcionesUtilidad {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         }
         return prop;
+    }
+
+    /**
+     * Trae el archivo properties que se encuentre en el direcctorio del jar
+     * @param arc -> "configsystem.properties" nombre del archivo properties
+     * @return Properties
+     */
+    public static AudioInputStream obtenerArchivoSonidoWAV(String nombre) {
+        AudioInputStream source = null;
+        try {
+            CodeSource codeSource = funcionesUtilidad.class.getProtectionDomain().getCodeSource();
+            File jarFile = new File(codeSource.getLocation().toURI().getPath());
+            File jarDir = jarFile.getParentFile();
+            if (jarDir != null && jarDir.isDirectory()) {
+                File audio = new File(jarDir, nombre);
+                source = AudioSystem.getAudioInputStream(audio);
+            }
+            return source;
+        } catch (UnsupportedAudioFileException ex) {
+            //Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Formato de sonido no soportado... :-( cambiar por wav");
+        } catch (IOException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return source;
     }
 }
