@@ -89,23 +89,23 @@ public class ConexionBase {
         }
     }
 
-    private void reconectarBD() {
-        CerrarConexion();
-        log.info("Iniciar Reconexión a la base de datos...");
-        try {
-            conexion = DriverManager.getConnection(url, usr, pass);
-        } catch (SQLException ex) {
-            if (ex.getMessage().equals("Communications link failure")) {
-                log.trace("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
-            }
-        }
-        try {
-            st = (Statement) conexion.createStatement();
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        log.info("Reconexión Base de Datos OK");
-    }
+//    private void reconectarBD() {
+//        CerrarConexion();
+//        log.info("Iniciar Reconexión a la base de datos...");
+//        try {
+//            conexion = DriverManager.getConnection(url, usr, pass);
+//        } catch (SQLException ex) {
+//            if (ex.getMessage().equals("Communications link failure")) {
+//                log.trace("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
+//            }
+//        }
+//        try {
+//            st = (Statement) conexion.createStatement();
+//        } catch (SQLException ex) {
+//            java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        log.info("Reconexión Base de Datos OK");
+//    }
 
     /**
      * Crea una conexion a cualquier base de datos mysql, con parametros
@@ -1979,7 +1979,8 @@ public class ConexionBase {
         ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
         ResultSet r = null;
         try {
-            String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO FROM PENDIENTES WHERE ESTADO = 'AC'";
+            String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
+                    + "FROM PENDIENTES WHERE ESTADO = 'AC'";
             r = ejecutarConsultaStatement2(sql);
 
             while (r.next()) {
@@ -2012,9 +2013,25 @@ public class ConexionBase {
         ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
         ResultSet rsPendiente = null;
         try {
-            String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
-                    + "FROM PENDIENTES WHERE ESTADO = 'AC' AND '"
-                    + fecha + "' BETWEEN FECHA_INI AND FECHA_FIN AND HORA >= NOW()";
+
+            String sql = "SELECT P.CODIGO,P.FECHA_INI,P.FECHA_FIN,P.HORA,P.MIN_RECUERDO,P.CUANDO_RECORDAR,P.NOTA,P.ESTADO "
+                    + "FROM PENDIENTES P "
+                    + "WHERE P.ESTADO = 'AC' "
+                    + "AND '" + fecha + "' BETWEEN P.FECHA_INI AND P.FECHA_FIN "
+                    + "AND P.HORA >= NOW() "
+                    + "AND ( "
+                    + "SELECT IF(("
+                    + "SELECT P.CUANDO_RECORDAR "
+                    + "FROM PENDIENTES PCR "
+                    + "WHERE P.CODIGO = PCR.CODIGO)='Lunes - Viernes', "
+                    + "1,2 )) = (SELECT IF(DAYOFWEEK('" + fecha + "')IN(2,3,4,5,6),1,2)) AND P.HORA >= NOW() "
+                    + "OR ( "
+                    + "SELECT IF(("
+                    + "SELECT P.CUANDO_RECORDAR "
+                    + "FROM PENDIENTES PCR "
+                    + "WHERE P.CODIGO = PCR.CODIGO)='Lunes - Domingo',"
+                    + "2,1)) = 2 AND P.HORA >= NOW()";
+
             rsPendiente = ejecutarConsultaStatement2(sql);
 
             while (rsPendiente.next()) {

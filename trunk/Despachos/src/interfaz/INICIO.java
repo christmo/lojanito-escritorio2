@@ -526,7 +526,7 @@ public class INICIO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBEMultasActionPerformed
 
     private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
-        // TODO add your handling code here:
+        // TODO añadir funcionalidad al boton de directorio telefonico
     }//GEN-LAST:event_btnDirectorioActionPerformed
 
     private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed

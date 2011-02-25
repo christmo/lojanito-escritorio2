@@ -43,6 +43,11 @@ public class GenerarReporteDespachos {
             } else {
                 if (!campos.get("uni").equals("")) {
                     GenerarPorUnidad();
+                } else {
+                    if (!campos.get("turno").equals("")) {
+                        RutaJasper = getClass().getResourceAsStream("plantillas/DespachadosTurnos.jrxml");
+                        GenerarTodosLosDespachosPorTurno();
+                    }
                 }
             }
         }
@@ -161,6 +166,50 @@ public class GenerarReporteDespachos {
         parametro.put("quien", txt);
         parametro.put("empresa", empresa);
         parametro.put("usuario", usuario);
+
+        GenerarReporte.Generar(parametro, RutaJasper, bd);
+    }
+
+    /**
+     * Genera la lista de todos los Despachos Finalizados de la empresa
+     */
+    public void GenerarTodosLosDespachosPorTurno() {
+        String sql = "SELECT "
+                + "ASIGNADOS.`COD_CLIENTE` AS ASIGNADOS_COD_CLIENTE,"
+                + "ASIGNADOS.`FECHA` AS ASIGNADOS_FECHA,"
+                + "ASIGNADOS.`HORA` AS ASIGNADOS_HORA,"
+                + "ASIGNADOS.`TELEFONO` AS ASIGNADOS_TELEFONO,"
+                + "ASIGNADOS.`NOMBRE_APELLIDO_CLI` AS ASIGNADOS_NOMBRE_APELLIDO_CLI,"
+                + "ASIGNADOS.`DIRECCION_CLI` AS ASIGNADOS_DIRECCION_CLI,"
+                + "ASIGNADOS.`NOTA` AS ASIGNADOS_NOTA,"
+                + "ASIGNADOS.`N_UNIDAD` AS ASIGNADOS_N_UNIDAD,"
+                + "ASIGNADOS.`MINUTOS` AS ASIGNADOS_MINUTOS,"
+                + "ASIGNADOS.`SECTOR` AS ASIGNADOS_SECTOR,"
+                + "ASIGNADOS.`ATRASO` AS ASIGNADOS_ATRASO,"
+                + "ASIGNADOS.`ESTADO` AS ASIGNADOS_ESTADO"
+                + " FROM `ASIGNADOS` ASIGNADOS "
+                + "WHERE ASIGNADOS.`ESTADO` = 'F' "
+                + "AND CONCAT(ASIGNADOS.`FECHA`,'-',ASIGNADOS.`HORA`) "
+                + "BETWEEN CONCAT('$P!{fechaIni}','-',(SELECT TURNOS.`HORA_INI` from `TURNOS` TURNOS where TURNOS.`ID_TURNO` = $P!{turno})) "
+                + "AND CONCAT(IF((SELECT TURNOS.`HORA_INI` from `TURNOS` TURNOS where TURNOS.`ID_TURNO` = $P!{turno}) > (SELECT TURNOS.`HORA_FIN` from `TURNOS` TURNOS where TURNOS.`ID_TURNO` = $P!{turno}),"
+                + "'$P!{fechaIni}' + INTERVAL 1 DAY,'$P!{fechaIni}'),'-',(SELECT TURNOS.`HORA_FIN` from `TURNOS` TURNOS where TURNOS.`ID_TURNO` = $P!{turno})) "
+                + "AND ASIGNADOS.`ID_TURNO`= $P!{turno} "
+                + "AND ASIGNADOS.`USUARIO` = '$P!{user}' ";
+
+        System.out.println(sql);
+        String txt = "por todas las unidades:";
+
+        Map parametro = new HashMap();
+        parametro.put("sql", sql);
+        parametro.put("fechaIni", campos.get("fechaIni"));
+        parametro.put("fechaFin", campos.get("fechaIni"));
+        parametro.put("turno", campos.get("turno"));
+        parametro.put("quien", txt);
+        parametro.put("empresa", empresa);
+        parametro.put("user", campos.get("user"));
+        parametro.put("usuario", sesion[2]);
+        parametro.put("turnotxt", campos.get("turnotxt"));
+        parametro.put("nombre_user", campos.get("nombre_user"));
 
         GenerarReporte.Generar(parametro, RutaJasper, bd);
     }

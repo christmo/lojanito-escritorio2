@@ -11,8 +11,6 @@
 package login;
 
 import BaseDatos.ConexionBase;
-
-
 import configuracion.UIConfiguracion;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
@@ -25,14 +23,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author christmo
  */
 public class LoginGUI extends javax.swing.JFrame {
 
-    //private static final Logger log = LoggerFactory.getLogger(LoginGUI.class);
+    private static final Logger log = (Logger) LoggerFactory.getLogger(LoginGUI.class);
     private String strUser = null;
     private char[] chrPass = null;
     private String strPass = "";
@@ -50,14 +49,9 @@ public class LoginGUI extends javax.swing.JFrame {
         jbtIngresar.setText("<html><center>INGRESAR</center></html>");
         jbtIngresar.setVerticalTextPosition(SwingConstants.BOTTOM);
         jbtIngresar.setHorizontalTextPosition(SwingConstants.CENTER);
-//        try {
-//            arcConfig = new Properties();
-//            arcConfig.load(new FileInputStream(url_config));
-//            System.out.println("Cargado: " + url_config);
+
         arcConfig = funcionesUtilidad.obtenerArchivoPropiedades("configsystem.properties");
-//        } catch (IOException ex) {
-//            UIConfiguracion.CrearArchivoPropiedades(url_config);
-//        }
+
         existenDirectorios();
     }
 
@@ -246,42 +240,59 @@ public class LoginGUI extends javax.swing.JFrame {
             this.dispose();
         }
         if (entrar) {
+            log.trace("Iniciar sistema de Despachos... ;-)");
             try {
                 /**
                  * Semilla del password: KOMPRESORKR@D@C
                  * MD5(MD5(MD5(clave)  + MD5(semil)));
                  */
                 strPass = funciones.encriptar(strPass, semillaPass);
-                String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO FROM USUARIOS WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
+                String sql = "SELECT ID_EMPRESA,USUARIO,CLAVE,NOMBRE_USUARIO,ESTADO,OPERADOR "
+                        + "FROM USUARIOS "
+                        + "WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
 
                 rs = cb.ejecutarConsultaUnDato(sql);
 
-                String usuarioBase = rs.getString("USUARIO");
-                String claveBase = rs.getString("CLAVE");
+                String estado = rs.getString("ESTADO");
 
-                boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
-                boolean boolClave = (claveBase.equals(strPass));
+                if (estado.equals("Activo")) {
 
-                if (boolUsuario) {
-                    if (boolClave) {
-                        /**
-                         * Sesion -> usuario,id_empresa,Nombre_del_Usuario
-                         * Arreglo de 3 datos en el orden que se muestra
-                         */
-                        String sesion[] = {strUser, rs.getString("ID_EMPRESA"), rs.getString("NOMBRE_USUARIO")};
+                    String usuarioBase = rs.getString("USUARIO");
+                    String claveBase = rs.getString("CLAVE");
 
-                        Principal pantalla = new Principal(sesion, cb, arcConfig);
+                    boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
+                    boolean boolClave = (claveBase.equals(strPass));
 
-                        this.dispose();
+                    if (boolUsuario) {
+                        if (boolClave) {
+                            /**
+                             * Sesion -> usuario,id_empresa,Nombre_del_Usuario,
+                             * Arreglo de 4 datos en el orden que se muestra
+                             */
+                            String sesion[] = {
+                                strUser,
+                                rs.getString("ID_EMPRESA"),
+                                rs.getString("NOMBRE_USUARIO"),
+                                obtenerRolUsuario(rs.getString("OPERADOR"))};
+
+                            log.trace("ROL: {}", rs.getString("OPERADOR"));
+
+                            Principal pantalla = new Principal(sesion, cb, arcConfig);
+
+                            this.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
+                            jpPass.setFocusCycleRoot(true);
+                            jpPass.setText("");
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
-                        jpPass.setFocusCycleRoot(true);
-                        jpPass.setText("");
+                        JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
+                        jtUser.setFocusCycleRoot(true);
+                        jtUser.setText("");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
-                    jtUser.setFocusCycleRoot(true);
-                    jtUser.setText("");
+                    JOptionPane.showMessageDialog(this, "Este usuario a sido inactivado por el administrador del sistema, comuniquese con el inmediatamente para que le den acceso,"
+                            + "\ncaso contrario no podrá acceder al sistema de despachos...", "Error", 0);
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Comprobar si el usuario y la clave son correctos...", "Error", 0);
@@ -290,6 +301,28 @@ public class LoginGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No hay acceso a la base de datos, comprobar si la clave de la base de datos es corercta en el archivo de configuración...", "Error", 0);
                 System.exit(0);
             }
+        }
+    }
+
+    /**
+     * Se envia el nombre de rol y este lo devuelve como un número dependiendo
+     * de los roles que se tenga en la app
+     * 0 -> Sin Rol
+     * 1 -> Operador
+     * 2 -> Solo Lectura
+     * 3 -> Administrador
+     * @param rol
+     * @return String -> numero de rol al que pertenece el usuario
+     */
+    private String obtenerRolUsuario(String rol) {
+        if (rol.equals("Operador")) {
+            return "1";
+        } else if (rol.equals("Solo Lectura")) {
+            return "2";
+        } else if (rol.equals("Administrador")) {
+            return "3";
+        } else {
+            return "0";
         }
     }
 

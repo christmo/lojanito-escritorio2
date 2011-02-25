@@ -121,7 +121,8 @@ public class Reloj {
             //System.out.println("->" + Principal.listaPendientesFecha.size());
 
             if (Principal.listaPendientesFecha.size() > 0) {
-                for (int i = 0; i < Principal.listaPendientesFecha.size(); i++) {
+                int i = 0;
+                while (i < Principal.listaPendientesFecha.size()) {
                     p = Principal.listaPendientesFecha.get(i);
                     horaPendMenosRecuerdo = convertirHora(p.getHora()).getTime() - (p.getMinRecuerdo() * 60 * 1000);
                     //System.out.println("Rocordatorio Pendiente: " + horaPendMenosRecuerdo + "==" + hora);
@@ -135,7 +136,9 @@ public class Reloj {
                         System.out.println("Lanzar Pendiente...");
                         Principal.lanzarPendiente(Principal.listaPendientesFecha.get(i));
                         Principal.listaPendientesFecha.remove(i);
+                        i--;
                     }
+                    i++;
                 }
             }
 

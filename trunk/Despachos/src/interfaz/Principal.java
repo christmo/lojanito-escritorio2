@@ -54,6 +54,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sonido.Sonido;
 
 /**
  *
@@ -146,6 +147,7 @@ public final class Principal extends javax.swing.JFrame {
         Principal.arcConfig = archivo;
         log.trace("Iniciar la aplicacion de despachos...");
         log.trace("Usuario: {}", sesion[2]);
+        log.trace("Rol: {}", sesion[3]);
     }
 
     /**
@@ -2997,6 +2999,22 @@ public final class Principal extends javax.swing.JFrame {
     public static void lanzarPendiente(Pendientes p) {
         ponerAlarmaPendiente(false);
         ingresarClientePorDespachar(p.getCliente(), p.getNota());
+
+        /**
+         * Permite lanzar el sonido independientemente cuando haya pendientes
+         * dobles no se duerma el reloj y no haya congestiones
+         */
+        Thread hiloSonido = new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    Sonido sonido = new Sonido(arcConfig.getProperty("sonido_nueva_pendiente"), Integer.parseInt(arcConfig.getProperty("tiempo_sonido")));
+                } catch (NumberFormatException ex) {
+                    Sonido sonido = new Sonido("", 0);
+                }
+            }
+        });
+        hiloSonido.start();
     }
 
     /**
@@ -3007,5 +3025,18 @@ public final class Principal extends javax.swing.JFrame {
     private static void ponerAlarmaPendiente(boolean op) {
         lblAlarmaPendiente.setVisible(op);
         jpPendiente.setVisible(op);
+        if (op == true) {
+            Thread hiloSonido = new Thread(new Runnable() {
+
+                public void run() {
+                    try {
+                        Sonido sonido = new Sonido(arcConfig.getProperty("sonido_pendiente"), Integer.parseInt(arcConfig.getProperty("tiempo_sonido")));
+                    } catch (NumberFormatException ex) {
+                        Sonido sonido = new Sonido("", 0);
+                    }
+                }
+            });
+            hiloSonido.start();
+        }
     }
 }

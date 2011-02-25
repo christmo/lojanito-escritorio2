@@ -565,7 +565,7 @@ public class modConductor extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEstadoCivilFocusLost
 
     private void txtConyugeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConyugeFocusLost
-        txtConyuge.setText(txtConyuge.getText().toUpperCase());        // TODO add your handling code here:
+        txtConyuge.setText(txtConyuge.getText().toUpperCase());
     }//GEN-LAST:event_txtConyugeFocusLost
 
     private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
