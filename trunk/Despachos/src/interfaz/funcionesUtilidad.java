@@ -4,6 +4,7 @@
  */
 package interfaz;
 
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,13 +108,28 @@ public class funcionesUtilidad {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File fichero = fileChooser.getSelectedFile();
             name.setText(fichero.getName());
-            Icon fot = new ImageIcon(fichero.getAbsolutePath());
+            Icon fot = ajustarImagen(fichero.getAbsolutePath(), 210, 250);
             File Ffoto = fichero;
             img.setIcon(fot);
             img.setText("");
             return Ffoto;
         }
         return null;
+    }
+
+    /**
+     * Permite ajustar la imagen que se seleccione a un tamaño predefinido y
+     * que sea de acuerdo a donde se va a ubicar dentro de la interfaz a mostrar
+     * @param ico
+     * @param ancho
+     * @param alto
+     * @return ImageIcon
+     */
+    private ImageIcon ajustarImagen(String ico, int ancho, int alto) {
+        ImageIcon tmpIconAux = new ImageIcon(ico);
+        //Escalar Imagen
+        ImageIcon tmpIcon = new ImageIcon(tmpIconAux.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+        return tmpIcon;
     }
 
     /**
