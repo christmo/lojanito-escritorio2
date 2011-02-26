@@ -184,17 +184,28 @@ public class ConexionBase {
             r = st2.executeQuery(sql);
             log.trace(sql);
         } catch (SQLException ex) {
+            System.out.println("EX:" + ex.getMessage());
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado...");
             } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
                 log.trace("Statement cerrado...");
-            } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                log.trace("Se desconectó el cable de RED del equipo...");
-//                reconectarBD();
-//                r = ejecutarConsultaStatement2(sql);
             } else {
-                log.trace("Error al consultar [ejecutarConsultaStatement2]", ex);
+                if (ex.getMessage().length() > 113) {
+                    try {
+                        if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
+                            log.trace("Se desconectó el cable de RED del equipo...");
+//                          reconectarBD();
+//                          r = ejecutarConsultaStatement2(sql);
+
+                        }
+                    } catch (StringIndexOutOfBoundsException st) {
+                        log.trace("Error diferente no tiene la longitud contemplada...");
+                    }
+                } else {
+                    log.error("Error al consultar [ejecutarConsultaStatement2]", ex);
+                }
             }
+
         } catch (NullPointerException ex) {
             log.trace("Null ese statement");
         }
