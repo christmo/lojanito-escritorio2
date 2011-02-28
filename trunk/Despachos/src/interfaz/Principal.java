@@ -2108,6 +2108,11 @@ public final class Principal extends javax.swing.JFrame {
                         } catch (NullPointerException ex) {
                             JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
                             jtPorDespachar.setValueAt("", intFila, 6);
+                        } catch (UnsupportedOperationException ex) {
+                            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+                            log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
+                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                            jtPorDespachar.setValueAt("", intFila, 6);
                         }
                     }
                 } catch (NullPointerException ex) {

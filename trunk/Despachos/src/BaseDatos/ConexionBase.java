@@ -106,7 +106,6 @@ public class ConexionBase {
 //        }
 //        log.info("Reconexión Base de Datos OK");
 //    }
-
     /**
      * Crea una conexion a cualquier base de datos mysql, con parametros
      * de conexion indepenientes
@@ -198,11 +197,11 @@ public class ConexionBase {
 //                          r = ejecutarConsultaStatement2(sql);
 
                         }
-                    } catch (StringIndexOutOfBoundsException st) {
+                    } catch (StringIndexOutOfBoundsException sinoe) {
                         log.trace("Error diferente no tiene la longitud contemplada...");
                     }
                 } else {
-                    log.error("Error al consultar [ejecutarConsultaStatement2]", ex);
+                    log.error("ejecutarConsultaStatement2 empresa[" + Principal.sesion[1] + "] mensaje[{}]", ex.getMessage(), ex);
                 }
             }
 
@@ -227,8 +226,10 @@ public class ConexionBase {
             log.trace(sql);
             rsCUD.next();
         } catch (SQLException ex) {
-            System.out.println("ver: " + ex.getMessage());
-            if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
+            if (ex.getMessage().equals("Result consisted of more than one row")) {
+                log.trace("Tiene + de 1 estado la unidad a la misma hora -> {}", sql);
+                throw new UnsupportedOperationException("Tiene mas de una fila");
+            } else if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado [Reconectar]");
                 //reconectarBD();
                 //return ejecutarConsultaUnDato(sql);
@@ -240,6 +241,8 @@ public class ConexionBase {
                 log.trace("Base de datos cerrada intencionalmente...");
                 //reconectarBD();
                 //return ejecutarConsultaUnDato(sql);
+            } else {
+                log.error("ejecutarConsultaUnDato empresa[" + Principal.sesion[1] + "] mensaje[{}]", ex.getMessage(), ex);
             }
         }
         return rsCUD;
