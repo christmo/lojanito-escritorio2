@@ -33,7 +33,7 @@ public class INICIO extends javax.swing.JFrame {
     JDialog modEstados = null;
     JDialog modUsuarios = null;
     JDialog reportes = null;
-    public static String sesion[] = null;
+    private String sesion[] = null;
     private ConexionBase conec;
     private Properties arcConfig;
 
@@ -44,7 +44,7 @@ public class INICIO extends javax.swing.JFrame {
 
     public INICIO(String strSesion[], ConexionBase bd, Properties archivo) {
         this.conec = bd;
-        INICIO.sesion = strSesion;
+        this.sesion = strSesion;
         this.arcConfig = archivo;
         initComponents();
 
@@ -434,8 +434,8 @@ public class INICIO extends javax.swing.JFrame {
 
     private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
-            newVehiculo = new ingresoVehiculos(this, this.sesion, this.conec, arcConfig);
-            newVehiculo.setSize(731, 590);
+            newVehiculo = new ingresoVehiculos(this, sesion, this.conec, arcConfig);
+            newVehiculo.setSize(740, 590);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             newVehiculo.setResizable(false);
@@ -446,7 +446,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
         if ((beConductor == null) || (!beConductor.isDisplayable())) {
             beConductor = new modConductor(this, this.conec, arcConfig);
-            beConductor.setSize(705, 720);
+            beConductor.setSize(705, 700);
             beConductor.setLocationRelativeTo(this);
             beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             beConductor.setResizable(false);
@@ -481,7 +481,7 @@ public class INICIO extends javax.swing.JFrame {
     private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
             nConductor = new ingresoConductor(this, this.conec, arcConfig);
-            nConductor.setSize(650, 550);
+            nConductor.setSize(757, 512);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             nConductor.setResizable(false);
@@ -493,7 +493,7 @@ public class INICIO extends javax.swing.JFrame {
 
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
             editVehiculo = new modVehiculo(this, sesion, this.conec, arcConfig);
-            editVehiculo.setSize(778, 740);//[778, 713]
+            editVehiculo.setSize(819, 700);
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             editVehiculo.setResizable(false);
