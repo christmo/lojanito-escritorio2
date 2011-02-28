@@ -2084,9 +2084,12 @@ public final class Principal extends javax.swing.JFrame {
                     if (jtPorDespachar.isEditing()) {
                         jtPorDespachar.getCellEditor().cancelCellEditing();
                     } else {
+                        String nom_cli = "";
+                        String dir_cli = "";
                         try {
-                            String nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
-                            String dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+                            nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
+                            dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+
                             if (!nom_cli.equals("") && !dir_cli.equals("")) {
                                 if (CampoUnidadCambio) {
                                     ActivarUnidadBorrada(cod_cli);
@@ -2098,10 +2101,12 @@ public final class Principal extends javax.swing.JFrame {
                                  * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
                                  */
                                 enviarMensajeUnidadAsignada(intFila, intCol);
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
+                                jtPorDespachar.setValueAt("", intFila, 6);
                             }
                         } catch (NullPointerException ex) {
-                            //JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
-                            JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
+                            JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
                             jtPorDespachar.setValueAt("", intFila, 6);
                         }
                     }
@@ -2224,7 +2229,7 @@ public final class Principal extends javax.swing.JFrame {
             if (validarUnidad(Integer.parseInt(unidad))) {
                 strEstadoUnidad = bd.getEstadoUnidad(Integer.parseInt(unidad));
 
-                if (strEstadoUnidad.equals("AC")) {
+                if (strEstadoUnidad != null && strEstadoUnidad.equals("AC")) {
 
                     String estadoAsignado = bd.getNombreEstadoUnidad("ASI");
                     AsignarColorDespachoVehiculo(unidad, estadoAsignado);
@@ -2236,7 +2241,11 @@ public final class Principal extends javax.swing.JFrame {
                     if (estado != null) {
                         JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
                     } else {
-                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa..."
+                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
+                        if (r == 0) {
+                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                        }
                     }
                     jtPorDespachar.setValueAt("", intFila, intCol);
                 }

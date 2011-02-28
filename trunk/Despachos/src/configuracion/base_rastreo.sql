@@ -326,8 +326,8 @@ CREATE TABLE `respaldo_asignacion_server` (
   `HORA` int(11) NOT NULL,
   `FONO` varchar(25) DEFAULT NULL,
   `HORA_INSERT` bigint(20) NOT NULL,
-  `USUARIO` varchar(25) NOT NULL,
-  `DIRECCION` varchar(100) NOT NULL
+  `USUARIO` varchar(125) NOT NULL,
+  `DIRECCION` varchar(125) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

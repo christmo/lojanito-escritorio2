@@ -43,7 +43,7 @@ CREATE TABLE `server` (
   `fono` varchar(25) DEFAULT NULL,
   `valor` int(12) DEFAULT NULL,
   `estado_insert` varchar(3) DEFAULT NULL,
-  `usuario` varchar(25) DEFAULT NULL,
-  `direccion` varchar(250) DEFAULT NULL
+  `usuario` varchar(125) DEFAULT NULL,
+  `direccion` varchar(125) DEFAULT NULL
 ) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='mysql://usuario:clave@200.0.29.121:3306/rastreosatelital/TABLA';
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -108,7 +108,7 @@ public class funcionesUtilidad {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File fichero = fileChooser.getSelectedFile();
             name.setText(fichero.getName());
-            Icon fot = ajustarImagen(fichero.getAbsolutePath(), 210, 250);
+            Icon fot = ajustarImagen(fichero.getAbsolutePath(), 270, 350);
             File Ffoto = fichero;
             img.setIcon(fot);
             img.setText("");
@@ -125,7 +125,7 @@ public class funcionesUtilidad {
      * @param alto
      * @return ImageIcon
      */
-    private ImageIcon ajustarImagen(String ico, int ancho, int alto) {
+    public ImageIcon ajustarImagen(String ico, int ancho, int alto) {
         ImageIcon tmpIconAux = new ImageIcon(ico);
         //Escalar Imagen
         ImageIcon tmpIcon = new ImageIcon(tmpIconAux.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
@@ -480,11 +480,12 @@ public class funcionesUtilidad {
             }
             return source;
         } catch (UnsupportedAudioFileException ex) {
-            //Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Formato de sonido no soportado... :-( cambiar por wav");
-        } catch (IOException ex) {
-            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            System.out.println("El archivo de sonido no esta en el lugar esperado... :-(\n" + ex.getMessage());
         } catch (URISyntaxException ex) {
+            Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         }
         return source;
