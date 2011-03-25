@@ -10,7 +10,6 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -102,6 +101,8 @@ public class modVehiculo extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         txtRegistroMunicipal = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        txtSOAT = new javax.swing.JTextField();
 
         tblResultado.setFont(new java.awt.Font("Tahoma", 0, 14));
         tblResultado.setModel(new javax.swing.table.DefaultTableModel(
@@ -296,9 +297,19 @@ public class modVehiculo extends javax.swing.JDialog {
         jLabel17.setText("REGISTRO MUNICIPAL:");
         jLabel17.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
+        txtRegistroMunicipal.setText("0");
         txtRegistroMunicipal.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtRegistroMunicipalFocusLost(evt);
+            }
+        });
+
+        jLabel18.setText("SOAT:");
+        jLabel18.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        txtSOAT.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSOATFocusLost(evt);
             }
         });
 
@@ -355,13 +366,18 @@ public class modVehiculo extends javax.swing.JDialog {
                                         .addGap(18, 18, 18)
                                         .addComponent(spAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(txtNumChasis, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-                                    .addComponent(txtRegistroMunicipal, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                                         .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtRegistroMunicipal, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtSOAT, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)))))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -435,7 +451,9 @@ public class modVehiculo extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtRegistroMunicipal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17))
+                            .addComponent(jLabel17)
+                            .addComponent(txtSOAT, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -510,8 +528,7 @@ public class modVehiculo extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-//Comprobar que los campos obligatorios tengan valor.
-
+        //Comprobar que los campos obligatorios tengan valor.
         icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
         String nunidad = txtNUnidad.getText();
 
@@ -553,7 +570,8 @@ public class modVehiculo extends javax.swing.JDialog {
                                     txtMarca.getText(),
                                     txtNumMotor.getText(),
                                     txtNumChasis.getText(),
-                                    txtRegistroMunicipal.getText());
+                                    txtRegistroMunicipal.getText(),
+                                    txtSOAT.getText());
 
                             if (salida) {
                                 JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
@@ -658,6 +676,11 @@ public class modVehiculo extends javax.swing.JDialog {
     private void txtPropietarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPropietarioFocusLost
         txtPropietario.setText(txtPropietario.getText().toUpperCase());
     }//GEN-LAST:event_txtPropietarioFocusLost
+
+    private void txtSOATFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSOATFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSOATFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
@@ -676,6 +699,7 @@ public class modVehiculo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -697,6 +721,7 @@ public class modVehiculo extends javax.swing.JDialog {
     private javax.swing.JTextField txtNumMotor;
     private javax.swing.JTextField txtPropietario;
     private javax.swing.JTextField txtRegistroMunicipal;
+    private javax.swing.JTextField txtSOAT;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -765,6 +790,7 @@ public class modVehiculo extends javax.swing.JDialog {
         txtNumMotor.setText(aux[12]);
         txtMarca.setText(aux[11]);
         txtRegistroMunicipal.setText(aux[5]);
+        txtSOAT.setText(aux[14]);
 
         //Año
         if (aux[7] != null) {
@@ -836,12 +862,6 @@ public class modVehiculo extends javax.swing.JDialog {
         }
     }
 
-    /**
-     * Carga el archivo de propiedades del sistema
-     */
-    /*private void leerProperties() {
-    rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }*/
     /**
      * Limpia contenido de las cajas
      */

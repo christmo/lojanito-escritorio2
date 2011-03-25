@@ -16,13 +16,14 @@ show engines;
 
 -----------------------------------------------------------------------------
 COOP                USUARIO         CLAVE                       TABLA
-LojaNorte           lojanort        l3O4j1a7n3O0r8t13           ASIGNADOS_LN
-Ciudad Victoria     cityvictory     C5i9t1Y0V4i7c9t0O2r7y	ASIGNADOS_CV
-Riveras de Alcazar  riveralcazar    1A9l4c9A7r5i2v0E1r7         ASIGNADOS_RA
-TransPeñaSur        trpesur         9s4U89p3E0r2t5Ru6a3N9s0	ASIGNADOS_TP
-AndinaSur           andinasur       9s4U89p3E0r2t5Ru6a3N9s0     ASIGNADOS_AS
-TaxOpel             taxopel         9s4U89p3E0r2t5Ru6a3N9s0     ASIGNADOS_TO
-LojaTuristica       lojaturist      9s4U89p3E0r2t5Ru6a3N9s0     ASIGNADOS_LT
+LojaNorte           lojanort	l3O4j1a7n3O0r8t13                   ASIGNADOS_LN
+Ciudad Victoria     cityvictory	C5i9t1Y0V4i7c9t0O2r7y               ASIGNADOS_CV
+Riveras de Alcazar  riveralcazar	1A9l4c9A7r5i2v0E1r7         ASIGNADOS_RA
+TransPeñaSur        trpesur	9s4U89p3E0r2t5Ru6a3N9s0             ASIGNADOS_TP
+Andina Sur          adnsur	c827dc4d8976H962505f9288            ASIGNADOS_AS
+Taxopel             taxopel	336c2cb0b84800172f6e5dfcc570faeb    ASIGNADOS_TX
+Loja Turistica      lojaturist	f9817fc5cbb25fc9d7da53e1dfc14cd3    ASIGNADOS_LT
+Kradac              krctest	krctesting                          ASIGNADOS_KR
 -----------------------------------------------------------------------------
 
 */
@@ -43,7 +44,7 @@ CREATE TABLE `server` (
   `fono` varchar(25) DEFAULT NULL,
   `valor` int(12) DEFAULT NULL,
   `estado_insert` varchar(3) DEFAULT NULL,
-  `usuario` varchar(125) DEFAULT NULL,
-  `direccion` varchar(125) DEFAULT NULL
+  `usuario` varchar(25) DEFAULT NULL,
+  `direccion` varchar(150) DEFAULT NULL
 ) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='mysql://usuario:clave@200.0.29.121:3306/rastreosatelital/TABLA';
 /*!40101 SET character_set_client = @saved_cs_client */;

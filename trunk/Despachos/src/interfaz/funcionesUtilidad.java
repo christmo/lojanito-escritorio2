@@ -441,7 +441,7 @@ public class funcionesUtilidad {
      * @param arc -> "configsystem.properties" nombre del archivo properties
      * @return Properties
      */
-    public static Properties obtenerArchivoPropiedades(String arc) {
+    public static Properties obtenerArchivoPropiedades(String arc) throws FileNotFoundException {
         Properties prop = null;
         try {
             CodeSource codeSource = funcionesUtilidad.class.getProtectionDomain().getCodeSource();
@@ -456,7 +456,8 @@ public class funcionesUtilidad {
         } catch (URISyntaxException ex) {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            System.err.println("No se encuentra el archivo: " + ex.getMessage());
+            //System.err.println("No se encuentra el archivo: " + ex.getMessage());
+            throw new FileNotFoundException("No se econtró el archivo de propiedades...");
         } catch (IOException ex) {
             Logger.getLogger(funcionesUtilidad.class.getName()).log(Level.SEVERE, null, ex);
         }

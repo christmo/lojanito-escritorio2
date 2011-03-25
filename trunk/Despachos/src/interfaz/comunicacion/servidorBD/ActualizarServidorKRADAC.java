@@ -85,10 +85,7 @@ public class ActualizarServidorKRADAC extends Thread {
                 }
             }
         } catch (SQLException ex) {
-            if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-            } else {
-                //log.error("{}", Principal.sesion[1]);
-            }
+            log.trace("Resulset cerrado...");
         }
     }
 
@@ -109,7 +106,7 @@ public class ActualizarServidorKRADAC extends Thread {
             String usuario,
             String direccion) {
 
-        if(strTelefono.equals("null")){
+        if (strTelefono.equals("null")) {
             strTelefono = "";
         }
 
@@ -131,7 +128,7 @@ public class ActualizarServidorKRADAC extends Thread {
                 + "','"
                 + direccion
                 + "');";
-        return bd.ejecutarSentenciaStatement2(sql);
+        return bd.ejecutarSentenciaActualizarServidorKradac(sql);
     }
 
     /**
@@ -140,7 +137,7 @@ public class ActualizarServidorKRADAC extends Thread {
      */
     private void BorrarRespadoLocal(long HoraInsert) {
         String sql = "DELETE FROM RESPALDO_ASIGNACION_SERVER WHERE HORA_INSERT = " + HoraInsert;
-        bd.ejecutarSentenciaStatement2(sql);
+        bd.ejecutarSentenciaActualizarServidorKradac(sql);
         log.trace("Respaldo borrado correctamente...");
     }
 

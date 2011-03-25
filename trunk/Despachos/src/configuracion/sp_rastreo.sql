@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.36, for Win32 (ia32)
 --
--- Host: localhost    Database: rastreo
+-- Host: localhost    Database: rastreosatelital
 -- ------------------------------------------------------
 -- Server version	5.1.36-community-log
 
@@ -15,8 +15,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+use rastreosatelital;
+
 --
--- Dumping routines for database 'rastreo'
+-- Dumping routines for database 'rastreosatelital'
 --
 /*!50003 DROP FUNCTION IF EXISTS `SF_CONDUCTOR_ASIGNADO` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -412,7 +414,8 @@ IN MAR VARCHAR(45),
 IN MOT VARCHAR(125),
 IN CHA VARCHAR(125),
 IN IDUSER VARCHAR(100),
-IN REG_MUN VARCHAR(10))
+IN REG_MUN VARCHAR(10),
+IN SOAT VARCHAR(15))
 BEGIN
 
 DECLARE IDCON INT(11);
@@ -445,7 +448,8 @@ MAR,
 MOT,
 CHA,
 IDUSER,
-REG_MUN
+REG_MUN,
+SOAT
 );
 
 INSERT INTO REGCODESTTAXI
@@ -482,7 +486,8 @@ DELIMITER ;;
                                                           IN MAR VARCHAR(45),
                                                           IN MOT VARCHAR(125),
                                                           IN CHA VARCHAR(125),
-                                                          IN REG_MUN int(5))
+                                                          IN REG_MUN int(5),
+                                                          IN PSOAT VARCHAR(15))
 BEGIN
 
   DECLARE IDCON INT(11);
@@ -513,7 +518,8 @@ BEGIN
     MARCA = MAR,
     NUM_MOTOR = MOT,
     NUM_CHASIS = CHA,
-    REG_MUNICIPAL = REG_MUN
+    REG_MUNICIPAL = REG_MUN,
+    SOAT = PSOAT
   WHERE
     PLACA = PL;
 

@@ -2,7 +2,7 @@
 ---------------------------------------------------------
 -- christmo
 ---------------------------------------------------------
--- Obtenida con el comando: mysqldump -u root -p -t -d rastreo > rastreo.sql
+-- Obtenida con el comando: mysqldump -u root -p -d rastreosatelital > base.sql
 ---------------------------------------------------------
 */
 
@@ -23,25 +23,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP DATABASE IF EXISTS rastreosatelital;
+--DROP DATABASE IF EXISTS rastreosatelital;
 create database rastreosatelital;
 use rastreosatelital;
-
---
--- Table structure for table `accesos`
---
-
-DROP TABLE IF EXISTS `accesos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `accesos` (
-  `IP` varchar(255) DEFAULT NULL,
-  `HOST` varchar(255) DEFAULT NULL,
-  `USUARIO` varchar(255) DEFAULT NULL,
-  `FECHA` date DEFAULT NULL,
-  `HORA` time DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `asignados`
@@ -78,11 +62,12 @@ DROP TABLE IF EXISTS `centrales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `centrales` (
-  `ID_EMPRESA` varchar(10) DEFAULT NULL,
+  `ID_EMPRESA` varchar(10) NOT NULL,
   `LATITUD` double DEFAULT NULL,
   `LONGITUD` double DEFAULT NULL,
   `DIRECCION` varchar(150) DEFAULT NULL,
-  `TELEFONO` varchar(150) DEFAULT NULL
+  `TELEFONO` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`ID_EMPRESA`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -276,17 +261,18 @@ CREATE TABLE `posicion_clientes` (
 DROP TABLE IF EXISTS `recorridos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `recorridos` (
-  `ID` int(12) DEFAULT NULL,
+ CREATE TABLE `recorridos` (
+  `ID` int(12) NOT NULL,
   `N_UNIDAD` int(11) NOT NULL,
   `ID_EMPRESA` varchar(10) NOT NULL,
-  `LATITUD` double DEFAULT NULL,
-  `LONGITUD` double DEFAULT NULL,
+  `LATITUD` double NOT NULL,
+  `LONGITUD` double NOT NULL,
   `FECHA` date NOT NULL,
   `HORA` time NOT NULL,
   `VELOCIDAD` double DEFAULT NULL,
   `G1` int(1) unsigned DEFAULT NULL,
-  `G2` int(1) unsigned DEFAULT NULL
+  `G2` int(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`LATITUD`,`LONGITUD`,`FECHA`,`HORA`,`N_UNIDAD`,`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 1024 */;
@@ -327,7 +313,8 @@ CREATE TABLE `respaldo_asignacion_server` (
   `FONO` varchar(25) DEFAULT NULL,
   `HORA_INSERT` bigint(20) NOT NULL,
   `USUARIO` varchar(125) NOT NULL,
-  `DIRECCION` varchar(125) NOT NULL
+  `DIRECCION` varchar(125) NOT NULL,
+  PRIMARY KEY (`N_UNIDAD`,`COD_CLIENTE`,`ESTADO`,`FECHA`,`HORA`,`FONO`,`HORA_INSERT`,`USUARIO`,`DIRECCION`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -408,6 +395,7 @@ CREATE TABLE `vehiculos` (
   `NUM_CHASIS` varchar(125) DEFAULT NULL,
   `USUARIO` varchar(120) DEFAULT NULL,
   `REG_MUNICIPAL` int(5) DEFAULT NULL,
+  `SOAT` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`PLACA`,`N_UNIDAD`,`ID_EMPRESA`),
   KEY `FK_REFERENCE_6` (`ID_EMPRESA`),
   KEY `FK_REFERENCE_8` (`ID_CON`)

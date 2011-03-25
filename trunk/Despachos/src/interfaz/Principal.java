@@ -62,6 +62,9 @@ import sonido.Sonido;
  */
 public final class Principal extends javax.swing.JFrame {
 
+    //--------------------------------------------------------------------------
+    // Variables Globales
+    //--------------------------------------------------------------------------
     /**
      * Logger para guardar los log en un archivo y enviar por mail los de error
      */
@@ -130,6 +133,9 @@ public final class Principal extends javax.swing.JFrame {
     /*Puerto Serial*/
     private CommMonitoreo comm;
 
+    //--------------------------------------------------------------------------
+    // Constructores
+    //--------------------------------------------------------------------------
     /**
      * Constructor para recibir los datos de sesion desde el menu principal
      * @param String[] sesion -> (0)=nickUsuario,(1)=id_empresa,(2)=NombreUsuario
@@ -170,7 +176,7 @@ public final class Principal extends javax.swing.JFrame {
      * Configuracion inicial de la ventana para que se ejecuten cuando se cargue
      * y cree el objeto al momento de llamar a esta ventana
      */
-    public void ConfiguracionInicial() {
+    private void ConfiguracionInicial() {
         ActualizarTurno();
         BarraTitulo();
         redimencionarTablaVehiculos();
@@ -274,7 +280,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Abre la comunicación serial para leer el numero de telefono del cliente
      */
-    public void IdentificadorLlamadas() {
+    private void IdentificadorLlamadas() {
         String puerto = arcConfig.getProperty("comm");
         String separador = arcConfig.getProperty("separador");
         //System.out.println("Puerto COMM: " + puerto);
@@ -305,7 +311,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Actualiza la barra de titulo del frame
      */
-    public void BarraTitulo() {
+    private void BarraTitulo() {
         setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
         setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
@@ -387,11 +393,16 @@ public final class Principal extends javax.swing.JFrame {
                 log.error("{}", sesion[1], ex);
             }
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Iniciar nuevamente - Creando turnos por defecto...", "Error...", 1);
+            JOptionPane.showMessageDialog(null, "Iniciar nuevamente - Creando turnos por defecto y estados de taxi por defecto...", "Error...", 1);
             log.trace("Creando turnos por defecto - Cerrar Aplicación...");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(1,'6:0:0','13:59:59')");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(2,'14:0:0','21:59:59')");
             bd.ejecutarSentencia("INSERT INTO TURNOS VALUES(3,'22:0:0','5:59:59')");
+
+            log.trace("Creando estados de taxi por defecto - Cerrar Aplicación...");
+            bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('AC', 'ACTIVO', '-13369549')");
+            bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('ASI', 'ASIGNADO', '-23123326')");
+            bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('OCU', 'OCUPADO', '-34512')");
             System.exit(0);
         }
     }
@@ -559,7 +570,6 @@ public final class Principal extends javax.swing.JFrame {
         jtPorDespachar = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtDespachados = new javax.swing.JTable();
-        jbSalir = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jtTelefono = new javax.swing.JTextField();
@@ -574,7 +584,6 @@ public final class Principal extends javax.swing.JFrame {
         jbLimpiarCampos = new javax.swing.JButton();
         jbNuevoDespacho = new javax.swing.JButton();
         jbDespachar = new javax.swing.JButton();
-        lblFecha = new javax.swing.JLabel();
         lblReloj = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -583,17 +592,20 @@ public final class Principal extends javax.swing.JFrame {
         jtBuscarPorTelefono = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jtBuscarPorCodigo = new javax.swing.JTextField();
-        jbMenu = new javax.swing.JButton();
         jlIndicadorLlamada = new javax.swing.JLabel();
-        jbBuscarClienteNombre = new javax.swing.JButton();
         jlSenalInternet = new javax.swing.JLabel();
-        lblSenal = new javax.swing.JLabel();
-        jbPendientes = new javax.swing.JButton();
         jpPendiente = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         lblRecordar = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jbSalir = new javax.swing.JButton();
+        jbMenu = new javax.swing.JButton();
+        jbBuscarClienteNombre = new javax.swing.JButton();
+        jbPendientes = new javax.swing.JButton();
+        lblFecha = new javax.swing.JLabel();
+        lblSenal = new javax.swing.JLabel();
         lblAlarmaPendiente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -725,14 +737,6 @@ public final class Principal extends javax.swing.JFrame {
         jtDespachados.getColumnModel().getColumn(8).setMaxWidth(28);
         jtDespachados.getColumnModel().getColumn(9).setMinWidth(100);
         jtDespachados.getColumnModel().getColumn(9).setMaxWidth(100);
-
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
-        jbSalir.setText("Salir");
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Teléfono:");
@@ -876,10 +880,6 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        lblFecha.setFont(new java.awt.Font("Arial", 1, 20));
-        lblFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calendario.png"))); // NOI18N
-        lblFecha.setText("Fecha");
-
         lblReloj.setFont(new java.awt.Font("Arial", 1, 36));
         lblReloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblReloj.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/reloj.png"))); // NOI18N
@@ -951,34 +951,7 @@ public final class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jbMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/menu.jpg"))); // NOI18N
-        jbMenu.setText("Menú");
-        jbMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbMenuActionPerformed(evt);
-            }
-        });
-
         jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
-
-        jbBuscarClienteNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
-        jbBuscarClienteNombre.setText("Clientes");
-        jbBuscarClienteNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbBuscarClienteNombreActionPerformed(evt);
-            }
-        });
-
-        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
-
-        jbPendientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/pendientes.png"))); // NOI18N
-        jbPendientes.setText("Pendientes");
-        jbPendientes.setActionCommand("jbPendientes");
-        jbPendientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbPendientesActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Se debe despachar el cliente en");
 
@@ -1018,7 +991,77 @@ public final class Principal extends javax.swing.JFrame {
                 .addGap(13, 13, 13))
         );
 
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
+        jbSalir.setText("Salir");
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
+
+        jbMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/menu.jpg"))); // NOI18N
+        jbMenu.setText("Menú");
+        jbMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMenuActionPerformed(evt);
+            }
+        });
+
+        jbBuscarClienteNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
+        jbBuscarClienteNombre.setText("Clientes");
+        jbBuscarClienteNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClienteNombreActionPerformed(evt);
+            }
+        });
+
+        jbPendientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/pendientes.png"))); // NOI18N
+        jbPendientes.setText("Pendientes");
+        jbPendientes.setActionCommand("jbPendientes");
+        jbPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPendientesActionPerformed(evt);
+            }
+        });
+
+        lblFecha.setFont(new java.awt.Font("Arial", 1, 20));
+        lblFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calendario.png"))); // NOI18N
+        lblFecha.setText("Fecha");
+
+        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
+
         lblAlarmaPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/alarma.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jbSalir)
+                .addGap(18, 18, 18)
+                .addComponent(jbMenu)
+                .addGap(18, 18, 18)
+                .addComponent(jbBuscarClienteNombre)
+                .addGap(18, 18, 18)
+                .addComponent(jbPendientes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
+                .addComponent(lblAlarmaPendiente)
+                .addGap(18, 18, 18)
+                .addComponent(lblSenal)
+                .addGap(18, 18, 18)
+                .addComponent(lblFecha))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblAlarmaPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+            .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1044,22 +1087,10 @@ public final class Principal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbSalir)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbMenu)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbBuscarClienteNombre)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbPendientes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
-                        .addComponent(lblAlarmaPendiente)
-                        .addGap(34, 34, 34)
-                        .addComponent(lblSenal)
-                        .addGap(18, 18, 18)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jlSenalInternet)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblFecha)))
+                        .addGap(111, 111, 111))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1074,7 +1105,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1086,23 +1117,16 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlSenalInternet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                        .addComponent(jbPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAlarmaPendiente, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jlSenalInternet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-1037)/2, (screenSize.height-800)/2, 1037, 800);
+        setBounds((screenSize.width-1037)/2, (screenSize.height-793)/2, 1037, 793);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
@@ -1920,15 +1944,12 @@ public final class Principal extends javax.swing.JFrame {
             } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
                 log.trace("No se obtuvieron campos para el ResultSet...");
             } else if (ex.getMessage().equals("Illegal operation on empty result set.")) {
-                JOptionPane.showMessageDialog(null, "Reiniciar el programa - Creando los estados de los taxis por defecto...", "Error...", 1);
-                log.trace("Creando los estados de los taxis por defecto - Reiniciar el programa...");
-                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('AC', 'ACTIVO', '-13369549')");
-                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('ASI', 'ASIGNADO', '-23123326')");
-                bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('OCU', 'OCUPADO', '-34512')");
-                System.exit(0);
+                log.trace("No hay estados para los taxis, crear estados por defecto...");
             } else {
                 log.error("{}", sesion[1], ex);
             }
+        } catch (NullPointerException ex) {
+            //System.out.println("NULL AL PINTAR EL ESTADO... colorCodigosBD()");
         }
     }
 
@@ -1943,37 +1964,41 @@ public final class Principal extends javax.swing.JFrame {
         Map unidadCodigoBD = new HashMap();
         ResultSet rsPintarEstadoTaxi = null;
         try {
-            String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
-            rsPintarEstadoTaxi = bd.ejecutarConsultaStatement2(sql);
-            while (rsPintarEstadoTaxi.next()) {
-                try {
-                    unidadCodigoBD.put(rsPintarEstadoTaxi.getString(1), rsPintarEstadoTaxi.getString(2));
-                } catch (NullPointerException ex) {
-                    //System.err.println("Null al obtener unidad y id_cod...");
+            try {
+                String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
+                rsPintarEstadoTaxi = bd.ejecutarConsultaStatement2(sql);
+                while (rsPintarEstadoTaxi.next()) {
+                    try {
+                        unidadCodigoBD.put(rsPintarEstadoTaxi.getString(1), rsPintarEstadoTaxi.getString(2));
+                    } catch (NullPointerException ex) {
+                        //System.err.println("Null al obtener unidad y id_cod...");
+                    }
+                } // ArrayList codigo color
+                colorCodigosBD();
+
+            } catch (SQLException ex) {
+                if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
+                    log.error("ResultSet rsPintarEstadoTaxi cerrado");
+                } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
+                    log.error("NO hay campos para el resulset rsPintarEstadoTaxi");
+                } else if (ex.getMessage().equals("After end of result set")) {
+                } else {
+                    log.error("{}", sesion[1], ex);
                 }
-            } // ArrayList codigo color
-            colorCodigosBD();
-
-        } catch (SQLException ex) {
-            if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
-                log.error("ResultSet rsPintarEstadoTaxi cerrado");
-            } else if (ex.getMessage().equals("Query generated no fields for ResultSet")) {
-                log.error("NO hay campos para el resulset rsPintarEstadoTaxi");
-            } else if (ex.getMessage().equals("After end of result set")) {
-            } else {
-                log.error("{}", sesion[1], ex);
             }
-        }
 
-        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        tcr.setVerticalAlignment(SwingConstants.CENTER);
+            DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+            tcr.setHorizontalAlignment(SwingConstants.CENTER);
+            tcr.setVerticalAlignment(SwingConstants.CENTER);
 
-        for (int i = 0, len = jtVehiculos.getColumnCount(); i < len; i++) {
-            TableColumn column = jtVehiculos.getColumn(jtVehiculos.getColumnName(i));
-            column.setCellRenderer(new formatoTabla(encab, unidadCodigoBD, codigo, color));
+            for (int i = 0, len = jtVehiculos.getColumnCount(); i < len; i++) {
+                TableColumn column = jtVehiculos.getColumn(jtVehiculos.getColumnName(i));
+                column.setCellRenderer(new formatoTabla(encab, unidadCodigoBD, codigo, color));
+            }
+            jtVehiculos.repaint();
+        } catch (NullPointerException ex) {
+            System.out.println("NULL AL PINTAR EL ESTADO... pintarEstadoTaxi()");
         }
-        jtVehiculos.repaint();
     }
     private int intMinutoAnt = 0;
     private int contador = 0;
@@ -2699,6 +2724,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton jbBuscarClienteNombre;
