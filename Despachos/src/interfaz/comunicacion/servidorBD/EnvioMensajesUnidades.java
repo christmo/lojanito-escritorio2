@@ -79,7 +79,7 @@ public class EnvioMensajesUnidades extends Thread {
 
             String respuesta;
             if ((respuesta = entrada.readLine()) != null) {
-                log.trace("Viende de KRADAC: {}", respuesta);
+                log.trace("Viene de KRADAC: {}", respuesta);
             } else {
                 log.trace("NO hay respuesta del servidor -> esta abajo el server KRADAC");
             }
@@ -98,7 +98,7 @@ public class EnvioMensajesUnidades extends Thread {
         try {
             try {
                 mensajeSocket = new Socket(DIRECCION, PUERTO);
-                log.trace("Iniciar conexion con el server [{}]", DIRECCION);
+                log.trace("Iniciar conexion con el server [{}] para enviar mensajes...", DIRECCION);
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
             } catch (IOException ex) {
@@ -122,7 +122,7 @@ public class EnvioMensajesUnidades extends Thread {
             }
             try {
                 mensajeSocket.close();
-                log.trace("Cerrar conexion con el server");
+                log.trace("Cerrar conexion con el server para enviar mensajes...");
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {

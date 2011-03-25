@@ -51,6 +51,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
         }
     }
 
+    /**
+     * Abre el puerto al servidor KRADAC para consulta de recorridos
+     */
     public static void AbrirPuerto() {
         try {
             try {
@@ -63,14 +66,15 @@ public class ConsultaRecorridosServidorBD extends Thread {
             } catch (IOException ex) {
                 PonerIconoNOSenal();
                 if (ex.getMessage().equals("No route to host: connect")) {
-                    System.err.println("Conexion rechasada por el servidor de BD, No se pudo conectar...");
+                    System.err.println("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...");
                     cerrarConexionServerKradac();
                     try {
                         Thread.sleep(1000);
                         AbrirPuerto();
                     } catch (InterruptedException ex1) {
-                        log.error("{}", Principal.sesion[1]);
+                        log.error("{} error de interrupcion de hilo", Principal.sesion[1], ex1);
                     }
+
                 }
             }
         } catch (StackOverflowError m) {
@@ -272,7 +276,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         HayInternet = true;
         int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
         //log.info("Numero de filas respaldadas: {}", filasRespaldadas);
-        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas,bd);
+        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, bd);
         actualizarServer.start();
     }
 

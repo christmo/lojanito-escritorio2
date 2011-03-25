@@ -135,7 +135,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Asignacion, Respaldo insert Server Kradac: {}", sql2);
-            //cb.CerrarConexion();
+            cb.CerrarConexion();
         } else {
             log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
         }
@@ -243,7 +243,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Despacho, Respaldo insert Server Kradac: {}", sql2);
-            //cb.CerrarConexion();
+            cb.CerrarConexion();
         } else {
             log.trace("Exito Despacho guardada server KRADAC: {}", sql);
         }
@@ -342,7 +342,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
             cb.ejecutarSentencia(sql2);
             log.trace("Fallo Liberacion, Respaldo insert Server Kradac: {}", sql2);
-            //cb.CerrarConexion();
+            cb.CerrarConexion();
         } else {
             log.trace("Exito Liberacion guardada server KRADAC: {}", sql);
         }
