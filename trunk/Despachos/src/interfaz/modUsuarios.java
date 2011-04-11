@@ -364,7 +364,7 @@ public class modUsuarios extends javax.swing.JDialog {
                                 JOptionPane.showMessageDialog(this, "Debe ingresar una clave para el usuario...", "Error...", 0);
                             } else {
                                 if (jcTurnos.getSelectedIndex() == 0) {
-                                    JOptionPane.showMessageDialog(this, "Debe seleccionar un turno para el usuario usuario...", "Error...", 0);
+                                    JOptionPane.showMessageDialog(this, "Debe seleccionar un turno para el usuario...", "Error...", 0);
                                 } else {
                                     if (!usuarioIngresado(user)) {
                                         boolean r = bd.insertarUsuario(
@@ -382,6 +382,7 @@ public class modUsuarios extends javax.swing.JDialog {
                                             Icon ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
                                             JOptionPane.showMessageDialog(this, "Datos guardados correctamente...", "Mensaje...", 1, ic);
                                             this.usuarios = CargarUsuarios();
+                                            LimpiarCampos();
                                         } else {
                                             JOptionPane.showMessageDialog(this, "No pudo guardar el usuario...", "Error...", 0);
                                         }
@@ -401,6 +402,7 @@ public class modUsuarios extends javax.swing.JDialog {
                                             Icon ic = new ImageIcon(getClass().getResource("/interfaz/iconos/correcto.png"));
                                             JOptionPane.showMessageDialog(this, "Datos actualizados correctamente...", "Mensaje...", 1, ic);
                                             this.usuarios = CargarUsuarios();
+                                            LimpiarCampos();
                                         } else {
                                             JOptionPane.showMessageDialog(this, "No se pudo actualizar los datos del usuario...", "Error...", 0);
                                         }
@@ -421,11 +423,16 @@ public class modUsuarios extends javax.swing.JDialog {
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
         try {
             String usuario = jlUsuarios.getSelectedValue().toString();
-            int op = JOptionPane.showConfirmDialog(this, "Desea eliminar el usuario: " + usuario, "Mensaje...", JOptionPane.OK_CANCEL_OPTION);
-            if (op == 0) {
-                EliminarUsuario(usuario);
+            if (!usuario.equals("KRADAC") && !usuario.equals("KRC")) {
+                int op = JOptionPane.showConfirmDialog(this, "Desea eliminar el usuario: " + usuario, "Mensaje...", JOptionPane.OK_CANCEL_OPTION);
+                if (op == 0) {
+                    EliminarUsuario(usuario);
+                    LimpiarCampos();
+                    this.usuarios = CargarUsuarios();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Al usuario KRADAC no se lo puede eliminar...", "Error...", 0);
                 LimpiarCampos();
-                this.usuarios = CargarUsuarios();
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un usuario...", "Error...", 0);
@@ -475,7 +482,19 @@ public class modUsuarios extends javax.swing.JDialog {
     }//GEN-LAST:event_jtTelefonoFocusLost
 
     private void jtUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtUsuarioFocusLost
-        jtUsuario.setText(jtUsuario.getText().toUpperCase());
+        String usuario = jtUsuario.getText().toUpperCase().trim();
+
+        if (jtUsuario.isEditable()) {
+            if (!usuario.equals("")) {
+                if (validarUsuario(usuario)) {
+                    JOptionPane.showMessageDialog(this, "Este nombre de usuario ya está siendo utilizado por otra persona, por favor ingresar otro...", "Error...", 0);
+                    jtUsuario.setText("");
+                    jtUsuario.requestFocus();
+                } else {
+                    jtUsuario.setText(usuario);
+                }
+            }
+        }
     }//GEN-LAST:event_jtUsuarioFocusLost
 
     private void jpClaveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jpClaveFocusGained
@@ -574,5 +593,15 @@ public class modUsuarios extends javax.swing.JDialog {
      */
     private void EliminarUsuario(String usuario) {
         bd.eliminarUsuario(usuario);
+    }
+
+    /**
+     * Valida si el usuario ya está ingresado en la base de datos
+     * true si existe false si no esta.
+     * @param usuario
+     * @return
+     */
+    private boolean validarUsuario(String usuario) {
+        return bd.validarNombreUsuario(usuario);
     }
 }
