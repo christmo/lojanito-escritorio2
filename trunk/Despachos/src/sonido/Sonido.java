@@ -36,30 +36,41 @@ public class Sonido extends Thread {
             try {
                 AudioInputStream source;
                 source = funcionesUtilidad.obtenerArchivoSonidoWAV(nombre);
-                DataLine.Info info = new DataLine.Info(Clip.class, source.getFormat());
-                Clip clip = (Clip) AudioSystem.getLine(info);
-                clip.open(source);
-                clip.start();
-
+                try {
+                    DataLine.Info info = new DataLine.Info(Clip.class, source.getFormat());
+                    Clip clip = (Clip) AudioSystem.getLine(info);
+                    clip.open(source);
+                    clip.start();
+                } catch (NullPointerException nex) {
+                    System.out.println("No hay archivo de sonido... :-(");
+                    Beep();
+                }
                 try {
                     Thread.sleep(segundos * 1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Sonido.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             } catch (LineUnavailableException ex) {
                 Logger.getLogger(Sonido.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(Sonido.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            Toolkit.getDefaultToolkit().beep();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Sonido.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Toolkit.getDefaultToolkit().beep();
+            Beep();
         }
+    }
+
+    /**
+     * Emite un sonido por defecto cuando no se encuentra el verdadero sonido
+     * de pendientes
+     */
+    public void Beep() {
+        Toolkit.getDefaultToolkit().beep();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Sonido.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Toolkit.getDefaultToolkit().beep();
     }
 }
