@@ -7,6 +7,9 @@ package interfaz.reportes;
 import BaseDatos.ConexionBase;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -31,10 +34,8 @@ public class GenerarReporte {
     public static void Generar(Map par, InputStream ruta, ConexionBase bd) {
         try {
             Map parameters = par;
-
             //JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("plantillas/Clientes.jrxml"));
             JasperReport report = JasperCompileManager.compileReport(ruta);
-
             //InputStream report= GenerarReporteClientes.class.getResourceAsStream("/interfaz/Reportes/Clientes.jasper");
             //JasperReport report = JasperCompileManager.compileReport("/interfaz/Reportes/prueba.jrxml");
             JasperPrint print = JasperFillManager.fillReport(report, parameters, bd.getConexion());
@@ -42,8 +43,8 @@ public class GenerarReporte {
             //JasperExportManager.exportReportToPdfFile(print,"/tmp/demodos.pdf");
             //Para visualizar el pdf directamente desde java
             JasperViewer.viewReport(print, false);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JRException ex) {
+            Logger.getLogger(GenerarReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
