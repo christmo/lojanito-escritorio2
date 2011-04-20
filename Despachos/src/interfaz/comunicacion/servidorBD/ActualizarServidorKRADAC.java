@@ -60,10 +60,14 @@ public class ActualizarServidorKRADAC extends Thread {
             long minutos;
             rs = bd.getFilasRespaldoLocalAsignaciones();
             while (rs.next()) {
-                long HoraAct = funciones.getHoraEnMilis();
-                long HoraInsert = rs.getLong("HORA_INSERT");
+                long HoraAct = funciones.getHoraEnMilis()/1000; // hora actual en segundos
+                long HoraInsert = rs.getLong("HORA_INSERT"); // BD trae tiempo en segundos
                 int MinDespacho = rs.getInt("HORA");
-                minutos = (((HoraAct - HoraInsert) / 1000) / 60) + MinDespacho;
+                /**
+                 * No es necesario dividir para 1000 en la base de datos se
+                 * almacena los tiempos en segundos
+                 */
+                minutos = ((HoraAct - HoraInsert) / 60) + MinDespacho;
                 boolean estadoInsersionServidor = InsertServidorKRADAC(
                         rs.getInt("N_UNIDAD"),
                         rs.getInt("COD_CLIENTE"),

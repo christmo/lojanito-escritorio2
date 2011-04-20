@@ -3,14 +3,15 @@
 -- christmo
 ---------------------------------------------------------
 -- Obtenida con el comando: mysqldump -u root -p -d rastreosatelital > base.sql
+-- cambio de version de la base de datos...
 ---------------------------------------------------------
 */
 
--- MySQL dump 10.13  Distrib 5.1.36, for Win32 (ia32)
+-- MySQL dump 10.13  Distrib 5.5.8, for Win32 (x86)
 --
--- Host: localhost    Database: rastreo
+-- Host: localhost    Database: rastreosatelital
 -- ------------------------------------------------------
--- Server version	5.1.36-community-log
+-- Server version	5.5.8-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -51,8 +52,116 @@ CREATE TABLE `asignados` (
   `ID_TURNO` int(11) DEFAULT NULL,
   `USUARIO` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIGNADOS`)
-) ENGINE=MyISAM AUTO_INCREMENT=7498 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `asignados_local`
+--
+
+DROP TABLE IF EXISTS `asignados_local`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `asignados_local` (
+  `id` int(8) NOT NULL DEFAULT '0',
+  `n_unidad` int(12) NOT NULL DEFAULT '0',
+  `cod_cliente` int(11) NOT NULL DEFAULT '0',
+  `estado` varchar(25) NOT NULL,
+  `fecha` date NOT NULL DEFAULT '0000-00-00',
+  `hora` time NOT NULL DEFAULT '00:00:00',
+  `fono` varchar(25) NOT NULL DEFAULT '',
+  `valor` int(12) NOT NULL DEFAULT '0',
+  `estado_insert` varchar(3) NOT NULL,
+  `usuario` varchar(25) NOT NULL,
+  `direccion` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`,`n_unidad`,`cod_cliente`,`estado`,`fecha`,`hora`,`fono`,`valor`,`estado_insert`,`usuario`,`direccion`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+/*!50100 PARTITION BY HASH (ID)
+PARTITIONS 400 */;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
+
+    ON rastreosatelital.asignados_local FOR EACH ROW
+
+BEGIN
+
+    DECLARE FECHA DATETIME;
+
+    DECLARE LIMITE INT(12);
+
+    SET LIMITE = -2;
+
+    IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
+
+      
+
+      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+
+      SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
+      SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
+
+    ELSE
+
+      
+
+        IF (LIMITE = NEW.VALOR) THEN
+
+            SET NEW.HORA = CURTIME();
+
+            SET NEW.FECHA = CURDATE();
+
+        ELSE
+
+            SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+
+            SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
+            SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
+
+        END IF;
+
+    END IF;
+
+    
+
+    SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
+
+
+
+    CALL SP_INSERTAR_RESPALDAR_SERVER(
+
+      NEW.N_UNIDAD,
+
+      NEW.COD_CLIENTE,
+
+      NEW.ESTADO,
+
+      NEW.FONO,
+
+      NEW.VALOR,
+
+      NEW.ESTADO_INSERT,
+
+      NEW.USUARIO,
+
+      NEW.DIRECCION,@x);
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `centrales`
@@ -142,7 +251,7 @@ CREATE TABLE `conductores` (
   `MAIL` varchar(125) DEFAULT NULL,
   `FOTO` varchar(125) DEFAULT NULL,
   PRIMARY KEY (`ID_CON`,`CEDULA_CONDUCTOR`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,7 +370,7 @@ CREATE TABLE `posicion_clientes` (
 DROP TABLE IF EXISTS `recorridos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
- CREATE TABLE `recorridos` (
+CREATE TABLE `recorridos` (
   `ID` int(12) NOT NULL,
   `N_UNIDAD` int(11) NOT NULL,
   `ID_EMPRESA` varchar(10) NOT NULL,
@@ -275,7 +384,7 @@ DROP TABLE IF EXISTS `recorridos`;
   PRIMARY KEY (`LATITUD`,`LONGITUD`,`FECHA`,`HORA`,`N_UNIDAD`,`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC
 /*!50100 PARTITION BY HASH (ID)
-PARTITIONS 1024 */;
+PARTITIONS 400 */;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,11 +415,11 @@ DROP TABLE IF EXISTS `respaldo_asignacion_server`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `respaldo_asignacion_server` (
   `N_UNIDAD` int(12) NOT NULL,
-  `COD_CLIENTE` int(11) DEFAULT NULL,
+  `COD_CLIENTE` int(11) NOT NULL,
   `ESTADO` varchar(25) NOT NULL,
   `FECHA` date NOT NULL,
   `HORA` int(11) NOT NULL,
-  `FONO` varchar(25) DEFAULT NULL,
+  `FONO` varchar(25) NOT NULL,
   `HORA_INSERT` bigint(20) NOT NULL,
   `USUARIO` varchar(125) NOT NULL,
   `DIRECCION` varchar(125) NOT NULL,
@@ -347,7 +456,7 @@ CREATE TABLE `turnos` (
   `HORA_INI` time DEFAULT NULL,
   `HORA_FIN` time DEFAULT NULL,
   PRIMARY KEY (`ID_TURNO`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,6 +480,11 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`ID_EMPRESA`,`USUARIO`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Creacion del usuario KRADAC por defecto
+--
+INSERT INTO `usuarios` VALUES ('KR','KRADAC','47c6330f847f1342c4a306ef20869d7c','KRADAC',NULL,NULL,1,'Activo','Administrador',NULL);
 
 --
 -- Table structure for table `vehiculos`
@@ -401,6 +515,7 @@ CREATE TABLE `vehiculos` (
   KEY `FK_REFERENCE_8` (`ID_CON`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -410,4 +525,4 @@ CREATE TABLE `vehiculos` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-12-09 15:31:12
+-- Dump completed on 2011-04-15 18:29:41

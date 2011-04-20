@@ -267,6 +267,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
             log.error("{}", Principal.sesion[1]);
         }
     }
+    static int contador = 0;
 
     /**
      * Pone el icono en la interfaz Principal de señal
@@ -274,10 +275,23 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoSenal() {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
-        int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
-        //log.info("Numero de filas respaldadas: {}", filasRespaldadas);
-        ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, bd);
-        actualizarServer.start();
+        try {
+            if (Principal.arcConfig.getProperty("actualizar_respaldos").equals("si")
+                    || Principal.arcConfig.getProperty("actualizar_respaldos").equals("SI")
+                    && !Principal.arcConfig.getProperty("actualizar_respaldos").equals("")
+                    && Principal.arcConfig.getProperty("actualizar_respaldos") != null) {
+
+                int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
+
+                if (contador == 0) {
+                    ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, bd);
+                    actualizarServer.start();
+                    contador++;
+                }
+            }
+        } catch (NullPointerException nex) {
+            log.trace("No se a especificado la directiva [actualizar_respaldos] en el archivo de configuración...");
+        }
     }
 
     /**
@@ -287,5 +301,6 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoNOSenal() {
         Principal.lblSenal.setIcon(nosenal);
         HayInternet = false;
+        contador = 0;
     }
 }
