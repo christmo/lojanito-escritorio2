@@ -620,8 +620,29 @@ public class ingresoVehiculos extends javax.swing.JDialog {
                     JOptionPane.INFORMATION_MESSAGE,
                     ic);
             Principal.redimencionarTablaVehiculos();
-            super.dispose();
+            limpiarCampos();
         }
 
+    }
+
+    /**
+     * Limpia todos los campos del Formulario...
+     */
+    private void limpiarCampos() {
+        txtPlaca.setText("");
+        txtNUnidad.setText("");
+        cmbConductor.setSelectedIndex(0);
+        cmbCondAux.setSelectedIndex(0);
+        txtInformacion.setText("");
+        txtMarca.setText("");
+        txtModelo.setText("");
+        txtNumChasis.setText("");
+        txtNumMotor.setText("");
+        txtPropietario.setText("");
+        txtRegistroMunicipal.setText("0");
+        txtSOAT.setText("");
+        lblEtiquetaImagen.setText("");
+        Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultveh.png"));
+        lblImagen.setIcon(fot);
     }
 }
