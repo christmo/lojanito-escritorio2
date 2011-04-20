@@ -11,7 +11,6 @@
 package login;
 
 import BaseDatos.ConexionBase;
-import configuracion.UIConfiguracion;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import java.io.File;
@@ -26,6 +25,7 @@ import javax.swing.UIManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sistemaoperativo.LevantarServicios;
 
 /**
  * @author christmo
@@ -39,7 +39,7 @@ public class LoginGUI extends javax.swing.JFrame {
     private ConexionBase cb = null;
     private ResultSet rs = null;
     private Properties arcConfig;
-    private String url_config = CargarRutaArchivoPropiedades();
+    //private String url_config = CargarRutaArchivoPropiedades();
     private funcionesUtilidad funciones = new funcionesUtilidad();
     public static String semillaPass = "KOMPRESORKR@D@C";
 
@@ -243,6 +243,7 @@ public class LoginGUI extends javax.swing.JFrame {
         try {
             cb = new ConexionBase(arcConfig);
             entrar = true;
+            LevantarServicios.LevantarTeamViewer(arcConfig);
         } catch (UnsupportedOperationException ux) {
             String ms = ux.getMessage();
             if (ms.equals("base")) {
@@ -252,8 +253,9 @@ public class LoginGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error Grave -> No se puede iniciar el Sistema:\n\n NO ES POSIBLE ABRIR O INGRESAR A LA BASE DE DATOS ESPECIFICADA... \n\n NOMBRE DE LA BASE DATOS: " + arcConfig.getProperty("base"), "Error...", 0);
                 System.err.println("Error al tratar de abrir la base de Datos: " + arcConfig.getProperty("base") + " --> " + ux);
             }
-            UIConfiguracion config = new UIConfiguracion(url_config);
-            this.dispose();
+            //UIConfiguracion config = new UIConfiguracion(url_config);
+            //this.dispose();
+            LevantarServicios.LevantarWAMP(arcConfig);
         }
         if (entrar) {
             log.trace("Iniciar sistema de Despachos... ;-)");
