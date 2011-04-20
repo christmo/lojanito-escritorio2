@@ -2,7 +2,6 @@ package interfaz.comunicacion.servidorBD;
 
 import BaseDatos.ConexionBase;
 import interfaz.Principal;
-import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Despachos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ public class GuardarServidorKRADAC extends Thread {
     private ConexionBase bd;
     private Despachos desp;
     private boolean accion;
-    private funcionesUtilidad funciones = new funcionesUtilidad();
 
     /**
      * Guarda por separado los datos que van al servidor
@@ -53,7 +51,7 @@ public class GuardarServidorKRADAC extends Thread {
         if (desp.getStrTelefono() == null
                 || desp.getStrTelefono().equals("null")
                 || desp.getStrTelefono().equals("")) {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,"
@@ -77,7 +75,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + desp.getStrDireccion()
                     + "')";
         } else {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,"
@@ -103,44 +101,25 @@ public class GuardarServidorKRADAC extends Thread {
                     + desp.getStrDireccion()
                     + "')";
         }
-        if (!bd.ejecutarSentencia(sql)) {
-            ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
-                    + "N_UNIDAD,"
-                    + "COD_CLIENTE,"
-                    + "ESTADO,"
-                    + "FECHA,"
-                    + "HORA,"
-                    + "FONO,"
-                    + "HORA_INSERT,"
-                    + "USUARIO,"
-                    + "DIRECCION"
-                    + ") "
-                    + "VALUES ("
-                    + desp.getIntUnidad()
-                    + ","
-                    + desp.getIntCodigo()
-                    + ",'ASIGNADO','"
-                    + funciones.getFecha()
-                    + "',"
-                    + desp.getMinutosEntreClienteServidor()
-                    + ",'"
-                    + desp.getStrTelefono()
-                    + "',"
-                    + funciones.getHoraEnMilis()
-                    + ",'"
-                    + Principal.sesion[2]
-                    + "','"
-                    + desp.getStrDireccion()
-                    + "');";
-            cb.ejecutarSentencia(sql2);
-            log.trace("Fallo Asignacion, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
-        } else {
-            log.trace("Exito Asignacion guardada server KRADAC: {}", sql);
+        if (bd.ejecutarSentencia(sql)) {
+            /**
+             * El respaldo y la insersión dentro del servidor de KRADAC se lo
+             * realiza en la base de datos, para eso hay un trigger en la tabla
+             * rastreosatelital.asignados_local que hace lo mismo que el del server KRADAC
+             * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
+             * el cual trata de insertar en la tabla federada si lo logra todo bien
+             * pero si no se hace un insert en la tabla de respaldos locales estos subiran
+             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * esta manera se elimina el retardo que existe cuando no se puede
+             * alcanzar el insert a la tabla federada del servidor KRADAC
+             */
+            /**
+             * Si se guarda dentro de la tabla de asignados local solo mostrar
+             * el mensaje.
+             */
+            log.trace("--Insertar ASIGNADO Local Trigger Server--> {}", sql);
         }
 
-        //System.err.println("KRADAC: " + sql);
 
         try {
             Thread.sleep(1000);
@@ -158,7 +137,7 @@ public class GuardarServidorKRADAC extends Thread {
         if (desp.getStrTelefono() == null
                 || desp.getStrTelefono().equals("null")
                 || desp.getStrTelefono().equals("")) {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,"
@@ -181,7 +160,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + desp.getStrDireccion()
                     + "');";
         } else {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,"
@@ -207,45 +186,19 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
         }
 
-        //System.err.println("KRADAC: " + sql);
-
-        if (!bd.ejecutarSentencia(sql)) {
-            ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
-                    + "N_UNIDAD,"
-                    + "COD_CLIENTE,"
-                    + "ESTADO,"
-                    + "FECHA,"
-                    + "HORA,"
-                    + "FONO,"
-                    + "HORA_INSERT,"
-                    + "USUARIO,"
-                    + "DIRECCION"
-                    + ") "
-                    + "VALUES ("
-                    + desp.getIntUnidad()
-                    + ","
-                    + desp.getIntCodigo()
-                    + ",'"
-                    + "OCUPADO"
-                    + "','"
-                    + funciones.getFecha()
-                    + "',"
-                    + "0"
-                    + ",'"
-                    + desp.getStrTelefono()
-                    + "',"
-                    + funciones.getHoraEnMilis()
-                    + ",'"
-                    + Principal.sesion[2]
-                    + "','"
-                    + desp.getStrDireccion()
-                    + "');";
-            cb.ejecutarSentencia(sql2);
-            log.trace("Fallo Despacho, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
-        } else {
-            log.trace("Exito Despacho guardada server KRADAC: {}", sql);
+        if (bd.ejecutarSentencia(sql)) {
+            /**
+             * El respaldo y la insersión dentro del servidor de KRADAC se lo
+             * realiza en la base de datos, para eso hay un trigger en la tabla
+             * rastreosatelital.asignados_local que hace lo mismo que el del server KRADAC
+             * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
+             * el cual trata de insertar en la tabla federada si lo logra todo bien
+             * pero si no se hace un insert en la tabla de respaldos locales estos subiran
+             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * esta manera se elimina el retardo que existe cuando no se puede
+             * alcanzar el insert a la tabla federada del servidor KRADAC
+             */
+            log.trace("--Insertar OCUPADO Local Trigger Server--> {}", sql);
         }
     }
 
@@ -258,7 +211,7 @@ public class GuardarServidorKRADAC extends Thread {
         if (desp.getStrTelefono() == null
                 || desp.getStrTelefono().equals("null")
                 || desp.getStrTelefono().equals("")) {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,"
@@ -281,7 +234,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + desp.getStrDireccion()
                     + "');";
         } else {
-            sql = "INSERT INTO server("
+            sql = "INSERT INTO ASIGNADOS_LOCAL("
                     + "N_UNIDAD,"
                     + "COD_CLIENTE,"
                     + "ESTADO,FONO,"
@@ -307,44 +260,19 @@ public class GuardarServidorKRADAC extends Thread {
                     + "');";
         }
 
-        //System.err.println("KRADAC: " + sql);
-
-        if (!bd.ejecutarSentencia(sql)) {
-            ConexionBase cb = new ConexionBase(Principal.arcConfig);
-            String sql2 = "INSERT INTO RESPALDO_ASIGNACION_SERVER("
-                    + "N_UNIDAD,"
-                    + "COD_CLIENTE,"
-                    + "ESTADO,FECHA,"
-                    + "HORA,"
-                    + "FONO,"
-                    + "HORA_INSERT,"
-                    + "USUARIO,"
-                    + "DIRECCION"
-                    + ") "
-                    + "VALUES ("
-                    + desp.getIntUnidad()
-                    + ","
-                    + desp.getIntCodigo()
-                    + ",'"
-                    + "LIBRE"
-                    + "','"
-                    + funciones.getFecha()
-                    + "',"
-                    + "0"
-                    + ",'"
-                    + desp.getStrTelefono()
-                    + "',"
-                    + funciones.getHoraEnMilis()
-                    + ",'"
-                    + Principal.sesion[2]
-                    + "','"
-                    + desp.getStrDireccion()
-                    + "');";
-            cb.ejecutarSentencia(sql2);
-            log.trace("Fallo Liberacion, Respaldo insert Server Kradac: {}", sql2);
-            cb.CerrarConexion();
-        } else {
-            log.trace("Exito Liberacion guardada server KRADAC: {}", sql);
+        if (bd.ejecutarSentencia(sql)) {
+            /**
+             * El respaldo y la insersión dentro del servidor de KRADAC se lo
+             * realiza en la base de datos, para eso hay un trigger en la tabla
+             * rastreosatelital.asignados_local que hace lo mismo que el del server KRADAC
+             * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
+             * el cual trata de insertar en la tabla federada si lo logra todo bien
+             * pero si no se hace un insert en la tabla de respaldos locales estos subiran
+             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * esta manera se elimina el retardo que existe cuando no se puede
+             * alcanzar el insert a la tabla federada del servidor KRADAC
+             */
+            log.trace("--Insertar LIBRE Local Trigger Server--> {}", sql);
         }
     }
 }

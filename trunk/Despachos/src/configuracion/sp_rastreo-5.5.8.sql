@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.36, for Win32 (ia32)
+-- MySQL dump 10.13  Distrib 5.5.8, for Win32 (x86)
 --
 -- Host: localhost    Database: rastreosatelital
 -- ------------------------------------------------------
--- Server version	5.1.36-community-log
+-- Server version	5.5.8-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,8 +14,55 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-use rastreosatelital;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
+    ON rastreosatelital.asignados_local FOR EACH ROW
+BEGIN
+    DECLARE FECHA DATETIME;
+    DECLARE LIMITE INT(12);
+    SET LIMITE = -2;
+    IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
+      
+      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+      SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+      SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
+    ELSE
+      
+        IF (LIMITE = NEW.VALOR) THEN
+            SET NEW.HORA = CURTIME();
+            SET NEW.FECHA = CURDATE();
+        ELSE
+            SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+            SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+            SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
+        END IF;
+    END IF;
+    
+    SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
+
+    CALL SP_INSERTAR_RESPALDAR_SERVER(
+      NEW.N_UNIDAD,
+      NEW.COD_CLIENTE,
+      NEW.ESTADO,
+      NEW.FONO,
+      NEW.VALOR,
+      NEW.ESTADO_INSERT,
+      NEW.USUARIO,
+      NEW.DIRECCION,@x);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Dumping routines for database 'rastreosatelital'
@@ -358,6 +405,72 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_INSERTAR_RESPALDAR_SERVER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RESPALDAR_SERVER`(
+IN PN_UNIDAD INTEGER,
+IN PCOD_CLIENTE INTEGER,
+IN PESTADO VARCHAR(50),
+IN PFONO VARCHAR(50),
+IN PVALOR INT,
+IN PESTADO_INSERT VARCHAR(50),
+IN PUSUARIO VARCHAR(50),
+IN PDIRECCION  VARCHAR(150),
+out x varchar(150)
+)
+BEGIN
+#DECLARE CONTINUE HANDLER FOR 1429 SET @x = 1;
+DECLARE NO_ACCESO_BD CONDITION FOR 1296;
+DECLARE NO_PERMISO_USER CONDITION FOR 1429;
+DECLARE MUCHO_TIEMPO_ESPERANDO CONDITION FOR 1159;
+
+ DECLARE CONTINUE HANDLER FOR NO_ACCESO_BD 
+  BEGIN
+    SET x = 1;
+  END;
+
+  DECLARE CONTINUE HANDLER FOR NO_PERMISO_USER 
+  BEGIN
+    SET x = 1;
+  END;
+
+  DECLARE CONTINUE HANDLER FOR MUCHO_TIEMPO_ESPERANDO 
+  BEGIN
+    SET x = 1;
+  END;
+
+INSERT INTO SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION)
+VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,PFONO,PVALOR,PESTADO_INSERT,PUSUARIO,PDIRECCION);
+
+IF x = 1 THEN
+     
+     IF PVALOR = -2 THEN
+        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION)
+        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),0,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION);
+        SET x = 2;
+     ELSE
+        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION)
+        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),PVALOR,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION);
+        SET x = 3;
+     END IF;
+       
+END IF;
+
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SP_INSERTAR_USUARIOS` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -539,4 +652,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-01-20 16:20:23
+-- Dump completed on 2011-04-15 18:28:08

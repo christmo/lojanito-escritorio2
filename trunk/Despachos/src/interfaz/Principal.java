@@ -328,8 +328,17 @@ public final class Principal extends javax.swing.JFrame {
      * las unidades para dibujarlas en el mapa de forma local
      */
     private void LeerRecorridosServidorKRADAC() {
-        ConsultaRecorridosServidorBD conServidor = new ConsultaRecorridosServidorBD(sesion[1], bd);
-        conServidor.start();
+        try {
+            if (Principal.arcConfig.getProperty("posicion_gps").equals("si")
+                    || Principal.arcConfig.getProperty("posicion_gps").equals("SI")
+                    && !Principal.arcConfig.getProperty("posicion_gps").equals("")
+                    && Principal.arcConfig.getProperty("posicion_gps") != null) {
+                ConsultaRecorridosServidorBD conServidor = new ConsultaRecorridosServidorBD(sesion[1], bd);
+                conServidor.start();
+            }
+        } catch (NullPointerException ex) {
+            log.trace("No se a especificado la directiva [posicion_gps] en el archivo de configuración...");
+        }
     }
 
     /**
@@ -1333,6 +1342,7 @@ public final class Principal extends javax.swing.JFrame {
      * @return boolean -> true si se despacho el cliente correctamente
      */
     private boolean DespacharCliente(int intFila) {
+        intFilaSeleccionada = intFila;
         if (jtPorDespachar.isEditing()) {
             jtPorDespachar.getCellEditor().cancelCellEditing();
         } else {
@@ -1354,15 +1364,20 @@ public final class Principal extends javax.swing.JFrame {
                      * Envia los datos al servidor de Kradac, cuando el despacho
                      * se realizo correctamente
                      **********************************************/
-                    InsertarAsignacionDespachoServidorKradac();
-                    /**********************************************/
-                    /**
-                     * Remover la fila de la tabla de clientes por despachar
-                     */
-                    DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
-                    model.removeRow(intFila);
+                    java.awt.EventQueue.invokeLater(new Runnable() {
 
-                    InicializarVariables();
+                        public void run() {
+                            InsertarAsignacionDespachoServidorKradac();
+                            /**
+                             * Remover la fila de la tabla de clientes por despachar
+                             */
+                            DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
+                            model.removeRow(intFilaSeleccionada);
+
+                            InicializarVariables();
+                        }
+                    });
+                    /**********************************************/
                     return true;
                 } else {
                     return false;
@@ -1806,8 +1821,13 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
-        getBuscarPorCodigo();
-        InicializarVariables();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                getBuscarPorCodigo();
+                InicializarVariables();
+            }
+        });
     }//GEN-LAST:event_jtCodigoActionPerformed
 
     /**
@@ -2091,11 +2111,10 @@ public final class Principal extends javax.swing.JFrame {
              * CAMBIO EN LA CELDA DE UNIDAD
              */
             if (intCol == 6) { // cambio de la celda de unidad
-                //------ Poner el icono de colgar el telefono
+                //Poner el icono de colgar el telefono
                 Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
                 jlIndicadorLlamada.setIcon(img);
                 jtTelefono.setText("");
-                //------
 
                 /**
                  * Actualiza el tiempo en que se asigna una unidad a un cliente
@@ -2104,8 +2123,12 @@ public final class Principal extends javax.swing.JFrame {
                 InsertarActualizarDespachoTemporalListaTMP();
 
                 try {
-                    String cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-
+                    String cod_cli = "";
+                    try {
+                        cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+                    } catch (ArrayIndexOutOfBoundsException aex) {
+                        cod_cli = "0";
+                    }
                     if (jtPorDespachar.isEditing()) {
                         jtPorDespachar.getCellEditor().cancelCellEditing();
                     } else {
@@ -2123,9 +2146,22 @@ public final class Principal extends javax.swing.JFrame {
                                     ActualizarAsignacion(intFila, intCol, cod_cli);
                                 }
                                 /**
-                                 * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                 * Enviar mensaje de direccion y cliente a la unidad
+                                 * si esta especificado en el archivo de propiedades
                                  */
-                                enviarMensajeUnidadAsignada(intFila, intCol);
+                                try {
+                                    if (Principal.arcConfig.getProperty("enviar_mensajes").equals("si")
+                                            || Principal.arcConfig.getProperty("enviar_mensajes").equals("SI")
+                                            && !Principal.arcConfig.getProperty("enviar_mensajes").equals("")
+                                            && Principal.arcConfig.getProperty("enviar_mensajes") != null) {
+                                        /**
+                                         * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                         */
+                                        enviarMensajeUnidadAsignada(intFila, intCol);
+                                    }
+                                } catch (NullPointerException nex) {
+                                    log.trace("No se a especificado la directiva [enviar_mensajes] en el archivo de configuración...");
+                                }
                             } else {
                                 JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
                                 jtPorDespachar.setValueAt("", intFila, 6);
@@ -2984,18 +3020,23 @@ public final class Principal extends javax.swing.JFrame {
      */
     private void InsertarAsignacionDespachoServidorKradac() {
         int intFila = jtPorDespachar.getSelectedRow();
+
         long minutos;
+        int unidadTabla = 0;
+        long horaDespacho = 0;
+        long horaDes = 0;
 
         for (Despachos d : listaDespachosTemporales) {
-            int unidadTabla = Integer.parseInt(jtPorDespachar.getValueAt(intFila, 6).toString());
+            unidadTabla = Integer.parseInt(jtPorDespachar.getValueAt(intFila, 6).toString());
+
             if (d.getIntUnidad() == unidadTabla) {
-                long horaDespacho = funciones.getHoraEnMilis();
+                horaDespacho = funciones.getHoraEnMilis();
 
                 if (horaDespacho != 0) {
                     d.setHoraDeDespacho(horaDespacho);
                 } else {
                     Calendar c = new GregorianCalendar();
-                    long horaDes = c.getTimeInMillis();
+                    horaDes = c.getTimeInMillis();
                     d.setHoraDeDespacho(horaDes);
                 }
                 minutos = ((d.getHoraDeDespacho() - d.getHoraDeAsignacion()) / 1000) / 60;
