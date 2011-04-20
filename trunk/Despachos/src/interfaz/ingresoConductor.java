@@ -357,8 +357,7 @@ public class ingresoConductor extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "NUEVO CHOFER GUARDADO",
                                 "LISTO",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        super.dispose();
-
+                        limpiarCampos();
                     } else {
                         JOptionPane.showMessageDialog(this, "NO SE PUDO GUARDAR EL CHOFER",
                                 "ERROR",
@@ -510,9 +509,19 @@ public class ingresoConductor extends javax.swing.JDialog {
     }
 
     /**
-     * Carga el archivo de propiedades del sistema
+     * Limpia todos los campos del formulario.
      */
-    /*private void leerProperties() {
-    rb = ResourceBundle.getBundle("configuracion.configsystem");
-    }*/
+    private void limpiarCampos() {
+        txtCedula.setText("");
+        txtConyuge.setText("");
+        txtDireccion.setText("");
+        txtEstadoCivil.setText("");
+        txtNomApe.setText("");
+        txtNumCasa.setText("");
+        txtTipoSangre.setText("");
+        txtemail.setText("");
+        lblFotoEtiqueta.setText("");
+        Icon fot = new ImageIcon(getClass().getResource("/interfaz/iconos/defaultcon.jpg"));
+        lblFoto.setIcon(fot);
+    }
 }
