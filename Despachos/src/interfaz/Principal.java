@@ -2482,10 +2482,11 @@ public final class Principal extends javax.swing.JFrame {
     private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
         if ((menu == null) || (!menu.isDisplayable())) {
             menu = new INICIO(sesion, Principal.bd, arcConfig);
-            menu.setLocationRelativeTo(this);
             menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             menu.setResizable(false);
         }
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(this);
     }//GEN-LAST:event_jbMenuActionPerformed
     /*
      * Ventana de consultar los clientes por nombre

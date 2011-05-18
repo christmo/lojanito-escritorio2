@@ -36,6 +36,14 @@ public class INICIO extends javax.swing.JFrame {
     private String sesion[] = null;
     private ConexionBase conec;
     private Properties arcConfig;
+    /**
+     * Rol del usuario logueado en el sistema
+     * 0 -> Sin Rol
+     * 1 -> Operador
+     * 2 -> Solo Lectura
+     * 3 -> Administrador
+     */
+    private int intRol;
 
     /** Creates new form INICIO */
     public INICIO() {
@@ -46,6 +54,7 @@ public class INICIO extends javax.swing.JFrame {
         this.conec = bd;
         this.sesion = strSesion;
         this.arcConfig = archivo;
+        this.intRol = Integer.parseInt(strSesion[3]);
         initComponents();
 
         try {
@@ -63,7 +72,7 @@ public class INICIO extends javax.swing.JFrame {
         btnDirectorio.setText("<html><center>DIRECTORIO</center></html>");
         btnReportes.setText("<html><center>REPORTES</center></html>");
         btnAsignarM.setText("<html><center>ASIGNAR <BR> MULTA</center></html>");
-        btnMultas.setText("<html><center> MULTAS </center></html>");
+        btnMultas.setText("<html><center>CREAR MULTAS</center></html>");
         btnConfig.setText("<html><center>CONFIG</center></html>");
         jbUsuarios.setText("<html><center>USUARIOS</center></html>");
         jbClientes.setText("<html><center>CLIENTES</center></html>");
@@ -135,6 +144,9 @@ public class INICIO extends javax.swing.JFrame {
         //ICONO DE APLICACION
         this.setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
         this.setVisible(true);
+
+        validarRolUsuario();
+        btnConfig.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -640,4 +652,43 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Muestra solo los botones necesario dependiendo del tipo de rol
+     * Rol del usuario logueado en el sistema
+     * 0 -> Sin Rol
+     * 1 -> Operador
+     * 2 -> Solo Lectura
+     * 3 -> Administrador
+     */
+    private void validarRolUsuario() {
+        switch (intRol) {
+            case 1:
+                controlRolOperador();
+                break;
+            case 2:
+                controlRolSoloLectura();
+                break;
+            default:
+        }
+    }
+
+    private void controlRolOperador() {
+        boolean op = false;
+        jbUsuarios.setEnabled(op);
+        btnTurnos.setEnabled(op);
+    }
+
+    private void controlRolSoloLectura() {
+        boolean op = false;
+        btnNvConductor.setEnabled(op);
+        btnNewVehiculo.setEnabled(op);
+        btnEstados.setEnabled(op);
+        btnTurnos.setEnabled(op);
+        btnAsignarM.setEnabled(op);
+
+        jbUsuarios.setEnabled(op);
+        jbClientes.setEnabled(op);
+
+    }
 }
