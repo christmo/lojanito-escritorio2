@@ -1221,7 +1221,8 @@ public final class Principal extends javax.swing.JFrame {
                 }
             }
             /**
-             * Borrar el texto antes de insertar algo nuevo
+             * Borrar el texto antes de insertar algo nuevo, este rango de teclas
+             * corresponde a todo el teclado de caracteres imprimibles
              */
             if (cod >= 48 && cod <= 105) {
                 String tmp = "" + jtPorDespachar.getValueAt(intFila, intCol);
