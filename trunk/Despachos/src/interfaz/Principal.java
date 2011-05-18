@@ -1167,7 +1167,7 @@ public final class Principal extends javax.swing.JFrame {
             while (rs.next()) {
                 RemoverDespachoDeTemporal(rs.getString(1));
                 String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + "AC" + "','" + sesion[0] + "','" + rs.getString(1) + "')";
-                bd.ejecutarSentenciaStatement2(sql);
+                bd.ejecutarSentencia(sql);
             }
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
