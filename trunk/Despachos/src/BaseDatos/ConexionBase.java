@@ -129,6 +129,11 @@ public class ConexionBase {
 
     public void reconectarBaseDatos() {
         try {
+            st.close();
+            conexion.close();
+        } catch (Exception ex) {
+        }
+        try {
             conexion = DriverManager.getConnection(url, usr, pass);
             try {
                 st = (Statement) conexion.createStatement();
@@ -142,6 +147,11 @@ public class ConexionBase {
                 log.trace("MySQL no esta corriendo, el servicio esta abajo...");
                 LevantarServicios.LevantarWAMP(arcConfig);
                 LevantarServicios.LevantarTeamViewer(arcConfig);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex1) {
+                    java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex1);
+                }
                 reconectarBaseDatos();
             } else {
                 log.error("{}", ex.getMessage(), ex);
@@ -403,7 +413,7 @@ public class ConexionBase {
                 log.trace("[COD:" + code + "]Conexión base de datos cerrada...", ex);
                 return false;
             } else if (ex.getMessage().equals("Connection.close() has already been called. Invalid operation in this state.")) {
-                log.trace("[COD:" + code + "]Conexión base de datos cerrada...", ex);
+                log.trace("[COD:" + code + "]Conexión base de datos cerrada...");
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after connection closed.")) {
                 log.trace("[COD:" + code + "]Conexión base de datos cerrada...");
@@ -2130,6 +2140,7 @@ public class ConexionBase {
     public ArrayList<Pendientes> obtenerPendientesGuardados() {
         ArrayList<Pendientes> datos = new ArrayList<Pendientes>();
         ResultSet r = null;
+        int cod = 0;
         try {
             String sql = "SELECT CODIGO,FECHA_INI,FECHA_FIN,HORA,MIN_RECUERDO,CUANDO_RECORDAR,NOTA,ESTADO "
                     + "FROM PENDIENTES WHERE ESTADO = 'AC'";
@@ -2137,7 +2148,7 @@ public class ConexionBase {
 
             while (r.next()) {
                 Pendientes p = new Pendientes();
-                int cod = r.getInt("CODIGO");
+                cod = r.getInt("CODIGO");
                 Clientes c = obtenerCliente(cod);
                 p.setCliente(c);
                 p.setFechaFin(r.getString("FECHA_FIN"));

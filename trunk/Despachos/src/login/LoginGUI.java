@@ -11,6 +11,7 @@
 package login;
 
 import BaseDatos.ConexionBase;
+import interfaz.INICIO;
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import java.io.File;
@@ -283,19 +284,34 @@ public class LoginGUI extends javax.swing.JFrame {
 
                     if (boolUsuario) {
                         if (boolClave) {
+                            int intN_Rol = obtenerRolUsuario(rs.getString("OPERADOR"));
                             /**
-                             * Sesion -> usuario,id_empresa,Nombre_del_Usuario,
-                             * Arreglo de 4 datos en el orden que se muestra
+                             * Sesion -> Arreglo de 4 datos en el orden que se muestra
+                             * [0]usuario,
+                             * [1]id_empresa,
+                             * [2]Nombre_del_Usuario,
+                             * [3]rol -> numero del rol del usuario
                              */
                             String sesion[] = {
                                 strUser,
                                 rs.getString("ID_EMPRESA"),
                                 rs.getString("NOMBRE_USUARIO"),
-                                obtenerRolUsuario(rs.getString("OPERADOR"))};
+                                "" + intN_Rol};
 
                             log.trace("ROL: {}", rs.getString("OPERADOR"));
 
-                            Principal pantalla = new Principal(sesion, cb, arcConfig);
+                            if (intN_Rol != 2) {//!= de Solo Lectura
+                                if (intN_Rol != 0) {//!= de Sin Rol
+                                    Principal pantalla = new Principal(sesion, cb, arcConfig);
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Este usuario no tiene un rol asignado, comuniquese con el administrador del sistema...", "Error...", 0);
+                                }
+                            } else {
+                                INICIO menu = new INICIO(sesion, cb, arcConfig);
+                                menu.setLocationRelativeTo(this);
+                                menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                                menu.setResizable(false);
+                            }
 
                             this.dispose();
                         } else {
@@ -330,17 +346,17 @@ public class LoginGUI extends javax.swing.JFrame {
      * 2 -> Solo Lectura
      * 3 -> Administrador
      * @param rol
-     * @return String -> numero de rol al que pertenece el usuario
+     * @return int -> numero de rol al que pertenece el usuario
      */
-    private String obtenerRolUsuario(String rol) {
+    private int obtenerRolUsuario(String rol) {
         if (rol.equals("Operador")) {
-            return "1";
+            return 1;
         } else if (rol.equals("Solo Lectura")) {
-            return "2";
+            return 2;
         } else if (rol.equals("Administrador")) {
-            return "3";
+            return 3;
         } else {
-            return "0";
+            return 4;
         }
     }
 
