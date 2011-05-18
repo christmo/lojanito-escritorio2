@@ -1193,7 +1193,7 @@ public final class Principal extends javax.swing.JFrame {
         int intFila = Tabla.getSelectedRow();
         int intCol = Tabla.getSelectedColumn();
         try {
-            if (cod == 127 || cod == 8) {
+            if (cod == 127 || cod == 8) {//teclas suprimir y backspace
                 /**
                  * borrar la celda que se haya seleccionado, esto se debe
                  * ejecutar cuando se presione (<-) BackSpace o SUPRIMIR
@@ -1233,7 +1233,9 @@ public final class Principal extends javax.swing.JFrame {
                         CampoUnidadCambio = false;
                     }
                 }
-                jtPorDespachar.setValueAt("", intFila, intCol);
+                if (intCol != 8) { //Borras lo que tengan las celdas menos las 8 ATRASO
+                    jtPorDespachar.setValueAt("", intFila, intCol);
+                }
             }
         } catch (ArrayIndexOutOfBoundsException aidx) {
         }

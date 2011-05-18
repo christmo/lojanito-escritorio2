@@ -423,6 +423,9 @@ public class ConexionBase {
                 System.err.println("****************\n* MySQL no tiene permisos para INSERTAR en la tabla FEDERADA del servidor KRADAC -> [" + ip_server[2] + " --> " + ip_server[4] + "\n****************");
                 log.error("[COD:" + code + "][Empresa: {}]MySQL no tiene permisos para INSERTAR en la tabla FEDERADA del servidor KRADAC -> [" + ip_server[2] + " --> " + ip_server[4] + "]", Principal.sesion[1]);
                 return false;
+            } else if (code == 0) {
+                log.trace("[COD:" + code + "]Comunicación con la base datos falló -> ultimo paquete enviado mayor a 5ms...");
+                return false;
             } else {
                 log.trace("[COD:" + code + "]", ex);
                 return false;
