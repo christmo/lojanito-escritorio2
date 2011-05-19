@@ -17,8 +17,6 @@ import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.comm.CommPortIdentifier;
 import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
@@ -31,6 +29,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import org.pushingpixels.lafwidget.UiThreadingViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -57,6 +57,10 @@ public class CommMonitoreo extends Thread {
     private String strNombre;
     private String strDireccion;
     private String strBarrio;
+    /**
+     * Logs para registro de mensajes por consola en archivos
+     */
+    private static final Logger log = LoggerFactory.getLogger(CommMonitoreo.class);
 
     public CommMonitoreo() {
     }
@@ -68,10 +72,10 @@ public class CommMonitoreo extends Thread {
     public CommMonitoreo(String puerto, ConexionBase bd) {
         this.bd = bd;
         if (!AbrirPuerto(puerto)) {
-            System.err.println("No se pudo abrir el puerto");
+            log.trace("No se pudo abrir el puerto COM: " + puerto);
         }
         if (!setParametros(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE)) {
-            System.err.println("No se pudo setear puerto");
+            log.trace("No se pudo setear el puerto con los parametros por defecto...");
             CerrarPuerto();
         }
     }
@@ -90,15 +94,16 @@ public class CommMonitoreo extends Thread {
 
         while (true) {
             cod = leerDatosCode();
-
             if (cod == 13) {
                 if (strNumero.length() == 8) {
                     strNumero = "0" + strNumero;
                     timbrar(true, strNumero);
+                    log.trace("longitud 8 Numero: " + strNumero);
                     setDespachoCliente(strNumero);
                 } else if (strNumero.length() == 9) {
                     timbrar(true, strNumero);
                     try {
+                        log.trace("longitud 9 Numero: " + strNumero);
                         setDespachoCliente(strNumero);
                     } catch (UiThreadingViolationException a) {
                     }
@@ -109,7 +114,9 @@ public class CommMonitoreo extends Thread {
                 tel = "";
                 numero = false;
             } else {
-                tel += "" + (char) cod;
+                if (cod != 13) {
+                    tel += "" + (char) cod;
+                }
             }
 
             if (tel.equals("RING")) {
@@ -184,8 +191,15 @@ public class CommMonitoreo extends Thread {
                 strDireccion = rs.getString("DIRECCION_CLI");
                 strBarrio = rs.getString("SECTOR");
                 strHora = funciones.getHora();
-                despacho = new Despachos(funciones.getHoraEnMilis(),strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
-
+                despacho = new Despachos(
+                        funciones.getHoraEnMilis(),
+                        strHora,
+                        strTelefono,
+                        intCodigo,
+                        strNombre,
+                        strDireccion,
+                        strBarrio,
+                        "");
 
                 setDatosTablas(despacho, jtPorDespachar);
 
@@ -269,12 +283,12 @@ public class CommMonitoreo extends Thread {
             //Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Puerto del modem está en uso por otra apicación...\nModificar los paramatros de inicio si no quiere usar el identificador de llamadas.", "error", 0);
             System.err.println("Cerrar Apicación - puerto en uso o no hay puerto serial disponible...");
+            log.trace("Puerto del modem está en uso por otra apicación... Puerto: {}", comm);
             System.exit(0);
         } catch (NoSuchPortException ex) {
             JOptionPane.showMessageDialog(null, "No se ha cargado el driver COMM de java:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
-            //JOptionPane.showMessageDialog(null, "Se ha producido el siguiente error:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
             CargarDriverCOMM();
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            log.trace("No se ha instalado el driver del puerto serial COMM...");
             System.exit(0);
         }
         return false;
@@ -340,8 +354,7 @@ public class CommMonitoreo extends Thread {
             sPuerto.setSerialPortParams(baudRate, dataBits, stopBits, paridad);
             return true;
         } catch (UnsupportedCommOperationException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
-            //System.out.println("Cerrar Apicación");
+            log.trace("Operacion no soportada al configurar los parametros del modem...", ex);
             System.exit(0);
         }
         return false;
@@ -355,7 +368,7 @@ public class CommMonitoreo extends Thread {
         try {
             return sPuerto.getInputStream();
         } catch (IOException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            log.trace("Error al recibir datos del modem...", ex);
         }
         return null;
     }
@@ -370,24 +383,24 @@ public class CommMonitoreo extends Thread {
             is = sPuerto.getInputStream();
             return "" + ((char) is.read());
         } catch (IOException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
-        }/*catch(IllegalStateException ex){
-        System.err.println("Error -> Puerto Cerrado...");
-        }*/
+            log.trace("Error al escuchar lo que llega por el puerto serial...", ex);
+        }
         return null;
     }
 
+    /**
+     * Obtiene del puerto serial el codigo de los caracteres recibidos
+     * @return int
+     */
     public int leerDatosCode() {
         InputStream is = null;
         try {
             is = sPuerto.getInputStream();
             return is.read();
         } catch (IOException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
-        }/*catch(IllegalStateException ex){
-        System.err.println("Error -> Puerto Cerrado...");
-        }*/ catch (NullPointerException nex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, nex);
+            log.trace("Error al leer el codigo de caracteres recibidos", ex);
+        } catch (NullPointerException nex) {
+            log.trace("", nex);
         }
         return 0;
     }
@@ -401,7 +414,7 @@ public class CommMonitoreo extends Thread {
             os = sPuerto.getOutputStream();
             os.write(mensaje.getBytes());
         } catch (IOException ex) {
-            Logger.getLogger(CommMonitoreo.class.getName()).log(Level.SEVERE, null, ex);
+            log.trace("Error al enviar datos por el puerto serial...", ex);
         }
     }
 

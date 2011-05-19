@@ -328,7 +328,6 @@ public class ConexionBase {
         } catch (SQLException ex) {
             String txt = ex.getMessage();
             int code = ex.getErrorCode();
-            System.out.println("Code: " + code);
             String strMSG113;
             try {
                 strMSG113 = txt.substring(0, 113);
@@ -561,7 +560,6 @@ public class ConexionBase {
         } catch (SQLException ex) {
             String txt = ex.getMessage();
             int code = ex.getErrorCode();
-            System.out.println("Code: " + code);
             try {
                 txt = ex.getMessage().substring(0, 76);
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
