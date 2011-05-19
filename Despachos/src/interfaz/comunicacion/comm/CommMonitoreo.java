@@ -286,7 +286,8 @@ public class CommMonitoreo extends Thread {
             log.trace("Puerto del modem está en uso por otra apicación... Puerto: {}", comm);
             System.exit(0);
         } catch (NoSuchPortException ex) {
-            JOptionPane.showMessageDialog(null, "No se ha cargado el driver COMM de java:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
+            System.err.println("" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "No se ha cargado el driver COMM de java o el puerto Serial [" + comm + "] no esta disponible para el uso:\n\n" + ex + "\n\nNo se puede cargar la aplicación...", "error", 0);
             CargarDriverCOMM();
             log.trace("No se ha instalado el driver del puerto serial COMM...");
             System.exit(0);

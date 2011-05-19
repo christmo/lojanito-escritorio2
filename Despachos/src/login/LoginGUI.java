@@ -271,62 +271,69 @@ public class LoginGUI extends javax.swing.JFrame {
                         + "WHERE USUARIO = '" + strUser + "' AND CLAVE = '" + strPass + "'";
 
                 rs = cb.ejecutarConsultaUnDato(sql);
+                try {
+                    String estado = rs.getString("ESTADO");
 
-                String estado = rs.getString("ESTADO");
+                    if (estado.equals("Activo")) {
 
-                if (estado.equals("Activo")) {
+                        String usuarioBase = rs.getString("USUARIO");
+                        String claveBase = rs.getString("CLAVE");
 
-                    String usuarioBase = rs.getString("USUARIO");
-                    String claveBase = rs.getString("CLAVE");
+                        boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
+                        boolean boolClave = (claveBase.equals(strPass));
 
-                    boolean boolUsuario = (usuarioBase.toUpperCase().equals(strUser.toUpperCase()));
-                    boolean boolClave = (claveBase.equals(strPass));
+                        if (boolUsuario) {
+                            if (boolClave) {
+                                try {
+                                    int intN_Rol = obtenerRolUsuario(rs.getString("OPERADOR"));
+                                    /**
+                                     * Sesion -> Arreglo de 4 datos en el orden que se muestra
+                                     * [0]usuario,
+                                     * [1]id_empresa,
+                                     * [2]Nombre_del_Usuario,
+                                     * [3]rol -> numero del rol del usuario
+                                     */
+                                    String sesion[] = {
+                                        strUser,
+                                        rs.getString("ID_EMPRESA"),
+                                        rs.getString("NOMBRE_USUARIO"),
+                                        "" + intN_Rol};
 
-                    if (boolUsuario) {
-                        if (boolClave) {
-                            int intN_Rol = obtenerRolUsuario(rs.getString("OPERADOR"));
-                            /**
-                             * Sesion -> Arreglo de 4 datos en el orden que se muestra
-                             * [0]usuario,
-                             * [1]id_empresa,
-                             * [2]Nombre_del_Usuario,
-                             * [3]rol -> numero del rol del usuario
-                             */
-                            String sesion[] = {
-                                strUser,
-                                rs.getString("ID_EMPRESA"),
-                                rs.getString("NOMBRE_USUARIO"),
-                                "" + intN_Rol};
+                                    log.trace("ROL: {}", rs.getString("OPERADOR"));
 
-                            log.trace("ROL: {}", rs.getString("OPERADOR"));
+                                    if (intN_Rol != 2) {//!= de Solo Lectura
+                                        if (intN_Rol != 0) {//!= de Sin Rol
+                                            Principal pantalla = new Principal(sesion, cb, arcConfig);
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "Este usuario no tiene un rol asignado, comuniquese con el administrador del sistema...", "Error...", 0);
+                                        }
+                                    } else {
+                                        INICIO menu = new INICIO(sesion, cb, arcConfig);
+                                        menu.setLocationRelativeTo(this);
+                                        menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                                        menu.setResizable(false);
+                                    }
 
-                            if (intN_Rol != 2) {//!= de Solo Lectura
-                                if (intN_Rol != 0) {//!= de Sin Rol
-                                    Principal pantalla = new Principal(sesion, cb, arcConfig);
-                                } else {
-                                    JOptionPane.showMessageDialog(this, "Este usuario no tiene un rol asignado, comuniquese con el administrador del sistema...", "Error...", 0);
+                                    this.dispose();
+                                } catch (NullPointerException ex) {
+                                    JOptionPane.showMessageDialog(this, "No ha sido asignado un ROL a este usuario...\nComunicarse con el administrador del sistema...", "Error", 0);
                                 }
                             } else {
-                                INICIO menu = new INICIO(sesion, cb, arcConfig);
-                                menu.setLocationRelativeTo(this);
-                                menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                                menu.setResizable(false);
+                                JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
+                                jpPass.setFocusCycleRoot(true);
+                                jpPass.setText("");
                             }
-
-                            this.dispose();
                         } else {
-                            JOptionPane.showMessageDialog(this, "Clave incorrecta", "Error", 0);
-                            jpPass.setFocusCycleRoot(true);
-                            jpPass.setText("");
+                            JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
+                            jtUser.setFocusCycleRoot(true);
+                            jtUser.setText("");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "Usuario incorrecto", "Error", 0);
-                        jtUser.setFocusCycleRoot(true);
-                        jtUser.setText("");
+                        JOptionPane.showMessageDialog(this, "Este usuario a sido inactivado por el administrador del sistema, comuniquese con el inmediatamente para que le den acceso,"
+                                + "\ncaso contrario no podrá acceder al sistema de despachos...", "Error", 0);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Este usuario a sido inactivado por el administrador del sistema, comuniquese con el inmediatamente para que le den acceso,"
-                            + "\ncaso contrario no podrá acceder al sistema de despachos...", "Error", 0);
+                } catch (NullPointerException ex) {
+                    JOptionPane.showMessageDialog(this, "El estado de este usuario es indefinido [Activo|Inactivo]...\nComunicarse con el administrador del sistema...", "Error", 0);
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Comprobar si el usuario y la clave son correctos...", "Error", 0);
