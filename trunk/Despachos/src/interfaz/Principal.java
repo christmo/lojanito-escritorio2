@@ -188,6 +188,7 @@ public final class Principal extends javax.swing.JFrame {
         LeerRecorridosServidorKRADAC();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
+        jtCodigo.requestFocus();
 
         ponerAlarmaPendiente(false);
 
@@ -676,6 +677,11 @@ public final class Principal extends javax.swing.JFrame {
                 jtPorDespacharMousePressed(evt);
             }
         });
+        jtPorDespachar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtPorDespacharFocusLost(evt);
+            }
+        });
         jtPorDespachar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jtPorDespacharPropertyChange(evt);
@@ -1115,7 +1121,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1435,6 +1441,9 @@ public final class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(Principal.gui, "Debe ingresar la unidad que recogerá al pasajero", "Error...", 0);
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
+
+        jtCodigo.requestFocusInWindow();
+
     }
 
     /**
@@ -1458,7 +1467,6 @@ public final class Principal extends javax.swing.JFrame {
         jtTelefono.setText("");
         jtCodigo.setText("");
         resetValDespacho();
-        jtPorDespachar.requestFocus();
     }
 
     /**
@@ -1503,6 +1511,8 @@ public final class Principal extends javax.swing.JFrame {
     private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
+
+        System.out.println("C:" + intClicks + " B:" + intBoton);
 
         try {
             jtPorDespachar.getCellEditor().stopCellEditing();
@@ -1781,6 +1791,8 @@ public final class Principal extends javax.swing.JFrame {
                 } else { //despacha por campo telefono
                     setDatosTablas(despacho, jtPorDespachar);
                     IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
+                    jtPorDespachar.setColumnSelectionInterval(6, 6);
+                    jtPorDespachar.setRowSelectionInterval(0, 0);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Numero ingresado no valido...", "Error", 0);
@@ -1819,7 +1831,9 @@ public final class Principal extends javax.swing.JFrame {
                     "0",
                     ""};
                 dtm.insertRow(0, inicial);
+                jtPorDespachar.setColumnSelectionInterval(3, 3);
                 jtPorDespachar.setRowSelectionInterval(0, 0);
+
             }
         }
         return intCodigo;
@@ -1836,7 +1850,7 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jtCodigoActionPerformed
 
     /**
-     * Obtener el código del usuario dependiendo del telefono ingresado
+     * Obtener el telefono del usuario dependiendo del codigo ingresado
      * @return String
      */
     private String getBuscarPorCodigo() {
@@ -1861,6 +1875,11 @@ public final class Principal extends javax.swing.JFrame {
 
             setDatosTablas(despacho, jtPorDespachar);
             IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
+
+            jtPorDespachar.setColumnSelectionInterval(6, 6);
+            jtPorDespachar.setRowSelectionInterval(0, 0);
+            jtPorDespachar.requestFocus();
+
         } catch (SQLException ex) {
             jtTelefono.setText("");
         } catch (NullPointerException ex) {
@@ -2175,10 +2194,6 @@ public final class Principal extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
                             jtPorDespachar.setValueAt("", intFila, 6);
                         } catch (UnsupportedOperationException ex) {
-//                            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-//                            log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
-//                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
-//                            jtPorDespachar.setValueAt("", intFila, 6);
                             activarUnidadConDosEstados(intFila);
                         } catch (ArrayIndexOutOfBoundsException ex) {
                         }
@@ -2326,12 +2341,12 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
                     if (estado != null) {
-                        //JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
-                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
-                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
-                        if (r == 0) {
-                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
-                        }
+                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+//                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
+//                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
+//                        if (r == 0) {
+//                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+//                        }
                     } else {
                         int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa..."
                                 + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
@@ -2540,6 +2555,10 @@ public final class Principal extends javax.swing.JFrame {
             pendientes.setResizable(false);
         }
     }//GEN-LAST:event_jbPendientesActionPerformed
+
+    private void jtPorDespacharFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPorDespacharFocusLost
+        jtCodigo.requestFocus();
+    }//GEN-LAST:event_jtPorDespacharFocusLost
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -2846,17 +2865,20 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     private void LlenarFila(int fila, JTable tabla, Despachos d) {
-        tabla.setValueAt(d.getStrHora(), fila, 0);
-        tabla.setValueAt(d.getStrTelefono(), fila, 1);
-        if (d.getIntCodigo() == 0) {
-            tabla.setValueAt("", fila, 2);
-        } else {
-            tabla.setValueAt("" + d.getIntCodigo(), fila, 2);
+        try {
+            tabla.setValueAt(d.getStrHora(), fila, 0);
+            tabla.setValueAt(d.getStrTelefono(), fila, 1);
+            if (d.getIntCodigo() == 0) {
+                tabla.setValueAt("", fila, 2);
+            } else {
+                tabla.setValueAt("" + d.getIntCodigo(), fila, 2);
+            }
+            tabla.setValueAt(d.getStrNombre(), fila, 3);
+            tabla.setValueAt(d.getStrBarrio(), fila, 4);
+            tabla.setValueAt(d.getStrDireccion(), fila, 5);
+            tabla.setValueAt(d.getStrNota(), fila, 9);
+        } catch (ArrayIndexOutOfBoundsException ex) {
         }
-        tabla.setValueAt(d.getStrNombre(), fila, 3);
-        tabla.setValueAt(d.getStrBarrio(), fila, 4);
-        tabla.setValueAt(d.getStrDireccion(), fila, 5);
-        tabla.setValueAt(d.getStrNota(), fila, 9);
     }
 
     /**
