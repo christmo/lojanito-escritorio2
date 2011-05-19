@@ -227,7 +227,7 @@ public class ConexionBase {
      * @param sql - debe ser Select
      * @return ResultSet
      */
-    public ResultSet ejecutarConsultaUnDato(String sql) {
+    public ResultSet ejecutarConsultaUnDato(String sql) throws UnsupportedOperationException {
         //System.out.println("Consultar: " + sql);
         ResultSet rsCUD = null;
         try {
@@ -869,8 +869,9 @@ public class ConexionBase {
             ResultSet r = ejecutarConsultaUnDato(sql);
             return r.getString(1);
         } catch (SQLException ex) {
+        } catch (UnsupportedOperationException ex) {
         }
-        return "";
+        return null;
     }
 
     /**
@@ -1384,7 +1385,7 @@ public class ConexionBase {
         ArrayList<Despachos> datos = new ArrayList<Despachos>();
 
         try {
-            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i:%s') AS HORA, "
                     + "TELEFONO, "
                     + "COD_CLIENTE, "
                     + "NOMBRE_APELLIDO_CLI, "
@@ -1432,7 +1433,7 @@ public class ConexionBase {
         ArrayList<Despachos> datos = new ArrayList<Despachos>();
 
         try {
-            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i:%s') AS HORA, "
                     + "TELEFONO, "
                     + "COD_CLIENTE, "
                     + "NOMBRE_APELLIDO_CLI, "
@@ -1483,7 +1484,7 @@ public class ConexionBase {
         ArrayList<Despachos> datos = new ArrayList<Despachos>();
 
         try {
-            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i:%s') AS HORA, "
                     + "TELEFONO, "
                     + "COD_CLIENTE, "
                     + "NOMBRE_APELLIDO_CLI, "
@@ -1574,7 +1575,7 @@ public class ConexionBase {
         ArrayList<Despachos> datos = new ArrayList<Despachos>();
 
         try {
-            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i') AS HORA, "
+            String sql = "SELECT DATE_FORMAT(HORA,'%H%:%i:%s') AS HORA, "
                     + "TELEFONO, "
                     + "COD_CLIENTE, "
                     + "NOMBRE_APELLIDO_CLI, "

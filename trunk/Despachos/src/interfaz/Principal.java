@@ -705,6 +705,7 @@ public final class Principal extends javax.swing.JFrame {
         jtPorDespachar.getColumnModel().getColumn(9).setMinWidth(100);
         jtPorDespachar.getColumnModel().getColumn(9).setMaxWidth(100);
 
+        jtDespachados.setAutoCreateRowSorter(true);
         jtDespachados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1114,7 +1115,7 @@ public final class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1490,6 +1491,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         } else if (!validarUnidad(d.getIntUnidad())) {
             JOptionPane.showMessageDialog(this, "La unidad ingresada no es válida...", "Error...", 0);
+            jtPorDespachar.setValueAt("", fila, 6);
         } else {
             resultado = true;
         }
@@ -2173,10 +2175,12 @@ public final class Principal extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
                             jtPorDespachar.setValueAt("", intFila, 6);
                         } catch (UnsupportedOperationException ex) {
-                            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-                            log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
-                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
-                            jtPorDespachar.setValueAt("", intFila, 6);
+//                            String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+//                            log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
+//                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+//                            jtPorDespachar.setValueAt("", intFila, 6);
+                            activarUnidadConDosEstados(intFila);
+                        } catch (ArrayIndexOutOfBoundsException ex) {
                         }
                     }
                 } catch (NullPointerException ex) {
@@ -2186,6 +2190,20 @@ public final class Principal extends javax.swing.JFrame {
             Mayuculas(jtPorDespachar, intFila);
         }
     }//GEN-LAST:event_jtPorDespacharPropertyChange
+
+    /**
+     * Permite enviar a la base el estado activo para la unidad seleccionada,
+     * por mal manejo se ingresan dos estado diferentes en la base a la misma hora
+     * y el programa no puede decidir cual es el que es válido entonces se inicia
+     * nuevamente.
+     * @param intFila
+     */
+    private void activarUnidadConDosEstados(int intFila) {
+        String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+        log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
+        AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+        jtPorDespachar.setValueAt("", intFila, 6);
+    }
 
     /**
      * Permite enviar el mensaje con la información del cliente a la unidad
@@ -2308,7 +2326,12 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
                     if (estado != null) {
-                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+                        //JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
+                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
+                        if (r == 0) {
+                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                        }
                     } else {
                         int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa..."
                                 + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
@@ -2851,7 +2874,9 @@ public final class Principal extends javax.swing.JFrame {
             if (estado != null) {
                 JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + estado, "Error", 0);
             } else {
-                JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + "No se ha asignado uno...", "Error", 0);
+                JOptionPane.showMessageDialog(this, "No se puede despachar la unidad asignada ya que tiene un conflicto de estados en el mismo tiempo"
+                        + "\nse activará nuevamente esta unidad...", "Error", 0);
+                activarUnidadConDosEstados(fila);
             }
             jtPorDespachar.setValueAt("0", fila, 6);
         } else {
