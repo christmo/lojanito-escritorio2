@@ -1664,7 +1664,7 @@ public class ConexionBase {
     public String[] getUsuarios() {
         try {
             String[] datosCast;
-            String sql = "SELECT USUARIO FROM USUARIOS";
+            String sql = "SELECT USUARIO FROM USUARIOS WHERE USUARIO <> 'KRADAC'";
             rs = ejecutarConsulta(sql);
             ArrayList<String> listaUsuarios = new ArrayList<String>();
             while (rs.next()) {

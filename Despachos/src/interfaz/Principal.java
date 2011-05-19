@@ -183,12 +183,13 @@ public final class Principal extends javax.swing.JFrame {
         llenarComboEstados();
         LimpiarCargarTablaDespachados();
         IdentificadorLlamadas();
-        jtTelefono.requestFocus();
+        
+        jtTelefono.requestFocusInWindow();
+
         tiempo.start();
         LeerRecorridosServidorKRADAC();
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
-        jtCodigo.requestFocus();
 
         ponerAlarmaPendiente(false);
 
