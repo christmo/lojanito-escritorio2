@@ -183,7 +183,7 @@ public final class Principal extends javax.swing.JFrame {
         llenarComboEstados();
         LimpiarCargarTablaDespachados();
         IdentificadorLlamadas();
-        
+
         jtTelefono.requestFocusInWindow();
 
         tiempo.start();
@@ -1155,14 +1155,19 @@ public final class Principal extends javax.swing.JFrame {
      * de salir
      */
     private void SalirVentanaPrincipal() {
+        log.trace("Empezar a salir del sistema... :-|");
         ActivarUnidadesOcupadasAsignadas();
+        log.trace("Activadas las unidades asignadas...");
         bd.TruncarTablaPosicionesCliente();
+        log.trace("Eliminados los clientes del mapa...");
         bd.CerrarConexion();
+        log.trace("Cerrar conexión base...");
         try {
             comm.CerrarPuerto();
+            log.trace("Cerrar puerto comm...");
         } catch (NullPointerException ex) {
         }
-        log.trace("Salir de la aplicacion de despachos...");
+        log.trace("Salir de la aplicacion de despachos... :-)");
         System.exit(0);
     }
 
@@ -1513,7 +1518,7 @@ public final class Principal extends javax.swing.JFrame {
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
 
-        System.out.println("C:" + intClicks + " B:" + intBoton);
+        //System.out.println("C:" + intClicks + " B:" + intBoton);
 
         try {
             jtPorDespachar.getCellEditor().stopCellEditing();
@@ -1693,6 +1698,7 @@ public final class Principal extends javax.swing.JFrame {
                 }
                 break;
         }
+        ventanaDatos.setAlwaysOnTop(true);
     }
 
     /**
@@ -2897,7 +2903,7 @@ public final class Principal extends javax.swing.JFrame {
             if (estado != null) {
                 JOptionPane.showMessageDialog(this, "No se puede despachar esa unidad no está Asignada...\nEstado de la unidad: " + estado, "Error", 0);
             } else {
-                JOptionPane.showMessageDialog(this, "No se puede despachar la unidad asignada ya que tiene un conflicto de estados en el mismo tiempo"
+                JOptionPane.showMessageDialog(this, "No se puede despachar la unidad asignada ya que tiene un ESTADO, conflicto de estados en el mismo tiempo"
                         + "\nse activará nuevamente esta unidad...", "Error", 0);
                 activarUnidadConDosEstados(fila);
             }

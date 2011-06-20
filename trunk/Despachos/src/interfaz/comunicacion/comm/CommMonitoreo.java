@@ -94,24 +94,28 @@ public class CommMonitoreo extends Thread {
 
         while (true) {
             cod = leerDatosCode();
+            log.trace("CODIGO: " + cod + " = " + (char) cod);
             if (cod == 13) {
                 if (strNumero.length() == 8) {
                     strNumero = "0" + strNumero;
                     timbrar(true, strNumero);
-                    log.trace("longitud 8 Numero: " + strNumero);
+                    log.trace("L8:[" + strNumero + "]");
                     setDespachoCliente(strNumero);
                 } else if (strNumero.length() == 9) {
                     timbrar(true, strNumero);
                     try {
-                        log.trace("longitud 9 Numero: " + strNumero);
+                        log.trace("L9:[" + strNumero + "]");
                         setDespachoCliente(strNumero);
                     } catch (UiThreadingViolationException a) {
                     }
+                } else {
+                    log.trace("L" + strNumero.length() + ":[" + strNumero + "]");
                 }
             }
 
             if (cod == 10) {
                 tel = "";
+                strNumero = ""; //no tenia esto antes añadido por LN
                 numero = false;
             } else {
                 if (cod != 13) {
@@ -120,13 +124,15 @@ public class CommMonitoreo extends Thread {
             }
 
             if (tel.equals("RING")) {
+                log.trace("[" + tel + "]");
                 if (!celular) {
                     timbrar(true, strNumero);
                 }
                 strNumero = "";
                 strCelular = "";
                 tel = "";
-            } else if (tel.equals("NMBR = ")) {
+            } else if (tel.equals("NMBR = ")) {//Añadido un espacio más por LN
+                log.trace("[" + tel + "]");
                 tel = "";
                 numero = true;
                 celular = false;
@@ -136,6 +142,8 @@ public class CommMonitoreo extends Thread {
                 tel = "";
                 numero = true;
                 celular = true;
+            }else if(tel.equals(" ")){ // solucion para un espacio más del modem de LN
+                tel = "";
             }
 
             if (numero) {
@@ -143,7 +151,6 @@ public class CommMonitoreo extends Thread {
                 if (celular) {
                     if (tel.length() == 9) {
                         strCelular = strNumero.substring(0, 9);
-                        //System.out.println("Numero Celular: " + strCelular);
                         timbrar(true, strCelular);
                         if (!strNumeroCelularAnterior.equals(strCelular)) {
                             try {
@@ -159,7 +166,6 @@ public class CommMonitoreo extends Thread {
                              * porque en la trama del numero celular se envia el numero
                              * constantemente en cada RING
                              */
-                            //System.out.println("N: " + intContadorTimbreCelular);
                             if (intContadorTimbreCelular >= 8) {
                                 intContadorTimbreCelular = 1;
                                 strNumeroCelularAnterior = "";

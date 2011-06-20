@@ -5,6 +5,7 @@
 package interfaz.reloj;
 
 import BaseDatos.ConexionBase;
+
 import interfaz.Principal;
 import interfaz.funcionesUtilidad;
 import interfaz.subVentanas.Pendientes;
@@ -17,9 +18,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.JLabel;
+import org.pushingpixels.substance.api.UiThreadingViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Reloj {
 
+    /**
+     * Logger para guardar los log en un archivo y enviar por mail los de error
+     */
+    private static final Logger log = LoggerFactory.getLogger(Reloj.class);
     DateFormat df;
     SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm:ss");
     SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,18 +75,28 @@ public class Reloj {
                 lblReloj.setForeground(Color.BLACK);
             }
 
-            if (Principal.horaNuevoTurno.equals(sdfHora.format(c.getTime()))) {
-                parpadeo = false;
-                if (Principal.gui != null) {
-                    Principal.ReiniciarTurno();
+            try {
+                if (Principal.horaNuevoTurno.equals(sdfHora.format(c.getTime()))) {
+                    parpadeo = false;
+                    if (Principal.gui != null) {
+                        Principal.ReiniciarTurno();
+                    }
                 }
+            } catch (Exception ex) {
+                log.error("Error cambio de turno... [" + Principal.sesion[1] + "]", ex);
             }
 
-            /**
-             * Pendientes
-             */
-            comprobarHoraPendientes(horaActual);
-
+            try {
+                /**
+                 * Pendientes
+                 */
+                comprobarHoraPendientes(horaActual);
+            }catch(UiThreadingViolationException ex){
+                comprobarHoraPendientes(horaSalida);
+            } catch (Exception ex) {
+                log.error("Error lanzar pendiente... [" + Principal.sesion[1] + "]", ex);
+                comprobarHoraPendientes(horaSalida);
+            }
         }
 
         /**

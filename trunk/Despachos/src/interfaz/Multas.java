@@ -83,6 +83,7 @@ public class Multas extends javax.swing.JDialog {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, 20));
 
         txtDescripcion.setColumns(20);
+        txtDescripcion.setLineWrap(true);
         txtDescripcion.setRows(3);
         txtDescripcion.setTabSize(0);
         txtDescripcion.setNextFocusableComponent(txtValor);

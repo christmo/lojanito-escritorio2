@@ -143,18 +143,25 @@ public class ConexionBase {
             System.out.println("RECONEXIÓN BASE");
         } catch (SQLException ex) {
             String txt = ex.getMessage();
+            int cod = ex.getErrorCode();
             if (txt.substring(0, 27).equals("Communications link failure")) {
                 log.trace("MySQL no esta corriendo, el servicio esta abajo...");
                 LevantarServicios.LevantarWAMP(arcConfig);
                 LevantarServicios.LevantarTeamViewer(arcConfig);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException ex1) {
                     java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex1);
                 }
                 reconectarBaseDatos();
             } else {
-                log.error("{}", ex.getMessage(), ex);
+                log.error("[" + Principal.sesion[1] + "][" + cod + "]{}", ex.getMessage(), ex);
+                try {
+                    Thread.sleep(30000);
+                    log.trace("Despues de saturar la base de datos con conexiones se espera 30 segundos...");
+                } catch (InterruptedException ex1) {
+                    java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             }
         }
     }
@@ -210,6 +217,8 @@ public class ConexionBase {
                     } catch (StringIndexOutOfBoundsException sinoe) {
                         log.trace("Error diferente no tiene la longitud contemplada...");
                     }
+                } else if (ex.getMessage().equals("Table 'regcodesttaxi' is marked as crashed and should be repaired")) {
+                    repararTablaRota(ex.getMessage());
                 } else {
                     log.error("ejecutarConsultaStatement2 empresa[" + Principal.sesion[1] + "] mensaje[{}]" + sql, ex.getMessage(), ex);
                 }
@@ -219,6 +228,19 @@ public class ConexionBase {
             log.trace("Statement esta nulo...");
         }
         return r;
+    }
+
+    /**
+     * Permite mandar un comando de reparacion a la base de datos cuando se rompa
+     * una tabla de mysql...
+     * @param nombre tabla
+     */
+    private void repararTablaRota(String mensajeError) {
+        String[] resultado = mensajeError.split("'");
+        String tabla = resultado[1];
+        String sqlReparar = "repair table " + tabla;
+        ejecutarSentencia(sqlReparar);
+        log.error("Empresa[" + Principal.sesion[1] + "]Reparada la tabla [" + tabla + "]");
     }
 
     /**
@@ -577,7 +599,11 @@ public class ConexionBase {
                     String[] ip_server = ex.getMessage().split("'");
                     //System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
                     if (contador == 0) {
-                        log.error("[COD:" + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1] + " --> " + ip_server[3]);
+                        try {
+                            log.error("[COD:" + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1] + " --> " + ip_server[3]);
+                        } catch (ArrayIndexOutOfBoundsException aiobe) {
+                            log.error("[COD:" + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1]);
+                        }
                         contador++;
                     } else {
                         if (contador == 20000) { //Envia un mail cada 15 minutos despues de que sucede esto
