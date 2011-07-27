@@ -100,13 +100,18 @@ public class CommMonitoreo extends Thread {
                     strNumero = "0" + strNumero;
                     timbrar(true, strNumero);
                     log.trace("L8:[" + strNumero + "]");
-                    setDespachoCliente(strNumero);
+                    try {
+                        setDespachoCliente(strNumero);
+                    } catch (UiThreadingViolationException a) {
+                        log.trace("Numero = L8: ", a);
+                    }
                 } else if (strNumero.length() == 9) {
                     timbrar(true, strNumero);
                     try {
                         log.trace("L9:[" + strNumero + "]");
                         setDespachoCliente(strNumero);
                     } catch (UiThreadingViolationException a) {
+                        log.trace("Numero = L9: ", a);
                     }
                 } else {
                     log.trace("L" + strNumero.length() + ":[" + strNumero + "]");
@@ -115,7 +120,7 @@ public class CommMonitoreo extends Thread {
 
             if (cod == 10) {
                 tel = "";
-                strNumero = ""; //no tenia esto antes añadido por LN
+                strNumero = "";
                 numero = false;
             } else {
                 if (cod != 13) {
@@ -138,11 +143,18 @@ public class CommMonitoreo extends Thread {
                 celular = false;
                 intContadorTimbreCelular = 1;
                 strNumeroCelularAnterior = "";
+            } else if (tel.equals("TIME = ")) {//Está llegando el numero de telefono a lado de TIME en LN
+                log.trace("[" + tel + "]");
+                tel = "";
+                numero = true;
+                celular = false;
+                intContadorTimbreCelular = 1;
+                strNumeroCelularAnterior = "";
             } else if (tel.equals("+CLIP: \"")) {//+CLIP: "099362766",129,"",0,"",0
                 tel = "";
                 numero = true;
                 celular = true;
-            }else if(tel.equals(" ")){ // solucion para un espacio más del modem de LN
+            } else if (tel.equals(" ")) { // solucion para un espacio más del modem de LN
                 tel = "";
             }
 
@@ -158,6 +170,7 @@ public class CommMonitoreo extends Thread {
                                 strNumeroCelularAnterior = strNumero;
                                 intContadorTimbreCelular++;
                             } catch (UiThreadingViolationException a) {
+                                log.trace("Numero = 9: ", a);
                             }
                         } else {
                             /*

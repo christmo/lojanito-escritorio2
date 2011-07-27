@@ -132,6 +132,17 @@ public final class Principal extends javax.swing.JFrame {
 
     /*Puerto Serial*/
     private CommMonitoreo comm;
+    //Matriz de Relacion CODIGO - COLOR
+    //Cada Elemento de codColor
+    //[1][ID_CODIGO]  [2][COLOR]
+    private static ArrayList<String> codigo = new ArrayList();
+    private static ArrayList<String> color = new ArrayList();
+    private static ArrayList<String> etiq = new ArrayList();
+    private static Map etiqColor = new HashMap();
+    /**
+     * Permite controlar si se cambia la unidad antes de despachar la carrera
+     */
+    private boolean CampoUnidadCambio = false;
 
     //--------------------------------------------------------------------------
     // Constructores
@@ -1179,8 +1190,9 @@ public final class Principal extends javax.swing.JFrame {
         try {
             while (rs.next()) {
                 RemoverDespachoDeTemporal(rs.getString(1));
-                String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + "AC" + "','" + sesion[0] + "','" + rs.getString(1) + "')";
-                bd.ejecutarSentencia(sql);
+                //String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + "AC" + "','" + sesion[0] + "','" + rs.getString(1) + "')";
+                //bd.ejecutarSentencia(sql);
+                bd.setCambiarEstadoUnidad("AC", sesion[0], rs.getString(1));
             }
         } catch (SQLException ex) {
             if (ex.getMessage().equals("Operation not allowed after ResultSet closed")) {
@@ -1254,7 +1266,6 @@ public final class Principal extends javax.swing.JFrame {
         } catch (ArrayIndexOutOfBoundsException aidx) {
         }
     }
-    private boolean CampoUnidadCambio = false;
 
     /**
      * Elimina una Fila de la Tabla PorDespachar que se haya seleccionado
@@ -1951,8 +1962,9 @@ public final class Principal extends javax.swing.JFrame {
         String codig = codigo.get(et);
 
         for (String i : codVh) {
-            String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
-            bd.ejecutarSentenciaStatement2(sql);
+            //String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + codig + "','" + sesion[0] + "','" + i + "')";
+            //bd.ejecutarSentenciaStatement2(sql);
+            bd.setCambiarEstadoUnidad(codig, sesion[0], i);
             /*
              * Si es AC significa que va activar esa unidad por tal motivo hay que
              * remover todo el despacho del temporal y guardar la liberacion en el
@@ -1964,13 +1976,6 @@ public final class Principal extends javax.swing.JFrame {
         }
         pintarEstadoTaxi(strEncabezados);
     }
-    //Matriz de Relacion CODIGO - COLOR
-    //Cada Elemento de codColor
-    //[1][ID_CODIGO]  [2][COLOR]
-    private static ArrayList<String> codigo = new ArrayList();
-    private static ArrayList<String> color = new ArrayList();
-    private static ArrayList<String> etiq = new ArrayList();
-    private static Map etiqColor = new HashMap();
 
     private static void colorCodigosBD() {
         try {
@@ -2016,8 +2021,9 @@ public final class Principal extends javax.swing.JFrame {
         ResultSet rsPintarEstadoTaxi = null;
         try {
             try {
-                String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
-                rsPintarEstadoTaxi = bd.ejecutarConsultaStatement2(sql);
+                //String sql = "SELECT A.N_UNIDAD, A.ID_CODIGO FROM REGCODESTTAXI A, ( SELECT AUX.N_UNIDAD, MAX(CONCAT(AUX.FECHA,AUX.HORA)) AS TMP FROM REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD) AS B WHERE A.N_UNIDAD = B.N_UNIDAD AND CONCAT(A.FECHA,A.HORA) = B.TMP";
+                //rsPintarEstadoTaxi = bd.ejecutarConsultaStatement2(sql);
+                rsPintarEstadoTaxi = bd.getUnidadesPintarEstado();
                 while (rsPintarEstadoTaxi.next()) {
                     try {
                         unidadCodigoBD.put(rsPintarEstadoTaxi.getString(1), rsPintarEstadoTaxi.getString(2));
@@ -2348,12 +2354,15 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
                     if (estado != null) {
-                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
-//                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
-//                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
-//                        if (r == 0) {
-//                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
-//                        }
+//                        JOptionPane.showMessageDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado, "Error", 0);
+                        int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
+                                + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
+                        if (r == 0) {
+                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                            jtPorDespachar.setColumnSelectionInterval(6, 6);
+                            jtPorDespachar.setRowSelectionInterval(intFila, intFila);
+                            jtPorDespachar.requestFocus();
+                        }
                     } else {
                         int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa..."
                                 + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
@@ -2732,7 +2741,9 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     /**
-     * Convierte a mayusculas todas las letras de una fila de la tabla
+     * Convierte a mayusculas todas las letras de una fila de la tabla y le quita
+     * el caracter de comillas simple ' para que no cause problemas en la base de
+     * datos al construir la sentencia sql
      * @param Tabla
      * @param intFila
      */
@@ -2741,6 +2752,7 @@ public final class Principal extends javax.swing.JFrame {
         for (int i = 0; i < intTotalColumnas; i++) {
             try {
                 String txt = Tabla.getValueAt(intFila, i).toString().toUpperCase();
+                txt = txt.replaceAll("'", "");
                 if (i == 1) {
                     Tabla.setValueAt(funciones.validarTelefono(txt), intFila, i);
                 } else {

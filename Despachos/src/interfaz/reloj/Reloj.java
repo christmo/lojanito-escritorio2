@@ -82,6 +82,7 @@ public class Reloj {
                         Principal.ReiniciarTurno();
                     }
                 }
+            } catch (UiThreadingViolationException ex) {
             } catch (Exception ex) {
                 log.error("Error cambio de turno... [" + Principal.sesion[1] + "]", ex);
             }
@@ -91,7 +92,7 @@ public class Reloj {
                  * Pendientes
                  */
                 comprobarHoraPendientes(horaActual);
-            }catch(UiThreadingViolationException ex){
+            } catch (UiThreadingViolationException ex) {
                 comprobarHoraPendientes(horaSalida);
             } catch (Exception ex) {
                 log.error("Error lanzar pendiente... [" + Principal.sesion[1] + "]", ex);

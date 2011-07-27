@@ -128,7 +128,7 @@ public class modUsuarios extends javax.swing.JDialog {
 
         jcEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activo", "Inactivo" }));
 
-        jcOperador.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Operador", "Solo Lectura", "Administrador" }));
+        jcOperador.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Operador", "Solo Lectura", "Administrador", "Super" }));
 
         jLabel2.setText("Cédula:");
 

@@ -109,7 +109,7 @@ public class GuardarServidorKRADAC extends Thread {
              * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
              * el cual trata de insertar en la tabla federada si lo logra todo bien
              * pero si no se hace un insert en la tabla de respaldos locales estos subiran
-             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * al servidor cuando el icono de red cambie o cuando hay conexión, de
              * esta manera se elimina el retardo que existe cuando no se puede
              * alcanzar el insert a la tabla federada del servidor KRADAC
              */
@@ -194,7 +194,7 @@ public class GuardarServidorKRADAC extends Thread {
              * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
              * el cual trata de insertar en la tabla federada si lo logra todo bien
              * pero si no se hace un insert en la tabla de respaldos locales estos subiran
-             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * al servidor cuando el icono de red cambie o cuando hay conexión, de
              * esta manera se elimina el retardo que existe cuando no se puede
              * alcanzar el insert a la tabla federada del servidor KRADAC
              */
@@ -268,7 +268,7 @@ public class GuardarServidorKRADAC extends Thread {
              * pero tambien hace la ejecución de un procedimiento SP_INSERTAR_RESPALDAR_SERVER
              * el cual trata de insertar en la tabla federada si lo logra todo bien
              * pero si no se hace un insert en la tabla de respaldos locales estos subiran
-             * al servidor cuando el icono de red cambie a cuando hay conexión, de
+             * al servidor cuando el icono de red cambie o cuando hay conexión, de
              * esta manera se elimina el retardo que existe cuando no se puede
              * alcanzar el insert a la tabla federada del servidor KRADAC
              */

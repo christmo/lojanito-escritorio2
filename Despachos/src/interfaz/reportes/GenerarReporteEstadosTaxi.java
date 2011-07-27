@@ -86,15 +86,15 @@ public class GenerarReporteEstadosTaxi {
                 + "REGCODESTTAXI.`N_UNIDAD` AS REGCODESTTAXI_N_UNIDAD,"
                 + "REGCODESTTAXI.`USUARIO` AS REGCODESTTAXI_USUARIO,"
                 + "REGCODESTTAXI.`ID_CODIGO` AS REGCODESTTAXI_ID_CODIGO,"
-                + "REGCODESTTAXI.`HORA` AS REGCODESTTAXI_HORA,"
-                + "REGCODESTTAXI.`FECHA` AS REGCODESTTAXI_FECHA,"
+                + "TIME(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_HORA,"
+                + "DATE(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_FECHA,"
                 + "CODESTTAXI.`ETIQUETA` AS CODESTTAXI_ETIQUETA "
                 + "FROM "
                 + "`REGCODESTTAXI` REGCODESTTAXI,"
                 + "`CODESTTAXI` CODESTTAXI "
                 + "WHERE "
                 + "REGCODESTTAXI.`ID_CODIGO` = CODESTTAXI.`ID_CODIGO` "
-                + "AND REGCODESTTAXI.`FECHA` = '$P!{dia}'";
+                + "AND REGCODESTTAXI.`FECHA_HORA` = '$P!{dia}'";
 
         System.out.println("SQL: " + sqlCodigo);
 
@@ -115,15 +115,15 @@ public class GenerarReporteEstadosTaxi {
                 + "REGCODESTTAXI.`N_UNIDAD` AS REGCODESTTAXI_N_UNIDAD,"
                 + "REGCODESTTAXI.`USUARIO` AS REGCODESTTAXI_USUARIO,"
                 + "REGCODESTTAXI.`ID_CODIGO` AS REGCODESTTAXI_ID_CODIGO,"
-                + "REGCODESTTAXI.`HORA` AS REGCODESTTAXI_HORA,"
-                + "REGCODESTTAXI.`FECHA` AS REGCODESTTAXI_FECHA,"
+                + "TIME(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_HORA,"
+                + "DATE(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_FECHA,"
                 + "CODESTTAXI.`ETIQUETA` AS CODESTTAXI_ETIQUETA "
                 + "FROM "
                 + "`REGCODESTTAXI` REGCODESTTAXI,"
                 + "`CODESTTAXI` CODESTTAXI "
                 + "WHERE "
                 + "REGCODESTTAXI.`ID_CODIGO` = CODESTTAXI.`ID_CODIGO` "
-                + "AND MONTH(REGCODESTTAXI.`FECHA`) = '$P!{mes}'";
+                + "AND MONTH(REGCODESTTAXI.`FECHA_HORA`) = '$P!{mes}'";
 
         System.out.println("SQL: " + sqlCodigo);
 
@@ -145,8 +145,8 @@ public class GenerarReporteEstadosTaxi {
                 + "REGCODESTTAXI.`N_UNIDAD` AS REGCODESTTAXI_N_UNIDAD,"
                 + "REGCODESTTAXI.`USUARIO` AS REGCODESTTAXI_USUARIO,"
                 + "REGCODESTTAXI.`ID_CODIGO` AS REGCODESTTAXI_ID_CODIGO,"
-                + "REGCODESTTAXI.`HORA` AS REGCODESTTAXI_HORA,"
-                + "REGCODESTTAXI.`FECHA` AS REGCODESTTAXI_FECHA,"
+                + "TIME(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_HORA,"
+                + "DATE(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_FECHA,"
                 + "CODESTTAXI.`ETIQUETA` AS CODESTTAXI_ETIQUETA "
                 + "FROM "
                 + "`REGCODESTTAXI` REGCODESTTAXI,"
@@ -174,8 +174,8 @@ public class GenerarReporteEstadosTaxi {
                 + "REGCODESTTAXI.`N_UNIDAD` AS REGCODESTTAXI_N_UNIDAD,"
                 + "REGCODESTTAXI.`USUARIO` AS REGCODESTTAXI_USUARIO,"
                 + "REGCODESTTAXI.`ID_CODIGO` AS REGCODESTTAXI_ID_CODIGO,"
-                + "REGCODESTTAXI.`HORA` AS REGCODESTTAXI_HORA,"
-                + "REGCODESTTAXI.`FECHA` AS REGCODESTTAXI_FECHA,"
+                + "TIME(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_HORA,"
+                + "DATE(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_FECHA,"
                 + "CODESTTAXI.`ETIQUETA` AS CODESTTAXI_ETIQUETA "
                 + "FROM "
                 + "`REGCODESTTAXI` REGCODESTTAXI,"
@@ -183,7 +183,7 @@ public class GenerarReporteEstadosTaxi {
                 + "WHERE "
                 + "REGCODESTTAXI.`ID_CODIGO` = CODESTTAXI.`ID_CODIGO` "
                 + "AND REGCODESTTAXI.`N_UNIDAD` = $P!{unidad} "
-                + "AND REGCODESTTAXI.`FECHA`='$P!{dia}'";
+                + "AND DATE(REGCODESTTAXI.`FECHA_HORA`)='$P!{dia}'";
 
         System.out.println("SQL: " + sqlCodigo);
 
@@ -205,8 +205,8 @@ public class GenerarReporteEstadosTaxi {
                 + "REGCODESTTAXI.`N_UNIDAD` AS REGCODESTTAXI_N_UNIDAD,"
                 + "REGCODESTTAXI.`USUARIO` AS REGCODESTTAXI_USUARIO,"
                 + "REGCODESTTAXI.`ID_CODIGO` AS REGCODESTTAXI_ID_CODIGO,"
-                + "REGCODESTTAXI.`HORA` AS REGCODESTTAXI_HORA,"
-                + "REGCODESTTAXI.`FECHA` AS REGCODESTTAXI_FECHA,"
+                + "TIME(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_HORA,"
+                + "DATE(REGCODESTTAXI.`FECHA_HORA`) AS REGCODESTTAXI_FECHA,"
                 + "CODESTTAXI.`ETIQUETA` AS CODESTTAXI_ETIQUETA "
                 + "FROM "
                 + "`REGCODESTTAXI` REGCODESTTAXI,"
@@ -214,7 +214,7 @@ public class GenerarReporteEstadosTaxi {
                 + "WHERE "
                 + "REGCODESTTAXI.`ID_CODIGO` = CODESTTAXI.`ID_CODIGO` "
                 + "AND REGCODESTTAXI.`N_UNIDAD` = $P!{unidad} "
-                + "AND MONTH(REGCODESTTAXI.`FECHA`)='$P!{mes}'";
+                + "AND MONTH(REGCODESTTAXI.`FECHA_HORA`)='$P!{mes}'";
 
         System.out.println("SQL: " + sqlCodigo);
 
