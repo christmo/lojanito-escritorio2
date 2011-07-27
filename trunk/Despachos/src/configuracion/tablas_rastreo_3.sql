@@ -11,7 +11,7 @@
 --
 -- Host: localhost    Database: rastreosatelital
 -- ------------------------------------------------------
--- Server version	5.5.8-log
+-- Server version	5.1.36-community-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,7 +24,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---DROP DATABASE IF EXISTS rastreosatelital;
+/*DROP DATABASE IF EXISTS rastreosatelital;*/
 create database rastreosatelital;
 use rastreosatelital;
 
@@ -52,7 +52,7 @@ CREATE TABLE `asignados` (
   `ID_TURNO` int(11) DEFAULT NULL,
   `USUARIO` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIGNADOS`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,101 +67,18 @@ CREATE TABLE `asignados_local` (
   `n_unidad` int(12) NOT NULL DEFAULT '0',
   `cod_cliente` int(11) NOT NULL DEFAULT '0',
   `estado` varchar(25) NOT NULL,
-  `fecha` date NOT NULL DEFAULT '0000-00-00',
-  `hora` time NOT NULL DEFAULT '00:00:00',
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fono` varchar(25) NOT NULL DEFAULT '',
   `valor` int(12) NOT NULL DEFAULT '0',
   `estado_insert` varchar(3) NOT NULL,
   `usuario` varchar(25) NOT NULL,
   `direccion` varchar(150) NOT NULL,
-  PRIMARY KEY (`id`,`n_unidad`,`cod_cliente`,`estado`,`fecha`,`hora`,`fono`,`valor`,`estado_insert`,`usuario`,`direccion`)
+  PRIMARY KEY (`id`,`n_unidad`,`cod_cliente`,`estado`,`fono`,`valor`,`estado_insert`,`usuario`,`direccion`,`FECHA_HORA`) USING BTREE,
+  KEY `Index_asignado_local` (`FECHA_HORA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 400 */;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = latin1 */ ;
-/*!50003 SET character_set_results = latin1 */ ;
-/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
-
-    ON rastreosatelital.asignados_local FOR EACH ROW
-
-BEGIN
-
-    DECLARE FECHA DATETIME;
-
-    DECLARE LIMITE INT(12);
-
-    SET LIMITE = -2;
-
-    IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
-
-      
-
-      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
-
-      SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
-
-      SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
-
-    ELSE
-
-      
-
-        IF (LIMITE = NEW.VALOR) THEN
-
-            SET NEW.HORA = CURTIME();
-
-            SET NEW.FECHA = CURDATE();
-
-        ELSE
-
-            SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
-
-            SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
-
-            SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');
-
-        END IF;
-
-    END IF;
-
-    
-
-    SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
-
-
-
-    CALL SP_INSERTAR_RESPALDAR_SERVER(
-
-      NEW.N_UNIDAD,
-
-      NEW.COD_CLIENTE,
-
-      NEW.ESTADO,
-
-      NEW.FONO,
-
-      NEW.VALOR,
-
-      NEW.ESTADO_INSERT,
-
-      NEW.USUARIO,
-
-      NEW.DIRECCION,@x);
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `centrales`
@@ -190,8 +107,8 @@ DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
   `TELEFONO` varchar(25) NOT NULL DEFAULT '',
   `CODIGO` int(10) DEFAULT NULL,
-  `NOMBRE_APELLIDO_CLI` varchar(125) NOT NULL,
-  `DIRECCION_CLI` varchar(125) NOT NULL,
+  `NOMBRE_APELLIDO_CLI` varchar(125) NOT NULL DEFAULT '',
+  `DIRECCION_CLI` varchar(125) NOT NULL DEFAULT '',
   `SECTOR` varchar(125) DEFAULT NULL,
   `NUM_CASA_CLI` varchar(10) DEFAULT NULL,
   `LATITUD` double DEFAULT NULL,
@@ -210,11 +127,11 @@ DROP TABLE IF EXISTS `cod_multas`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cod_multas` (
   `IDENTIFICADOR` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `COD_MULTA` varchar(5) NOT NULL,
+  `COD_MULTA` varchar(10) NOT NULL,
   `DESCRIPCION` varchar(255) DEFAULT NULL,
   `VALOR` double DEFAULT NULL,
   PRIMARY KEY (`IDENTIFICADOR`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -303,7 +220,7 @@ CREATE TABLE `multas_asignadas` (
   `COD_MULTA` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIG`),
   KEY `FK_CODMULTAS` (`COD_MULTA`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -376,12 +293,11 @@ CREATE TABLE `recorridos` (
   `ID_EMPRESA` varchar(10) NOT NULL,
   `LATITUD` double NOT NULL,
   `LONGITUD` double NOT NULL,
-  `FECHA` date NOT NULL,
-  `HORA` time NOT NULL,
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `VELOCIDAD` double DEFAULT NULL,
   `G1` int(1) unsigned DEFAULT NULL,
   `G2` int(1) unsigned DEFAULT NULL,
-  PRIMARY KEY (`LATITUD`,`LONGITUD`,`FECHA`,`HORA`,`N_UNIDAD`,`ID`)
+  PRIMARY KEY (`LATITUD`,`LONGITUD`,`N_UNIDAD`,`ID`,`FECHA_HORA`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 400 */;
@@ -395,11 +311,11 @@ DROP TABLE IF EXISTS `regcodesttaxi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `regcodesttaxi` (
-  `FECHA` date NOT NULL,
-  `HORA` time NOT NULL,
-  `ID_CODIGO` varchar(50) DEFAULT NULL,
-  `USUARIO` varchar(100) DEFAULT NULL,
+  `ID_CODIGO` varchar(50) NOT NULL DEFAULT '',
+  `USUARIO` varchar(100) NOT NULL DEFAULT '',
   `N_UNIDAD` int(11) NOT NULL,
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`USUARIO`,`N_UNIDAD`,`ID_CODIGO`,`FECHA_HORA`) USING BTREE,
   KEY `FK_REFERENCE_10` (`ID_CODIGO`),
   KEY `FK_REFERENCE_12` (`USUARIO`),
   KEY `FK_N_UNIDAD` (`N_UNIDAD`)
@@ -525,4 +441,4 @@ CREATE TABLE `vehiculos` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-04-15 18:29:41
+-- Dump completed on 2011-07-08 12:45:30

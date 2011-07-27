@@ -301,7 +301,13 @@ public class LoginGUI extends javax.swing.JFrame {
 
                                     log.trace("ROL: {}", rs.getString("OPERADOR"));
 
-                                    if (intN_Rol != 2) {//!= de Solo Lectura
+                                    /**
+                                     * Validación para cargar toda la interfaz del programa
+                                     * se valida que sea de rol Operador para bloquear menu
+                                     * o Super que pueden ver todo es SuperKRADAC ;-)
+                                     */
+                                    if (intN_Rol != 2
+                                            && (intN_Rol != 3 || intN_Rol == 4)) {//!= de Solo Lectura y Administrador
                                         if (intN_Rol != 0) {//!= de Sin Rol
                                             Principal pantalla = new Principal(sesion, cb, arcConfig);
                                         } else {
@@ -347,11 +353,12 @@ public class LoginGUI extends javax.swing.JFrame {
 
     /**
      * Se envia el nombre de rol y este lo devuelve como un número dependiendo
-     * de los roles que se tenga en la app
-     * 0 -> Sin Rol
-     * 1 -> Operador
-     * 2 -> Solo Lectura
-     * 3 -> Administrador
+     * de los roles que se tenga en la app<BR/>
+     * 0 -> Sin Rol<BR/>
+     * 1 -> Operador<BR/>
+     * 2 -> Solo Lectura<BR/>
+     * 3 -> Administrador<BR/>
+     * 4 -> Super<BR/>
      * @param rol
      * @return int -> numero de rol al que pertenece el usuario
      */
@@ -362,8 +369,10 @@ public class LoginGUI extends javax.swing.JFrame {
             return 2;
         } else if (rol.equals("Administrador")) {
             return 3;
-        } else {
+        } else if (rol.equals("Super")) {
             return 4;
+        } else {
+            return 0;
         }
     }
 

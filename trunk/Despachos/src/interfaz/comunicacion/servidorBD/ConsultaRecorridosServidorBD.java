@@ -113,34 +113,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
 
     /**
      * Guarda los datos de los recorridos
-     * @deprecated 
      * @param datoVehiculo
      * @param bd
      */
-    private void GuardarDatosRecorridos(String datoVehiculo, ConexionBase bd) {
-        String[] recorrido = datoVehiculo.split(",");
-
-        PonerIconoSenal();
-        /**
-        ----
-        ID PARTICION: 20100909
-        N_UNIDAD: 43
-        ID_EMPRESA: LN
-        LAT: -3.99473
-        LON: -79.2105116666667
-        FECHA: 2010-09-09
-        HORA: 09:44:36
-        ESTADO_TAXI: W
-        VEL: 0.14
-        ESTADO_TAXIMETRO: A
-        ----
-         */
-        try {
-            bd.InsertarRecorridoTaxi(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
-        } catch (ArrayIndexOutOfBoundsException ex) {
-        }
-    }
-
     private void GuardarDatosRecorridosNuevo(String datoVehiculo, ConexionBase bd) {
         String[] recorrido = datoVehiculo.split(",");
 

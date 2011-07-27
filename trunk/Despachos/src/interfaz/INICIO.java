@@ -58,7 +58,7 @@ public class INICIO extends javax.swing.JFrame {
         initComponents();
 
         try {
-            lblEmpresa.setText(bd.getEmpresa(Principal.sesion[1]));
+            lblEmpresa.setText(bd.getEmpresa(strSesion[1]));
         } catch (NullPointerException ex) {
         }
 
@@ -67,7 +67,7 @@ public class INICIO extends javax.swing.JFrame {
         btnEditConductor.setText("<html><center>EDITAR<br>CONDUCTOR</center></html>");
         btnNewVehiculo.setText("<html><center>NUEVO<br>VEHICULO</center></html>");
         btnEstados.setText("<html><center>ESTADOS<br>DEL TAXI</center></html>");
-        btnBEMultas.setText("<html><center>EDITAR<br> MULTAS</center></html>");
+        btnEditarMultas.setText("<html><center>EDITAR<br> MULTAS</center></html>");
         btnTurnos.setText("<html><center>TURNOS</center></html>");
         btnDirectorio.setText("<html><center>DIRECTORIO</center></html>");
         btnReportes.setText("<html><center>REPORTES</center></html>");
@@ -101,8 +101,8 @@ public class INICIO extends javax.swing.JFrame {
         btnEstados.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnEstados.setHorizontalTextPosition(SwingConstants.CENTER);
 
-        btnBEMultas.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnBEMultas.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnEditarMultas.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnEditarMultas.setHorizontalTextPosition(SwingConstants.CENTER);
 
         btnTurnos.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnTurnos.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -161,7 +161,7 @@ public class INICIO extends javax.swing.JFrame {
         btnReportes = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnEditConductor = new javax.swing.JButton();
-        btnBEMultas = new javax.swing.JButton();
+        btnEditarMultas = new javax.swing.JButton();
         btnDirectorio = new javax.swing.JButton();
         btnMultas = new javax.swing.JButton();
         btnAsignarM = new javax.swing.JButton();
@@ -252,11 +252,11 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
-        btnBEMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bemulta.png"))); // NOI18N
-        btnBEMultas.setText("B/E ASIGNACION DE MULTAS");
-        btnBEMultas.addActionListener(new java.awt.event.ActionListener() {
+        btnEditarMultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/bemulta.png"))); // NOI18N
+        btnEditarMultas.setText("B/E ASIGNACION DE MULTAS");
+        btnEditarMultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBEMultasActionPerformed(evt);
+                btnEditarMultasActionPerformed(evt);
             }
         });
 
@@ -284,13 +284,13 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
 
-        lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 36)); // NOI18N
+        lblNombreAplicacion.setFont(new java.awt.Font("Nimbus Roman No9 L", 1, 36));
         lblNombreAplicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNombreAplicacion.setText("KOMPRESOR");
 
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
         lblEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblEmpresa.setText("CIUDAD VICTORIA ");
+        lblEmpresa.setText("...");
 
         btnModEstados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modEstados.png"))); // NOI18N
         btnModEstados.setText("Estados Taxi");
@@ -386,7 +386,7 @@ public class INICIO extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jbMailKradac, 0, 0, Short.MAX_VALUE)
-                                    .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(btnEditarMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(37, 37, 37))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -419,7 +419,7 @@ public class INICIO extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnReportes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBEMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditarMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDirectorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMultas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -526,7 +526,7 @@ public class INICIO extends javax.swing.JFrame {
         reportes.setVisible(true);
     }//GEN-LAST:event_btnReportesActionPerformed
 
-    private void btnBEMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBEMultasActionPerformed
+    private void btnEditarMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
             beasignarMulta = new modAsignarMultas(this, this.conec, sesion);
             beasignarMulta.setSize(538, 635);
@@ -535,7 +535,7 @@ public class INICIO extends javax.swing.JFrame {
             beasignarMulta.setResizable(false);
         }
         beasignarMulta.setVisible(true);
-    }//GEN-LAST:event_btnBEMultasActionPerformed
+    }//GEN-LAST:event_btnEditarMultasActionPerformed
 
     private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
         // TODO añadir funcionalidad al boton de directorio telefonico
@@ -631,11 +631,11 @@ public class INICIO extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarM;
-    private javax.swing.JButton btnBEMultas;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDirectorio;
     private javax.swing.JButton btnEditConductor;
     private javax.swing.JButton btnEditVehiculo;
+    private javax.swing.JButton btnEditarMultas;
     private javax.swing.JButton btnEstados;
     private javax.swing.JButton btnModEstados;
     private javax.swing.JButton btnMultas;
@@ -669,23 +669,58 @@ public class INICIO extends javax.swing.JFrame {
             case 2:
                 controlRolSoloLectura();
                 break;
+            case 3:
+                //controlAdministrador();
             default:
         }
     }
 
+    /**
+     * Asignar permisos para los operadores del sistema, estos pueden:
+     * Asignar Multas
+     * Reportes
+     * Clientes
+     * Mapa
+     * Mail
+     */
     private void controlRolOperador() {
         boolean op = false;
         jbUsuarios.setEnabled(op);
         btnTurnos.setEnabled(op);
+        btnEstados.setEnabled(op);
+        btnModEstados.setEnabled(op);
+
+        btnNvConductor.setEnabled(op);
+        btnNewVehiculo.setEnabled(op);
+
+        btnEditConductor.setEnabled(op);
+        btnEditVehiculo.setEnabled(op);
+
+        btnEditarMultas.setEnabled(op);
+        btnMultas.setEnabled(op);
     }
 
+    /**
+     * Permisos para usuarios de solo lectura, no se puede hacer más que ver
+     * Reportes
+     * Mapa
+     * Mail
+     */
     private void controlRolSoloLectura() {
         boolean op = false;
         btnNvConductor.setEnabled(op);
         btnNewVehiculo.setEnabled(op);
+
+        btnEditConductor.setEnabled(op);
+        btnEditVehiculo.setEnabled(op);
+
         btnEstados.setEnabled(op);
+        btnModEstados.setEnabled(op);
         btnTurnos.setEnabled(op);
+
         btnAsignarM.setEnabled(op);
+        btnEditarMultas.setEnabled(op);
+        btnMultas.setEnabled(op);
 
         jbUsuarios.setEnabled(op);
         jbClientes.setEnabled(op);
