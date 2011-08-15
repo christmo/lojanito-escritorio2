@@ -58,7 +58,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         try {
             try {
                 echoSocket = new Socket(DIRECCION, PUERTO);
-                //System.err.println("Iniciar conexion con el server BD...");
+                log.trace("Conectado con [" + DIRECCION + "] puerto [" + PUERTO + "]");
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
                 AbrirPuerto();
@@ -259,7 +259,8 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
 
                 if (contador == 0) {
-                    ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, bd);
+                    ConexionBase base = new ConexionBase(Principal.arcConfig);
+                    ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, base);
                     actualizarServer.start();
                     contador++;
                 }

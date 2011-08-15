@@ -1172,7 +1172,6 @@ public final class Principal extends javax.swing.JFrame {
         bd.TruncarTablaPosicionesCliente();
         log.trace("Eliminados los clientes del mapa...");
         bd.CerrarConexion();
-        log.trace("Cerrar conexión base...");
         try {
             comm.CerrarPuerto();
             log.trace("Cerrar puerto comm...");

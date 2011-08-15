@@ -83,6 +83,7 @@ public class Reloj {
                     }
                 }
             } catch (UiThreadingViolationException ex) {
+            } catch (NullPointerException ex) {
             } catch (Exception ex) {
                 log.error("Error cambio de turno... [" + Principal.sesion[1] + "]", ex);
             }
