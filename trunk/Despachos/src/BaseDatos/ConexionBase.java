@@ -127,6 +127,9 @@ public class ConexionBase {
         log.trace("Conexion a Base de Datos OK: {}", bd);
     }
 
+    /**
+     * Permite hacer la reconexion a la base de datos...
+     */
     public void reconectarBaseDatos() {
         try {
             st.close();
@@ -140,7 +143,8 @@ public class ConexionBase {
             } catch (SQLException ex) {
                 java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("RECONEXIÓN BASE");
+            log.trace("RECONEXIÓN BASE");
+            contadorReconexiones = 0;
         } catch (SQLException ex) {
             String txt = ex.getMessage();
             int cod = ex.getErrorCode();
@@ -285,6 +289,11 @@ public class ConexionBase {
         }
         return rsCUD;
     }
+    /**
+     * Permite registrar el numero de intentos de conexion a la base de datos
+     * al tratar de reconectar...
+     */
+    int contadorReconexiones = 0;
 
     /**
      * Ejecuta una consulta en la base de datos, que devuelve valores
@@ -301,8 +310,11 @@ public class ConexionBase {
             rs.next();
         } catch (SQLException ex) {
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado [Reconectar]");
-                reconectarBaseDatos();
+                if (contadorReconexiones <= 5) {
+                    log.trace("Statement cerrado [Reconectar]");
+                    contadorReconexiones++;
+                    reconectarBaseDatos();
+                }
                 return null;
             } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
                 log.trace("MySQL no esta corriendo, levantar el servicio...");
@@ -392,7 +404,7 @@ public class ConexionBase {
                         log.trace("[COD:" + code + "]Conexión base de datos cerrada... Connection.close()", ex);
                         return false;
                     } else if (ex.getMessage().equals("No operations allowed after connection closed.")) {
-                        log.trace("[COD:" + code + "]Conexión base de datos cerrada...", ex);
+                        log.trace("[COD:" + code + "]Conexión base de datos cerrada...");
                         return false;
                     }
                     return false;
@@ -789,9 +801,12 @@ public class ConexionBase {
      */
     public void CerrarConexion() {
         try {
+            st.close();
+            rs.close();
             conexion.close();
+            log.trace("Cerrar conexion BD [OK]");
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.trace("Cerrar conexion BD [FALLO]", ex);
         } catch (NullPointerException ex) {
             log.trace("NO está abierta la base de datos... [{}]", Principal.sesion[1]);
         }

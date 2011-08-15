@@ -33,6 +33,7 @@ public class ActualizarServidorKRADAC extends Thread {
     @Override
     public void run() {
         ActualizarServidorConConexion();
+        bd.CerrarConexion();
     }
 
     /**
@@ -60,7 +61,7 @@ public class ActualizarServidorKRADAC extends Thread {
             long minutos;
             rs = bd.getFilasRespaldoLocalAsignaciones();
             while (rs.next()) {
-                long HoraAct = funciones.getHoraEnMilis()/1000; // hora actual en segundos
+                long HoraAct = funciones.getHoraEnMilis() / 1000; // hora actual en segundos
                 long HoraInsert = rs.getLong("HORA_INSERT"); // BD trae tiempo en segundos
                 int MinDespacho = rs.getInt("HORA");
                 /**
