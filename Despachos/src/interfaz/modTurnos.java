@@ -1,5 +1,5 @@
-package interfaz;
-
+package interfaz;//GEN-FIRST:event_btnCancelarActionPerformed
+//GEN-LAST:event_btnCancelarActionPerformed
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,7 +43,7 @@ public class modTurnos extends javax.swing.JDialog {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         btnCalcular = new javax.swing.JButton();
@@ -126,25 +126,25 @@ public class modTurnos extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
+    private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {                                            
         colocarNuevosTurnos(tblTurnos, calcularTurnos(horaTurno));
-    }//GEN-LAST:event_btnCalcularActionPerformed
+    }                                           
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try {
             super.dispose();
         } catch (Throwable ex) {
             Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }                                           
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
         grabarTurnos(tblTurnos);
 
-}//GEN-LAST:event_btnGuardarActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+}                                          
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnCalcular;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
@@ -155,7 +155,7 @@ public class modTurnos extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblTurnos;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     /**
      * Cambia el formato del Spinner para presentar
@@ -312,7 +312,7 @@ public class modTurnos extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS",
                     "LISTO",
                     JOptionPane.INFORMATION_MESSAGE);
-            Principal.ReiniciarTurno();
+            Principal.reiniciarTurno();
             super.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "DEBE CREAR TURNOS ANTES DE GUARDAR");

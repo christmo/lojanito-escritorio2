@@ -4,7 +4,10 @@
  */
 package sistemaoperativo;
 
+import BaseDatos.ConexionBase;
+import ch.qos.logback.classic.Logger;
 import java.util.Properties;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -12,13 +15,18 @@ import java.util.Properties;
  */
 public class LevantarServicios {
 
+    private static final Logger log = (Logger) LoggerFactory.getLogger(LevantarServicios.class);
+
     /**
      * Levanta los servicios de mysql y apache
      * @param arcConfig
      */
-    public static void LevantarWAMP(Properties arcConfig) {
-        System.err.println("Levantando WAMP");
+    public static void LevantarWAMP() {
+        log.trace("Levantando WAMP");
         if (System.getProperty("os.name").equals("Linux")) {
+            /**
+             * TODO: Levantar los servicios en Linux
+             */
         } else {//Windows
             ComandosSistemaOperativo OSMYSQL = new ComandosSistemaOperativo("net start wampmysqld");
             ComandosSistemaOperativo OSAPACHE = new ComandosSistemaOperativo("net start wampapache");
@@ -27,16 +35,18 @@ public class LevantarServicios {
 
     /**
      * Levantar TeamView para asistencia remota
-     * @param arcConfig
+     * @param versionTV
      */
-    public static void LevantarTeamViewer(Properties arcConfig) {
-        System.err.println("Levantando TeamViewer");
+    public static void LevantarTeamViewer(String versionTV) {
+        log.trace("Levantando TeamViewer");
         if (System.getProperty("os.name").equals("Linux")) {
+            /**
+             * TODO: Levantar los servicios en Linux
+             */
         } else {//Windows
-            if (arcConfig.getProperty("tv") != null
-                    && !arcConfig.getProperty("tv").equals("")
-                    && !arcConfig.getProperty("tv").equals("0")) {
-                ComandosSistemaOperativo TV = new ComandosSistemaOperativo("net start TeamViewer" + arcConfig.getProperty("tv"));
+            //String versionTV = bd.obtenerValorConfiguiracion("tv");
+            if (versionTV != null && !versionTV.equals("") && !versionTV.equals("0")) {
+                ComandosSistemaOperativo TV = new ComandosSistemaOperativo("net start TeamViewer" + versionTV);
             } else {
                 ComandosSistemaOperativo TV = new ComandosSistemaOperativo("net start TeamViewer" + 6);
             }

@@ -41,14 +41,20 @@ public class ConsultaRecorridosServidorBD extends Thread {
     public ConsultaRecorridosServidorBD(String empresa, ConexionBase cb) {
         this.empresa = empresa;
         bd = cb;
+        consultrarDireccionServer();
+        crono.IniciarCrono();
+    }
 
-        ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
+    private static void consultrarDireccionServer() {
+        //ConsultaRecorridosServidorBD.DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
+        ConsultaRecorridosServidorBD.DIRECCION = bd.getValorConfiguiracion("ip_kradac");
         try {
-            ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
-            crono.IniciarCrono();
+            //ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
+            ConsultaRecorridosServidorBD.PUERTO = Integer.parseInt(bd.getValorConfiguiracion("puerto_kradac"));
         } catch (NumberFormatException ex) {
             System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
         }
+
     }
 
     /**
@@ -57,6 +63,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
     public static void AbrirPuerto() {
         try {
             try {
+                consultrarDireccionServer();
                 echoSocket = new Socket(DIRECCION, PUERTO);
                 log.trace("Conectado con [" + DIRECCION + "] puerto [" + PUERTO + "]");
             } catch (UnknownHostException ex) {
@@ -87,7 +94,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
         while (true) {
             try {
                 GuardarDatosRecorridos();
-                ConsultaRecorridosServidorBD.sleep(5000);
+                ConsultaRecorridosServidorBD.sleep(10000);
             } catch (InterruptedException ex) {
                 System.err.println("" + ex.getMessage());
             }
@@ -250,24 +257,26 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoSenal() {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
-        try {
-            if (Principal.arcConfig.getProperty("actualizar_respaldos").equals("si")
-                    || Principal.arcConfig.getProperty("actualizar_respaldos").equals("SI")
-                    && !Principal.arcConfig.getProperty("actualizar_respaldos").equals("")
-                    && Principal.arcConfig.getProperty("actualizar_respaldos") != null) {
 
-                int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
+        if (contador == 0) {
+            try {
+                String actulizarRespaldo = bd.getValorConfiguiracion("actualizar_respaldos");
+                if (actulizarRespaldo.equals("si") || actulizarRespaldo.equals("SI")
+                        && !actulizarRespaldo.equals("") && actulizarRespaldo != null) {
 
-                if (contador == 0) {
+                    int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
+
                     ConexionBase base = new ConexionBase(Principal.arcConfig);
                     ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, base);
                     actualizarServer.start();
-                    contador++;
+                    contador = 1;
                 }
+            } catch (NullPointerException nex) {
+                log.trace("No se a especificado la directiva [actualizar_respaldos] en el archivo de configuración...");
             }
-        } catch (NullPointerException nex) {
-            log.trace("No se a especificado la directiva [actualizar_respaldos] en el archivo de configuración...");
+            contador = 1;
         }
+
     }
 
     /**

@@ -5,7 +5,9 @@
 -- Server version	5.1.36-community-log
 
 use rastreosatelital;
-DROP TRIGGER `TGR_ASIGNADOS_LOCAL_SERVER`;
+DROP TRIGGER IF EXISTS `TGR_ASIGNADOS_LOCAL_SERVER`;
+DROP TRIGGER IF EXISTS `TGR_ACTUALIZAR_ULTIMOS_GPS`;
+DROP TRIGGER IF EXISTS `TGR_ACTUALIZAR_ESTADO_ULTIMO_GPS`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,40 +31,145 @@ DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
     ON rastreosatelital.asignados_local FOR EACH ROW
 BEGIN
+
     DECLARE FECHA DATETIME;
+
     DECLARE LIMITE INT(12);
+
     SET LIMITE = -2;
+
     IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
 
+      
+
       SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+
       /*SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
       SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');*/
+
       SET NEW.FECHA_HORA = FECHA;
+
     ELSE
 
+      
+
         IF (LIMITE = NEW.VALOR) THEN
+
             /*SET NEW.HORA = CURTIME();
+
             SET NEW.FECHA = CURDATE();*/
+
             SET NEW.FECHA_HORA = NOW();
+
         ELSE
+
             SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+
             /*SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
             SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');*/
+
             SET NEW.FECHA_HORA = FECHA;
+
         END IF;
+
     END IF;
+
+    
 
     SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
 
+
+
     CALL SP_INSERTAR_RESPALDAR_SERVER(
+
       NEW.N_UNIDAD,
+
       NEW.COD_CLIENTE,
+
       NEW.ESTADO,
+
       NEW.FONO,
+
       NEW.VALOR,
+
       NEW.ESTADO_INSERT,
+
       NEW.USUARIO,
+
       NEW.DIRECCION,@x);
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ULTIMOS_GPS` BEFORE INSERT
+    ON rastreosatelital.recorridos FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
+  
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+  
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET LONGITUD=NEW.LONGITUD,
+      LATITUD=NEW.LATITUD,
+      VELOCIDAD=NEW.VELOCIDAD,
+      FECHA_HORA=NEW.FECHA_HORA,
+      G1=NEW.G1,
+      G2=NEW.G2
+      WHERE N_UNIDAD = UNIDAD;
+    ELSE
+    
+      INSERT INTO ULTIMOS_GPS(N_UNIDAD,LONGITUD,LATITUD,VELOCIDAD,FECHA_HORA,G1,G2)
+      VALUES(NEW.N_UNIDAD,NEW.LONGITUD,NEW.LATITUD,NEW.VELOCIDAD,NEW.FECHA_HORA,NEW.G1,NEW.G2);
+       
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ESTADO_ULTIMO_GPS` BEFORE INSERT
+    ON rastreosatelital.regcodesttaxi FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
+    
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+    
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET ID_CODIGO=NEW.ID_CODIGO
+      WHERE N_UNIDAD = UNIDAD;
+    END IF;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -126,20 +233,32 @@ DELIMITER ;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `SF_ESTADO_UNIDAD`(UNIDAD INT) RETURNS varchar(10) CHARSET latin1
     DETERMINISTIC
 BEGIN
+
 DECLARE ESTADO VARCHAR(10);
 
 SELECT DISTINCT ID_CODIGO
+
 INTO ESTADO
+
 FROM REGCODESTTAXI
+
 WHERE N_UNIDAD=UNIDAD AND
 
 FECHA_HORA = (
+
   SELECT MAX(FECHA_HORA)
+
 	FROM REGCODESTTAXI
+
 	WHERE N_UNIDAD=UNIDAD AND FECHA_HORA = (SELECT MAX(FECHA_HORA) FROM REGCODESTTAXI WHERE N_UNIDAD=UNIDAD)
+
 	GROUP BY FECHA_HORA
+
 );
+
 RETURN ESTADO;
+
+
 
 END */;;
 DELIMITER ;
@@ -202,6 +321,161 @@ DECLARE turno VARCHAR(50);
 		hora BETWEEN '00:00:00' AND (SELECT MIN(HORA_FIN) FROM TURNOS)
 	);
 	RETURN turno;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_ACTUALIZAR_RESPALDOS_SERVER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_ACTUALIZAR_RESPALDOS_SERVER`()
+BEGIN
+
+
+
+/*INSERT INTO SERVER1(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION)
+
+SELECT
+
+  N_UNIDAD,
+
+  COD_CLIENTE,
+
+  ESTADO,
+
+  FONO,
+
+  TRUNCATE(((UNIX_TIMESTAMP()-HORA_INSERT)/60)+HORA,0) AS VALOR,
+
+  'RES',
+
+  USUARIO,
+
+  DIRECCION
+
+FROM RESPALDO_ASIGNACION_SERVER;*/
+
+
+
+   DECLARE PN_UNIDAD INT(12);
+
+   DECLARE PCOD_CLIENTE INT(11);
+
+   DECLARE PESTADO VARCHAR(25);
+
+   DECLARE PFONO VARCHAR(25);
+
+  DECLARE PHORA_INSERT BIGINT(20);
+
+  DECLARE PHORA INT(11);
+
+  DECLARE PUSUARIO VARCHAR(25);
+
+  DECLARE PDIRECCION VARCHAR(150);
+
+  /*DECLARE i INT(10);*/
+
+  DECLARE n_respaldos INT(10);
+
+
+
+  DECLARE no_mas_respaldos INT;
+
+
+
+  DECLARE csr_respaldos CURSOR FOR
+
+  SELECT
+
+    N_UNIDAD,
+
+    COD_CLIENTE,
+
+    ESTADO,
+
+    FONO,
+
+    HORA_INSERT,
+
+    HORA,
+
+    USUARIO,
+
+    DIRECCION
+
+  FROM RESPALDO_ASIGNACION_SERVER;
+
+
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET no_mas_respaldos=1;
+
+
+
+  SET @i=0;
+
+
+
+  SELECT COUNT(*) INTO @n_respaldos FROM RESPALDO_ASIGNACION_SERVER;
+
+
+
+  /*IF n_respaldos > 0 THEN
+
+    SET no_mas_respaldos=1;
+
+  END IF;*/
+
+
+
+  OPEN csr_respaldos;
+
+
+
+  REPEAT
+
+    FETCH csr_respaldos INTO PN_UNIDAD, PCOD_CLIENTE, PESTADO, PFONO, PHORA_INSERT, PHORA, PUSUARIO, PDIRECCION;
+
+
+
+    INSERT INTO SERVER1(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION)
+
+    VALUES(PN_UNIDAD,PCOD_CLIENTE,PESTADO,PFONO,TRUNCATE(((UNIX_TIMESTAMP()-PHORA_INSERT)/60)+PHORA,0),'RES',PUSUARIO,PDIRECCION);
+
+
+
+    DELETE FROM RESPALDO_ASIGNACION_SERVER
+
+    WHERE N_UNIDAD = PN_UNIDAD AND HORA_INSERT = PHORA_INSERT;
+
+
+
+    SET @i=@i+1;
+
+
+
+  UNTIL no_mas_respaldos
+
+  END REPEAT;
+
+
+
+  CLOSE csr_respaldos;
+
+
+
+  SET no_mas_respaldos=0;
+
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -384,22 +658,33 @@ DELIMITER ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RECORRIDOS`(
+
 IN PID_PART varchar(10),
+
 IN PN_UNIDAD INTEGER,
+
 IN PID_EMPRESA varchar(10),
+
 IN PLAT DOUBLE,
+
 IN PLON DOUBLE,
+
 IN PFECHA DATE,
+
 IN PHORA TIME,
+
 IN PVEL VARCHAR(25),
+
 IN PG1 DOUBLE,
+
 IN PG2 CHAR(10)
+
 )
 BEGIN
 
 INSERT INTO RECORRIDOS(ID,N_UNIDAD, ID_EMPRESA,LATITUD,LONGITUD,FECHA_HORA,VELOCIDAD,G1,G2)
-
 VALUES (PID_PART,PN_UNIDAD,PID_EMPRESA,PLAT,PLON,CONCAT(PFECHA,' ',PHORA),PVEL,PG1,PG2);
+
 
 END */;;
 DELIMITER ;
@@ -411,114 +696,72 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RESPALDAR_SERVER`(
-
 IN PN_UNIDAD INTEGER,
-
 IN PCOD_CLIENTE INTEGER,
-
 IN PESTADO VARCHAR(50),
-
 IN PFONO VARCHAR(50),
-
 IN PVALOR INT,
-
 IN PESTADO_INSERT VARCHAR(50),
-
 IN PUSUARIO VARCHAR(50),
-
 IN PDIRECCION  VARCHAR(150),
-
 out x varchar(150)
-
 )
 BEGIN
 
-
 DECLARE NO_ACCESO_BD CONDITION FOR 1296;
-
 DECLARE NO_PERMISO_USER CONDITION FOR 1429;
-
 DECLARE MUCHO_TIEMPO_ESPERANDO CONDITION FOR 1159;
-
 DECLARE TABLA_NO_EXISTE CONDITION FOR 1146;
 
-
  DECLARE CONTINUE HANDLER FOR NO_ACCESO_BD 
-
   BEGIN
-
     SET x = 1;
-
   END;
-
-
 
   DECLARE CONTINUE HANDLER FOR NO_PERMISO_USER 
-
   BEGIN
-
     SET x = 1;
-
   END;
 
-
-
   DECLARE CONTINUE HANDLER FOR MUCHO_TIEMPO_ESPERANDO
-
   BEGIN
-
     SET x = 1;
-
   END;
 
   DECLARE CONTINUE HANDLER FOR TABLA_NO_EXISTE
   BEGIN
     SET x = 1;
   END;
-
-INSERT INTO SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION)
-
+/*
+tabla XX comodin para que siempre se guarde en la otra tabla de respaldos
+esto se hizo para que por este trigger insertar al servidor automaticamente en 
+la tabla federada server, por problemas de conexion en las centrales se elimino
+la tabla server y se creo la tabla independiente server_federada para subir los
+datos de respaldo...
+*/
+INSERT INTO XX(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION)
 VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,PFONO,PVALOR,PESTADO_INSERT,PUSUARIO,PDIRECCION);
 
-
-
 IF x = 1 THEN
-
      
-
      IF PVALOR = -2 THEN
-
-        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION)
-
-        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),0,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION);
-
-        /*SET x = 2;*/
+        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT)
+        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),0,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION,PESTADO_INSERT);
 
      ELSE
-
-        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION)
-
-        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),PVALOR,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION);
-
-        /*SET x = 3;*/
+        INSERT INTO RESPALDO_ASIGNACION_SERVER(N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT)
+        VALUES (PN_UNIDAD,PCOD_CLIENTE,PESTADO,NOW(),PVALOR,PFONO,UNIX_TIMESTAMP(),PUSUARIO,PDIRECCION,PESTADO_INSERT);
 
      END IF;
-
        
-
 END IF;
-
-
-
-
-
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -567,60 +810,116 @@ DELIMITER ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERT_VEHICULO`(
+
 IN PL VARCHAR(10),
+
 IN NUNI INT(11),
+
 IN EMP VARCHAR(10),
+
 IN CON VARCHAR(125),
+
 IN CONAUX VARCHAR(125),
+
 IN MODEL VARCHAR(25),
+
 IN AN INT(5),
+
 IN PRO VARCHAR(125),
+
 IN INF VARCHAR(225),
+
 IN IMG VARCHAR(125),
+
 IN MAR VARCHAR(45),
+
 IN MOT VARCHAR(125),
+
 IN CHA VARCHAR(125),
+
 IN IDUSER VARCHAR(100),
+
 IN REG_MUN VARCHAR(10),
+
 IN SOAT VARCHAR(15))
 BEGIN
 
+
+
 DECLARE IDCON INT(11);
+
 DECLARE IDCONAUX INT(11);
 
+
+
 SELECT ID_CON
+
 INTO IDCON
+
 FROM CONDUCTORES
+
 WHERE NOMBRE_APELLIDO_CON = CON;
 
+
+
 SELECT ID_CON
+
 INTO IDCONAUX
+
 FROM CONDUCTORES
+
 WHERE NOMBRE_APELLIDO_CON = CONAUX;
 
+
+
 INSERT INTO
+
 VEHICULOS
+
 VALUES (
+
 PL,
+
 NUNI,
+
 EMP,
+
 IDCON,
+
 IDCONAUX,
+
 MODEL,
+
 AN,
+
 PRO,
+
 INF,
+
 IMG,
+
 MAR,
+
 MOT,
+
 CHA,
+
 IDUSER,
+
 REG_MUN,
+
 SOAT
+
 );
 
+
+
 INSERT INTO REGCODESTTAXI
+
 VALUES ('AC',IDUSER,NUNI,NOW());
+
+
+
 
 
 END */;;
@@ -706,4 +1005,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-07-06 16:04:34
+-- Dump completed on 2011-09-21 11:24:58

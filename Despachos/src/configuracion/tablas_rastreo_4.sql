@@ -52,7 +52,7 @@ CREATE TABLE `asignados` (
   `ID_TURNO` int(11) DEFAULT NULL,
   `USUARIO` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIGNADOS`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,6 +170,44 @@ CREATE TABLE `conductores` (
   PRIMARY KEY (`ID_CON`,`CEDULA_CONDUCTOR`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `configuraciones`
+--
+
+DROP TABLE IF EXISTS `configuraciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `configuraciones` (
+  `id_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(100) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `desc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id_config`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `configuraciones` VALUES 
+(1,'dirImgConductores','ImgConductores','Directorio para almacenar las imagenes de los conductores'),
+(2,'dirImgVehiculos','ImgVehiculos','Directorio para almacenar las imagenes de los vehículos'),
+(3,'dirProyecto','C:\\\\Despachos\\\\','Directorio principal del Proyecto para guardar alli los logs'),
+(4,'comm','0','Puerto serial del computador el valor es con la palabra ej.COM1, 0 significa que no activar el puerto serial'),
+(5,'separador','\\r\\n','Separador de ENTER para activar el identificador de llamadas'),
+(6,'ip_kradac','200.0.29.121','IP pública del servidor KRADAC, para recolectar la posiciones de los carros'),
+(7,'puerto_kradac','666','Puerto para hacer las consultas al servidor KRADAC por la posición de los carros'),
+(8,'puerto_mapa','65000','Puerto para recoger la posición de los clientes dentro del mapa local'),
+(9,'ip_mapa_local','localhost','IP para abrir el mapa local'),
+(10,'puerto_mapa_local','8080','Puerto para abrir el mapa local'),
+(11,'url','coopserver/','Directorio donde se encuentra el sistema de rastreo loca siempre / al final'),
+(12,'url_home','index.php','Página principal del sistema de rastreo local'),
+(13,'sonido_pendiente','pendiente.wav',NULL),
+(14,'sonido_nueva_pendiente','nuevapendiente.wav',NULL),
+(15,'tiempo_sonido','3','Tiempo de reproducción de los sonidos (segundos)'),
+(16,'posicion_gps','si','Consultar posiciones de gps de las unidades del servidor KRADAC'),
+(17,'enviar_mensajes','si','Sistema de envio de mensajes a las unidades con la info del cliente'),
+(18,'actualizar_respaldos','no','Sistema de Actualización de Respaldos en el servidor KRADAC'),
+(19,'tv','6','Versión del Servicio de TeamView'),
+(20,'not_pago','si','Notificación de pago');
 
 --
 -- Table structure for table `empresas`
@@ -302,7 +340,7 @@ CREATE TABLE `recorridos` (
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 400 */;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+  
 --
 -- Table structure for table `regcodesttaxi`
 --
@@ -321,7 +359,7 @@ CREATE TABLE `regcodesttaxi` (
   KEY `FK_N_UNIDAD` (`N_UNIDAD`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+    
 --
 -- Table structure for table `respaldo_asignacion_server`
 --
@@ -337,8 +375,9 @@ CREATE TABLE `respaldo_asignacion_server` (
   `HORA` int(11) NOT NULL,
   `FONO` varchar(25) NOT NULL,
   `HORA_INSERT` bigint(20) NOT NULL,
-  `USUARIO` varchar(125) NOT NULL,
-  `DIRECCION` varchar(125) NOT NULL,
+  `USUARIO` varchar(25) NOT NULL,
+  `DIRECCION` varchar(100) NOT NULL,
+  `ESTADO_INSERT` varchar(50) DEFAULT 'RES',
   PRIMARY KEY (`N_UNIDAD`,`COD_CLIENTE`,`ESTADO`,`FECHA`,`HORA`,`FONO`,`HORA_INSERT`,`USUARIO`,`DIRECCION`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -373,6 +412,26 @@ CREATE TABLE `turnos` (
   `HORA_FIN` time DEFAULT NULL,
   PRIMARY KEY (`ID_TURNO`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ultimos_gps`
+--
+
+DROP TABLE IF EXISTS `ultimos_gps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ultimos_gps` (
+  `N_UNIDAD` int(10) unsigned NOT NULL,
+  `LONGITUD` double NOT NULL,
+  `LATITUD` double NOT NULL,
+  `VELOCIDAD` double NOT NULL,
+  `ID_CODIGO` varchar(45) DEFAULT NULL,
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `G1` int(10) unsigned DEFAULT NULL,
+  `G2` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`N_UNIDAD`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,4 +500,4 @@ CREATE TABLE `vehiculos` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-07-08 12:45:30
+-- Dump completed on 2011-09-21 11:13:48

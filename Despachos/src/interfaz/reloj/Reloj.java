@@ -79,11 +79,13 @@ public class Reloj {
                 if (Principal.horaNuevoTurno.equals(sdfHora.format(c.getTime()))) {
                     parpadeo = false;
                     if (Principal.gui != null) {
-                        Principal.ReiniciarTurno();
+                        Principal.reiniciarTurno();
                     }
                 }
             } catch (UiThreadingViolationException ex) {
+                log.trace("Problema del look and feel al refrescar la interfaz --> no importa");
             } catch (NullPointerException ex) {
+                log.trace("Null",ex);
             } catch (Exception ex) {
                 log.error("Error cambio de turno... [" + Principal.sesion[1] + "]", ex);
             }

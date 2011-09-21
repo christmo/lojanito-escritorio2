@@ -44,6 +44,19 @@ public class GuardarServidorKRADAC extends Thread {
     }
 
     /**
+     * Comprueba si hay el icono de conexión al server para poner que el dato
+     * es actual ACT o respaldo RES
+     * @return String
+     */
+    public String getEstadoInsert() {
+        if (ConsultaRecorridosServidorBD.HayInternet) {
+            return "ACT";
+        } else {
+            return "RES";
+        }
+    }
+
+    /**
      * Inserta la asignasion en el servidor kradac
      */
     public void InsertarAsignacionServidorKRADAC() {
@@ -68,7 +81,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + ","
                     + desp.getMinutosEntreClienteServidor()
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"
@@ -94,7 +107,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "',"
                     + desp.getMinutosEntreClienteServidor()
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"
@@ -153,7 +166,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + ",'OCUPADO',"
                     + "-2"
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"
@@ -178,7 +191,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + desp.getStrTelefono() + "',"
                     + "-2"
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"
@@ -227,7 +240,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + ",'LIBRE',"
                     + "-2"
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"
@@ -252,7 +265,7 @@ public class GuardarServidorKRADAC extends Thread {
                     + "',"
                     + "-2"
                     + ",'"
-                    + "ACT"
+                    + getEstadoInsert()
                     + "','"
                     + Principal.sesion[2]
                     + "','"

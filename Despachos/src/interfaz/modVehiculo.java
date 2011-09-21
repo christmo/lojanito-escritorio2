@@ -1,5 +1,5 @@
-/*
- * NewJPanel.java
+/*//GEN-FIRST:event_tblResultadoMouseClicked
+ * NewJPanel.java//GEN-LAST:event_tblResultadoMouseClicked
  *
  * Created on 09/08/2010, 08:38:49 AM
  */
@@ -60,7 +60,7 @@ public class modVehiculo extends javax.swing.JDialog {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -471,14 +471,14 @@ public class modVehiculo extends javax.swing.JDialog {
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {                                          
         limpiarCajas();
         preBuscar(cmbParametro.getSelectedIndex(), txtCoincidencia.getText().toUpperCase());
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    }                                         
 
-    private void tblResultadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblResultadoMouseClicked
+    private void tblResultadoMouseClicked(java.awt.event.MouseEvent evt) {                                          
         int fila = tblResultado.rowAtPoint(evt.getPoint());
         int columna = tblResultado.columnAtPoint(evt.getPoint());
 
@@ -486,16 +486,16 @@ public class modVehiculo extends javax.swing.JDialog {
             cargarVehiculoSeleccionado(fila);
         }
 
-    }//GEN-LAST:event_tblResultadoMouseClicked
+    }                                         
 
-    private void txtCoincidenciaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCoincidenciaKeyPressed
+    private void txtCoincidenciaKeyPressed(java.awt.event.KeyEvent evt) {                                           
         if (evt.getKeyCode() == 10) {
             limpiarCajas();
             preBuscar(cmbParametro.getSelectedIndex(), txtCoincidencia.getText());
         }
-    }//GEN-LAST:event_txtCoincidenciaKeyPressed
+    }                                          
 
-    private void tblResultadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblResultadoKeyPressed
+    private void tblResultadoKeyPressed(java.awt.event.KeyEvent evt) {                                        
         int fila;
 
         if (evt.getKeyCode() == 38) {
@@ -515,19 +515,19 @@ public class modVehiculo extends javax.swing.JDialog {
             }
             cargarVehiculoSeleccionado(fila);
         }
-    }//GEN-LAST:event_tblResultadoKeyPressed
+    }                                       
 
-    private void cmbParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbParametroActionPerformed
+    private void cmbParametroActionPerformed(java.awt.event.ActionEvent evt) {                                             
         txtCoincidencia.setText("");
         limpiarCajas();
         limpiarTabla(tblResultado);
-    }//GEN-LAST:event_cmbParametroActionPerformed
+    }                                            
 
-    private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
+    private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {                                                
         Ffoto = funciones.cargarImagen(lblEtiquetaImagen, lblFoto);
-    }//GEN-LAST:event_btnCargarImagenActionPerformed
+    }                                               
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
         //Comprobar que los campos obligatorios tengan valor.
         icError = new ImageIcon(getClass().getResource("/interfaz/iconos/error.png"));
         String nunidad = txtNUnidad.getText();
@@ -550,7 +550,7 @@ public class modVehiculo extends javax.swing.JDialog {
                             //System.out.println("[" + imgActual + "]");
 
                             if (!imgOriginal.equals(imgActual) && !(imgActual.equals("defaultveh.png"))) {
-                                imgActual = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
+                                imgActual = funciones.guardarImagen(Ffoto, bd.getValorConfiguiracion("dirProyecto") + bd.getValorConfiguiracion("dirImgVehiculos"));
 
                             }
 
@@ -617,9 +617,9 @@ public class modVehiculo extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE,
                     icError);
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }                                          
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         int op = JOptionPane.showConfirmDialog(this, "<html><b>Está seguro que desea eliminar este vehículo?</b></html>", "Eliminar vehículo", 0);
         if (op == 0) {
             if (bd.eliminarVehiculo(lblPlaca.getText())) {
@@ -639,49 +639,49 @@ public class modVehiculo extends javax.swing.JDialog {
                         icError);
             }
         }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }                                           
 
-    private void txtModeloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtModeloFocusLost
+    private void txtModeloFocusLost(java.awt.event.FocusEvent evt) {                                    
         txtModelo.setText(txtModelo.getText().toUpperCase());
-}//GEN-LAST:event_txtModeloFocusLost
+}                                   
 
-    private void txtNumChasisFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumChasisFocusLost
+    private void txtNumChasisFocusLost(java.awt.event.FocusEvent evt) {                                       
         txtNumChasis.setText(txtNumChasis.getText().toUpperCase());
-}//GEN-LAST:event_txtNumChasisFocusLost
+}                                      
 
-    private void txtNumMotorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumMotorFocusLost
+    private void txtNumMotorFocusLost(java.awt.event.FocusEvent evt) {                                      
         txtNumMotor.setText(txtNumMotor.getText().toUpperCase());
-}//GEN-LAST:event_txtNumMotorFocusLost
+}                                     
 
-    private void cmbConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbConductorActionPerformed
-    }//GEN-LAST:event_cmbConductorActionPerformed
+    private void cmbConductorActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    }                                            
 
-    private void txtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMarcaFocusLost
+    private void txtMarcaFocusLost(java.awt.event.FocusEvent evt) {                                   
         txtMarca.setText(txtMarca.getText().toUpperCase());
-}//GEN-LAST:event_txtMarcaFocusLost
+}                                  
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         super.dispose();
-}//GEN-LAST:event_btnCancelarActionPerformed
+}                                           
 
-    private void txtRegistroMunicipalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRegistroMunicipalFocusLost
+    private void txtRegistroMunicipalFocusLost(java.awt.event.FocusEvent evt) {                                               
         try {
             Integer.parseInt(txtRegistroMunicipal.getText());
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Solo ingresar números...", "Error...", 0);
             txtRegistroMunicipal.setText("");
         }
-    }//GEN-LAST:event_txtRegistroMunicipalFocusLost
+    }                                              
 
-    private void txtPropietarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPropietarioFocusLost
+    private void txtPropietarioFocusLost(java.awt.event.FocusEvent evt) {                                         
         txtPropietario.setText(txtPropietario.getText().toUpperCase());
-    }//GEN-LAST:event_txtPropietarioFocusLost
+    }                                        
 
-    private void txtSOATFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSOATFocusLost
+    private void txtSOATFocusLost(java.awt.event.FocusEvent evt) {                                  
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtSOATFocusLost
+    }                                 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCargarImagen;
@@ -722,7 +722,7 @@ public class modVehiculo extends javax.swing.JDialog {
     private javax.swing.JTextField txtPropietario;
     private javax.swing.JTextField txtRegistroMunicipal;
     private javax.swing.JTextField txtSOAT;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     /**
      * Busca los vehículos que coincidan con el parámetro
@@ -842,8 +842,8 @@ public class modVehiculo extends javax.swing.JDialog {
 
         } else {
             Icon fot = funciones.ajustarImagen(
-                    arcConfig.getProperty("dirProyecto")
-                    + arcConfig.getProperty("dirImgVehiculos")
+                    bd.getValorConfiguiracion("dirProyecto")
+                    + bd.getValorConfiguiracion("dirImgVehiculos")
                     + System.getProperty("file.separator") + aux[10], 270, 350);
 
             img = aux[10];
@@ -959,7 +959,7 @@ public class modVehiculo extends javax.swing.JDialog {
             imgName = "defaultcon.jpg";
         } else {
             //imgName = funciones.guardarImagen(Ffoto, rb.getString("dirImgConductores"));
-            imgName = funciones.guardarImagen(Ffoto, arcConfig.getProperty("dirProyecto") + arcConfig.getProperty("dirImgVehiculos"));
+            imgName = funciones.guardarImagen(Ffoto, bd.getValorConfiguiracion("dirProyecto") + bd.getValorConfiguiracion("dirImgVehiculos"));
         }
 
         if (imgName != null) {

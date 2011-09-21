@@ -50,9 +50,9 @@ public class EnvioMensajesUnidades extends Thread {
 
     @Override
     public void run() {
-        DIRECCION = Principal.arcConfig.getProperty("ip_kradac");
+        DIRECCION = bd.getValorConfiguiracion("ip_kradac");
         try {
-            PUERTO = Integer.parseInt(Principal.arcConfig.getProperty("puerto_kradac"));
+            PUERTO = Integer.parseInt(bd.getValorConfiguiracion("puerto_kradac"));
             AbrirPuerto();
         } catch (NumberFormatException ex) {
             System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
