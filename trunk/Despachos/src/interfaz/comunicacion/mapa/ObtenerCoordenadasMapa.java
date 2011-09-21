@@ -4,6 +4,7 @@
  */
 package interfaz.comunicacion.mapa;
 
+import BaseDatos.ConexionBase;
 import interfaz.Principal;
 import interfaz.subVentanas.VentanaDatos;
 import java.io.IOException;
@@ -28,8 +29,8 @@ public class ObtenerCoordenadasMapa extends Thread {
     /*public static void main(String[] args) {
     new ObtenerCoordenadasMapa();
     }*/
-    public ObtenerCoordenadasMapa() {
-        ObtenerCoordenadasMapa.puerto = Integer.parseInt(Principal.arcConfig.getProperty("puerto_mapa"));
+    public ObtenerCoordenadasMapa(ConexionBase bd) {
+        ObtenerCoordenadasMapa.puerto = Integer.parseInt(bd.getValorConfiguiracion("puerto_mapa"));
         this.start();
     }
 

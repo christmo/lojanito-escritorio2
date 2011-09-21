@@ -1,5 +1,5 @@
-/*
- * INICIO.java
+/*//GEN-FIRST:event_jbUsuariosActionPerformed
+ * INICIO.java//GEN-LAST:event_jbUsuariosActionPerformed
  *
  * Created on 09/08/2010, 04:04:21 PM
  */
@@ -34,7 +34,7 @@ public class INICIO extends javax.swing.JFrame {
     JDialog modUsuarios = null;
     JDialog reportes = null;
     private String sesion[] = null;
-    private ConexionBase conec;
+    private ConexionBase bd;
     private Properties arcConfig;
     /**
      * Rol del usuario logueado en el sistema
@@ -51,7 +51,7 @@ public class INICIO extends javax.swing.JFrame {
     }
 
     public INICIO(String strSesion[], ConexionBase bd, Properties archivo) {
-        this.conec = bd;
+        this.bd = bd;
         this.sesion = strSesion;
         this.arcConfig = archivo;
         this.intRol = Integer.parseInt(strSesion[3]);
@@ -150,7 +150,7 @@ public class INICIO extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         btnNvConductor = new javax.swing.JButton();
@@ -438,49 +438,49 @@ public class INICIO extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {                                         
         this.dispose();
-    }//GEN-LAST:event_btnSalirActionPerformed
+    }                                        
 
-    private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
+    private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {                                               
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
-            newVehiculo = new ingresoVehiculos(this, sesion, this.conec, arcConfig);
+            newVehiculo = new ingresoVehiculos(this, sesion, this.bd, arcConfig);
             newVehiculo.setSize(740, 590);
             newVehiculo.setLocationRelativeTo(this);
             newVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             newVehiculo.setResizable(false);
         }
         newVehiculo.setVisible(true);
-    }//GEN-LAST:event_btnNewVehiculoActionPerformed
+    }                                              
 
-    private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
+    private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                 
         if ((beConductor == null) || (!beConductor.isDisplayable())) {
-            beConductor = new modConductor(this, this.conec, arcConfig);
+            beConductor = new modConductor(this, this.bd, arcConfig);
             beConductor.setSize(705, 700);
             beConductor.setLocationRelativeTo(this);
             beConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             beConductor.setResizable(false);
         }
         beConductor.setVisible(true);
-    }//GEN-LAST:event_btnEditConductorActionPerformed
+    }                                                
 
-    private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
+    private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if ((nEstado == null) || (!nEstado.isDisplayable())) {
-            nEstado = new ingresoEstados(this, this.conec);
+            nEstado = new ingresoEstados(this, this.bd);
             nEstado.setSize(354, 267);
             nEstado.setLocationRelativeTo(this);
             nEstado.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             nEstado.setResizable(false);
         }
         nEstado.setVisible(true);
-    }//GEN-LAST:event_btnEstadosActionPerformed
+    }                                          
 
-    private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
+    private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {                                          
 
         if ((turnos == null) || (!turnos.isDisplayable())) {
-            turnos = new modTurnos(this, this.conec);
+            turnos = new modTurnos(this, this.bd);
             turnos.setSize(525, 250);
             turnos.setLocationRelativeTo(this);
             turnos.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -488,62 +488,62 @@ public class INICIO extends javax.swing.JFrame {
         }
         turnos.setVisible(true);
 
-    }//GEN-LAST:event_btnTurnosActionPerformed
+    }                                         
 
-    private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
+    private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {                                               
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
-            nConductor = new ingresoConductor(this, this.conec, arcConfig);
+            nConductor = new ingresoConductor(this, this.bd, arcConfig);
             nConductor.setSize(757, 512);
             nConductor.setLocationRelativeTo(this);
             nConductor.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             nConductor.setResizable(false);
         }
         nConductor.setVisible(true);
-    }//GEN-LAST:event_btnNvConductorActionPerformed
+    }                                              
 
-    private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
+    private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {                                                
 
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
-            editVehiculo = new modVehiculo(this, sesion, this.conec, arcConfig);
+            editVehiculo = new modVehiculo(this, sesion, this.bd, arcConfig);
             editVehiculo.setSize(819, 700);
             editVehiculo.setLocationRelativeTo(this);
             editVehiculo.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             editVehiculo.setResizable(false);
         }
         editVehiculo.setVisible(true);
-    }//GEN-LAST:event_btnEditVehiculoActionPerformed
+    }                                               
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-    }//GEN-LAST:event_formWindowClosed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {                                  
+    }                                 
 
-    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {                                            
         if ((reportes == null) || (!reportes.isDisplayable())) {
-            reportes = new Reportes(this, sesion, this.conec);
+            reportes = new Reportes(this, sesion, this.bd);
             reportes.setLocationRelativeTo(this);
             reportes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             reportes.setResizable(false);
         }
         reportes.setVisible(true);
-    }//GEN-LAST:event_btnReportesActionPerformed
+    }                                           
 
-    private void btnEditarMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMultasActionPerformed
+    private void btnEditarMultasActionPerformed(java.awt.event.ActionEvent evt) {                                                
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
-            beasignarMulta = new modAsignarMultas(this, this.conec, sesion);
+            beasignarMulta = new modAsignarMultas(this, this.bd, sesion);
             beasignarMulta.setSize(538, 635);
             beasignarMulta.setLocationRelativeTo(this);
             beasignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             beasignarMulta.setResizable(false);
         }
         beasignarMulta.setVisible(true);
-    }//GEN-LAST:event_btnEditarMultasActionPerformed
+    }                                               
 
-    private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
+    private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO añadir funcionalidad al boton de directorio telefonico
-    }//GEN-LAST:event_btnDirectorioActionPerformed
+    }                                             
 
-    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
+    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {                                          
         if ((multas == null) || (!multas.isDisplayable())) {
-            multas = new Multas(this, this.conec);
+            multas = new Multas(this, this.bd);
             multas.setSize(496, 400);
             multas.setLocationRelativeTo(this);
             multas.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -551,11 +551,11 @@ public class INICIO extends javax.swing.JFrame {
         }
         multas.setVisible(true);
 
-    }//GEN-LAST:event_btnMultasActionPerformed
+    }                                         
 
-    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
+    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {                                            
         if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
-            asignarMulta = new asignarMultas(this, sesion, this.conec);
+            asignarMulta = new asignarMultas(this, sesion, this.bd);
             asignarMulta.setSize(350, 354);
             asignarMulta.setLocationRelativeTo(this);
             asignarMulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -563,63 +563,63 @@ public class INICIO extends javax.swing.JFrame {
         }
         asignarMulta.setVisible(true);
 
-    }//GEN-LAST:event_btnAsignarMActionPerformed
+    }                                           
 
-    private void btnModEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModEstadosActionPerformed
+    private void btnModEstadosActionPerformed(java.awt.event.ActionEvent evt) {                                              
         if ((modEstados == null) || (!modEstados.isDisplayable())) {
-            modEstados = new modEstados(this, this.conec);
+            modEstados = new modEstados(this, this.bd);
             modEstados.setSize(500, 320);
             modEstados.setLocationRelativeTo(this);
             modEstados.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             modEstados.setResizable(false);
         }
         modEstados.setVisible(true);
-    }//GEN-LAST:event_btnModEstadosActionPerformed
+    }                                             
 
-    private void jbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbUsuariosActionPerformed
+    private void jbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if ((modUsuarios == null) || (!modUsuarios.isDisplayable())) {
-            modUsuarios = new modUsuarios(this, this.conec);
+            modUsuarios = new modUsuarios(this, this.bd);
             modUsuarios.setLocationRelativeTo(this);
             modUsuarios.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             modUsuarios.setResizable(false);
         }
         modUsuarios.setVisible(true);
-    }//GEN-LAST:event_jbUsuariosActionPerformed
+    }                                          
     private VentanaDatos v;
-    private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClientesActionPerformed
+    private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if ((v == null) || (!v.isDisplayable())) {
-            v = new VentanaDatos(true, conec);
+            v = new VentanaDatos(true, bd);
             v.setLocationRelativeTo(this);
             v.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             v.setResizable(false);
         }
         v.setVisible(true);
-    }//GEN-LAST:event_jbClientesActionPerformed
+    }                                          
     private VentanaMail mail;
-    private void jbProblemasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbProblemasActionPerformed
+    private void jbProblemasActionPerformed(java.awt.event.ActionEvent evt) {                                            
         if ((mail == null) || (!mail.isDisplayable())) {
-            mail = new VentanaMail(conec, sesion);
+            mail = new VentanaMail(bd, sesion);
             mail.setLocationRelativeTo(this);
             mail.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             mail.setResizable(false);
         }
         mail.setVisible(true);
-    }//GEN-LAST:event_jbProblemasActionPerformed
+    }                                           
 
-    private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
-        String url = "http://" + arcConfig.getProperty("ip_mapa_local")
+    private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        String url = "http://" + bd.getValorConfiguiracion("ip_mapa_local")
                 + ":"
-                + arcConfig.getProperty("puerto_mapa_local")
+                + bd.getValorConfiguiracion("puerto_mapa_local")
                 + "/"
-                + arcConfig.getProperty("url")
-                + arcConfig.getProperty("url_home");
+                + bd.getValorConfiguiracion("url")
+                + bd.getValorConfiguiracion("url_home");
         BrowserControl.displayURL(url);
-    }//GEN-LAST:event_jbMapaActionPerformed
+    }                                      
 
-    private void jbMailKradacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMailKradacActionPerformed
-        String url = "http://mail.kradac.com";
+    private void jbMailKradacActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        String url = "http://mail.google.com";
         BrowserControl.displayURL(url);
-    }//GEN-LAST:event_jbMailKradacActionPerformed
+    }                                            
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -629,7 +629,7 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnAsignarM;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDirectorio;
@@ -651,7 +651,7 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     /**
      * Muestra solo los botones necesario dependiendo del tipo de rol

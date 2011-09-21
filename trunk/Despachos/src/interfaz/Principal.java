@@ -1,5 +1,5 @@
-/*
- * Cuando escribi este codigo, solo Dios y YO entendiamos lo que estaba haciendo
+/*//GEN-FIRST:event_btnColorActionPerformed
+ * Cuando escribi este codigo, solo Dios y YO entendiamos lo que estaba haciendo//GEN-LAST:event_btnColorActionPerformed
  * AHORA, solo Dios lo entiende --> ;-) ja ja
  *
  * Principal.java
@@ -40,6 +40,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -106,6 +107,8 @@ public final class Principal extends javax.swing.JFrame {
     private int cod; //codigo de la tecla presionada
     private boolean desPorTabla_Campo = false; //false es un despacho por campo, true es un despacho por tabla
     private INICIO menu;
+    private long fechaHoraUltimoDespacho;
+    private GregorianCalendar calendar = new GregorianCalendar();
     /**
      * almacena los clientes Por Despachar
      */
@@ -188,12 +191,14 @@ public final class Principal extends javax.swing.JFrame {
      * y cree el objeto al momento de llamar a esta ventana
      */
     private void ConfiguracionInicial() {
-        ActualizarTurno();
-        BarraTitulo();
+        actualizarTurno();
+        actualizarBarraTitulo();
         redimencionarTablaVehiculos();
         llenarComboEstados();
-        LimpiarCargarTablaDespachados();
+        limpiarCargarTablaDespachados();
         IdentificadorLlamadas();
+
+        fechaHoraUltimoDespacho = bd.obtenerUltimaFechaHoraDespacho();
 
         jtTelefono.requestFocusInWindow();
 
@@ -215,7 +220,7 @@ public final class Principal extends javax.swing.JFrame {
                  * Metodo generico para despachar se lo utiliza en todos los
                  * lugares donde se despacha carreras
                  */
-                ValidarDespacharCliente();
+                validarDespacharCliente();
             }
         });
 
@@ -231,7 +236,7 @@ public final class Principal extends javax.swing.JFrame {
                 } catch (NullPointerException ex) {
                 }
                 int intFila = jtPorDespachar.getSelectedRow();
-                BorrarCamposFilaSeleccionadaPorDespachar(intFila);
+                borrarCamposFilaSeleccionadaPorDespachar(intFila);
             }
         });
 
@@ -247,7 +252,7 @@ public final class Principal extends javax.swing.JFrame {
                  * llamarlo desde todos los lugares donde se hagan borrado de
                  * filas
                  */
-                BorradoFilasFormaSegura();
+                borrarFilasFormaSegura();
             }
         });
 
@@ -262,7 +267,7 @@ public final class Principal extends javax.swing.JFrame {
                     jtPorDespachar.getCellEditor().stopCellEditing();
                 } catch (NullPointerException ex) {
                 }
-                NuevaFilaDespacho();
+                nuevaFilaDespacho();
             }
         });
 
@@ -285,7 +290,7 @@ public final class Principal extends javax.swing.JFrame {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                SalirVentanaPrincipal();
+                salirVentanaPrincipal();
             }
         });
     }
@@ -294,8 +299,8 @@ public final class Principal extends javax.swing.JFrame {
      * Abre la comunicación serial para leer el numero de telefono del cliente
      */
     private void IdentificadorLlamadas() {
-        String puerto = arcConfig.getProperty("comm");
-        String separador = arcConfig.getProperty("separador");
+        String puerto = bd.getValorConfiguiracion("comm");
+        String separador = bd.getValorConfiguiracion("separador");
         //System.out.println("Puerto COMM: " + puerto);
         log.trace("Puerto COMM: {}", puerto);
         //System.out.println("Empresa: " + sesion[1]);
@@ -324,7 +329,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Actualiza la barra de titulo del frame
      */
-    private void BarraTitulo() {
+    private void actualizarBarraTitulo() {
         setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
         setIconImage(new ImageIcon(getClass().getResource("/interfaz/iconos/kradac_icono.png")).getImage());
     }
@@ -342,10 +347,9 @@ public final class Principal extends javax.swing.JFrame {
      */
     private void LeerRecorridosServidorKRADAC() {
         try {
-            if (Principal.arcConfig.getProperty("posicion_gps").equals("si")
-                    || Principal.arcConfig.getProperty("posicion_gps").equals("SI")
-                    && !Principal.arcConfig.getProperty("posicion_gps").equals("")
-                    && Principal.arcConfig.getProperty("posicion_gps") != null) {
+            String getGPS = bd.getValorConfiguiracion("posicion_gps");
+            if (getGPS.equals("si") || getGPS.equals("SI")
+                    && !getGPS.equals("") && getGPS != null) {
                 ConsultaRecorridosServidorBD conServidor = new ConsultaRecorridosServidorBD(sesion[1], bd);
                 conServidor.start();
             }
@@ -357,15 +361,15 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Limpia y carga con todos los valores pord efecto en la tabla de despachados
      */
-    private static void LimpiarCargarTablaDespachados() {
+    private static void limpiarCargarTablaDespachados() {
         limpiarTablaDespachados();
-        CargarTablaDespachados();
+        cargarTablaDespachados();
     }
 
     /**
      * Carga los clientes despachados en el turno actual
      */
-    private static void CargarTablaDespachados() {
+    private static void cargarTablaDespachados() {
         listaDespachados.clear();
         try {
             listaDespachados = bd.getDespachados(sesion[0], id_Turno, funciones.getFecha());
@@ -404,11 +408,11 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * setea el string del turno y el id del turno actual
      */
-    public static void ActualizarTurno() {
+    public static void actualizarTurno() {
         turno = validarTurno();
         try {
             id_Turno = bd.getIdTurno(validarTurno());
-            ActualizarTurnoUsuario(sesion[0], id_Turno);
+            actualizarTurnoUsuario(sesion[0], id_Turno);
             try {
                 horaNuevoTurno = bd.getHoraNuevoTurno(id_Turno);
             } catch (SQLException ex) {
@@ -435,7 +439,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param user
      * @param id_turno
      */
-    private static void ActualizarTurnoUsuario(String user, int id_turno) {
+    private static void actualizarTurnoUsuario(String user, int id_turno) {
         bd.actualziarTurnoUsuario(user, id_turno);
     }
 
@@ -583,7 +587,7 @@ public final class Principal extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jsVehiculos = new javax.swing.JScrollPane();
@@ -1155,19 +1159,19 @@ public final class Principal extends javax.swing.JFrame {
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-1037)/2, (screenSize.height-793)/2, 1037, 793);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-        SalirVentanaPrincipal();
-    }//GEN-LAST:event_jbSalirActionPerformed
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        salirVentanaPrincipal();
+    }                                       
 
     /**
      * Permite ejecutar acciones que se realicen al momento de precionar el boton
      * de salir
      */
-    private void SalirVentanaPrincipal() {
+    private void salirVentanaPrincipal() {
         log.trace("Empezar a salir del sistema... :-|");
-        ActivarUnidadesOcupadasAsignadas();
+        activarUnidadesOcupadasAsignadas();
         log.trace("Activadas las unidades asignadas...");
         bd.TruncarTablaPosicionesCliente();
         log.trace("Eliminados los clientes del mapa...");
@@ -1184,11 +1188,11 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Activa todas las unidades que esten ocupadas cuando se cierre el sistema
      */
-    private void ActivarUnidadesOcupadasAsignadas() {
+    private void activarUnidadesOcupadasAsignadas() {
         rs = bd.getUnidadesOcupadasAsignadas();
         try {
             while (rs.next()) {
-                RemoverDespachoDeTemporal(rs.getString(1));
+                removerDespachoDeTemporal(rs.getString(1));
                 //String sql = "INSERT INTO REGCODESTTAXI VALUES (now(),now(),'" + "AC" + "','" + sesion[0] + "','" + rs.getString(1) + "')";
                 //bd.ejecutarSentencia(sql);
                 bd.setCambiarEstadoUnidad("AC", sesion[0], rs.getString(1));
@@ -1203,10 +1207,10 @@ public final class Principal extends javax.swing.JFrame {
         }
     }
 
-    private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyPressed
+    private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {                                          
         cod = evt.getKeyCode();
         AccionesBorrado(cod, jtPorDespachar);
-    }//GEN-LAST:event_jtPorDespacharKeyPressed
+    }                                         
 
     /**
      * Borra las filas o las celdas dependiendo de la tecla que se precione
@@ -1270,7 +1274,7 @@ public final class Principal extends javax.swing.JFrame {
      * Elimina una Fila de la Tabla PorDespachar que se haya seleccionado
      * @param intFila
      */
-    private void BorrarFilaSeleccionadaPorDespachar(int intFila) {
+    private void borrarFilaSeleccionadaPorDespachar(int intFila) {
 
         if (jtPorDespachar.isEditing()) {
             jtPorDespachar.getCellEditor().cancelCellEditing();
@@ -1323,9 +1327,9 @@ public final class Principal extends javax.swing.JFrame {
 
         if (despacho.getIntUnidad() != 0) {
             String etiquetaActivo = bd.getEtiquetaEstadoUnidad("AC");
-            AsignarColorDespachoVehiculo(unidad, etiquetaActivo);
+            setColorDespachoVehiculo(unidad, etiquetaActivo);
         }
-        QuitarClienteMapa(cod_cli, unidad);
+        quitarClienteMapaLocal(cod_cli, unidad);
 
         DefaultTableModel model = ((DefaultTableModel) jtPorDespachar.getModel());
         try {
@@ -1343,7 +1347,7 @@ public final class Principal extends javax.swing.JFrame {
      * telefono o codigo que los cambios no van a ser permanentes
      * @param intFila
      */
-    private void BorrarCamposFilaSeleccionadaPorDespachar(int intFila) {
+    private void borrarCamposFilaSeleccionadaPorDespachar(int intFila) {
         try {
             jtPorDespachar.setValueAt("", intFila, 3);
             jtPorDespachar.setValueAt("", intFila, 4);
@@ -1352,12 +1356,12 @@ public final class Principal extends javax.swing.JFrame {
             jtBuscarPorNombre.setText("");
             jtBuscarPorTelefono.setText("");
             jtBuscarPorCodigo.setText("");
-            LimpiarCargarTablaDespachados();
+            limpiarCargarTablaDespachados();
         } catch (IndexOutOfBoundsException iex) {
             jtBuscarPorNombre.setText("");
             jtBuscarPorTelefono.setText("");
             jtBuscarPorCodigo.setText("");
-            LimpiarCargarTablaDespachados();
+            limpiarCargarTablaDespachados();
         }
     }
 
@@ -1380,10 +1384,10 @@ public final class Principal extends javax.swing.JFrame {
                  * Inserta el despacho en la tabla de despachados
                  */
                 boolean despachar = setDatosTablaDespachados(despacho, jtDespachados);
-                GuardarClienteSinCodigo(despacho);
+                guardarClienteSinCodigo(despacho);
                 if (despachar) {
                     String estadoOcupado = bd.getNombreEstadoUnidad("OCU");
-                    AsignarColorDespachoVehiculo("" + despacho.getIntUnidad(), estadoOcupado);
+                    setColorDespachoVehiculo("" + despacho.getIntUnidad(), estadoOcupado);
                     setNumeroCarrerasRealizadasPorTaxi("" + despacho.getIntUnidad());
 
                     /**
@@ -1393,7 +1397,7 @@ public final class Principal extends javax.swing.JFrame {
                     java.awt.EventQueue.invokeLater(new Runnable() {
 
                         public void run() {
-                            InsertarAsignacionDespachoServidorKradac();
+                            insertarAsignacionDespachoServidorKradac();
                             /**
                              * Remover la fila de la tabla de clientes por despachar
                              */
@@ -1419,7 +1423,7 @@ public final class Principal extends javax.swing.JFrame {
      * por ahora si se implementara una nueva forma de despachar se lo deberia
      * llamar a este metodo.
      */
-    private void ValidarDespacharCliente() {
+    private void validarDespacharCliente() {
         try {
             jtPorDespachar.getCellEditor().stopCellEditing();
         } catch (NullPointerException ex) {
@@ -1439,16 +1443,35 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 String strCampoMinutos = jtPorDespachar.getValueAt(intFila, 7).toString();
                 if (!strCampoMinutos.equals("") && !strCampoMinutos.equals("0")) {
-                    /**
-                     * Comprueba si se despacho correctamente para
-                     * quitar los datos del cliente del mapa
+                    /*
+                     * Comprobar si no se ha cambiado la hora del equipo a una
+                     * fecha anterior al ultimo despacho
                      */
-                    boolean seDespacho = DespacharCliente(intFila);
-                    if (seDespacho) {
-                        QuitarClienteMapa(cod_cli, unidad);
+                    if (fechaHoraUltimoDespacho < (calendar.getTimeInMillis()/1000)) {
+                        /**
+                         * Comprueba si se despacho correctamente para
+                         * quitar los datos del cliente del mapa
+                         */
+                        boolean seDespacho = DespacharCliente(intFila);
+                        if (seDespacho) {
+                            quitarClienteMapaLocal(cod_cli, unidad);
+                        } else {
+                            JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, 
+                                "Hay un problema con la hora y fecha del equipo, igualar el reloj de su computador,\n"
+                                + "caso contrario no le dejará despachar las carreras...", "Error...", 0);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+                        log.error("Problema de hora del equipo\n\n\n"
+                                + "Se quiere despachar con hora del equipo anterior al último despacho...\n\n"
+                                + "Empresa:\t"+sesion[1]
+                                +"\nUsuario:\t"+sesion[2]
+                                +"\nFecha y hora último Despacho:\t"+sdf.format(fechaHoraUltimoDespacho*1000)
+                                +"\nFecha y hora actual del equipo:\t"+sdf.format(calendar.getTime())
+                                +"\n\n"
+                                );
                     }
-                } else {
-                    JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
                 }
             } catch (NullPointerException ex) {
                 JOptionPane.showMessageDialog(Principal.gui, "Falta ingresar el tiempo estimado de llegada\na recoger el pasajero...", "Error...", 0);
@@ -1467,7 +1490,7 @@ public final class Principal extends javax.swing.JFrame {
      * vuelva a llamar sepa que cliente es.
      * @param Despacho
      */
-    private void GuardarClienteSinCodigo(Despachos des) {
+    private void guardarClienteSinCodigo(Despachos des) {
         if (!des.getStrTelefono().equals("")) {
             des.setStrNumeroCasa("");
             des.setStrReferecia("");
@@ -1524,7 +1547,7 @@ public final class Principal extends javax.swing.JFrame {
     }
     VentanaDatos ventanaDatos = null;
 
-    private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
+    private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {                                            
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
 
@@ -1548,7 +1571,7 @@ public final class Principal extends javax.swing.JFrame {
                 if (!esNullFechaTablaPorDespachar()
                         && !esNullTelefonoTablaPorDespachar()
                         && !esNullCodigoTablaPorDespachar()) {
-                    AbrirVentanaDatosCliente(1);
+                    abrirVentanaDatosCliente(1);
                 } else {
                     /*
                      * Sin telefono, Con Codigo y Con Hora abrir la ventana
@@ -1558,7 +1581,7 @@ public final class Principal extends javax.swing.JFrame {
                     if (!esNullFechaTablaPorDespachar()
                             && !esNullCodigoTablaPorDespachar()
                             && esNullTelefonoTablaPorDespachar()) {
-                        AbrirVentanaDatosCliente(2);
+                        abrirVentanaDatosCliente(2);
                     } else {
                         /**
                          * Tiene fecha pero es nulo el codigo y el telefono
@@ -1569,7 +1592,7 @@ public final class Principal extends javax.swing.JFrame {
                         if (!esNullFechaTablaPorDespachar()
                                 && esNullCodigoTablaPorDespachar()
                                 && esNullTelefonoTablaPorDespachar()) {
-                            AbrirVentanaDatosCliente(3);
+                            abrirVentanaDatosCliente(3);
                         } else {
                             /**
                              * Despacho temporal sin codigo mostrar la ventana
@@ -1579,7 +1602,7 @@ public final class Principal extends javax.swing.JFrame {
                             if (!esNullFechaTablaPorDespachar()
                                     && esNullCodigoTablaPorDespachar()
                                     && !esNullTelefonoTablaPorDespachar()) {
-                                AbrirVentanaDatosCliente(1);
+                                abrirVentanaDatosCliente(1);
                             }
                         }
                     }
@@ -1601,7 +1624,7 @@ public final class Principal extends javax.swing.JFrame {
             } catch (ArrayIndexOutOfBoundsException ex) {
             }
         }
-    }//GEN-LAST:event_jtPorDespacharMousePressed
+    }                                           
 
     /**
      * Comprueba si es nulo el valor que se recoje de la tabla, en el campo Fecha
@@ -1661,7 +1684,7 @@ public final class Principal extends javax.swing.JFrame {
      * 
      * @param ConTelefono -> verdadero si esta el telefono en la tabla falso si no hay telefono
      */
-    private void AbrirVentanaDatosCliente(int casoTelefono) {
+    private void abrirVentanaDatosCliente(int casoTelefono) {
         switch (casoTelefono) {
             case 1:
                 if (ventanaDatos == null) {
@@ -1779,11 +1802,11 @@ public final class Principal extends javax.swing.JFrame {
         return datos;
     }
 
-    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefonoActionPerformed
+    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {                                           
         desPorTabla_Campo = false;
         getBuscarPorTelefono();
         InicializarVariables();
-    }//GEN-LAST:event_jtTelefonoActionPerformed
+    }                                          
 
     /**
      * Obtener el código del usuario dependiendo del telefono ingresado
@@ -1804,10 +1827,10 @@ public final class Principal extends javax.swing.JFrame {
 
                 if (desPorTabla_Campo) { //Despacha por tabla
                     setDatosFila(despacho, jtPorDespachar);
-                    IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
+                    setClienteMapaLocal("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
                 } else { //despacha por campo telefono
                     setDatosTablas(despacho, jtPorDespachar);
-                    IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
+                    setClienteMapaLocal("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
                     jtPorDespachar.setColumnSelectionInterval(6, 6);
                     jtPorDespachar.setRowSelectionInterval(0, 0);
                 }
@@ -1856,7 +1879,7 @@ public final class Principal extends javax.swing.JFrame {
         return intCodigo;
     }
 
-    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
+    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {                                         
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
@@ -1864,7 +1887,7 @@ public final class Principal extends javax.swing.JFrame {
                 InicializarVariables();
             }
         });
-    }//GEN-LAST:event_jtCodigoActionPerformed
+    }                                        
 
     /**
      * Obtener el telefono del usuario dependiendo del codigo ingresado
@@ -1891,7 +1914,7 @@ public final class Principal extends javax.swing.JFrame {
             despacho = new Despachos(funciones.getHoraEnMilis(), strHora, strTelefono, intCodigo, strNombre, strDireccion, strBarrio, "");
 
             setDatosTablas(despacho, jtPorDespachar);
-            IngresarClienteMapa("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
+            setClienteMapaLocal("" + despacho.getIntCodigo(), strNombre, strBarrio, strTelefono);
 
             jtPorDespachar.setColumnSelectionInterval(6, 6);
             jtPorDespachar.setRowSelectionInterval(0, 0);
@@ -1905,7 +1928,7 @@ public final class Principal extends javax.swing.JFrame {
         return strTelefono;
     }
 
-    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {                                         
         int[] numCol = jtVehiculos.getSelectedColumns();
         JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
         String etiqueta = editor.getText();
@@ -1929,14 +1952,14 @@ public final class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Este estado no se puede asignar desde aqui...", "Error...", 0);
         }
         jtTelefono.requestFocus();
-    }//GEN-LAST:event_btnColorActionPerformed
+    }                                        
 
     /**
      * Activa y pone en libre las unidades seleccionadas en el servidor, y remueve
      * el registro del despacho de la lista de despachos temporales
      * @param codVehiculo
      */
-    private void RemoverDespachoDeTemporal(String unidad) {
+    private void removerDespachoDeTemporal(String unidad) {
 
         for (int i = 0; i < listaDespachosTemporales.size(); i++) {
             if (listaDespachosTemporales.get(i).getIntUnidad() == Integer.parseInt(unidad)) {
@@ -1970,7 +1993,7 @@ public final class Principal extends javax.swing.JFrame {
              * servidor KRADAC
              */
             if (bd.getCodigoEtiquetaEstadoUnidad(etq).equals("AC")) {
-                RemoverDespachoDeTemporal(i);
+                removerDespachoDeTemporal(i);
             }
         }
         pintarEstadoTaxi(strEncabezados);
@@ -2063,7 +2086,7 @@ public final class Principal extends javax.swing.JFrame {
     /************************************************
     Propiedad de Cambio de la Tabla de Clientes Por Despachar
      ************************************************/
-    private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
+    private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {                                              
         if (evt.getPropertyName().equals("tableCellEditor")) {
             int intFila = jtPorDespachar.getSelectedRow();
             int intCol = jtPorDespachar.getSelectedColumn();
@@ -2137,7 +2160,7 @@ public final class Principal extends javax.swing.JFrame {
                     jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
                     //actualizar la lista de despachos temporales en memoria
                     //para poder encontrar este cambio por la hora
-                    ActualizarListaTMPHoraIngreso(intFila, horaAntes);
+                    actualizarListaTMPHoraIngreso(intFila, horaAntes);
                 } catch (NullPointerException ex) {
                 } catch (ArrayIndexOutOfBoundsException aex) {
                 }
@@ -2156,7 +2179,7 @@ public final class Principal extends javax.swing.JFrame {
                  * Actualiza el tiempo en que se asigna una unidad a un cliente
                  * para su despacho
                  */
-                InsertarActualizarDespachoTemporalListaTMP();
+                insertarActualizarDespachoTemporalListaTMP();
 
                 try {
                     String cod_cli = "";
@@ -2176,20 +2199,19 @@ public final class Principal extends javax.swing.JFrame {
 
                             if (!nom_cli.equals("") && !dir_cli.equals("")) {
                                 if (CampoUnidadCambio) {
-                                    ActivarUnidadBorrada(cod_cli);
-                                    ActualizarAsignacion(intFila, intCol, cod_cli);
+                                    activarUnidadBorrada(cod_cli);
+                                    actualizarAsignacion(intFila, intCol, cod_cli);
                                 } else {
-                                    ActualizarAsignacion(intFila, intCol, cod_cli);
+                                    actualizarAsignacion(intFila, intCol, cod_cli);
                                 }
                                 /**
                                  * Enviar mensaje de direccion y cliente a la unidad
                                  * si esta especificado en el archivo de propiedades
                                  */
                                 try {
-                                    if (Principal.arcConfig.getProperty("enviar_mensajes").equals("si")
-                                            || Principal.arcConfig.getProperty("enviar_mensajes").equals("SI")
-                                            && !Principal.arcConfig.getProperty("enviar_mensajes").equals("")
-                                            && Principal.arcConfig.getProperty("enviar_mensajes") != null) {
+                                    String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
+                                    if (sendSMS.equals("si") || sendSMS.equals("SI")
+                                            && !sendSMS.equals("") && sendSMS != null) {
                                         /**
                                          * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
                                          */
@@ -2214,9 +2236,9 @@ public final class Principal extends javax.swing.JFrame {
                     jtPorDespachar.setValueAt("", intFila, 2);
                 }
             }
-            Mayuculas(jtPorDespachar, intFila);
+            convertirMayuculas(jtPorDespachar, intFila);
         }
-    }//GEN-LAST:event_jtPorDespacharPropertyChange
+    }                                             
 
     /**
      * Permite enviar a la base el estado activo para la unidad seleccionada,
@@ -2228,7 +2250,7 @@ public final class Principal extends javax.swing.JFrame {
     private void activarUnidadConDosEstados(int intFila) {
         String unidad = jtPorDespachar.getValueAt(intFila, 6).toString();
         log.trace("REACTIVAR LA UNIDAD[{}]", unidad);
-        AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+        setColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
         jtPorDespachar.setValueAt("", intFila, 6);
     }
 
@@ -2269,7 +2291,7 @@ public final class Principal extends javax.swing.JFrame {
      * a la lista de despachos temporales para luego ser enviado al servidor
      * @return boolean |true si lo inserto, false y se actualiza uno existente...
      */
-    private boolean InsertarActualizarDespachoTemporalListaTMP() {
+    private boolean insertarActualizarDespachoTemporalListaTMP() {
         Despachos desTMP = getDatosPorDespachar();
         if (desTMP.getIntUnidad() != 0) {
             long hora = funciones.getHoraEnMilis();
@@ -2319,10 +2341,10 @@ public final class Principal extends javax.swing.JFrame {
      * Activa la unidad que se quiere borrar y se le quita el estado de asignado
      * @param cod_cli
      */
-    private void ActivarUnidadBorrada(String cod_cli) {
+    private void activarUnidadBorrada(String cod_cli) {
         String estadoActivo = bd.getNombreEstadoUnidad("AC");
-        AsignarColorDespachoVehiculo(UnidadAntesDeBorrar, estadoActivo);
-        QuitarClienteMapa(cod_cli, UnidadAntesDeBorrar);
+        setColorDespachoVehiculo(UnidadAntesDeBorrar, estadoActivo);
+        quitarClienteMapaLocal(cod_cli, UnidadAntesDeBorrar);
     }
 
     /**
@@ -2332,7 +2354,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param intCol
      * @param cod_cli
      */
-    private void ActualizarAsignacion(int intFila, int intCol, String cod_cli) {
+    private void actualizarAsignacion(int intFila, int intCol, String cod_cli) {
         String unidad = "0";
         try {
             unidad = jtPorDespachar.getValueAt(intFila, intCol).toString();
@@ -2346,9 +2368,9 @@ public final class Principal extends javax.swing.JFrame {
                 if (strEstadoUnidad != null && strEstadoUnidad.equals("AC")) {
 
                     String estadoAsignado = bd.getNombreEstadoUnidad("ASI");
-                    AsignarColorDespachoVehiculo(unidad, estadoAsignado);
+                    setColorDespachoVehiculo(unidad, estadoAsignado);
 
-                    ActualizarClienteMapa(cod_cli, unidad);
+                    actualizarClienteMapaLocal(cod_cli, unidad);
 
                 } else {
                     String estado = bd.getEtiquetaEstadoUnidad(strEstadoUnidad);
@@ -2357,7 +2379,7 @@ public final class Principal extends javax.swing.JFrame {
                         int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa...\nEstado de la unidad: " + estado
                                 + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
                         if (r == 0) {
-                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                            setColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
                             jtPorDespachar.setColumnSelectionInterval(6, 6);
                             jtPorDespachar.setRowSelectionInterval(intFila, intFila);
                             jtPorDespachar.requestFocus();
@@ -2366,14 +2388,14 @@ public final class Principal extends javax.swing.JFrame {
                         int r = JOptionPane.showConfirmDialog(this, "No se puede asignar una carrera a esa unidad, no está Activa..."
                                 + "\n<html><b>¿Activar esta unidad?</b></html>", "Error", 0);
                         if (r == 0) {
-                            AsignarColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
+                            setColorDespachoVehiculo(unidad, bd.getNombreEstadoUnidad("AC"));
                         }
                     }
                     jtPorDespachar.setValueAt("", intFila, intCol);
                 }
             } else {
                 jtPorDespachar.setValueAt("", intFila, intCol);
-                ActivarUnidadBorrada(cod_cli);
+                activarUnidadBorrada(cod_cli);
             }
         } catch (NumberFormatException nfex) {
         }
@@ -2384,7 +2406,7 @@ public final class Principal extends javax.swing.JFrame {
      * de la finalización de la carrera en la tabla de clientes por despachar
      * @param unidad
      */
-    private void AsignarColorDespachoVehiculo(String unidad, String estado) {
+    private void setColorDespachoVehiculo(String unidad, String estado) {
         int col = -1;
         for (int i = 0; i < jtVehiculos.getColumnCount(); i++) {
             if (jtVehiculos.getColumnName(i).equals(unidad)) {
@@ -2433,38 +2455,38 @@ public final class Principal extends javax.swing.JFrame {
         }
     }
 
-    private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarFilaActionPerformed
-        BorradoFilasFormaSegura();
-    }//GEN-LAST:event_jbEliminarFilaActionPerformed
+    private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        borrarFilasFormaSegura();
+    }                                              
 
     /**
      * Permite utilizar un metodo generico para borrar las filas para llamarlo
      * desde donde se proceda a borrar las filas de la tabla de clietnes por
      * despachar
      */
-    private void BorradoFilasFormaSegura() {
+    private void borrarFilasFormaSegura() {
         try {
             jtPorDespachar.getCellEditor().stopCellEditing();
         } catch (NullPointerException ex) {
         }
         int intFila = jtPorDespachar.getSelectedRow();
-        BorrarFilaSeleccionadaPorDespachar(intFila);
+        borrarFilaSeleccionadaPorDespachar(intFila);
     }
 
-    private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpiarCamposActionPerformed
+    private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {                                                
         int intFila = jtPorDespachar.getSelectedRow();
-        BorrarCamposFilaSeleccionadaPorDespachar(intFila);
-    }//GEN-LAST:event_jbLimpiarCamposActionPerformed
+        borrarCamposFilaSeleccionadaPorDespachar(intFila);
+    }                                               
 
-    private void jbNuevoDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoDespachoActionPerformed
-        NuevaFilaDespacho();
-    }//GEN-LAST:event_jbNuevoDespachoActionPerformed
+    private void jbNuevoDespachoActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        nuevaFilaDespacho();
+    }                                               
 
-    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
-        ValidarDespacharCliente();
-    }//GEN-LAST:event_jbDespacharActionPerformed
+    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        validarDespacharCliente();
+    }                                           
 
-    private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDespachadosMousePressed
+    private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {                                           
         int intClicks = evt.getClickCount();
         int intBoton = evt.getButton();
 
@@ -2483,34 +2505,34 @@ public final class Principal extends javax.swing.JFrame {
             } catch (ArrayIndexOutOfBoundsException aex) {
             }
         }
-    }//GEN-LAST:event_jtDespachadosMousePressed
+    }                                          
 
-    private void jtBuscarPorTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorTelefonoActionPerformed
+    private void jtBuscarPorTelefonoActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         String txt = jtBuscarPorTelefono.getText();
         jtBuscarPorTelefono.setText(txt.toUpperCase());
         buscarDespachados("telefono", txt.toUpperCase());
-    }//GEN-LAST:event_jtBuscarPorTelefonoActionPerformed
+    }                                                   
 
-    private void jtBuscarPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorCodigoActionPerformed
+    private void jtBuscarPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         String txt = jtBuscarPorCodigo.getText();
         jtBuscarPorCodigo.setText(txt.toUpperCase());
         buscarDespachados("codigo", txt.toUpperCase());
-    }//GEN-LAST:event_jtBuscarPorCodigoActionPerformed
+    }                                                 
 
-    private void jtBuscarPorNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorNombreActionPerformed
+    private void jtBuscarPorNombreActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         String txt = jtBuscarPorNombre.getText();
         jtBuscarPorNombre.setText(txt.toUpperCase());
         buscarDespachados("nombre", txt.toUpperCase());
-    }//GEN-LAST:event_jtBuscarPorNombreActionPerformed
+    }                                                 
 
-    private void jtVehiculosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtVehiculosMousePressed
+    private void jtVehiculosMousePressed(java.awt.event.MouseEvent evt) {                                         
         if (evt.getButton() == 1 && evt.getClickCount() == 1) {
             jtVehiculos.setCellSelectionEnabled(true);
         } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
             String unidad = strCabecerasColumnasVehiculos[jtVehiculos.getSelectedColumn()];
             obtenerHoraDeAsignacionEstado(unidad);
         }
-    }//GEN-LAST:event_jtVehiculosMousePressed
+    }                                        
 
     /**
      * Permite mostrar el mensaje de asignacion de las unidades, hora en que se
@@ -2535,7 +2557,7 @@ public final class Principal extends javax.swing.JFrame {
         jtVehiculos.setCellSelectionEnabled(false);
     }
 
-    private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
+    private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {                                       
         if ((menu == null) || (!menu.isDisplayable())) {
             menu = new INICIO(sesion, Principal.bd, arcConfig);
             menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -2543,37 +2565,37 @@ public final class Principal extends javax.swing.JFrame {
         }
         menu.setVisible(true);
         menu.setLocationRelativeTo(this);
-    }//GEN-LAST:event_jbMenuActionPerformed
+    }                                      
     /*
      * Ventana de consultar los clientes por nombre
      */
     private ConsultaClientes cliente;
 
-    private void jbBuscarClienteNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteNombreActionPerformed
+    private void jbBuscarClienteNombreActionPerformed(java.awt.event.ActionEvent evt) {                                                      
         if ((cliente == null) || (!cliente.isDisplayable())) {
             cliente = new ConsultaClientes(Principal.bd);
             cliente.setLocationRelativeTo(this);
             cliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             cliente.setResizable(false);
         }
-    }//GEN-LAST:event_jbBuscarClienteNombreActionPerformed
+    }                                                     
     /**
      * Ventana para registrar los pendientes de despacho
      */
     private PendientesGUI pendientes;
 
-    private void jbPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPendientesActionPerformed
+    private void jbPendientesActionPerformed(java.awt.event.ActionEvent evt) {                                             
         if ((pendientes == null) || (!pendientes.isDisplayable())) {
             pendientes = new PendientesGUI(Principal.bd);
             pendientes.setLocationRelativeTo(this);
             pendientes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             pendientes.setResizable(false);
         }
-    }//GEN-LAST:event_jbPendientesActionPerformed
+    }                                            
 
-    private void jtPorDespacharFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPorDespacharFocusLost
+    private void jtPorDespacharFocusLost(java.awt.event.FocusEvent evt) {                                         
         jtCodigo.requestFocus();
-    }//GEN-LAST:event_jtPorDespacharFocusLost
+    }                                        
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -2604,7 +2626,7 @@ public final class Principal extends javax.swing.JFrame {
 
             }
         } else {
-            LimpiarCargarTablaDespachados();
+            limpiarCargarTablaDespachados();
         }
     }
 
@@ -2732,7 +2754,7 @@ public final class Principal extends javax.swing.JFrame {
     /**
      * Ingresa una nueva fila para despachar
      */
-    private void NuevaFilaDespacho() {
+    private void nuevaFilaDespacho() {
         dtm = (DefaultTableModel) jtPorDespachar.getModel();
         String[] inicial = {funciones.getHora(), "", "", "", "", "", "", "", "0", ""};
         dtm.insertRow(0, inicial);
@@ -2746,7 +2768,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param Tabla
      * @param intFila
      */
-    public void Mayuculas(JTable Tabla, int intFila) {
+    public void convertirMayuculas(JTable Tabla, int intFila) {
         int intTotalColumnas = Tabla.getColumnCount();
         for (int i = 0; i < intTotalColumnas; i++) {
             try {
@@ -2803,13 +2825,13 @@ public final class Principal extends javax.swing.JFrame {
      * Permite iniciar los controles con los datos del nuevo turno y el mismo
      * usuario
      */
-    public static void ReiniciarTurno() {
-        ActualizarTurno();
-        LimpiarCargarTablaDespachados();
+    public static void reiniciarTurno() {
+        actualizarTurno();
+        limpiarCargarTablaDespachados();
         //redimencionarTablaVehiculos();
         gui.setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnColor;
     private static javax.swing.JComboBox cbEstadosTaxi;
     private javax.swing.JLabel jLabel1;
@@ -2853,7 +2875,7 @@ public final class Principal extends javax.swing.JFrame {
     private static javax.swing.JLabel lblRecordar;
     private javax.swing.JLabel lblReloj;
     public static javax.swing.JLabel lblSenal;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
     private static TrabajoTablas trabajarTabla;
 
     /**
@@ -3022,7 +3044,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param codigoCliente
      * @param n_unidad
      */
-    private void IngresarClienteMapa(String codigoCliente, String strNombre, String strBarrio, String strTelefono) {
+    private void setClienteMapaLocal(String codigoCliente, String strNombre, String strBarrio, String strTelefono) {
         try {
             rs = bd.obtenerLatLonCliente(Integer.parseInt(codigoCliente));
             double lat = rs.getDouble("LATITUD");
@@ -3042,7 +3064,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param codigoCliente
      * @param n_unidad
      */
-    private void QuitarClienteMapa(String codigoCliente, String n_unidad) {
+    private void quitarClienteMapaLocal(String codigoCliente, String n_unidad) {
         try {
             if (!codigoCliente.equals("")) {
                 if (!n_unidad.equals("")) {
@@ -3060,7 +3082,7 @@ public final class Principal extends javax.swing.JFrame {
      * @param cod_cli
      * @param unidad
      */
-    private void ActualizarClienteMapa(String cod_cli, String unidad) {
+    private void actualizarClienteMapaLocal(String cod_cli, String unidad) {
         if (!cod_cli.equals("") || !cod_cli.equals("0")) {
             bd.ActualizarUnidadClienteMapa(Integer.parseInt(cod_cli), Integer.parseInt(unidad));
         }
@@ -3071,7 +3093,7 @@ public final class Principal extends javax.swing.JFrame {
      * el tiempo de despacho y de asignacion en el servidor
      * @param idx
      */
-    private void ActualizarListaTMPHoraIngreso(int idx, String horaAnt) {
+    private void actualizarListaTMPHoraIngreso(int idx, String horaAnt) {
         String horaTbl = horaAnt;
         String horaDspch = "";
 
@@ -3087,7 +3109,7 @@ public final class Principal extends javax.swing.JFrame {
      * Realiza la insersion del despacho y de la asignacion de la aunidad
      * en el servidor de Kradac
      */
-    private void InsertarAsignacionDespachoServidorKradac() {
+    private void insertarAsignacionDespachoServidorKradac() {
         int intFila = jtPorDespachar.getSelectedRow();
 
         long minutos;
@@ -3158,7 +3180,7 @@ public final class Principal extends javax.swing.JFrame {
 
             public void run() {
                 try {
-                    Sonido sonido = new Sonido(arcConfig.getProperty("sonido_nueva_pendiente"), Integer.parseInt(arcConfig.getProperty("tiempo_sonido")));
+                    Sonido sonido = new Sonido(bd.getValorConfiguiracion("sonido_nueva_pendiente"), Integer.parseInt(bd.getValorConfiguiracion("tiempo_sonido")));
                 } catch (NumberFormatException ex) {
                     Sonido sonido = new Sonido("", 0);
                 }
@@ -3180,7 +3202,7 @@ public final class Principal extends javax.swing.JFrame {
 
                 public void run() {
                     try {
-                        Sonido sonido = new Sonido(arcConfig.getProperty("sonido_pendiente"), Integer.parseInt(arcConfig.getProperty("tiempo_sonido")));
+                        Sonido sonido = new Sonido(bd.getValorConfiguiracion("sonido_pendiente"), Integer.parseInt(bd.getValorConfiguiracion("tiempo_sonido")));
                     } catch (NumberFormatException ex) {
                         Sonido sonido = new Sonido("", 0);
                     }

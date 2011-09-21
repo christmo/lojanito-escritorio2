@@ -1,5 +1,5 @@
-package interfaz;
-
+package interfaz;//GEN-FIRST:event_btnCancelarActionPerformed
+//GEN-LAST:event_btnCancelarActionPerformed
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +35,7 @@ public class Multas extends javax.swing.JDialog {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         btnCancelar = new javax.swing.JButton();
@@ -159,21 +159,21 @@ public class Multas extends javax.swing.JDialog {
             }
         });
         getContentPane().add(cmbCodigoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, -1, -1));
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try {
             super.dispose();
         } catch (Throwable ex) {
             Logger.getLogger(Multas.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }                                           
 
-    private void txtDescripcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescripcionFocusLost
+    private void txtDescripcionFocusLost(java.awt.event.FocusEvent evt) {                                         
         txtDescripcion.setText(txtDescripcion.getText().toUpperCase());
-}//GEN-LAST:event_txtDescripcionFocusLost
+}                                        
 
-    private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
+    private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         cmbCodigoM.setVisible(true);
         /*if (!txtCodMulta.getText().equals("")) {
         buscarMulta(txtCodMulta.getText());
@@ -182,9 +182,9 @@ public class Multas extends javax.swing.JDialog {
         "FALTA INFORMACION",
         JOptionPane.ERROR_MESSAGE);
         }*/
-}//GEN-LAST:event_btnBuscar2ActionPerformed
+}                                          
 
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {                                             
         if (!txtCodMulta.getText().equals("") && objUtilidad.isDouble(txtValor.getText())) {
             if (verificarCodMulta(txtCodMulta.getText())) {
 
@@ -206,9 +206,9 @@ public class Multas extends javax.swing.JDialog {
             }
         }
 
-    }//GEN-LAST:event_btnModificarActionPerformed
+    }                                            
 
-    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         if (!txtCodMulta.getText().equals("")) {
 
             if (objUtilidad.isDouble(txtValor.getText())) {
@@ -237,9 +237,9 @@ public class Multas extends javax.swing.JDialog {
                     "FALTAN CAMPOS OBLIGATORIOS",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
+    }                                           
 
-    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
         if (!txtCodMulta.getText().equals("")) {
 
             if (verificarCodMulta(txtCodMulta.getText())) {
@@ -260,21 +260,21 @@ public class Multas extends javax.swing.JDialog {
                     "NO SE PUDO ELIMINAR EL REGISTRO",
                     JOptionPane.ERROR_MESSAGE);
         }
-}//GEN-LAST:event_btnEliminar1ActionPerformed
+}                                            
 
-    private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMActionPerformed
+    private void cmbCodigoMActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if (cmbCodigoM.getSelectedIndex() > 0) {
             txtCodMulta.setText(cmbCodigoM.getSelectedItem().toString());
             buscarMulta(txtCodMulta.getText());
         }
-}//GEN-LAST:event_cmbCodigoMActionPerformed
+}                                          
 
-    private void txtCodMultaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodMultaFocusLost
+    private void txtCodMultaFocusLost(java.awt.event.FocusEvent evt) {                                      
         txtCodMulta.setText(txtCodMulta.getText().toUpperCase());
-    }//GEN-LAST:event_txtCodMultaFocusLost
+    }                                     
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnBuscar2;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar1;
@@ -290,7 +290,7 @@ public class Multas extends javax.swing.JDialog {
     private javax.swing.JTextField txtCodMulta;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtValor;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     private void limpiar() {
         txtCodMulta.setText("");

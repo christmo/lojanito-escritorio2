@@ -46,7 +46,7 @@ public class ConexionBase {
      * de kradac, parametros de la conexion quemados por defecto para la
      * maquina local
      */
-    public ConexionBase(Properties conf) {
+    public ConexionBase(Properties conf) throws NullPointerException {
         try {
             this.arcConfig = conf;
             driver = "com.mysql.jdbc.Driver";
@@ -150,8 +150,8 @@ public class ConexionBase {
             int cod = ex.getErrorCode();
             if (txt.substring(0, 27).equals("Communications link failure")) {
                 log.trace("MySQL no esta corriendo, el servicio esta abajo...");
-                LevantarServicios.LevantarWAMP(arcConfig);
-                LevantarServicios.LevantarTeamViewer(arcConfig);
+                LevantarServicios.LevantarWAMP();
+                LevantarServicios.LevantarTeamViewer(getValorConfiguiracion("tv"));
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex1) {
@@ -240,9 +240,16 @@ public class ConexionBase {
      * @param nombre tabla
      */
     private void repararTablaRota(String mensajeError) {
-        String[] resultado = mensajeError.split("'");
-        String tabla = resultado[1];
+        String rutaTabla = mensajeError.split("'")[1];
+        String[] tablaFull = rutaTabla.split("[\\\\]");
+        String tabla = "";
+        if (tablaFull.length == 3) {
+            tabla = tablaFull[2];
+        } else {
+            tabla = tablaFull[0];
+        }
         String sqlReparar = "repair table " + tabla;
+
         ejecutarSentencia(sqlReparar);
         log.error("Empresa[" + Principal.sesion[1] + "]Reparada la tabla [" + tabla + "]");
     }
@@ -269,13 +276,13 @@ public class ConexionBase {
                     String[] datos = ex.getMessage().split("'");
                     System.err.println("No se conoce la columna " + datos[1] + " en [" + datos[3] + "] \nSQL:" + sql);
                     break;
-
             }
             if (ex.getMessage().equals("Result consisted of more than one row")) {
                 log.trace("Tiene + de 1 estado la unidad a la misma hora -> {}", sql);
                 throw new UnsupportedOperationException("Tiene mas de una fila");
             } else if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 log.trace("Statement cerrado [Reconectar]");
+                reconectarBaseDatos();
                 //return ejecutarConsultaUnDato(sql);
             } else if (ex.getMessage().equals("Communications link failure\nLast packet sent to the server was 0 ms ago.")) {
                 log.trace("Base de datos cerrada intencionalmente CERRADA...");
@@ -372,13 +379,15 @@ public class ConexionBase {
             int code = ex.getErrorCode();
 
             switch (ex.getErrorCode()) {
+                //tabla rota
+                case 145:
+                    repararTablaRota(txt);
+                    return false;
                 //tabla no creada
                 case 1146:
                     String[] texto = ex.getMessage().split("'");
                     try {
-                        //if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
                         log.trace("[" + Principal.sesion[1] + "][COD:" + code + "] La tabla no esta creada: [" + texto[1] + "]");
-                        //}
                     } catch (ArrayIndexOutOfBoundsException aiob) {
                     }
                     return false;
@@ -484,7 +493,7 @@ public class ConexionBase {
                 log.trace("[COD:" + code + "]Ya está ingresado el registro en el servidor", ex);
                 return true;
             } else {
-                log.error("[COD:" + code + "]", ex);
+                log.error("[COD:" + code + "][" + Principal.sesion[1] + "]", ex);
                 return false;
             }
 
@@ -2356,5 +2365,53 @@ public class ConexionBase {
             java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    /**
+     * Obtiene el valor de la tabla de configuraciones de una determinada llave,
+     * este metodo se utiliza para utilizar las configuraciones de la base de datos
+     * y no del archivo de configuración
+     * @param key
+     * @return String
+     */
+    public String getValorConfiguiracion(String key) {
+        try {
+            String sql = "SELECT VALUE FROM CONFIGURACIONES WHERE `KEY`='" + key + "'";
+            ResultSet rsConfig = ejecutarConsultaUnDato(sql);
+            return rsConfig.getString("VALUE");
+        } catch (SQLException ex) {
+            log.trace("obtenerValorConfiguiracion", ex);
+        }
+        return null;
+    }
+
+    /**
+     * Asigna un valor dependiendo de la llave que se le envie para modificar
+     * las propiedades del sistema
+     * @param key
+     * @param valor
+     * @return boolean
+     */
+    public boolean setValorConfiguiracion(String key, String valor) {
+        String sql = "UPDATE CONFIGURACIONES SET "
+                + "VALUE ='" + valor + "' "
+                + "WHERE `KEY`='" + key + "'";
+        return ejecutarSentencia(sql);
+    }
+
+    /**
+     * Obtiene de la base de datos la fecha y la hora del ultimo despacho realizado
+     * esto permite comprobar si se ha retrocedido la hora del computador
+     * @return Date
+     */
+    public long obtenerUltimaFechaHoraDespacho() {
+        try {
+            String sql = "SELECT UNIX_TIMESTAMP(MAX(concat(FECHA,' ',HORA))) AS FECHAHORA FROM ASIGNADOS";
+            ResultSet rsConfig = ejecutarConsultaUnDato(sql);
+            return rsConfig.getLong("FECHAHORA");
+        } catch (SQLException ex) {
+            log.trace("obtenerValorConfiguiracion", ex);
+        }
+        return 0;
     }
 }

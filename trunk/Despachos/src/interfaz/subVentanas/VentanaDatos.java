@@ -1,5 +1,5 @@
-
-/*
+//GEN-FIRST:event_jtNombreFocusLost
+/*//GEN-LAST:event_jtNombreFocusLost
  * VentanaDatos.java
  *
  * Created on 05/08/2010, 09:57:11 AM
@@ -368,7 +368,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jpDatos = new javax.swing.JPanel();
@@ -693,15 +693,15 @@ public class VentanaDatos extends javax.swing.JFrame {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         java.awt.Dimension dialogSize = getSize();
         setLocation((screenSize.width-dialogSize.width)/2,(screenSize.height-dialogSize.height)/2);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarActionPerformed
+    private void jbAceptarActionPerformed(java.awt.event.ActionEvent evt) {                                          
         CerrarPuertoCoordenadas();
         GuardarDatos();
         String cod = jtCodigo.getText();
         IngresarClienteMapa(cod);
         this.dispose();
-    }//GEN-LAST:event_jbAceptarActionPerformed
+    }                                         
 
     /**
      * Permite insertar un cliente en la tabla de posisionamiento para que sea
@@ -818,7 +818,7 @@ public class VentanaDatos extends javax.swing.JFrame {
         return d;
     }
 
-    private void jbCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCodigoActionPerformed
+    private void jbCodigoActionPerformed(java.awt.event.ActionEvent evt) {                                         
         if (jtCodigo.getText() == null || jtCodigo.getText().equals("")) {
             try {
                 int cod = Integer.parseInt(bd.generarCodigo());
@@ -830,49 +830,49 @@ public class VentanaDatos extends javax.swing.JFrame {
                 Logger.getLogger(VentanaDatos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_jbCodigoActionPerformed
+    }                                        
 
-    private void jtNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNombreFocusLost
+    private void jtNombreFocusLost(java.awt.event.FocusEvent evt) {                                   
         jtNombre.setText(Mayusculas(jtNombre.getText()));
         insertarDatosTabla(jtNombre.getText(), 3);
-    }//GEN-LAST:event_jtNombreFocusLost
+    }                                  
 
-    private void jtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtDireccionFocusLost
+    private void jtDireccionFocusLost(java.awt.event.FocusEvent evt) {                                      
         jtDireccion.setText(Mayusculas(jtDireccion.getText()));
         insertarDatosTabla(jtDireccion.getText(), 5);
-    }//GEN-LAST:event_jtDireccionFocusLost
+    }                                     
 
-    private void jtBarrioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtBarrioFocusLost
+    private void jtBarrioFocusLost(java.awt.event.FocusEvent evt) {                                   
         jtBarrio.setText(Mayusculas(jtBarrio.getText()));
         insertarDatosTabla(jtBarrio.getText(), 4);
-    }//GEN-LAST:event_jtBarrioFocusLost
+    }                                  
 
-    private void jtNumeroCasaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNumeroCasaFocusLost
+    private void jtNumeroCasaFocusLost(java.awt.event.FocusEvent evt) {                                       
         jtNumeroCasa.setText(Mayusculas(jtNumeroCasa.getText()));
-    }//GEN-LAST:event_jtNumeroCasaFocusLost
+    }                                      
 
-    private void jtReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtReferenciaFocusLost
+    private void jtReferenciaFocusLost(java.awt.event.FocusEvent evt) {                                       
         jtReferencia.setText(Mayusculas(jtReferencia.getText()));
-    }//GEN-LAST:event_jtReferenciaFocusLost
+    }                                      
 
-    private void jtNotaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNotaFocusLost
+    private void jtNotaFocusLost(java.awt.event.FocusEvent evt) {                                 
         jtNota.setText(Mayusculas(jtNota.getText()));
         insertarDatosTabla(jtNota.getText(), 9);
-    }//GEN-LAST:event_jtNotaFocusLost
+    }                                
 
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {                                        
         CerrarPuertoCoordenadas();
         LimpiarCampos();
         this.dispose();
-    }//GEN-LAST:event_jbSalirActionPerformed
+    }                                       
 
-    private void jtReferenciaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtReferenciaKeyPressed
+    private void jtReferenciaKeyPressed(java.awt.event.KeyEvent evt) {                                        
         if (evt.getKeyCode() == 9) {
             jtNota.requestFocus();
         }
-    }//GEN-LAST:event_jtReferenciaKeyPressed
+    }                                       
 
-    private void jtNotaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtNotaKeyPressed
+    private void jtNotaKeyPressed(java.awt.event.KeyEvent evt) {                                  
         if (jbCodigo.isVisible()) {
             if (evt.getKeyCode() == 9) {
                 jbAceptar.requestFocus();
@@ -882,9 +882,9 @@ public class VentanaDatos extends javax.swing.JFrame {
                 jbSalir.requestFocus();
             }
         }
-    }//GEN-LAST:event_jtNotaKeyPressed
+    }                                 
 
-    private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtTelefonoFocusLost
+    private void jtTelefonoFocusLost(java.awt.event.FocusEvent evt) {                                     
         funcionesUtilidad f = new funcionesUtilidad();
         String tel = jtTelefono.getText();
         if (f.isNumeric(tel)) {
@@ -909,9 +909,9 @@ public class VentanaDatos extends javax.swing.JFrame {
         } else {
             jtTelefono.setText("");
         }
-    }//GEN-LAST:event_jtTelefonoFocusLost
+    }                                    
 
-    private void jcEditarCoordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcEditarCoordActionPerformed
+    private void jcEditarCoordActionPerformed(java.awt.event.ActionEvent evt) {                                              
         if (jcEditarCoord.isSelected()) {
             jtLatitud.setEditable(true);
             jtLongitud.setEditable(true);
@@ -921,9 +921,9 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtLongitud.setEditable(false);
             CerrarPuertoCoordenadas();
         }
-    }//GEN-LAST:event_jcEditarCoordActionPerformed
+    }                                             
 
-    private void jtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtCodigoFocusLost
+    private void jtCodigoFocusLost(java.awt.event.FocusEvent evt) {                                   
         String cod_cli = jtCodigo.getText();
         if (bd.clienteExiste(cod_cli)) {
             JOptionPane.showMessageDialog(this, "Ya hay otro cliente con ese código, es mejor utilizar el boton "
@@ -931,7 +931,7 @@ public class VentanaDatos extends javax.swing.JFrame {
             jtCodigo.setText("");
             jtCodigo.requestFocus();
         }
-    }//GEN-LAST:event_jtCodigoFocusLost
+    }                                  
 
     /**
      * Convierete a mayusculas lo que se envie
@@ -949,7 +949,7 @@ public class VentanaDatos extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -978,7 +978,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     private javax.swing.JTextField jtNumeroCasa;
     private javax.swing.JTextArea jtReferencia;
     private javax.swing.JTextField jtTelefono;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     /**
      * Permite escribir las coordenadas, con un clic desde el navegador
@@ -999,7 +999,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     private ObtenerCoordenadasMapa sock;
 
     private void AbrirPuertoCoordenadas() {
-        sock = new ObtenerCoordenadasMapa();
+        sock = new ObtenerCoordenadasMapa(bd);
     }
 
     public void CerrarPuertoCoordenadas() {

@@ -58,9 +58,8 @@ public class ComandosSistemaOperativo extends Thread {
 
             BufferedReader brCleanUp = new BufferedReader(new InputStreamReader(stdout));
             while ((comando = brCleanUp.readLine()) != null) {
-
                 if (comando.equals("El servicio solicitado ya ha sido iniciado.")) {
-                    System.out.println("El servicio solicitado ya ha sido iniciado.");
+                    System.out.println("El servicio solicitado ya ha sido iniciado:"+line);
                 } else if (comando.equals("\"net\" no se reconoce como un comando interno o externo,")) {
                     System.out.println("\"net\" no se reconoce como un comando interno o externo,");
                 } else if (comando.equals("El servicio de wampapache no ha podido iniciarse.")) {
@@ -72,7 +71,7 @@ public class ComandosSistemaOperativo extends Thread {
             brCleanUp = new BufferedReader(new InputStreamReader(stderr));
             while ((comando = brCleanUp.readLine()) != null) {
                 if (comando.equals("El servicio solicitado ya ha sido iniciado.")) {
-                    System.out.println("El servicio solicitado ya ha sido iniciado.");
+                    System.out.println("El servicio solicitado ya ha sido iniciado:"+line);
                 } else if (comando.equals("\"net\" no se reconoce como un comando interno o externo,")) {
                     System.out.println("\"net\" no se reconoce como un comando interno o externo,");
                 } else if (comando.equals("El servicio de wampapache no ha podido iniciarse.")) {
