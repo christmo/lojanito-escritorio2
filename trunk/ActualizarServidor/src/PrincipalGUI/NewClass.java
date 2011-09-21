@@ -20,7 +20,7 @@ public class NewClass {
     public static void main(String[] args) {
         try {
             Utilitarios ut = new Utilitarios();
-            Properties p = ut.obtenerArchivoPropiedades("configuracion.properties");
+            Properties p = ut.obtenerArchivoPropiedades("configsystem.properties");
             BaseDatos bd = new BaseDatos(p);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
