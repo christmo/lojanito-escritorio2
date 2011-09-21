@@ -128,7 +128,7 @@
         <SMTPPort>465</SMTPPort>
         <SSL>true</SSL>
         <Username>soporte@kradac.com</Username>
-        <Password>superkradacalrescate</Password>
+        <Password></Password>
 
         <To>soporte@kradac.com</To>
         <From>soporte@kradac.com</From>
@@ -139,6 +139,31 @@
             </Pattern>
         </layout>
     </appender>
+
+    <appender name="TRACE_RELOJ" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+
+        <File>${logPath}/${fecha}/${appName}-RELOJ.log</File>
+
+        <!-- full stacktrace para las excepciones -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                [%p][%d{dd/MM/yyyy HH:mm:ss}][%F][linea %L] %msg%n[excepciones] %exception{full}%n{2}
+            </Pattern>
+        </layout>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}-RELOJ.log</FileNamePattern>
+            <!-- mantener 5 días de historia -->
+            <MaxHistory>5</MaxHistory>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
 
     <logger name="BaseDatos.ConexionBase" level="TRACE">
         <appender-ref ref="TRACE_BD"/>
@@ -164,12 +189,13 @@
         <appender-ref ref="pantalla"/>
     </logger>
 
-    <logger name="interfaz" level="ALL">
-        <appender-ref ref="EMAIL"/>
-    </logger>
-
     <logger name="interfaz.comunicacion.servidorBD.EnvioMensajesUnidades" level="ALL">
         <appender-ref ref="TRACE_MENSAJES"/>
+    </logger>
+
+    <logger name="interfaz.reloj" level="ALL">
+        <appender-ref ref="TRACE_RELOJ"/>
+        <appender-ref ref="EMAIL"/>
         <appender-ref ref="pantalla"/>
     </logger>
 
