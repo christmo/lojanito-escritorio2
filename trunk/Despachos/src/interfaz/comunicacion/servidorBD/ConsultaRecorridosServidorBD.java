@@ -249,34 +249,13 @@ public class ConsultaRecorridosServidorBD extends Thread {
             log.error("{}", Principal.sesion[1]);
         }
     }
-    static int contador = 0;
-
+    
     /**
      * Pone el icono en la interfaz Principal de señal
      */
     private static void PonerIconoSenal() {
         Principal.lblSenal.setIcon(senal);
         HayInternet = true;
-
-        if (contador == 0) {
-            try {
-                String actulizarRespaldo = bd.getValorConfiguiracion("actualizar_respaldos");
-                if (actulizarRespaldo.equals("si") || actulizarRespaldo.equals("SI")
-                        && !actulizarRespaldo.equals("") && actulizarRespaldo != null) {
-
-                    int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
-
-                    ConexionBase base = new ConexionBase(Principal.arcConfig);
-                    ActualizarServidorKRADAC actualizarServer = new ActualizarServidorKRADAC(filasRespaldadas, base);
-                    actualizarServer.start();
-                    contador = 1;
-                }
-            } catch (NullPointerException nex) {
-                log.trace("No se a especificado la directiva [actualizar_respaldos] en el archivo de configuración...");
-            }
-            contador = 1;
-        }
-
     }
 
     /**
@@ -286,6 +265,5 @@ public class ConsultaRecorridosServidorBD extends Thread {
     private static void PonerIconoNOSenal() {
         Principal.lblSenal.setIcon(nosenal);
         HayInternet = false;
-        contador = 0;
     }
 }
