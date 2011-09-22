@@ -27,9 +27,9 @@ public class Principal {
     public static void main(String[] args) {
         try {
             Utilitarios ut = new Utilitarios();
-            Properties p = ut.obtenerArchivoPropiedades("configuracion.properties");
+            Properties p = ut.obtenerArchivoPropiedades("configsystem.properties");
             BaseDatos bd = new BaseDatos(p);
-
+            
             int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
 
             log.trace("Respaldar:["+filasRespaldadas+"]");
