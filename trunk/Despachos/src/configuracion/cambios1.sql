@@ -4,6 +4,16 @@ use rastreosatelital;
 DROP TABLE IF EXISTS `server`;
 DROP TABLE IF EXISTS `configuraciones`;
 
+DROP PROCEDURE IF EXISTS `SP_INSERTAR_RESPALDAR_SERVER`;
+
+DROP TABLE IF EXISTS `ultimos_gps`;
+
+DROP TABLE IF EXISTS `xx`;
+CREATE TABLE  `xx` (
+  `x` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`x`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `configuraciones` (
   `id_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(100) NOT NULL,
@@ -33,14 +43,15 @@ INSERT INTO `configuraciones` VALUES
 (17,'enviar_mensajes','si','Sistema de envio de mensajes a las unidades con la info del cliente'),
 (18,'actualizar_respaldos','no','Sistema de Actualización de Respaldos en el servidor KRADAC'),
 (19,'tv','6','Versión del Servicio de TeamView'),
-(20,'not_pago','si','Notificación de pago');
+(20,'not_pago','si','Notificación de pago'),
+(21,'tabla_servidor','server_federada','Tabla federada para subir los despachos al servidor');
 
 
-ALTER TABLE respaldo_asignacion_server
-ADD COLUMN `ESTADO_INSERT` VARCHAR(50) DEFAULT 'RES' AFTER `DIRECCION`;
+/*ALTER TABLE respaldo_asignacion_server
+ADD COLUMN `ESTADO_INSERT` VARCHAR(50) DEFAULT 'RES' AFTER `DIRECCION`;*/
 
-DROP PROCEDURE IF EXISTS SP_INSERTAR_RESPALDAR_SERVER;
-CREATE PROCEDURE `SP_INSERTAR_RESPALDAR_SERVER`(
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `SP_INSERTAR_RESPALDAR_SERVER`(
 IN PN_UNIDAD INTEGER,
 IN PCOD_CLIENTE INTEGER,
 IN PESTADO VARCHAR(50),
@@ -100,12 +111,80 @@ IF x = 1 THEN
      END IF;
        
 END IF;
+END */;;
+DELIMITER ;
+
+CREATE TABLE `ultimos_gps` (
+  `N_UNIDAD` int(10) unsigned NOT NULL,
+  `LONGITUD` double NOT NULL,
+  `LATITUD` double NOT NULL,
+  `VELOCIDAD` double NOT NULL,
+  `ID_CODIGO` varchar(45) DEFAULT NULL,
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `G1` int(10) unsigned DEFAULT NULL,
+  `G2` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`N_UNIDAD`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-END;
+
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ESTADO_ULTIMO_GPS` BEFORE INSERT
+    ON rastreosatelital.regcodesttaxi FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
+    
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+    
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET ID_CODIGO=NEW.ID_CODIGO
+      WHERE N_UNIDAD = UNIDAD;
+    END IF;
+END */;;
+DELIMITER ;
 
 
 
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ULTIMOS_GPS` BEFORE INSERT
+    ON rastreosatelital.recorridos FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
+  
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+  
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET LONGITUD=NEW.LONGITUD,
+      LATITUD=NEW.LATITUD,
+      VELOCIDAD=NEW.VELOCIDAD,
+      FECHA_HORA=NEW.FECHA_HORA,
+      G1=NEW.G1,
+      G2=NEW.G2
+      WHERE N_UNIDAD = UNIDAD;
+    ELSE
+    
+      INSERT INTO ULTIMOS_GPS(N_UNIDAD,LONGITUD,LATITUD,VELOCIDAD,FECHA_HORA,G1,G2)
+      VALUES(NEW.N_UNIDAD,NEW.LONGITUD,NEW.LATITUD,NEW.VELOCIDAD,NEW.FECHA_HORA,NEW.G1,NEW.G2);
+       
+    END IF;
+END */;;
+DELIMITER ;
 
+DROP TABLE IF EXISTS `xx`;
+
+UPDATE USUARIOS SET CLAVE='577563b0da27c51f93f0813fd09f31fa' WHERE USUARIO='KRADAC';
+
+GRANT INSERT,SELECT,DELETE,UPDATE,EXECUTE
+ON rastreosatelital.*
+TO kradac@5.29.118.2
+IDENTIFIED BY 'krcloja';
 
 
