@@ -24,6 +24,7 @@ public class ActualizarServidorKRADAC extends Thread {
     private ResultSet rs;
     private Utilitarios funciones = new Utilitarios();
     private int intFilasRespaldadas;
+    private String tablaServidor = "server";
 
     public ActualizarServidorKRADAC(int filas, BaseDatos cb) {
         this.intFilasRespaldadas = filas;
@@ -57,6 +58,7 @@ public class ActualizarServidorKRADAC extends Thread {
     private void InsertarFilasRespaldadasLocalesEnServidorKRADAC() {
         try {
             long minutos;
+            tablaServidor = bd.getValorConfiguiracion("tabla_servidor");
             rs = bd.getFilasRespaldoLocalAsignaciones();
             while (rs.next()) {
                 try {
@@ -94,7 +96,7 @@ public class ActualizarServidorKRADAC extends Thread {
                         log.trace("Tabla no existe: [" + ex.getMessage().split("'")[1] + "]");
                         break;
                     } else if (intCode == 1429) {
-                        log.trace("No hay permisos: [" + ex.getMessage().split("'")[1] + " -> "+ex.getMessage().split("'")[3]+"]");
+                        log.trace("No hay permisos: [" + ex.getMessage().split("'")[1] + " -> " + ex.getMessage().split("'")[3] + "]");
                         break;
                     } else {
                         log.trace("Error al ejecutar sentecia codigo[" + intCode + "]", ex);
@@ -133,7 +135,7 @@ public class ActualizarServidorKRADAC extends Thread {
             strTelefono = "";
         }
 
-        String sql = "INSERT INTO server_federada(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION) "
+        String sql = "INSERT INTO " + tablaServidor + "(N_UNIDAD,COD_CLIENTE,ESTADO,FONO,VALOR,ESTADO_INSERT,USUARIO,DIRECCION) "
                 + "VALUES ("
                 + intUnidad
                 + ","

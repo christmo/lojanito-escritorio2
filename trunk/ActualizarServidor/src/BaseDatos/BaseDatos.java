@@ -165,7 +165,7 @@ public class BaseDatos {
      * @param sql - Sentencias INSERT, UPDATE, DELETE
      * @return int - confirmacion del resultado 1 valido || 0 invalido
      */
-    public boolean ejecutarSentencia(String sql)throws SQLException {
+    public boolean ejecutarSentencia(String sql) throws SQLException {
         try {
             Statement st = (Statement) conexion.createStatement();
 
@@ -177,7 +177,7 @@ public class BaseDatos {
             } else {
                 return false;
             }
-     
+
         } catch (NullPointerException ex) {
             return false;
         }
@@ -226,5 +226,23 @@ public class BaseDatos {
         } catch (NullPointerException ex) {
         }
         return 0;
+    }
+
+    /**
+     * Obtiene el valor de la tabla de configuraciones de una determinada llave,
+     * este metodo se utiliza para utilizar las configuraciones de la base de datos
+     * y no del archivo de configuración
+     * @param key
+     * @return String
+     */
+    public String getValorConfiguiracion(String key) {
+        try {
+            String sql = "SELECT VALUE FROM CONFIGURACIONES WHERE `KEY`='" + key + "'";
+            ResultSet rsConfig = ejecutarConsultaUnDato(sql);
+            return rsConfig.getString("VALUE");
+        } catch (SQLException ex) {
+            log.trace("obtenerValorConfiguiracion", ex);
+        }
+        return null;
     }
 }
