@@ -2410,7 +2410,7 @@ public class ConexionBase {
             ResultSet rsConfig = ejecutarConsultaUnDato(sql);
             return rsConfig.getLong("FECHAHORA");
         } catch (SQLException ex) {
-            log.trace("obtenerValorConfiguiracion", ex);
+            log.trace("Obteniendo la ultima fecha y hora de despacho...", ex);
         }
         return 0;
     }
