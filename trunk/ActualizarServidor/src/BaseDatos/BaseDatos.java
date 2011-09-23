@@ -4,7 +4,6 @@
  */
 package BaseDatos;
 
-import Utilitarios.Utilitarios;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -34,7 +33,6 @@ public class BaseDatos {
      */
     private static final Logger log = LoggerFactory.getLogger(BaseDatos.class);
     private Properties arcConfig;
-    private Utilitarios funciones = new Utilitarios();
 
     public BaseDatos() {
         ConexionBase();
@@ -205,10 +203,9 @@ public class BaseDatos {
      * @return ResultSet
      */
     public ResultSet getFilasRespaldoLocalAsignaciones() {
-        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT"
+        String sql = "SELECT N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT "
                 + "FROM RESPALDO_ASIGNACION_SERVER "
-                + "WHERE 1 "
-                + "GROUP BY N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT";
+                + "WHERE 1 GROUP BY N_UNIDAD,COD_CLIENTE,ESTADO,FECHA,HORA,FONO,HORA_INSERT,USUARIO,DIRECCION,ESTADO_INSERT";
         return ejecutarConsulta(sql);
     }
 
