@@ -79,6 +79,54 @@ CREATE TABLE `asignados_local` (
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 400 */;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
+    ON rastreosatelital.asignados_local FOR EACH ROW
+BEGIN
+    DECLARE FECHA DATETIME;
+    DECLARE LIMITE INT(12);
+    SET LIMITE = -2;
+
+    IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
+      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+    
+      SET NEW.FECHA_HORA = FECHA;
+    ELSE
+        IF (LIMITE = NEW.VALOR) THEN
+ 
+            SET NEW.FECHA_HORA = NOW();
+        ELSE
+            SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+           
+            SET NEW.FECHA_HORA = FECHA;
+        END IF;
+    END IF;
+
+    SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
+
+    CALL SP_INSERTAR_RESPALDAR_SERVER(
+      NEW.N_UNIDAD,
+      NEW.COD_CLIENTE,
+      NEW.ESTADO,
+      NEW.FONO,
+      NEW.VALOR,
+      NEW.ESTADO_INSERT,
+      NEW.USUARIO,
+      NEW.DIRECCION,@x);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `centrales`
@@ -207,7 +255,8 @@ INSERT INTO `configuraciones` VALUES
 (17,'enviar_mensajes','si','Sistema de envio de mensajes a las unidades con la info del cliente'),
 (18,'actualizar_respaldos','no','Sistema de Actualización de Respaldos en el servidor KRADAC'),
 (19,'tv','6','Versión del Servicio de TeamView'),
-(20,'not_pago','si','Notificación de pago');
+(20,'not_pago','si','Notificación de pago'),
+(21,'tabla_servidor','server_federada','Tabla federada para subir los despachos al servidor');
 
 --
 -- Table structure for table `empresas`
@@ -340,7 +389,46 @@ CREATE TABLE `recorridos` (
 /*!50100 PARTITION BY HASH (ID)
 PARTITIONS 400 */;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ULTIMOS_GPS` BEFORE INSERT
+    ON rastreosatelital.recorridos FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
   
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+	
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET LONGITUD=NEW.LONGITUD,
+      LATITUD=NEW.LATITUD,
+      VELOCIDAD=NEW.VELOCIDAD,
+      FECHA_HORA=NEW.FECHA_HORA,
+      G1=NEW.G1,
+      G2=NEW.G2
+      WHERE N_UNIDAD = UNIDAD;
+    ELSE
+      INSERT INTO ULTIMOS_GPS(N_UNIDAD,LONGITUD,LATITUD,VELOCIDAD,FECHA_HORA,G1,G2)
+      VALUES(NEW.N_UNIDAD,NEW.LONGITUD,NEW.LATITUD,NEW.VELOCIDAD,NEW.FECHA_HORA,NEW.G1,NEW.G2);
+    END IF;
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
 --
 -- Table structure for table `regcodesttaxi`
 --
@@ -359,7 +447,37 @@ CREATE TABLE `regcodesttaxi` (
   KEY `FK_N_UNIDAD` (`N_UNIDAD`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ESTADO_ULTIMO_GPS` BEFORE INSERT
+    ON rastreosatelital.regcodesttaxi FOR EACH ROW
+BEGIN
+    DECLARE UNIDAD INT(10);
+    SET UNIDAD=0;
     
+    SELECT N_UNIDAD 
+    INTO UNIDAD
+    FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
+    
+    IF (UNIDAD=NEW.N_UNIDAD) THEN
+      UPDATE ULTIMOS_GPS 
+      SET ID_CODIGO=NEW.ID_CODIGO
+      WHERE N_UNIDAD = UNIDAD;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
 --
 -- Table structure for table `respaldo_asignacion_server`
 --
