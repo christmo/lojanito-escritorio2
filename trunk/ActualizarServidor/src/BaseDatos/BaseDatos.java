@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -220,6 +221,7 @@ public class BaseDatos {
             ResultSet rs = ejecutarConsultaUnDato(sql);
             return rs.getInt(1);
         } catch (SQLException ex) {
+            log.trace("[COD {}]", ex.getErrorCode(), ex);
         } catch (NullPointerException ex) {
         }
         return 0;
@@ -238,7 +240,17 @@ public class BaseDatos {
             ResultSet rsConfig = ejecutarConsultaUnDato(sql);
             return rsConfig.getString("VALUE");
         } catch (SQLException ex) {
-            log.trace("obtenerValorConfiguiracion", ex);
+            log.trace("[COD {}]", ex.getErrorCode(), ex);
+        }
+        return null;
+    }
+
+    public String getNombreEmpresa() {
+        String sql = "SELECT ID_EMPRESA FROM USUARIOS WHERE USUARIO='KRADAC'";
+        try {
+            return ejecutarConsultaUnDato(sql).getString("ID_EMPRESA");
+        } catch (SQLException ex) {
+            log.trace("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
