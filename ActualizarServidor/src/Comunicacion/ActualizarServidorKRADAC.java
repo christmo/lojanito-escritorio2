@@ -5,6 +5,7 @@
 package Comunicacion;
 
 import BaseDatos.BaseDatos;
+import PrincipalGUI.Principal;
 import Utilitarios.Utilitarios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -92,15 +93,32 @@ public class ActualizarServidorKRADAC extends Thread {
                     }
                 } catch (SQLException ex) {
                     int intCode = ex.getErrorCode();
-                    if (intCode == 1146) {
-                        log.trace("Tabla no existe: [" + ex.getMessage().split("'")[1] + "]");
-                        break;
-                    } else if (intCode == 1429) {
-                        log.trace("No hay permisos: [" + ex.getMessage().split("'")[1] + " -> " + ex.getMessage().split("'")[3] + "]");
-                        break;
-                    } else {
-                        log.trace("Error al ejecutar sentecia codigo[" + intCode + "]", ex);
+                    switch (intCode) {
+
+                        case 1146:
+                            log.trace("Tabla no existe: [" + ex.getMessage().split("'")[1] + "]");
+                            break;
+                        case 1429:
+                            try {
+                                //Unable to connect to foreign data source: Host '186.42.209.202' is not allowed to connect to this MySQL se
+                                if (ex.getMessage().contains("Unable to connect to foreign data source: Host")) {
+                                    log.error("IP sin permisos[" + ex.getMessage().split("'")[1] + "][{}]", Principal.EMPRESA);
+                                //Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.121' (10060)
+                                } else if (ex.getMessage().contains("Unable to connect to foreign data source: Can't")) {
+                                    log.error("No se puede guardar los datos en el servidor con IP[" + ex.getMessage().split("'")[2] + "][{}]", Principal.EMPRESA);
+                                } else {
+                                    log.trace("No hay permisos: [" + ex.getMessage().split("'")[1] + " -> " + ex.getMessage().split("'")[3] + "][{}]",
+                                            Principal.EMPRESA, ex);
+                                }
+                            } catch (ArrayIndexOutOfBoundsException aiobe) {
+                                log.trace("No hay permisos nueva ip: [" + ex.getMessage().split("'")[1] + "]", ex);
+                            }
+                            System.exit(0);
+                            break;
+                        default:
+                            log.trace("Error al ejecutar sentecia codigo[" + intCode + "]", ex);
                     }
+
                 }
             }
         } catch (SQLException ex) {

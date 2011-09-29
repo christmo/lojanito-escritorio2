@@ -19,27 +19,35 @@ import org.slf4j.LoggerFactory;
  */
 public class Principal {
 
-     /**
+    /**
      * Logger para guardar los log en un archivo y enviar por mail los de error
      */
     private static final Logger log = LoggerFactory.getLogger(Principal.class);
+    public static String EMPRESA;
 
     public static void main(String[] args) {
+
         try {
             Utilitarios ut = new Utilitarios();
             Properties p = ut.obtenerArchivoPropiedades("configsystem.properties");
             BaseDatos bd = new BaseDatos(p);
-            
+
+            try {
+                EMPRESA = args[0];
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                EMPRESA = bd.getNombreEmpresa();
+            }
+
             int filasRespaldadas = bd.getNumeroFilasRespaldoAsignacion();
 
-            log.trace("Respaldar:["+filasRespaldadas+"]");
+            log.trace("Respaldar:[" + filasRespaldadas + "]");
 
             ActualizarServidorKRADAC actualizar = new ActualizarServidorKRADAC(filasRespaldadas, bd);
             actualizar.start();
 
 
         } catch (FileNotFoundException ex) {
-            log.trace(ex.getMessage(),ex);
+            log.trace(ex.getMessage(), ex);
         }
     }
 }
