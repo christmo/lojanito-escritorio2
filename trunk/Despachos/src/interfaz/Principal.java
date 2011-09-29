@@ -26,7 +26,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import interfaz.comboBox.*;
 import interfaz.comunicacion.comm.CommMonitoreo;
+import interfaz.comunicacion.servidorBD.ActualizadorDespachosServidorKRADAC;
 import interfaz.comunicacion.servidorBD.ConsultaRecorridosServidorBD;
+import interfaz.comunicacion.servidorBD.ConsultaUnidadesBloqueadas;
 import interfaz.comunicacion.servidorBD.EnvioMensajesUnidades;
 import interfaz.comunicacion.servidorBD.GuardarServidorKRADAC;
 
@@ -201,7 +203,11 @@ public final class Principal extends javax.swing.JFrame {
         jtTelefono.requestFocusInWindow();
 
         tiempo.start();
-        LeerRecorridosServidorKRADAC();
+        
+        leerRecorridosServidorKRADAC();
+        leerUnidadesBloqueadasServidorKRADAC();
+        actualizadorDespachosServidorKRADAC();
+        
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
 
@@ -343,7 +349,7 @@ public final class Principal extends javax.swing.JFrame {
      * Ejecuta el hilo para realizar los las consultas de los ultimos datos de
      * las unidades para dibujarlas en el mapa de forma local
      */
-    private void LeerRecorridosServidorKRADAC() {
+    private void leerRecorridosServidorKRADAC() {
         try {
             String getGPS = bd.getValorConfiguiracion("posicion_gps");
             if (getGPS.equals("si") || getGPS.equals("SI")
@@ -352,8 +358,25 @@ public final class Principal extends javax.swing.JFrame {
                 conServidor.start();
             }
         } catch (NullPointerException ex) {
-            log.trace("No se a especificado la directiva [posicion_gps] en el archivo de configuración...");
+            log.trace("No se a especificado la directiva [posicion_gps] en la base de datos...");
         }
+    }
+
+    /**
+     * Ejecuta el hilo para realizar las consultas de las unidades que han
+     * sido bloqueadas por falta de pago.
+     */
+    private void leerUnidadesBloqueadasServidorKRADAC() {
+        ConsultaUnidadesBloqueadas unidadesBloquedas = new ConsultaUnidadesBloqueadas(sesion[1], bd);
+        unidadesBloquedas.start();
+    }
+
+    /**
+     * Ejecuta el programa que actualiza los despachos dentro del servidor kradac
+     */
+    private void actualizadorDespachosServidorKRADAC() {
+        ActualizadorDespachosServidorKRADAC actualizador = new ActualizadorDespachosServidorKRADAC(sesion[1]);
+        actualizador.start();
     }
 
     /**
@@ -1287,17 +1310,30 @@ public final class Principal extends javax.swing.JFrame {
                     long horaActual = (calendar.getTimeInMillis() / 1000);
                     if (fechaHoraUltimoDespacho <= horaActual) {
                         /**
-                         * Comprueba si se despacho correctamente para
-                         * quitar los datos del cliente del mapa
+                         * Comprueba si la unidad no ha sido bloqueada por falta
+                         * de pago desde el servidor KRADAC
                          */
-                        boolean seDespacho = DespacharCliente(intFila);
-                        if (seDespacho) {
-                            quitarClienteMapaLocal(cod_cli, unidad);
+                        if ((bd.getEstadoUnidadPendientePago(unidad)
+                                && ConsultaRecorridosServidorBD.HayInternet)
+                                || !(ConsultaRecorridosServidorBD.HayInternet)) {
+                            /**
+                             * Comprueba si se despacho correctamente para
+                             * quitar los datos del cliente del mapa
+                             */
+                            boolean seDespacho = DespacharCliente(intFila);
+                            if (seDespacho) {
+                                quitarClienteMapaLocal(cod_cli, unidad);
+                            } else {
+                                JOptionPane.showMessageDialog(Principal.gui,
+                                        "Falta ingresar el tiempo estimado de llegada\n"
+                                        + "a recoger el pasajero...",
+                                        "Error...", 0);
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(Principal.gui, 
-                                    "Falta ingresar el tiempo estimado de llegada\n"
-                                    + "a recoger el pasajero...", 
-                                    "Error...", 0);
+                            JOptionPane.showMessageDialog(this,
+                                    "Esta unidad ha sido bloqueada por falta de PAGO, no se podrá despachar "
+                                    + "más carreras hasta que no se comunique con KRADAC\n"
+                                    + "para que sea habilitada nuevamente...", "Error...", 0);
                         }
                     } else {
                         JOptionPane.showMessageDialog(this,
@@ -1314,14 +1350,14 @@ public final class Principal extends javax.swing.JFrame {
                     }
                 }
             } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(Principal.gui, 
+                JOptionPane.showMessageDialog(Principal.gui,
                         "Falta ingresar el tiempo estimado de llegada\n"
-                        + "a recoger el pasajero...", 
+                        + "a recoger el pasajero...",
                         "Error...", 0);
             }
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(Principal.gui, 
-                    "Debe ingresar la unidad que recogerá al pasajero", 
+            JOptionPane.showMessageDialog(Principal.gui,
+                    "Debe ingresar la unidad que recogerá al pasajero",
                     "Error...", 0);
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
@@ -1363,29 +1399,29 @@ public final class Principal extends javax.swing.JFrame {
         boolean resultado = false;
 
         if (d.getStrHora() == null || d.getStrHora().equals("")) {
-            JOptionPane.showMessageDialog(this, 
-                    "Se debe ingresar una hora de despacho...", 
+            JOptionPane.showMessageDialog(this,
+                    "Se debe ingresar una hora de despacho...",
                     "Error...", 0);
             try {
                 jtPorDespachar.setValueAt(funciones.getHora(), fila, 0);
             } catch (IndexOutOfBoundsException iex) {
             }
         } else if (d.getStrNombre() == null || d.getStrNombre().equals("")) {
-            JOptionPane.showMessageDialog(this, 
-                    "Se debe ingresar un nombre de cliente...", 
+            JOptionPane.showMessageDialog(this,
+                    "Se debe ingresar un nombre de cliente...",
                     "Error...", 0);
         } else if (d.getStrDireccion() == null || d.getStrDireccion().equals("")) {
-            JOptionPane.showMessageDialog(this, 
-                    "Se debe ingresar una dirección del cliente...", 
+            JOptionPane.showMessageDialog(this,
+                    "Se debe ingresar una dirección del cliente...",
                     "Error...", 0);
         } else if (d.getStrBarrio() == null || d.getStrBarrio().equals("")) {
-            JOptionPane.showMessageDialog(this, 
-                    "Se debe ingresar un barrio donde vive el cliente...", 
+            JOptionPane.showMessageDialog(this,
+                    "Se debe ingresar un barrio donde vive el cliente...",
                     "Error...", 0);
         } else if (d.getIntMinutos() < 0) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "La estimación de tiempo de llegada a recojer al cliente es incorrecta, "
-                    + "tiene que ser mayor a 0...", 
+                    + "tiene que ser mayor a 0...",
                     "Error...", 0);
             try {
                 jtPorDespachar.setValueAt("", fila, 7);
@@ -1393,8 +1429,8 @@ public final class Principal extends javax.swing.JFrame {
             } catch (IndexOutOfBoundsException iex) {
             }
         } else if (!validarUnidad(d.getIntUnidad())) {
-            JOptionPane.showMessageDialog(this, 
-                    "La unidad ingresada no es válida...", 
+            JOptionPane.showMessageDialog(this,
+                    "La unidad ingresada no es válida...",
                     "Error...", 0);
             jtPorDespachar.setValueAt("", fila, 6);
         } else {
@@ -1641,8 +1677,8 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 intAtraso = Integer.parseInt(jtPorDespachar.getValueAt(fila, 8).toString());
             } catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(this, 
-                        "Solo debe ser número los campos de Atraso(ATR)...", 
+                JOptionPane.showMessageDialog(this,
+                        "Solo debe ser número los campos de Atraso(ATR)...",
                         "Error...", 0);
                 jtPorDespachar.setValueAt("0", fila, 8);
                 intAtraso = 0;
@@ -1683,13 +1719,13 @@ public final class Principal extends javax.swing.JFrame {
                 strDireccion = rs.getString("DIRECCION_CLI");
                 strBarrio = rs.getString("SECTOR");
                 strHora = funciones.getHora();
-                despacho = new Despachos(funciones.getHoraEnMilis(), 
-                        strHora, 
-                        strTelefono, 
-                        intCodigo, 
-                        strNombre, 
-                        strDireccion, 
-                        strBarrio, 
+                despacho = new Despachos(funciones.getHoraEnMilis(),
+                        strHora,
+                        strTelefono,
+                        intCodigo,
+                        strNombre,
+                        strDireccion,
+                        strBarrio,
                         "");
 
                 if (desPorTabla_Campo) { //Despacha por tabla
@@ -1702,8 +1738,8 @@ public final class Principal extends javax.swing.JFrame {
                     jtPorDespachar.setRowSelectionInterval(0, 0);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, 
-                        "Numero ingresado no valido...", 
+                JOptionPane.showMessageDialog(this,
+                        "Numero ingresado no valido...",
                         "Error", 0);
                 jtTelefono.setText("");
             }
@@ -1780,13 +1816,13 @@ public final class Principal extends javax.swing.JFrame {
             strBarrio = rs.getString("SECTOR");
             strHora = funciones.getHora();
 
-            despacho = new Despachos(funciones.getHoraEnMilis(), 
-                    strHora, 
-                    strTelefono, 
-                    intCodigo, 
-                    strNombre, 
-                    strDireccion, 
-                    strBarrio, 
+            despacho = new Despachos(funciones.getHoraEnMilis(),
+                    strHora,
+                    strTelefono,
+                    intCodigo,
+                    strNombre,
+                    strDireccion,
+                    strBarrio,
                     "");
 
             setDatosTablas(despacho, jtPorDespachar);
@@ -1817,8 +1853,8 @@ public final class Principal extends javax.swing.JFrame {
                     codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, 
-                        "Debe seleccionar una Unidad primero", 
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una Unidad primero",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             }
 
@@ -1828,7 +1864,7 @@ public final class Principal extends javax.swing.JFrame {
             jtVehiculos.setCellSelectionEnabled(false);
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Este estado no se puede asignar desde aqui...", 
+                    "Este estado no se puede asignar desde aqui...",
                     "Error...", 0);
         }
         jtTelefono.requestFocus();
@@ -1999,8 +2035,8 @@ public final class Principal extends javax.swing.JFrame {
                     } else {
                         contador++;
                         if (contador == 2) {
-                            JOptionPane.showMessageDialog(Principal.gui, 
-                                    "Debe seleccionar la unidad que recogerá al pasajero en ese tiempo...", 
+                            JOptionPane.showMessageDialog(Principal.gui,
+                                    "Debe seleccionar la unidad que recogerá al pasajero en ese tiempo...",
                                     "Error...", 0);
                             try {
                                 jtPorDespachar.getCellEditor().stopCellEditing();

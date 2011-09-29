@@ -40,6 +40,7 @@ public class ConexionBase {
     private ResultSet rs = null;
     private Properties arcConfig;
     private funcionesUtilidad funciones = new funcionesUtilidad();
+    private String estadoUnidad;
 
     /**
      * Crea la conexion directamente a la base de datos de rastreosatelital
@@ -72,7 +73,7 @@ public class ConexionBase {
                 conexion = DriverManager.getConnection(url, usr, pass);
             } catch (SQLException ex) {
                 if (ex.getMessage().equals("Communications link failure")) {
-                    log.trace("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
+                    log.info("Enlace de conexión con la base de datos falló, falta el archivo de configuración...");
                 }
             }
             try {
@@ -115,16 +116,16 @@ public class ConexionBase {
         try {
             conexion = DriverManager.getConnection(url, usr, pass);
         } catch (SQLException ex) {
-            log.trace("No se puede obtener la conexion...", ex);
+            log.info("No se puede obtener la conexion...", ex);
         }
         try {
             st = (Statement) conexion.createStatement();
         } catch (SQLException ex) {
-            log.trace("No se puede crear el estatement principal...", ex);
+            log.info("No se puede crear el estatement principal...", ex);
         } catch (NullPointerException ex) {
-            log.trace("Conexión es NULL", ex);
+            log.info("Conexión es NULL", ex);
         }
-        log.trace("Conexion a Base de Datos OK: {}", bd);
+        log.info("Conexion a Base de Datos OK: {}", bd);
     }
 
     /**
@@ -143,13 +144,13 @@ public class ConexionBase {
             } catch (SQLException ex) {
                 java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
             }
-            log.trace("RECONEXIÓN BASE");
+            log.debug("RECONEXIÓN BASE");
             contadorReconexiones = 0;
         } catch (SQLException ex) {
             String txt = ex.getMessage();
             int cod = ex.getErrorCode();
             if (txt.substring(0, 27).equals("Communications link failure")) {
-                log.trace("MySQL no esta corriendo, el servicio esta abajo...");
+                log.info("MySQL no esta corriendo, el servicio esta abajo...");
                 LevantarServicios.LevantarWAMP();
                 LevantarServicios.LevantarTeamViewer(getValorConfiguiracion("tv"));
                 try {
@@ -162,7 +163,7 @@ public class ConexionBase {
                 log.error("[" + Principal.sesion[1] + "][" + cod + "]{}", ex.getMessage(), ex);
                 try {
                     Thread.sleep(30000);
-                    log.trace("Despues de saturar la base de datos con conexiones se espera 30 segundos...");
+                    log.info("Despues de saturar la base de datos con conexiones se espera 30 segundos...");
                 } catch (InterruptedException ex1) {
                     java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex1);
                 }
@@ -185,15 +186,16 @@ public class ConexionBase {
             log.trace(sql);
 
         } catch (SQLException ex) {
+            int code = ex.getErrorCode();
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado...");
+                log.info("Statement cerrado...");
             } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
-                log.trace("Statement cerrado...");
+                log.info("Statement cerrado...");
             } else {
-                log.trace("Error al consultar: " + sql);
+                log.info("[COD {}]Error al consultar: " + sql, code, ex);
             }
         } catch (NullPointerException ex) {
-            log.trace("Statement está nulo...");
+            log.info("Statement está nulo...");
         }
         return r;
     }
@@ -207,29 +209,30 @@ public class ConexionBase {
             r = st2.executeQuery(sql);
             log.trace(sql);
         } catch (SQLException ex) {
+            int code = ex.getErrorCode();
             if (ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado...");
+                log.info("[COD {}]Statement cerrado...", code);
             } else if (ex.getMessage().equals("Se realizó una consulta como null.")) {
-                log.trace("Statement cerrado...");
+                log.info("[COD {}]Statement cerrado...", code);
             } else {
                 if (ex.getMessage().length() > 113) {
                     try {
                         if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                            log.trace("Se desconectó el cable de RED del equipo...");
+                            log.info("[COD {}]Se desconectó el cable de RED del equipo...", code);
                             reconectarBaseDatos();
                         }
                     } catch (StringIndexOutOfBoundsException sinoe) {
-                        log.trace("Error diferente no tiene la longitud contemplada...");
+                        log.info("[COD {}]Error diferente no tiene la longitud contemplada...", code);
                     }
                 } else if (ex.getMessage().equals("Table 'regcodesttaxi' is marked as crashed and should be repaired")) {
                     repararTablaRota(ex.getMessage());
                 } else {
-                    log.error("ejecutarConsultaStatement2 empresa[" + Principal.sesion[1] + "] mensaje[{}]" + sql, ex.getMessage(), ex);
+                    log.error("[COD " + code + "] empresa[" + Principal.sesion[1] + "] mensaje[{}]" + sql, ex.getMessage(), ex);
                 }
             }
 
         } catch (NullPointerException ex) {
-            log.trace("Statement esta nulo...");
+            log.info("Statement esta nulo...");
         }
         return r;
     }
@@ -241,10 +244,11 @@ public class ConexionBase {
      */
     private void repararTablaRota(String mensajeError) {
         String rutaTabla = mensajeError.split("'")[1];
-        String[] tablaFull = rutaTabla.split("[\\\\]");
+        String[] tablaFull = rutaTabla.split("\r");
         String tabla = "";
         if (tablaFull.length == 3) {
             tabla = tablaFull[2];
+            tabla = "r" + tabla.split("[.]")[0];
         } else {
             tabla = tablaFull[0];
         }
@@ -269,29 +273,28 @@ public class ConexionBase {
             log.trace(sql);
             rsCUD.next();
         } catch (SQLException ex) {
-            System.out.println("" + ex.getErrorCode());
-            System.out.println("" + ex.getMessage());
-            switch (ex.getErrorCode()) {
+            int code = ex.getErrorCode();
+            switch (code) {
                 case 1054:
                     String[] datos = ex.getMessage().split("'");
-                    System.err.println("No se conoce la columna " + datos[1] + " en [" + datos[3] + "] \nSQL:" + sql);
+                    log.info("[COD {}]No se conoce la columna " + datos[1] + " en [" + datos[3] + "] \nSQL:" + sql, code);
                     break;
             }
             if (ex.getMessage().equals("Result consisted of more than one row")) {
-                log.trace("Tiene + de 1 estado la unidad a la misma hora -> {}", sql);
+                log.info("[COD {}]Tiene + de 1 estado la unidad a la misma hora -> {}", code, sql);
                 throw new UnsupportedOperationException("Tiene mas de una fila");
             } else if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
-                log.trace("Statement cerrado [Reconectar]");
+                log.info("[COD {}]Statement cerrado [Reconectar]", code);
                 reconectarBaseDatos();
                 //return ejecutarConsultaUnDato(sql);
             } else if (ex.getMessage().equals("Communications link failure\nLast packet sent to the server was 0 ms ago.")) {
-                log.trace("Base de datos cerrada intencionalmente CERRADA...");
+                log.info("[COD {}]Base de datos cerrada intencionalmente CERRADA...", code);
                 reconectarBaseDatos();
             } else if (ex.getMessage().equals("Server shutdown in progress")) {
-                log.trace("Base de datos cerrada intencionalmente CERRADA...");
+                log.info("[COD {}]Base de datos cerrada intencionalmente CERRADA...", code);
                 reconectarBaseDatos();
             } else {
-                log.error("[COD: {" + ex.getErrorCode() + "}] empresa[" + Principal.sesion[1] + "] mensaje[{}]", ex.getMessage(), ex);
+                log.error("[COD: {" + code + "}] empresa[" + Principal.sesion[1] + "] mensaje[{}]", ex.getMessage(), ex);
             }
         }
         return rsCUD;
@@ -316,18 +319,19 @@ public class ConexionBase {
             //log.trace(sql);
             rs.next();
         } catch (SQLException ex) {
+            int code = ex.getErrorCode();
             if (!ex.getMessage().equals("No operations allowed after statement closed.")) {
                 if (contadorReconexiones <= 5) {
-                    log.trace("Statement cerrado [Reconectar]");
+                    log.info("[COD {}]Statement cerrado [Reconectar]", code);
                     contadorReconexiones++;
                     reconectarBaseDatos();
                 }
                 return null;
             } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                log.trace("MySQL no esta corriendo, levantar el servicio...");
+                log.info("[COD {}]MySQL no esta corriendo, levantar el servicio...", code);
                 return null;
             } else {
-                log.error("{}", ex.getMessage(), ex);
+                log.error("[COD " + code + "][" + Principal.sesion[1] + "]{}", ex.getMessage(), ex);
                 return null;
             }
         }
@@ -351,7 +355,7 @@ public class ConexionBase {
             log.trace(sql);
             rsAux.next();
         } catch (SQLException ex) {
-            log.trace("Error ejecutarConsultaUnDatoAux", ex);
+            log.trace("[COD {}] ejecutarConsultaUnDatoAux", ex.getErrorCode(), ex);
         }
         return rsAux;
     }
@@ -366,7 +370,7 @@ public class ConexionBase {
         try {
             st = (Statement) conexion.createStatement();
 
-            log.info("Ejecutar: {}", sql);
+            log.trace("Ejecutar: {}", sql);
 
             int rta = st.executeUpdate(sql);
             if (rta >= 0) {
@@ -387,33 +391,33 @@ public class ConexionBase {
                 case 1146:
                     String[] texto = ex.getMessage().split("'");
                     try {
-                        log.trace("[" + Principal.sesion[1] + "][COD:" + code + "] La tabla no esta creada: [" + texto[1] + "]");
+                        log.info("[" + Principal.sesion[1] + "][COD:" + code + "] La tabla no esta creada: [" + texto[1] + "]");
                     } catch (ArrayIndexOutOfBoundsException aiob) {
                     }
                     return false;
                 //Numero de columnas a insertar no coincide
                 case 1136:
-                    log.trace("El numero de columnas a insertar no coincide "
+                    log.info("El numero de columnas a insertar no coincide "
                             + "con el numero de columnas de la tabla...", ex);
                     return false;
                 //Error de sintaxis en SQL
                 case 1064:
-                    log.trace("SQL Mal Formada:{}", sql, ex);
+                    log.info("SQL Mal Formada:{}", sql, ex);
                     return false;
                 //Error de clave Primaria
                 case 1062:
-                    log.trace("Error de Clave Primaria -> Registro ya ingresado...");
+                    log.info("Error de Clave Primaria -> Registro ya ingresado...");
                     return false;
                 case 0:
-                    log.trace("[COD:" + code + "]Comunicación con la base datos falló -> ultimo paquete enviado mayor a 5ms...\nALERTA[" + sql + "]");
+                    log.info("[COD:" + code + "]Comunicación con la base datos falló -> ultimo paquete enviado mayor a 5ms...\nALERTA[" + sql + "]");
                     if (ex.getMessage().equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                        log.trace("[COD:" + code + "]Conexión base de datos cerrada...", ex);
+                        log.info("[COD:" + code + "]Conexión base de datos cerrada...", ex);
                         return false;
                     } else if (ex.getMessage().equals("Connection.close() has already been called. Invalid operation in this state.")) {
-                        log.trace("[COD:" + code + "]Conexión base de datos cerrada... Connection.close()", ex);
+                        log.info("[COD:" + code + "]Conexión base de datos cerrada... Connection.close()", ex);
                         return false;
                     } else if (ex.getMessage().equals("No operations allowed after connection closed.")) {
-                        log.trace("[COD:" + code + "]Conexión base de datos cerrada...");
+                        log.info("[COD:" + code + "]Conexión base de datos cerrada...");
                         return false;
                     }
                     return false;
@@ -436,12 +440,12 @@ public class ConexionBase {
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
+                    log.info("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.error("[COD:" + code + "][Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> [" + ip_server[3] + "]", Principal.sesion[1]);
+                    log.info("[COD:" + code + "][Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> [" + ip_server[3] + "]", Principal.sesion[1]);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
@@ -480,17 +484,17 @@ public class ConexionBase {
             }
             if (ex.getMessage().equals("Got timeout reading communication packets")) {
                 System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                log.trace("[COD:" + code + "]No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                log.info("[COD:" + code + "]No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
                 return false;
             } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                 System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                log.trace("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
+                log.info("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
                 return false;
             } else if (strMSG113.equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                log.trace("[COD:" + code + "]Se desconectó el cable de RED del equipo...");
+                log.info("[COD:" + code + "]Se desconectó el cable de RED del equipo...");
                 return false;
             } else if (ex.getMessage().equals("Can't write; duplicate key in table 'server'")) {
-                log.trace("[COD:" + code + "]Ya está ingresado el registro en el servidor", ex);
+                log.info("[COD:" + code + "]Ya está ingresado el registro en el servidor", ex);
                 return true;
             } else {
                 log.error("[COD:" + code + "][" + Principal.sesion[1] + "]", ex);
@@ -516,7 +520,7 @@ public class ConexionBase {
         try {
             Statement st1 = (Statement) conexion.createStatement();
 
-            log.info("Ejecutar: {}", sql);
+            log.trace("Ejecutar: {}", sql);
 
             int rta = st1.executeUpdate(sql);
 
@@ -528,56 +532,60 @@ public class ConexionBase {
 
         } catch (SQLException ex) {
             String txt = ex.getMessage();
+            int code = ex.getErrorCode();
             try {
-                int code = ex.getErrorCode();
                 switch (ex.getErrorCode()) {
+                    //Tabla rota
+                    case 126:
+                        repararTablaRota(ex.getMessage());
+                        return false;
                     //tabla no creada
                     case 1146:
                         String[] texto = ex.getMessage().split("'");
                         try {
                             //if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
-                            log.trace("[" + Principal.sesion[1] + "][COD:" + ex.getErrorCode() + "] La tabla no esta creada: [" + texto[1] + "]");
+                            log.info("[" + Principal.sesion[1] + "][COD:" + ex.getErrorCode() + "] La tabla no esta creada: [" + texto[1] + "]");
                             //}
                         } catch (ArrayIndexOutOfBoundsException aiob) {
                         }
                         return false;
                     //Numero de columnas a insertar no coincide
                     case 1136:
-                        log.trace("El numero de columnas a insertar no coincide "
-                                + "con el numero de columnas de la tabla...");
+                        log.info("El numero de columnas a insertar no coincide "
+                                + "con el numero de columnas de la tabla:{}", sql);
                         return false;
                     //Error de sintaxis en SQL
                     case 1064:
-                        log.trace("SQL Mal Formada:{}", sql, ex);
+                        log.info("SQL Mal Formada:{}", sql, ex);
                         return false;
                     //Error de clave Primaria
                     case 1062:
-                        log.trace("Error de Clave Primaria -> Registro ya ingresado...");
+                        log.info("Error de Clave Primaria -> Registro ya ingresado:{}", sql);
                         return false;
                     case 0:
-                        log.trace("[COD:" + code + "]Comunicación con la base datos falló -> ultimo paquete enviado mayor a 5ms...", ex);
+                        log.info("[COD:" + code + "]Comunicación con la base datos falló -> ultimo paquete enviado mayor a 5ms...", ex);
                         return false;
                 }
                 txt = ex.getMessage().substring(0, 76);
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
+                    log.info("[COD " + code + "]MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
-                    log.error("[Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
+                    log.error("[COD " + code + "][Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
                     return false;
                 } else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
                     if (contador == 0) {
-                        log.error("No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1] + " --> " + ip_server[3]);
+                        log.error("[COD " + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1] + " --> " + ip_server[3]);
                         contador++;
                     } else {
                         if (contador == 20000) { //Envia un mail cada 15 minutos despues de que sucede esto
-                            log.error("[Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], Principal.sesion[1]);
+                            log.error("[COD " + code + "][Empresa: {}]NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3], Principal.sesion[1]);
                             contador = 1;
                         } else {
                             contador++;
@@ -586,11 +594,11 @@ public class ConexionBase {
                     return false;
                 } else if (txt.substring(0, 46).equals("Unable to connect to foreign data source: Host")) {
                     if (contador == 0) {
-                        log.error("No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
+                        log.error("[COD " + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
                         contador++;
                     } else {
                         if (contador == 20000) { //Envia un mail cada 15 minutos despues de que sucede esto
-                            log.error("No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
+                            log.error("[COD " + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
                             contador = 1;
                         } else {
                             //log.trace("No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
@@ -607,25 +615,25 @@ public class ConexionBase {
             try {
                 if (ex.getMessage().equals("Got timeout reading communication packets")) {
                     System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                    log.trace("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                    log.info("[COD " + code + "]No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
                     return false;
                 } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                    log.trace("MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
+                    log.info("[COD " + code + "]MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
                     return false;
                 } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                    log.trace("Se desconectó el cable de RED del equipo...");
+                    log.info("[COD " + code + "]Se desconectó el cable de RED del equipo...");
                     reconectarBaseDatos();
                     return false;
                 } else if (ex.getMessage().equals("Can't write; duplicate key in table 'server'")) {
-                    log.trace("Ya está ingresado el registro en el servidor", ex);
+                    log.info("[COD " + code + "]Ya está ingresado el registro en el servidor", ex);
                     return true;
                 } else {
-                    log.error("[COD: {}]", ex.getErrorCode(), ex);
+                    log.error("[COD: {}][" + Principal.sesion[1] + "]", ex.getErrorCode(), ex);
                     return false;
                 }
             } catch (StringIndexOutOfBoundsException sex) {
-                log.error("[COD: {}]", ex.getErrorCode(), ex);
+                log.error("[COD: {}][" + Principal.sesion[1] + "]", ex.getErrorCode(), ex);
                 return false;
             }
         }
@@ -635,7 +643,7 @@ public class ConexionBase {
         try {
             Statement st1 = (Statement) conexion.createStatement();
 
-            log.info("Ejecutar: {}", sql);
+            log.trace("Ejecutar: {}", sql);
 
             int rta = st1.executeUpdate(sql);
 
@@ -653,7 +661,7 @@ public class ConexionBase {
                 if (txt.equals("Unable to connect to foreign data source: Can't connect to MySQL server on '")) {
                     String[] ip_server = ex.getMessage().split("'");
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor KRADAC -> " + ip_server[2] + "...\n****************");
-                    log.trace("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
+                    log.info("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor KRADAC -> [" + ip_server[2] + "]");
                     return false;
                 } else if (txt.equals("Got error 10000 'Error on remote system: 2003: Can't connect to MySQL server")) {
                     String[] ip_server = ex.getMessage().split("'");
@@ -705,27 +713,27 @@ public class ConexionBase {
                     String[] texto = ex.getMessage().split("'");
                     try {
                         if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
-                            log.trace("[COD:" + code + "]La tabla no esta creada: [" + texto[1] + "]");
+                            log.info("[COD:" + code + "]La tabla no esta creada: [" + texto[1] + "]");
                         }
                     } catch (ArrayIndexOutOfBoundsException aiob) {
                     }
                     return false;
                 } else if (ex.getMessage().equals("Got timeout reading communication packets")) {
                     System.err.println("No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
-                    log.trace("[COD:" + code + "]No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
+                    log.info("[COD:" + code + "]No hay Conexion a internet -> no se pueden guardar los datos en la tabla del servidor...");
                     return false;
                 } else if (ex.getMessage().equals("No operations allowed after statement closed.")) {
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...\n****************");
-                    log.trace("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
+                    log.info("[COD:" + code + "]MySQL no se pudo conectar con la tabla del servidor, error al ejecutar la sentencia...");
                     return false;
                 } else if (ex.getMessage().substring(0, 113).equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                    log.trace("[COD:" + code + "]Se desconectó el cable de RED del equipo...");
+                    log.info("[COD:" + code + "]Se desconectó el cable de RED del equipo...");
                     return false;
                 } else if (ex.getMessage().equals("Can't write; duplicate key in table 'server'")) {
-                    log.trace("[COD:" + code + "]Ya está ingresado el registro en el servidor", ex);
+                    log.info("[COD:" + code + "]Ya está ingresado el registro en el servidor", ex);
                     return true;
                 } else {
-                    log.trace("", ex);
+                    log.error("[COD:" + code + "]", ex);
                     return false;
                 }
             } catch (StringIndexOutOfBoundsException siobex) {
@@ -738,7 +746,7 @@ public class ConexionBase {
         try {
             Statement st1 = (Statement) conexion.createStatement();
 
-            log.info("Consultar: {}", sql);
+            log.trace("Consultar: {}", sql);
 
             rsAux = st1.executeQuery(sql);
             rsAux.next();
@@ -746,12 +754,12 @@ public class ConexionBase {
             return rsAux;
         } catch (SQLException ex) {
             String msg = ex.getMessage().substring(0, 113);
-
+            int code = ex.getErrorCode();
             if (msg.equals("No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:")) {
-                log.trace("Se desconectó el cable de RED del equipo...");
+                log.info("[COD {}]Se desconectó el cable de RED del equipo...", code);
                 reconectarBaseDatos();
             } else {
-                log.trace("", ex);
+                log.info("[COD {}]", code, ex);
             }
         }
         return null;
@@ -764,7 +772,7 @@ public class ConexionBase {
      * @param sql - Sentencias INSERT, UPDATE, DELETE
      * @return int - confirmacion del resultado 1 valido || 0 invalido
      */
-    public boolean ejecutarSentenciaHilo(String sql, String unidad) {
+    public boolean ejecutarSentenciaHilo(String sql) {
         try {
             st = (Statement) conexion.createStatement();
             int rta = st.executeUpdate(sql);
@@ -790,7 +798,7 @@ public class ConexionBase {
             int intNumero = Integer.parseInt(rs.getString(1));
             return intNumero;
         } catch (SQLException ex) {
-            log.trace("ResultSet closed - getNumeroCarerasPorVehiculo");
+            log.info("[COD {}]ResultSet closed - getNumeroCarerasPorVehiculo", ex.getErrorCode());
         }
         return 0;
     }
@@ -813,11 +821,11 @@ public class ConexionBase {
             st.close();
             rs.close();
             conexion.close();
-            log.trace("Cerrar conexion BD [OK]");
+            log.info("Cerrar conexion BD [OK]");
         } catch (SQLException ex) {
-            log.trace("Cerrar conexion BD [FALLO]", ex);
+            log.info("[COD {}]Cerrar conexion BD [FALLO]", ex.getErrorCode(), ex);
         } catch (NullPointerException ex) {
-            log.trace("NO está abierta la base de datos... [{}]", Principal.sesion[1]);
+            log.info("NO está abierta la base de datos... [{}]", Principal.sesion[1]);
         }
     }
 
@@ -840,7 +848,6 @@ public class ConexionBase {
         }
         return false;
     }
-    private String estadoUnidad;
 
     /**
      * Insertar Despacho Cliente
@@ -1232,7 +1239,7 @@ public class ConexionBase {
                 rta.add(aux);
             }
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return rta;
     }
@@ -1282,7 +1289,7 @@ public class ConexionBase {
                 rta.add(aux);
             }
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return rta;
     }
@@ -1303,6 +1310,7 @@ public class ConexionBase {
                 return true;
             }
         } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return false;
     }
@@ -1362,7 +1370,7 @@ public class ConexionBase {
                 return true;
             }
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
 
         return false;
@@ -1385,7 +1393,7 @@ public class ConexionBase {
                 return true;
             }
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return false;
     }
@@ -1502,7 +1510,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1553,7 +1561,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1604,7 +1612,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1644,7 +1652,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1695,7 +1703,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1743,7 +1751,7 @@ public class ConexionBase {
         try {
             return rs.getString("COLOR");
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1765,7 +1773,7 @@ public class ConexionBase {
             datosCast = listaUsuarios.toArray(datosCast);
             return datosCast;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1787,7 +1795,7 @@ public class ConexionBase {
             datosCast = listaTurnos.toArray(datosCast);
             return datosCast;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -1897,10 +1905,11 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("NOMBRE_EMP");
         } catch (SQLException ex) {
+            int code = ex.getErrorCode();
             if (ex.getMessage().equals("Illegal operation on empty result set.")) {
-                log.trace("Falta el nombre de la empresa en la base de datos...");
+                log.info("[COD {}]Falta el nombre de la empresa en la base de datos...", code);
             } else {
-                log.trace("", ex);
+                log.info("[COD {}]", code, ex);
             }
         }
         return null;
@@ -1918,7 +1927,7 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("TELEFONO");
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return "";
     }
@@ -1934,7 +1943,7 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDato(sql);
             return rs.getString("MODEM");
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return "";
     }
@@ -2064,7 +2073,6 @@ public class ConexionBase {
             String vel,
             String G1,
             String G2) {
-
         String sql = "CALL SP_INSERTAR_RECORRIDOS('"
                 + particion + "',"
                 + Integer.parseInt(unidad) + ",'"
@@ -2077,7 +2085,7 @@ public class ConexionBase {
                 + G1 + ","
                 + G2
                 + ")";
-        return ejecutarSentenciaHilo(sql, unidad);
+        return ejecutarSentenciaHilo(sql);
     }
 
     /**
@@ -2092,7 +2100,7 @@ public class ConexionBase {
             String nomEstadoUnidad = rs.getString("ETIQUETA");
             return nomEstadoUnidad;
         } catch (SQLException ex) {
-            log.trace("SQL:{}", sql, ex);
+            log.info("[COD " + ex.getErrorCode() + "]SQL:{}", sql, ex);
         }
         return null;
     }
@@ -2108,6 +2116,7 @@ public class ConexionBase {
             rs = ejecutarConsultaUnDatoNoImprimir(sql);
             return rs.getInt(1);
         } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         } catch (NullPointerException ex) {
         }
         return 0;
@@ -2244,7 +2253,7 @@ public class ConexionBase {
             }
             return datos;
         } catch (SQLException ex) {
-            log.trace("", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -2362,7 +2371,7 @@ public class ConexionBase {
                 return true;
             }
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return false;
     }
@@ -2380,7 +2389,7 @@ public class ConexionBase {
             ResultSet rsConfig = ejecutarConsultaUnDato(sql);
             return rsConfig.getString("VALUE");
         } catch (SQLException ex) {
-            log.trace("obtenerValorConfiguiracion", ex);
+            log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
     }
@@ -2410,8 +2419,39 @@ public class ConexionBase {
             ResultSet rsConfig = ejecutarConsultaUnDato(sql);
             return rsConfig.getLong("FECHAHORA");
         } catch (SQLException ex) {
-            log.trace("Obteniendo la ultima fecha y hora de despacho...", ex);
+            log.info("[COD " + ex.getErrorCode() + "]Obteniendo la ultima fecha y hora de despacho...", ex);
         }
         return 0;
+    }
+
+    /**
+     * Cambia el estado de Activo en la tabla ultimos_gps para prensentar las 
+     * posiciociones de los vehiculos en el mapa, activo es false para bloqueo
+     * @param unidades -> conjunto de todas las unidades a bloquear ej: 3,45,23,1,28
+     * @return boolean
+     */
+    public void guardarBloqueoUnidad(String unidades) {
+        String sql = "UPDATE ULTIMOS_GPS SET ACTIVO=FALSE WHERE N_UNIDAD IN (" + unidades + ")";
+        ejecutarSentenciaHilo(sql);
+        sql = "UPDATE ULTIMOS_GPS SET ACTIVO=TRUE WHERE N_UNIDAD NOT IN (" + unidades + ")";
+        ejecutarSentenciaHilo(sql);
+    }
+
+    /**
+     * Obtiene si esa unidad ha sido bloqueada desde el servidor KRADAC por 
+     * falta de pago...
+     * @param unidad
+     * @return boolean
+     */
+    public boolean getEstadoUnidadPendientePago(String unidad) {
+        String sql = "SELECT ACTIVO FROM ULTIMOS_GPS WHERE N_UNIDAD='" + unidad + "'";
+        boolean rta = true;
+        try {
+            rta = ejecutarConsultaUnDato(sql).getBoolean("ACTIVO");
+        } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
+        }
+
+        return rta;
     }
 }

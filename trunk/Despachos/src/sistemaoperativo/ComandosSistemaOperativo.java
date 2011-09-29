@@ -58,6 +58,7 @@ public class ComandosSistemaOperativo extends Thread {
 
             BufferedReader brCleanUp = new BufferedReader(new InputStreamReader(stdout));
             while ((comando = brCleanUp.readLine()) != null) {
+//                System.out.println(""+comando);
                 if (comando.equals("El servicio solicitado ya ha sido iniciado.")) {
                     System.out.println("El servicio solicitado ya ha sido iniciado:"+line);
                 } else if (comando.equals("\"net\" no se reconoce como un comando interno o externo,")) {

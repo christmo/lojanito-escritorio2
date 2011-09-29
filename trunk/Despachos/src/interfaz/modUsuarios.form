@@ -53,13 +53,13 @@
                   <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jbAceptar" max="32767" attributes="0"/>
-                  <Component id="jbNuevoUsuario" min="-2" pref="42" max="-2" attributes="1"/>
-                  <Component id="jbLimpiarCampos" min="-2" pref="42" max="-2" attributes="1"/>
-                  <Component id="jbEliminar" min="-2" pref="42" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jbNuevoUsuario" alignment="0" pref="42" max="32767" attributes="1"/>
+                  <Component id="jbLimpiarCampos" alignment="0" pref="42" max="32767" attributes="1"/>
+                  <Component id="jbEliminar" alignment="0" pref="42" max="32767" attributes="1"/>
+                  <Component id="jbAceptar" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="12" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
