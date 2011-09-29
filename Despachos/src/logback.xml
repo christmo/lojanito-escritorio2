@@ -36,6 +36,31 @@
             <maxFileSize>5MB</maxFileSize>
         </triggeringPolicy>
     </appender>
+    
+    <!-- Trace para Seguir los movimientos de la base de datos-->
+    <appender name="INFO_BD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
+        <File>${logPath}/${fecha}/${appName}-BD-ERROR.log</File>
+
+        <!-- full stacktrace para las excepciones -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                [%p][%d{dd/MM/yyyy HH:mm:ss}][%F][linea %L] %msg%n[excepciones] %exception{full}%n{2}
+            </Pattern>
+        </layout>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/%d{yyyy-MM-dd}/${appName}-BD-ERROR.log</FileNamePattern>
+            <!-- mantener 5 días de historia -->
+            <MaxHistory>5</MaxHistory>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
 
     <appender name="TRACE_PRINCIPAL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -128,7 +153,7 @@
         <SMTPPort>465</SMTPPort>
         <SSL>true</SSL>
         <Username>soporte@kradac.com</Username>
-        <Password></Password>
+        <Password>kradacloja</Password>
 
         <To>soporte@kradac.com</To>
         <From>soporte@kradac.com</From>
@@ -167,6 +192,7 @@
 
     <logger name="BaseDatos.ConexionBase" level="TRACE">
         <appender-ref ref="TRACE_BD"/>
+        <appender-ref ref="INFO_BD"/>
         <appender-ref ref="EMAIL"/>
         <appender-ref ref="pantalla"/>
     </logger>
@@ -193,10 +219,10 @@
         <appender-ref ref="TRACE_MENSAJES"/>
     </logger>
 
-    <logger name="interfaz.reloj" level="ALL">
+<!--    <logger name="interfaz.reloj" level="ALL">
         <appender-ref ref="TRACE_RELOJ"/>
         <appender-ref ref="EMAIL"/>
         <appender-ref ref="pantalla"/>
-    </logger>
+    </logger>-->
 
 </configuration>

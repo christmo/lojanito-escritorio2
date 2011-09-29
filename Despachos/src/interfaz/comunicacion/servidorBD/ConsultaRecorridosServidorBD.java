@@ -65,15 +65,15 @@ public class ConsultaRecorridosServidorBD extends Thread {
             try {
                 consultrarDireccionServer();
                 echoSocket = new Socket(DIRECCION, PUERTO);
-                log.trace("Conectado con [" + DIRECCION + "] puerto [" + PUERTO + "]");
+                log.info("Conectado con [" + DIRECCION + "] puerto [" + PUERTO + "]");
             } catch (UnknownHostException ex) {
                 cerrarConexionServerKradac();
                 AbrirPuerto();
-                log.error("{}", Principal.sesion[1]);
+                log.error("{}", Principal.sesion[1], ex);
             } catch (IOException ex) {
                 PonerIconoNOSenal();
                 if (ex.getMessage().equals("No route to host: connect")) {
-                    System.err.println("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...");
+                    log.info("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...", ex);
                     cerrarConexionServerKradac();
                     try {
                         Thread.sleep(1000);
@@ -96,7 +96,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
                 GuardarDatosRecorridos();
                 ConsultaRecorridosServidorBD.sleep(10000);
             } catch (InterruptedException ex) {
-                System.err.println("" + ex.getMessage());
+                log.info("{}", ex.getMessage(), ex);
             }
         }
     }
@@ -143,7 +143,17 @@ public class ConsultaRecorridosServidorBD extends Thread {
          */
         try {
             //bd.InsertarRecorridoTaxi(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
-            bd.InsertarRecorridoTaxiNuevo(recorrido[0], recorrido[1], recorrido[2], recorrido[3], recorrido[4], recorrido[5], recorrido[6], recorrido[7], recorrido[8], recorrido[9]);
+            bd.InsertarRecorridoTaxiNuevo(
+                    recorrido[0],
+                    recorrido[1],
+                    recorrido[2],
+                    recorrido[3],
+                    recorrido[4],
+                    recorrido[5],
+                    recorrido[6],
+                    recorrido[7],
+                    recorrido[8],
+                    recorrido[9]);
         } catch (ArrayIndexOutOfBoundsException ex) {
         }
     }
@@ -152,47 +162,9 @@ public class ConsultaRecorridosServidorBD extends Thread {
      * Se conectar al servidor de Kradac a obtener las ultimas posiciones de todos
      * los vehiculos de la empresa para guardarlos en la tabla de recorridos local
      * para mostrar esos vehiculos en el mapa
-     * @deprecated
      * @param empresa
      * @return String[]
      */
-    private String[] getDatosServidor(String empresa) {
-        ArrayList<String> nuevosDatos = new ArrayList<String>();
-        String[] cast = null;
-        String[] datos = null;
-        try {
-
-            entrada = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-            salida = new PrintStream(echoSocket.getOutputStream(), true);
-
-            salida.print(empresa + "\r\n");
-            boolean salir = false;
-            String dato;
-            while (!salir) {
-                if ((dato = entrada.readLine()) != null) {
-                    String[] pos = dato.split("#");
-                    for (int i = 0; i < pos.length; i++) {
-                        nuevosDatos.add(pos[i]);
-                        if (i == pos.length - 1) {
-                            salir = true;
-                        } else {
-                            salir = false;
-                        }
-                    }
-                }
-            }
-
-            cast = new String[nuevosDatos.size()];
-
-            datos = nuevosDatos.toArray(cast);
-            return datos;
-        } catch (Exception e) {
-            cerrarConexionServerKradac();
-            AbrirPuerto();
-        }
-        return null;
-    }
-
     private String[] getDatosServidorNuevo(String empresa) {
         ArrayList<String> nuevosDatos = new ArrayList<String>();
         String[] cast = null;
@@ -207,13 +179,15 @@ public class ConsultaRecorridosServidorBD extends Thread {
             String dato;
             while (!salir) {
                 if ((dato = entrada.readLine()) != null) {
-                    String[] pos = dato.split("#");
-                    for (int i = 0; i < pos.length; i++) {
-                        nuevosDatos.add(pos[i]);
-                        if (i == pos.length - 1) {
-                            salir = true;
-                        } else {
-                            salir = false;
+                    if (dato.contains("#")) {
+                        String[] pos = dato.split("#");
+                        for (int i = 0; i < pos.length; i++) {
+                            nuevosDatos.add(pos[i]);
+                            if (i == pos.length - 1) {
+                                salir = true;
+                            } else {
+                                salir = false;
+                            }
                         }
                     }
                 }
@@ -246,10 +220,10 @@ public class ConsultaRecorridosServidorBD extends Thread {
             } catch (NullPointerException ex) {
             }
         } catch (IOException ex) {
-            log.error("{}", Principal.sesion[1]);
+            log.error("{}", Principal.sesion[1], ex);
         }
     }
-    
+
     /**
      * Pone el icono en la interfaz Principal de señal
      */
