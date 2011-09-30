@@ -450,6 +450,7 @@ public final class Principal extends javax.swing.JFrame {
             bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('AC', 'ACTIVO', '-13369549')");
             bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('ASI', 'ASIGNADO', '-23123326')");
             bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('OCU', 'OCUPADO', '-34512')");
+            bd.ejecutarSentencia("INSERT INTO CODESTTAXI VALUES ('TXM', 'TAXIMETRO', '-64032')");
             System.exit(0);
         }
     }

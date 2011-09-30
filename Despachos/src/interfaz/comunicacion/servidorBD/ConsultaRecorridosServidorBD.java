@@ -73,7 +73,7 @@ public class ConsultaRecorridosServidorBD extends Thread {
             } catch (IOException ex) {
                 PonerIconoNOSenal();
                 if (ex.getMessage().equals("No route to host: connect")) {
-                    log.info("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...", ex);
+                    log.info("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...");
                     cerrarConexionServerKradac();
                     try {
                         Thread.sleep(1000);

@@ -2411,11 +2411,13 @@ public class ConexionBase {
     /**
      * Obtiene de la base de datos la fecha y la hora del ultimo despacho realizado
      * esto permite comprobar si se ha retrocedido la hora del computador
-     * @return Date
+     * @return long
      */
     public long obtenerUltimaFechaHoraDespacho() {
         try {
-            String sql = "SELECT UNIX_TIMESTAMP(MAX(concat(FECHA,' ',HORA))) AS FECHAHORA FROM ASIGNADOS";
+            String sql = "SELECT UNIX_TIMESTAMP(MAX(concat(FECHA,' ',HORA))) AS FECHAHORA "
+                    + "FROM ASIGNADOS "
+                    + "WHERE ESTADO='F'";
             ResultSet rsConfig = ejecutarConsultaUnDato(sql);
             return rsConfig.getLong("FECHAHORA");
         } catch (SQLException ex) {
@@ -2449,7 +2451,9 @@ public class ConexionBase {
         try {
             rta = ejecutarConsultaUnDato(sql).getBoolean("ACTIVO");
         } catch (SQLException ex) {
-            log.info("[COD {}]", ex.getErrorCode(), ex);
+            if (ex.getErrorCode() != 0) {
+                log.info("[COD {}]", ex.getErrorCode(), ex);
+            }
         }
 
         return rta;
