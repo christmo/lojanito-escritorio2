@@ -26,7 +26,7 @@ public class ActualizadorDespachosServidorKRADAC extends Thread {
             try {
                 comando = "java -jar ActualizarServidor.jar " + empresa;
                 ComandosSistemaOperativo cmd = new ComandosSistemaOperativo(comando);
-                ActualizadorDespachosServidorKRADAC.sleep(600000);//60 minutos
+                ActualizadorDespachosServidorKRADAC.sleep(3600000);//60 minutos
             } catch (InterruptedException ex) {
                 log.info("{}", ex.getMessage(), ex);
             }
