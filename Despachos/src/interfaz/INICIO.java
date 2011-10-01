@@ -1,5 +1,5 @@
-/*//GEN-FIRST:event_jbUsuariosActionPerformed
- * INICIO.java//GEN-LAST:event_jbUsuariosActionPerformed
+/*                                           
+ * INICIO.java                                          
  *
  * Created on 09/08/2010, 04:04:21 PM
  */
@@ -36,6 +36,8 @@ public class INICIO extends javax.swing.JFrame {
     private String sesion[] = null;
     private ConexionBase bd;
     private Properties arcConfig;
+    private VentanaDatos v;
+    private VentanaMail mail;
     /**
      * Rol del usuario logueado en el sistema
      * 0 -> Sin Rol
@@ -149,8 +151,82 @@ public class INICIO extends javax.swing.JFrame {
         btnConfig.setVisible(false);
     }
 
+    /**
+     * Muestra solo los botones necesario dependiendo del tipo de rol
+     * Rol del usuario logueado en el sistema
+     * 0 -> Sin Rol
+     * 1 -> Operador
+     * 2 -> Solo Lectura
+     * 3 -> Administrador
+     */
+    private void validarRolUsuario() {
+        switch (intRol) {
+            case 1:
+                controlRolOperador();
+                break;
+            case 2:
+                controlRolSoloLectura();
+                break;
+            case 3:
+            //controlAdministrador();
+            default:
+        }
+    }
+
+    /**
+     * Asignar permisos para los operadores del sistema, estos pueden:
+     * Asignar Multas
+     * Reportes
+     * Clientes
+     * Mapa
+     * Mail
+     */
+    private void controlRolOperador() {
+        boolean op = false;
+        jbUsuarios.setEnabled(op);
+        btnTurnos.setEnabled(op);
+        btnEstados.setEnabled(op);
+        btnModEstados.setEnabled(op);
+
+        btnNvConductor.setEnabled(op);
+        btnNewVehiculo.setEnabled(op);
+
+        btnEditConductor.setEnabled(op);
+        btnEditVehiculo.setEnabled(op);
+
+        btnEditarMultas.setEnabled(op);
+        btnMultas.setEnabled(op);
+    }
+
+    /**
+     * Permisos para usuarios de solo lectura, no se puede hacer más que ver
+     * Reportes
+     * Mapa
+     * Mail
+     */
+    private void controlRolSoloLectura() {
+        boolean op = false;
+        btnNvConductor.setEnabled(op);
+        btnNewVehiculo.setEnabled(op);
+
+        btnEditConductor.setEnabled(op);
+        btnEditVehiculo.setEnabled(op);
+
+        btnEstados.setEnabled(op);
+        btnModEstados.setEnabled(op);
+        btnTurnos.setEnabled(op);
+
+        btnAsignarM.setEnabled(op);
+        btnEditarMultas.setEnabled(op);
+        btnMultas.setEnabled(op);
+
+        jbUsuarios.setEnabled(op);
+        jbClientes.setEnabled(op);
+
+    }
+
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         btnNvConductor = new javax.swing.JButton();
@@ -290,7 +366,7 @@ public class INICIO extends javax.swing.JFrame {
 
         lblEmpresa.setFont(new java.awt.Font("Arial Black", 1, 18));
         lblEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblEmpresa.setText("...");
+        lblEmpresa.setText("\"\"");
 
         btnModEstados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/modEstados.png"))); // NOI18N
         btnModEstados.setText("Estados Taxi");
@@ -438,13 +514,13 @@ public class INICIO extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
-    }                                        
+    }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void btnNewVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewVehiculoActionPerformed
         if ((newVehiculo == null) || (!newVehiculo.isDisplayable())) {
             newVehiculo = new ingresoVehiculos(this, sesion, this.bd, arcConfig);
             newVehiculo.setSize(740, 590);
@@ -453,9 +529,9 @@ public class INICIO extends javax.swing.JFrame {
             newVehiculo.setResizable(false);
         }
         newVehiculo.setVisible(true);
-    }                                              
+    }//GEN-LAST:event_btnNewVehiculoActionPerformed
 
-    private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+    private void btnEditConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConductorActionPerformed
         if ((beConductor == null) || (!beConductor.isDisplayable())) {
             beConductor = new modConductor(this, this.bd, arcConfig);
             beConductor.setSize(705, 700);
@@ -464,9 +540,9 @@ public class INICIO extends javax.swing.JFrame {
             beConductor.setResizable(false);
         }
         beConductor.setVisible(true);
-    }                                                
+    }//GEN-LAST:event_btnEditConductorActionPerformed
 
-    private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
         if ((nEstado == null) || (!nEstado.isDisplayable())) {
             nEstado = new ingresoEstados(this, this.bd);
             nEstado.setSize(354, 267);
@@ -475,10 +551,9 @@ public class INICIO extends javax.swing.JFrame {
             nEstado.setResizable(false);
         }
         nEstado.setVisible(true);
-    }                                          
+    }//GEN-LAST:event_btnEstadosActionPerformed
 
-    private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {                                          
-
+    private void btnTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnosActionPerformed
         if ((turnos == null) || (!turnos.isDisplayable())) {
             turnos = new modTurnos(this, this.bd);
             turnos.setSize(525, 250);
@@ -487,10 +562,9 @@ public class INICIO extends javax.swing.JFrame {
             turnos.setResizable(false);
         }
         turnos.setVisible(true);
+    }//GEN-LAST:event_btnTurnosActionPerformed
 
-    }                                         
-
-    private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void btnNvConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNvConductorActionPerformed
         if ((nConductor == null) || (!nConductor.isDisplayable())) {
             nConductor = new ingresoConductor(this, this.bd, arcConfig);
             nConductor.setSize(757, 512);
@@ -499,10 +573,9 @@ public class INICIO extends javax.swing.JFrame {
             nConductor.setResizable(false);
         }
         nConductor.setVisible(true);
-    }                                              
+    }//GEN-LAST:event_btnNvConductorActionPerformed
 
-    private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {                                                
-
+    private void btnEditVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditVehiculoActionPerformed
         if ((editVehiculo == null) || (!editVehiculo.isDisplayable())) {
             editVehiculo = new modVehiculo(this, sesion, this.bd, arcConfig);
             editVehiculo.setSize(819, 700);
@@ -511,12 +584,12 @@ public class INICIO extends javax.swing.JFrame {
             editVehiculo.setResizable(false);
         }
         editVehiculo.setVisible(true);
-    }                                               
+    }//GEN-LAST:event_btnEditVehiculoActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {                                  
-    }                                 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    }//GEN-LAST:event_formWindowClosed
 
-    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         if ((reportes == null) || (!reportes.isDisplayable())) {
             reportes = new Reportes(this, sesion, this.bd);
             reportes.setLocationRelativeTo(this);
@@ -524,9 +597,9 @@ public class INICIO extends javax.swing.JFrame {
             reportes.setResizable(false);
         }
         reportes.setVisible(true);
-    }                                           
+    }//GEN-LAST:event_btnReportesActionPerformed
 
-    private void btnEditarMultasActionPerformed(java.awt.event.ActionEvent evt) {                                                
+    private void btnEditarMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMultasActionPerformed
         if ((beasignarMulta == null) || (!beasignarMulta.isDisplayable())) {
             beasignarMulta = new modAsignarMultas(this, this.bd, sesion);
             beasignarMulta.setSize(538, 635);
@@ -535,13 +608,13 @@ public class INICIO extends javax.swing.JFrame {
             beasignarMulta.setResizable(false);
         }
         beasignarMulta.setVisible(true);
-    }                                               
+    }//GEN-LAST:event_btnEditarMultasActionPerformed
 
-    private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
         // TODO añadir funcionalidad al boton de directorio telefonico
-    }                                             
+    }//GEN-LAST:event_btnDirectorioActionPerformed
 
-    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void btnMultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultasActionPerformed
         if ((multas == null) || (!multas.isDisplayable())) {
             multas = new Multas(this, this.bd);
             multas.setSize(496, 400);
@@ -551,9 +624,9 @@ public class INICIO extends javax.swing.JFrame {
         }
         multas.setVisible(true);
 
-    }                                         
+    }//GEN-LAST:event_btnMultasActionPerformed
 
-    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void btnAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarMActionPerformed
         if ((asignarMulta == null) || (!asignarMulta.isDisplayable())) {
             asignarMulta = new asignarMultas(this, sesion, this.bd);
             asignarMulta.setSize(350, 354);
@@ -563,9 +636,9 @@ public class INICIO extends javax.swing.JFrame {
         }
         asignarMulta.setVisible(true);
 
-    }                                           
+    }//GEN-LAST:event_btnAsignarMActionPerformed
 
-    private void btnModEstadosActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnModEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModEstadosActionPerformed
         if ((modEstados == null) || (!modEstados.isDisplayable())) {
             modEstados = new modEstados(this, this.bd);
             modEstados.setSize(500, 320);
@@ -574,9 +647,9 @@ public class INICIO extends javax.swing.JFrame {
             modEstados.setResizable(false);
         }
         modEstados.setVisible(true);
-    }                                             
+    }//GEN-LAST:event_btnModEstadosActionPerformed
 
-    private void jbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    private void jbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbUsuariosActionPerformed
         if ((modUsuarios == null) || (!modUsuarios.isDisplayable())) {
             modUsuarios = new modUsuarios(this, this.bd);
             modUsuarios.setLocationRelativeTo(this);
@@ -584,9 +657,9 @@ public class INICIO extends javax.swing.JFrame {
             modUsuarios.setResizable(false);
         }
         modUsuarios.setVisible(true);
-    }                                          
-    private VentanaDatos v;
-    private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    }//GEN-LAST:event_jbUsuariosActionPerformed
+
+    private void jbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClientesActionPerformed
         if ((v == null) || (!v.isDisplayable())) {
             v = new VentanaDatos(true, bd);
             v.setLocationRelativeTo(this);
@@ -594,9 +667,9 @@ public class INICIO extends javax.swing.JFrame {
             v.setResizable(false);
         }
         v.setVisible(true);
-    }                                          
-    private VentanaMail mail;
-    private void jbProblemasActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    }//GEN-LAST:event_jbClientesActionPerformed
+
+    private void jbProblemasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbProblemasActionPerformed
         if ((mail == null) || (!mail.isDisplayable())) {
             mail = new VentanaMail(bd, sesion);
             mail.setLocationRelativeTo(this);
@@ -604,9 +677,9 @@ public class INICIO extends javax.swing.JFrame {
             mail.setResizable(false);
         }
         mail.setVisible(true);
-    }                                           
+    }//GEN-LAST:event_jbProblemasActionPerformed
 
-    private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    private void jbMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMapaActionPerformed
         String url = "http://" + bd.getValorConfiguiracion("ip_mapa_local")
                 + ":"
                 + bd.getValorConfiguiracion("puerto_mapa_local")
@@ -614,12 +687,12 @@ public class INICIO extends javax.swing.JFrame {
                 + bd.getValorConfiguiracion("url")
                 + bd.getValorConfiguiracion("url_home");
         BrowserControl.displayURL(url);
-    }                                      
+    }//GEN-LAST:event_jbMapaActionPerformed
 
-    private void jbMailKradacActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jbMailKradacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMailKradacActionPerformed
         String url = "http://mail.google.com";
         BrowserControl.displayURL(url);
-    }                                            
+    }//GEN-LAST:event_jbMailKradacActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -629,7 +702,7 @@ public class INICIO extends javax.swing.JFrame {
             }
         });
     }
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarM;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnDirectorio;
@@ -651,79 +724,5 @@ public class INICIO extends javax.swing.JFrame {
     private javax.swing.JButton jbUsuarios;
     private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblNombreAplicacion;
-    // End of variables declaration                   
-
-    /**
-     * Muestra solo los botones necesario dependiendo del tipo de rol
-     * Rol del usuario logueado en el sistema
-     * 0 -> Sin Rol
-     * 1 -> Operador
-     * 2 -> Solo Lectura
-     * 3 -> Administrador
-     */
-    private void validarRolUsuario() {
-        switch (intRol) {
-            case 1:
-                controlRolOperador();
-                break;
-            case 2:
-                controlRolSoloLectura();
-                break;
-            case 3:
-                //controlAdministrador();
-            default:
-        }
-    }
-
-    /**
-     * Asignar permisos para los operadores del sistema, estos pueden:
-     * Asignar Multas
-     * Reportes
-     * Clientes
-     * Mapa
-     * Mail
-     */
-    private void controlRolOperador() {
-        boolean op = false;
-        jbUsuarios.setEnabled(op);
-        btnTurnos.setEnabled(op);
-        btnEstados.setEnabled(op);
-        btnModEstados.setEnabled(op);
-
-        btnNvConductor.setEnabled(op);
-        btnNewVehiculo.setEnabled(op);
-
-        btnEditConductor.setEnabled(op);
-        btnEditVehiculo.setEnabled(op);
-
-        btnEditarMultas.setEnabled(op);
-        btnMultas.setEnabled(op);
-    }
-
-    /**
-     * Permisos para usuarios de solo lectura, no se puede hacer más que ver
-     * Reportes
-     * Mapa
-     * Mail
-     */
-    private void controlRolSoloLectura() {
-        boolean op = false;
-        btnNvConductor.setEnabled(op);
-        btnNewVehiculo.setEnabled(op);
-
-        btnEditConductor.setEnabled(op);
-        btnEditVehiculo.setEnabled(op);
-
-        btnEstados.setEnabled(op);
-        btnModEstados.setEnabled(op);
-        btnTurnos.setEnabled(op);
-
-        btnAsignarM.setEnabled(op);
-        btnEditarMultas.setEnabled(op);
-        btnMultas.setEnabled(op);
-
-        jbUsuarios.setEnabled(op);
-        jbClientes.setEnabled(op);
-
-    }
+    // End of variables declaration//GEN-END:variables
 }

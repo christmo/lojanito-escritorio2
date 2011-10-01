@@ -1,5 +1,5 @@
-/*//GEN-FIRST:event_btnColorActionPerformed
- * Cuando escribi este codigo, solo Dios y YO entendiamos lo que estaba haciendo//GEN-LAST:event_btnColorActionPerformed
+    /*                                         
+ * Cuando escribi este codigo, solo Dios y YO entendiamos lo que estaba haciendo                                        
  * AHORA, solo Dios lo entiende --> ;-) ja ja
  *
  * Principal.java
@@ -64,6 +64,8 @@ import sonido.Sonido;
  */
 public final class Principal extends javax.swing.JFrame {
 
+    // <editor-fold defaultstate="collapsed" desc="Variables Globales">
+    private static TrabajoTablas trabajarTabla;
     //--------------------------------------------------------------------------
     // Variables Globales
     //--------------------------------------------------------------------------
@@ -147,37 +149,34 @@ public final class Principal extends javax.swing.JFrame {
      * Permite controlar si se cambia la unidad antes de despachar la carrera
      */
     private boolean CampoUnidadCambio = false;
-
-    //--------------------------------------------------------------------------
-    // Constructores
-    //--------------------------------------------------------------------------
+    private VentanaDatos ventanaDatos = null;
+    private int intMinutoAnt = 0;
+    private int contador = 0;
+    private String UnidadAntesDeBorrar;
+    private int filaAnt = -1;
     /**
-     * Constructor para recibir los datos de sesion desde el menu principal
-     * @param String[] sesion -> (0)=nickUsuario,(1)=id_empresa,(2)=NombreUsuario
+     * Comprueba el tiempo en que se piensa recojer al cliente por cada minuto
+     * para saber si el taxista se atrasa o no
      */
-    public Principal(String[] info, ConexionBase conec) {
-        setSession(info);
-        Principal.main(null);
-        Principal.bd = conec;
-    }
+    Timer tiempo = new Timer(60000, new ActionListener() {
 
-    public Principal(String[] info, ConexionBase conec, Properties archivo) {
-        setSession(info);
-        Principal.main(null);
-        Principal.bd = conec;
-        Principal.arcConfig = archivo;
-        log.trace("Iniciar la aplicacion de despachos...");
-        log.trace("Usuario: {}", sesion[2]);
-        log.trace("Rol: {}", sesion[3]);
-    }
-
-    /**
-     * Constructor Por defecto
-     */
-    public Principal() {
-        initComponents();
-        ConfiguracionInicial();
-    }
+        public void actionPerformed(ActionEvent ae) {
+            int N_filas = jtPorDespachar.getRowCount();
+            for (int i = 0; i < N_filas; i++) {
+                String dato = (String) jtPorDespachar.getValueAt(i, 8);
+                String minuto = (String) jtPorDespachar.getValueAt(i, 7);
+                try {
+                    if (!dato.equals("") && !minuto.equals("")) {
+                        int atraso = Integer.parseInt(dato);
+                        if (!minuto.equals("0")) {
+                            jtPorDespachar.setValueAt("" + (atraso + 1), i, 8);
+                        }
+                    }
+                } catch (NullPointerException ex) {
+                }
+            }
+        }
+    });
 
     /**
      * Setea los datos de la sesion a una variable global en este entorno
@@ -203,11 +202,11 @@ public final class Principal extends javax.swing.JFrame {
         jtTelefono.requestFocusInWindow();
 
         tiempo.start();
-        
+
         leerRecorridosServidorKRADAC();
         leerUnidadesBloqueadasServidorKRADAC();
         actualizadorDespachosServidorKRADAC();
-        
+
         Reloj();
         this.setExtendedState(MAXIMIZED_BOTH);
 
@@ -608,422 +607,6 @@ public final class Principal extends javax.swing.JFrame {
         cbEstadosTaxi.setEditor(editor);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
-
-        jsVehiculos = new javax.swing.JScrollPane();
-        jtVehiculos = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jtPorDespachar = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jtDespachados = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jtTelefono = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jtCodigo = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        cbEstadosTaxi = new javax.swing.JComboBox();
-        btnColor = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jbEliminarFila = new javax.swing.JButton();
-        jbLimpiarCampos = new javax.swing.JButton();
-        jbNuevoDespacho = new javax.swing.JButton();
-        jbDespachar = new javax.swing.JButton();
-        lblReloj = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jtBuscarPorNombre = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jtBuscarPorTelefono = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jtBuscarPorCodigo = new javax.swing.JTextField();
-        jlIndicadorLlamada = new javax.swing.JLabel();
-        jlSenalInternet = new javax.swing.JLabel();
-        jpPendiente = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        lblRecordar = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        lblCliente = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jbSalir = new javax.swing.JButton();
-        jbMenu = new javax.swing.JButton();
-        jbBuscarClienteNombre = new javax.swing.JButton();
-        jbPendientes = new javax.swing.JButton();
-        lblFecha = new javax.swing.JLabel();
-        lblSenal = new javax.swing.JLabel();
-        lblAlarmaPendiente = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jsVehiculos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsVehiculos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jsVehiculos.setAutoscrolls(true);
-        jsVehiculos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jtVehiculos.setFont(new java.awt.Font("Tahoma", 1, 12));
-        jtVehiculos.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, null, null, null}
-                },
-                new String[]{
-                    "Title 1", "Title 2", "Title 3", "Title 4"
-                }));
-        jtVehiculos.setCellSelectionEnabled(true);
-        jtVehiculos.getTableHeader().setReorderingAllowed(false);
-        jtVehiculos.addMouseListener(new java.awt.event.MouseAdapter() {
-
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jtVehiculosMousePressed(evt);
-            }
-        });
-        jsVehiculos.setViewportView(jtVehiculos);
-        jtVehiculos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-        jtPorDespachar.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null}
-                },
-                new String[]{
-                    "Hora", "Télefono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
-                }) {
-
-            boolean[] canEdit = new boolean[]{
-                false, true, false, true, true, true, true, true, false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        });
-        jtPorDespachar.getTableHeader().setReorderingAllowed(false);
-        jtPorDespachar.addMouseListener(new java.awt.event.MouseAdapter() {
-
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jtPorDespacharMousePressed(evt);
-            }
-        });
-        jtPorDespachar.addFocusListener(new java.awt.event.FocusAdapter() {
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtPorDespacharFocusLost(evt);
-            }
-        });
-        jtPorDespachar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jtPorDespacharPropertyChange(evt);
-            }
-        });
-        jtPorDespachar.addKeyListener(new java.awt.event.KeyAdapter() {
-
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jtPorDespacharKeyPressed(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jtPorDespachar);
-        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(62);
-        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(62);
-        jtPorDespachar.getColumnModel().getColumn(1).setMinWidth(80);
-        jtPorDespachar.getColumnModel().getColumn(1).setMaxWidth(80);
-        jtPorDespachar.getColumnModel().getColumn(2).setMinWidth(50);
-        jtPorDespachar.getColumnModel().getColumn(2).setMaxWidth(50);
-        jtPorDespachar.getColumnModel().getColumn(3).setPreferredWidth(150);
-        jtPorDespachar.getColumnModel().getColumn(4).setPreferredWidth(150);
-        jtPorDespachar.getColumnModel().getColumn(5).setPreferredWidth(250);
-        jtPorDespachar.getColumnModel().getColumn(6).setMinWidth(30);
-        jtPorDespachar.getColumnModel().getColumn(6).setMaxWidth(30);
-        jtPorDespachar.getColumnModel().getColumn(7).setMinWidth(28);
-        jtPorDespachar.getColumnModel().getColumn(7).setMaxWidth(28);
-        jtPorDespachar.getColumnModel().getColumn(8).setMinWidth(28);
-        jtPorDespachar.getColumnModel().getColumn(8).setMaxWidth(28);
-        jtPorDespachar.getColumnModel().getColumn(9).setMinWidth(100);
-        jtPorDespachar.getColumnModel().getColumn(9).setMaxWidth(100);
-
-        jtDespachados.setAutoCreateRowSorter(true);
-        jtDespachados.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "Hora", "Teléfono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
-                }) {
-
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        });
-        jtDespachados.getTableHeader().setReorderingAllowed(false);
-        jtDespachados.addMouseListener(new java.awt.event.MouseAdapter() {
-
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jtDespachadosMousePressed(evt);
-            }
-        });
-        jScrollPane3.setViewportView(jtDespachados);
-        jtDespachados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jtDespachados.getColumnModel().getColumn(0).setMinWidth(62);
-        jtDespachados.getColumnModel().getColumn(0).setMaxWidth(62);
-        jtDespachados.getColumnModel().getColumn(1).setMinWidth(80);
-        jtDespachados.getColumnModel().getColumn(1).setMaxWidth(80);
-        jtDespachados.getColumnModel().getColumn(2).setMinWidth(50);
-        jtDespachados.getColumnModel().getColumn(2).setMaxWidth(50);
-        jtDespachados.getColumnModel().getColumn(3).setPreferredWidth(150);
-        jtDespachados.getColumnModel().getColumn(4).setPreferredWidth(150);
-        jtDespachados.getColumnModel().getColumn(5).setPreferredWidth(250);
-        jtDespachados.getColumnModel().getColumn(6).setMinWidth(30);
-        jtDespachados.getColumnModel().getColumn(6).setMaxWidth(30);
-        jtDespachados.getColumnModel().getColumn(7).setMinWidth(28);
-        jtDespachados.getColumnModel().getColumn(7).setMaxWidth(28);
-        jtDespachados.getColumnModel().getColumn(8).setMinWidth(28);
-        jtDespachados.getColumnModel().getColumn(8).setMaxWidth(28);
-        jtDespachados.getColumnModel().getColumn(9).setMinWidth(100);
-        jtDespachados.getColumnModel().getColumn(9).setMaxWidth(100);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel1.setText("Teléfono:");
-
-        jtTelefono.setFont(new java.awt.Font("Arial", 1, 20));
-        jtTelefono.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jtTelefono.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtTelefonoActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel2.setText("Código:");
-
-        jtCodigo.setFont(new java.awt.Font("Arial", 1, 20));
-        jtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jtCodigo.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtCodigoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel1).addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)).addGap(18, 18, 18).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel2))));
-        jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel1).addComponent(jLabel2)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE).addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)).addContainerGap()));
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel3.setText("Cambiar Estado:");
-
-        btnColor.setText("Cambiar");
-        btnColor.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnColorActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel2Layout.createSequentialGroup().addContainerGap().addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup().addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(btnColor).addContainerGap()).addComponent(jLabel3))));
-        jPanel2Layout.setVerticalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup().addContainerGap(12, Short.MAX_VALUE).addComponent(jLabel3).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(btnColor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap()));
-
-        jbEliminarFila.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/eliminar.png"))); // NOI18N
-        jbEliminarFila.setToolTipText("Eliminar Filas Seleccionada (F8)");
-        jbEliminarFila.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEliminarFilaActionPerformed(evt);
-            }
-        });
-
-        jbLimpiarCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/limpiar.png"))); // NOI18N
-        jbLimpiarCampos.setToolTipText("Limpia los campos de texto para hacer un cambio y despacho temporal (F7)");
-        jbLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbLimpiarCamposActionPerformed(evt);
-            }
-        });
-
-        jbNuevoDespacho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/mas.png"))); // NOI18N
-        jbNuevoDespacho.setToolTipText("Añade una fila para despachar... (Insert)");
-        jbNuevoDespacho.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbNuevoDespachoActionPerformed(evt);
-            }
-        });
-
-        jbDespachar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/enviar.png"))); // NOI18N
-        jbDespachar.setToolTipText("Despachar (F12)");
-        jbDespachar.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbDespacharActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel3Layout.createSequentialGroup().addComponent(jbNuevoDespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jbLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jbEliminarFila, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jbDespachar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)));
-        jPanel3Layout.setVerticalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup().addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jbNuevoDespacho, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jbDespachar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jbLimpiarCampos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jbEliminarFila, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
-
-        lblReloj.setFont(new java.awt.Font("Arial", 1, 36));
-        lblReloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblReloj.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/reloj.png"))); // NOI18N
-        lblReloj.setText("Hora");
-        lblReloj.setFocusable(false);
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel4.setText("Nombre:");
-
-        jtBuscarPorNombre.setColumns(15);
-        jtBuscarPorNombre.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtBuscarPorNombreActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel5.setText("Teléfono:");
-
-        jtBuscarPorTelefono.setColumns(15);
-        jtBuscarPorTelefono.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtBuscarPorTelefonoActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel6.setText("Código:");
-
-        jtBuscarPorCodigo.setColumns(15);
-        jtBuscarPorCodigo.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtBuscarPorCodigoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel4Layout.createSequentialGroup().addContainerGap().addComponent(jLabel4).addGap(1, 1, 1).addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel5).addGap(3, 3, 3).addComponent(jtBuscarPorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel6).addGap(6, 6, 6).addComponent(jtBuscarPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(15, 15, 15)));
-        jPanel4Layout.setVerticalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup().addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel4).addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jtBuscarPorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel5).addComponent(jtBuscarPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel6)).addContainerGap()));
-
-        jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
-
-        jLabel7.setText("Se debe despachar el cliente en");
-
-        lblRecordar.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblRecordar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblRecordar.setText("min");
-
-        jLabel8.setText("min");
-
-        lblCliente.setFont(new java.awt.Font("Tahoma", 1, 14));
-        lblCliente.setText("cliente");
-
-        javax.swing.GroupLayout jpPendienteLayout = new javax.swing.GroupLayout(jpPendiente);
-        jpPendiente.setLayout(jpPendienteLayout);
-        jpPendienteLayout.setHorizontalGroup(
-                jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jpPendienteLayout.createSequentialGroup().addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jpPendienteLayout.createSequentialGroup().addComponent(jLabel7).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(lblRecordar).addGap(6, 6, 6).addComponent(jLabel8)).addComponent(lblCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)).addContainerGap()));
-        jpPendienteLayout.setVerticalGroup(
-                jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jpPendienteLayout.createSequentialGroup().addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel7).addComponent(lblRecordar, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel8)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(13, 13, 13)));
-
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
-        jbSalir.setText("Salir");
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
-            }
-        });
-
-        jbMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/menu.jpg"))); // NOI18N
-        jbMenu.setText("Menú");
-        jbMenu.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbMenuActionPerformed(evt);
-            }
-        });
-
-        jbBuscarClienteNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
-        jbBuscarClienteNombre.setText("Clientes");
-        jbBuscarClienteNombre.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbBuscarClienteNombreActionPerformed(evt);
-            }
-        });
-
-        jbPendientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/pendientes.png"))); // NOI18N
-        jbPendientes.setText("Pendientes");
-        jbPendientes.setActionCommand("jbPendientes");
-        jbPendientes.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbPendientesActionPerformed(evt);
-            }
-        });
-
-        lblFecha.setFont(new java.awt.Font("Arial", 1, 20));
-        lblFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calendario.png"))); // NOI18N
-        lblFecha.setText("Fecha");
-
-        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
-
-        lblAlarmaPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/alarma.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel5Layout.createSequentialGroup().addComponent(jbSalir).addGap(18, 18, 18).addComponent(jbMenu).addGap(18, 18, 18).addComponent(jbBuscarClienteNombre).addGap(18, 18, 18).addComponent(jbPendientes).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE).addComponent(lblAlarmaPendiente).addGap(18, 18, 18).addComponent(lblSenal).addGap(18, 18, 18).addComponent(lblFecha)));
-        jPanel5Layout.setVerticalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(lblAlarmaPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE).addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE).addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE).addComponent(jbPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE).addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(18, 18, 18).addComponent(jlIndicadorLlamada).addGap(18, 18, 18).addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE).addComponent(lblReloj).addGap(41, 41, 41).addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent(jlSenalInternet).addGap(111, 111, 111)).addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap().addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout.createSequentialGroup().addComponent(lblReloj).addGap(18, 18, 18)).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false).addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))).addGap(11, 11, 11))).addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(jPanel3, 0, 46, Short.MAX_VALUE).addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addGap(14, 14, 14).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jlSenalInternet).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
-
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width - 1037) / 2, (screenSize.height - 793) / 2, 1037, 793);
-    }// </editor-fold>                        
-
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {
-        salirVentanaPrincipal();
-    }
-
     /**
      * Permite ejecutar acciones que se realicen al momento de precionar el boton
      * de salir
@@ -1064,11 +647,6 @@ public final class Principal extends javax.swing.JFrame {
             }
         } catch (NullPointerException ex) {
         }
-    }
-
-    private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {
-        cod = evt.getKeyCode();
-        AccionesBorrado(cod, jtPorDespachar);
     }
 
     /**
@@ -1440,86 +1018,6 @@ public final class Principal extends javax.swing.JFrame {
 
         return resultado;
     }
-    VentanaDatos ventanaDatos = null;
-
-    private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {
-        int intClicks = evt.getClickCount();
-        int intBoton = evt.getButton();
-
-        //System.out.println("C:" + intClicks + " B:" + intBoton);
-
-        try {
-            jtPorDespachar.getCellEditor().stopCellEditing();
-        } catch (NullPointerException ex) {
-        }
-
-        if (intClicks == 1 && intBoton == 3) {
-            try {
-                ventanaDatos.CerrarPuertoCoordenadas();
-            } catch (NullPointerException ex) {
-            }
-            try {
-                /*
-                 * Con telefono y codigo en la tabla por despachar abrir la
-                 * ventana de datos normalmente
-                 */
-                if (!esNullFechaTablaPorDespachar()
-                        && !esNullTelefonoTablaPorDespachar()
-                        && !esNullCodigoTablaPorDespachar()) {
-                    abrirVentanaDatosCliente(1);
-                } else {
-                    /*
-                     * Sin telefono, Con Codigo y Con Hora abrir la ventana
-                     * habilitado el campo telefono para actualizar el telefono
-                     * a ese codigo
-                     */
-                    if (!esNullFechaTablaPorDespachar()
-                            && !esNullCodigoTablaPorDespachar()
-                            && esNullTelefonoTablaPorDespachar()) {
-                        abrirVentanaDatosCliente(2);
-                    } else {
-                        /**
-                         * Tiene fecha pero es nulo el codigo y el telefono
-                         * muestra la ventana para hacer una nueva insersion
-                         * si se le asigna un codigo, caso contrario es despacho
-                         * temporal
-                         */
-                        if (!esNullFechaTablaPorDespachar()
-                                && esNullCodigoTablaPorDespachar()
-                                && esNullTelefonoTablaPorDespachar()) {
-                            abrirVentanaDatosCliente(3);
-                        } else {
-                            /**
-                             * Despacho temporal sin codigo mostrar la ventana
-                             * por defecto si se quiere guardar se debe
-                             * generar un codigo en la ventana
-                             */
-                            if (!esNullFechaTablaPorDespachar()
-                                    && esNullCodigoTablaPorDespachar()
-                                    && !esNullTelefonoTablaPorDespachar()) {
-                                abrirVentanaDatosCliente(1);
-                            }
-                        }
-                    }
-                }
-
-            } catch (ArrayIndexOutOfBoundsException aex) {
-            }
-        }
-        if (intClicks == 1 && intBoton == 1) {
-            despacho = getDatosPorDespachar();
-            PonerHoraParaDespachar();
-            int filaAcc = getIntFilaSeleccionada();
-            try {
-                if (filaAcc != filaAnt) {
-                    if (filaAnt != -1) {
-                        actualizarFilaCampoTelefono(filaAnt, 1);
-                    }
-                }
-            } catch (ArrayIndexOutOfBoundsException ex) {
-            }
-        }
-    }
 
     /**
      * Comprueba si es nulo el valor que se recoje de la tabla, en el campo Fecha
@@ -1699,12 +1197,6 @@ public final class Principal extends javax.swing.JFrame {
         return datos;
     }
 
-    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {
-        desPorTabla_Campo = false;
-        getBuscarPorTelefono();
-        InicializarVariables();
-    }
-
     /**
      * Obtener el código del usuario dependiendo del telefono ingresado
      * @return String
@@ -1785,16 +1277,6 @@ public final class Principal extends javax.swing.JFrame {
         return intCodigo;
     }
 
-    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                getBuscarPorCodigo();
-                InicializarVariables();
-            }
-        });
-    }
-
     /**
      * Obtener el telefono del usuario dependiendo del codigo ingresado
      * @return String
@@ -1839,36 +1321,6 @@ public final class Principal extends javax.swing.JFrame {
             jtTelefono.setText("");
         }
         return strTelefono;
-    }
-
-    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {
-        int[] numCol = jtVehiculos.getSelectedColumns();
-        JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
-        String etiqueta = editor.getText();
-        String codEtiqueta = bd.getCodigoEtiquetaEstadoUnidad(etiqueta);
-
-        if (!codEtiqueta.equals("OCU") && !codEtiqueta.equals("ASI")) {
-            ArrayList<String> codVehiculo = new ArrayList();
-            if (numCol.length > 0) {
-                for (int i = 0; i < numCol.length; i++) {
-                    codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una Unidad primero",
-                        "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
-
-            cambiarEstadoTaxi(etiqueta, codVehiculo);
-            //insertar estado en el servidor...
-
-            jtVehiculos.setCellSelectionEnabled(false);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Este estado no se puede asignar desde aqui...",
-                    "Error...", 0);
-        }
-        jtTelefono.requestFocus();
     }
 
     /**
@@ -1994,168 +1446,6 @@ public final class Principal extends javax.swing.JFrame {
             jtVehiculos.repaint();
         } catch (NullPointerException ex) {
             System.out.println("NULL AL PINTAR EL ESTADO... pintarEstadoTaxi()");
-        }
-    }
-    private int intMinutoAnt = 0;
-    private int contador = 0;
-    private String UnidadAntesDeBorrar;
-
-    /************************************************
-    Propiedad de Cambio de la Tabla de Clientes Por Despachar
-     ************************************************/
-    private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("tableCellEditor")) {
-            int intFila = jtPorDespachar.getSelectedRow();
-            int intCol = jtPorDespachar.getSelectedColumn();
-
-            if (intCol == 7) { //Cuando cambie la celda de Munitos
-                try {
-                    /**
-                     * Antes de poner los minutos de llegada a recojer el cliente
-                     * se requiere que esté seleccionada una unidad
-                     */
-                    String strCampoUnidad = "";
-                    try {
-                        strCampoUnidad = jtPorDespachar.getValueAt(intFila, 6).toString();
-                    } catch (NullPointerException ex) {
-                    }
-                    if (!strCampoUnidad.equals("") && !strCampoUnidad.equals("0")) {
-                        jtPorDespachar.setValueAt("0", intFila, 8);
-
-                        intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 7));
-                        intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
-
-                        if (intAtraso != 0) {
-                            int res = (intMinutoAnt - intMinutos) + intAtraso;
-                            jtPorDespachar.setValueAt("" + res, intFila, 8);
-                            intMinutoAnt = intMinutos;
-                        } else {
-                            jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
-                            intMinutoAnt = intMinutos;
-                        }
-                    } else {
-                        contador++;
-                        if (contador == 2) {
-                            JOptionPane.showMessageDialog(Principal.gui,
-                                    "Debe seleccionar la unidad que recogerá al pasajero en ese tiempo...",
-                                    "Error...", 0);
-                            try {
-                                jtPorDespachar.getCellEditor().stopCellEditing();
-                            } catch (NullPointerException ex) {
-                            }
-                            jtPorDespachar.setValueAt("", intFila, 7);
-                            contador = 0;
-                        }
-                    }
-                } catch (NumberFormatException nfe) {
-                    jtPorDespachar.setValueAt("", intFila, 7);
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                }
-            }
-
-            if (intCol == 1) { //Cuando cambie la celda de telefono
-                try {
-                    if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
-                        actualizarFilaCampoTelefono(intFila, intCol);
-                    }
-                } catch (NullPointerException nex) {
-                    //System.err.println("No hay telefono recuperado de la celda...");
-                }
-                filaAnt = intFila;
-            }
-
-            if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 9) {
-                /**
-                 * Cuando cambie cualquiera de estas celdas poner la hora en
-                 * el campo de la hora
-                 */
-                String horaAntes = "";
-                try {
-                    try {
-                        horaAntes = jtPorDespachar.getValueAt(intFila, 0).toString();
-                    } catch (NullPointerException ex) {
-                    }
-                    //Poner una nueva hora cuandos edite alguno de estos campos
-                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
-                    //actualizar la lista de despachos temporales en memoria
-                    //para poder encontrar este cambio por la hora
-                    actualizarListaTMPHoraIngreso(intFila, horaAntes);
-                } catch (NullPointerException ex) {
-                } catch (ArrayIndexOutOfBoundsException aex) {
-                }
-            }
-
-            /**
-             * CAMBIO EN LA CELDA DE UNIDAD
-             */
-            if (intCol == 6) { // cambio de la celda de unidad
-                //Poner el icono de colgar el telefono
-                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
-                jlIndicadorLlamada.setIcon(img);
-                jtTelefono.setText("");
-
-                /**
-                 * Actualiza el tiempo en que se asigna una unidad a un cliente
-                 * para su despacho
-                 */
-                insertarActualizarDespachoTemporalListaTMP();
-
-                try {
-                    String cod_cli = "";
-                    try {
-                        cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
-                    } catch (ArrayIndexOutOfBoundsException aex) {
-                        cod_cli = "0";
-                    }
-                    if (jtPorDespachar.isEditing()) {
-                        jtPorDespachar.getCellEditor().cancelCellEditing();
-                    } else {
-                        String nom_cli = "";
-                        String dir_cli = "";
-                        try {
-                            nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
-                            dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
-
-                            if (!nom_cli.equals("") && !dir_cli.equals("")) {
-                                if (CampoUnidadCambio) {
-                                    activarUnidadBorrada(cod_cli);
-                                    actualizarAsignacion(intFila, intCol, cod_cli);
-                                } else {
-                                    actualizarAsignacion(intFila, intCol, cod_cli);
-                                }
-                                /**
-                                 * Enviar mensaje de direccion y cliente a la unidad
-                                 * si esta especificado en el archivo de propiedades
-                                 */
-                                try {
-                                    String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
-                                    if (sendSMS.equals("si") || sendSMS.equals("SI")
-                                            && !sendSMS.equals("") && sendSMS != null) {
-                                        /**
-                                         * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
-                                         */
-                                        enviarMensajeUnidadAsignada(intFila, intCol);
-                                    }
-                                } catch (NullPointerException nex) {
-                                    log.trace("No se a especificado la directiva [enviar_mensajes] en el archivo de configuración...");
-                                }
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
-                                jtPorDespachar.setValueAt("", intFila, 6);
-                            }
-                        } catch (NullPointerException ex) {
-                            JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
-                            jtPorDespachar.setValueAt("", intFila, 6);
-                        } catch (UnsupportedOperationException ex) {
-                            activarUnidadConDosEstados(intFila);
-                        } catch (ArrayIndexOutOfBoundsException ex) {
-                        }
-                    }
-                } catch (NullPointerException ex) {
-                    jtPorDespachar.setValueAt("", intFila, 2);
-                }
-            }
-            convertirMayuculas(jtPorDespachar, intFila);
         }
     }
 
@@ -2347,7 +1637,6 @@ public final class Principal extends javax.swing.JFrame {
         } catch (ArrayIndexOutOfBoundsException iex) {
         }
     }
-    private int filaAnt = -1;
 
     /**
      * Actualiza la fila de clientes pord espachar cuandos se ingresa un telefono
@@ -2374,10 +1663,6 @@ public final class Principal extends javax.swing.JFrame {
         }
     }
 
-    private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {
-        borrarFilasFormaSegura();
-    }
-
     /**
      * Permite utilizar un metodo generico para borrar las filas para llamarlo
      * desde donde se proceda a borrar las filas de la tabla de clietnes por
@@ -2390,67 +1675,6 @@ public final class Principal extends javax.swing.JFrame {
         }
         int intFila = jtPorDespachar.getSelectedRow();
         borrarFilaSeleccionadaPorDespachar(intFila);
-    }
-
-    private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {
-        int intFila = jtPorDespachar.getSelectedRow();
-        borrarCamposFilaSeleccionadaPorDespachar(intFila);
-    }
-
-    private void jbNuevoDespachoActionPerformed(java.awt.event.ActionEvent evt) {
-        nuevaFilaDespacho();
-    }
-
-    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {
-        validarDespacharCliente();
-    }
-
-    private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {
-        int intClicks = evt.getClickCount();
-        int intBoton = evt.getButton();
-
-        if (intClicks == 1 && intBoton == 1) {
-            try {
-                if (ventanaDatos == null) {
-                    ventanaDatos = new VentanaDatos(getDatosDespachados(), false, bd);
-                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
-                    ventanaDatos.setVisible(true);
-                } else {
-                    ventanaDatos.setDespachados(getDatosDespachados(), false);
-                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
-                    ventanaDatos.setVisible(true);
-                    ventanaDatos.setLocationRelativeTo(this);
-                }
-            } catch (ArrayIndexOutOfBoundsException aex) {
-            }
-        }
-    }
-
-    private void jtBuscarPorTelefonoActionPerformed(java.awt.event.ActionEvent evt) {
-        String txt = jtBuscarPorTelefono.getText();
-        jtBuscarPorTelefono.setText(txt.toUpperCase());
-        buscarDespachados("telefono", txt.toUpperCase());
-    }
-
-    private void jtBuscarPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {
-        String txt = jtBuscarPorCodigo.getText();
-        jtBuscarPorCodigo.setText(txt.toUpperCase());
-        buscarDespachados("codigo", txt.toUpperCase());
-    }
-
-    private void jtBuscarPorNombreActionPerformed(java.awt.event.ActionEvent evt) {
-        String txt = jtBuscarPorNombre.getText();
-        jtBuscarPorNombre.setText(txt.toUpperCase());
-        buscarDespachados("nombre", txt.toUpperCase());
-    }
-
-    private void jtVehiculosMousePressed(java.awt.event.MouseEvent evt) {
-        if (evt.getButton() == 1 && evt.getClickCount() == 1) {
-            jtVehiculos.setCellSelectionEnabled(true);
-        } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
-            String unidad = strCabecerasColumnasVehiculos[jtVehiculos.getSelectedColumn()];
-            obtenerHoraDeAsignacionEstado(unidad);
-        }
     }
 
     /**
@@ -2476,45 +1700,14 @@ public final class Principal extends javax.swing.JFrame {
         jtVehiculos.setCellSelectionEnabled(false);
     }
 
-    private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        if ((menu == null) || (!menu.isDisplayable())) {
-            menu = new INICIO(sesion, Principal.bd, arcConfig);
-            menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            menu.setResizable(false);
-        }
-        menu.setVisible(true);
-        menu.setLocationRelativeTo(this);
-    }
     /*
      * Ventana de consultar los clientes por nombre
      */
     private ConsultaClientes cliente;
-
-    private void jbBuscarClienteNombreActionPerformed(java.awt.event.ActionEvent evt) {
-        if ((cliente == null) || (!cliente.isDisplayable())) {
-            cliente = new ConsultaClientes(Principal.bd);
-            cliente.setLocationRelativeTo(this);
-            cliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            cliente.setResizable(false);
-        }
-    }
     /**
      * Ventana para registrar los pendientes de despacho
      */
     private PendientesGUI pendientes;
-
-    private void jbPendientesActionPerformed(java.awt.event.ActionEvent evt) {
-        if ((pendientes == null) || (!pendientes.isDisplayable())) {
-            pendientes = new PendientesGUI(Principal.bd);
-            pendientes.setLocationRelativeTo(this);
-            pendientes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            pendientes.setResizable(false);
-        }
-    }
-
-    private void jtPorDespacharFocusLost(java.awt.event.FocusEvent evt) {
-        jtCodigo.requestFocus();
-    }
 
     /**
      * Permite hacer un filtrado de todos los despachados y mostrar en la tabla 
@@ -2703,29 +1896,6 @@ public final class Principal extends javax.swing.JFrame {
             }
         }
     }
-    /**
-     * Comprueba el tiempo en que se piensa recojer al cliente por cada minuto
-     * para saber si el taxista se atrasa o no
-     */
-    Timer tiempo = new Timer(60000, new ActionListener() {
-
-        public void actionPerformed(ActionEvent ae) {
-            int N_filas = jtPorDespachar.getRowCount();
-            for (int i = 0; i < N_filas; i++) {
-                String dato = (String) jtPorDespachar.getValueAt(i, 8);
-                String minuto = (String) jtPorDespachar.getValueAt(i, 7);
-                try {
-                    if (!dato.equals("") && !minuto.equals("")) {
-                        int atraso = Integer.parseInt(dato);
-                        if (!minuto.equals("0")) {
-                            jtPorDespachar.setValueAt("" + (atraso + 1), i, 8);
-                        }
-                    }
-                } catch (NullPointerException ex) {
-                }
-            }
-        }
-    });
 
     /**
      * @param args the command line arguments
@@ -2750,52 +1920,6 @@ public final class Principal extends javax.swing.JFrame {
         //redimencionarTablaVehiculos();
         gui.setTitle("Despachos KRADAC - " + sesion[1] + " || " + turno + " || " + sesion[2]);
     }
-    // Variables declaration - do not modify                     
-    private javax.swing.JButton btnColor;
-    private static javax.swing.JComboBox cbEstadosTaxi;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JButton jbBuscarClienteNombre;
-    private javax.swing.JButton jbDespachar;
-    private javax.swing.JButton jbEliminarFila;
-    private javax.swing.JButton jbLimpiarCampos;
-    private javax.swing.JButton jbMenu;
-    private javax.swing.JButton jbNuevoDespacho;
-    private javax.swing.JButton jbPendientes;
-    private javax.swing.JButton jbSalir;
-    private javax.swing.JLabel jlIndicadorLlamada;
-    private javax.swing.JLabel jlSenalInternet;
-    private static javax.swing.JPanel jpPendiente;
-    private javax.swing.JScrollPane jsVehiculos;
-    private javax.swing.JTextField jtBuscarPorCodigo;
-    private javax.swing.JTextField jtBuscarPorNombre;
-    private javax.swing.JTextField jtBuscarPorTelefono;
-    private javax.swing.JTextField jtCodigo;
-    private static javax.swing.JTable jtDespachados;
-    private static javax.swing.JTable jtPorDespachar;
-    private javax.swing.JTextField jtTelefono;
-    private static javax.swing.JTable jtVehiculos;
-    public static javax.swing.JLabel lblAlarmaPendiente;
-    private static javax.swing.JLabel lblCliente;
-    private javax.swing.JLabel lblFecha;
-    private static javax.swing.JLabel lblRecordar;
-    private javax.swing.JLabel lblReloj;
-    public static javax.swing.JLabel lblSenal;
-    // End of variables declaration                   
-    private static TrabajoTablas trabajarTabla;
 
     /**
      * Ingresa un despacho en la tabla de clientes por Despachar en la
@@ -3130,4 +2254,1047 @@ public final class Principal extends javax.swing.JFrame {
             hiloSonido.start();
         }
     }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constructores">
+    //--------------------------------------------------------------------------
+    // Constructores
+    //--------------------------------------------------------------------------
+    /**
+     * Constructor para recibir los datos de sesion desde el menu principal
+     * @param String[] sesion -> (0)=nickUsuario,(1)=id_empresa,(2)=NombreUsuario
+     */
+    public Principal(String[] info, ConexionBase conec) {
+        setSession(info);
+        Principal.main(null);
+        Principal.bd = conec;
+    }
+
+    public Principal(String[] info, ConexionBase conec, Properties archivo) {
+        setSession(info);
+        Principal.main(null);
+        Principal.bd = conec;
+        Principal.arcConfig = archivo;
+        log.trace("Iniciar la aplicacion de despachos...");
+        log.trace("Usuario: {}", sesion[2]);
+        log.trace("Rol: {}", sesion[3]);
+    }
+
+    /**
+     * Constructor Por defecto
+     */
+    public Principal() {
+        initComponents();
+        ConfiguracionInicial();
+    }
+
+    // </editor-fold>
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jsVehiculos = new javax.swing.JScrollPane();
+        jtVehiculos = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtPorDespachar = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jtDespachados = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jtTelefono = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jtCodigo = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        cbEstadosTaxi = new javax.swing.JComboBox();
+        btnColor = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jbEliminarFila = new javax.swing.JButton();
+        jbLimpiarCampos = new javax.swing.JButton();
+        jbNuevoDespacho = new javax.swing.JButton();
+        jbDespachar = new javax.swing.JButton();
+        lblReloj = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jtBuscarPorNombre = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jtBuscarPorTelefono = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jtBuscarPorCodigo = new javax.swing.JTextField();
+        jlIndicadorLlamada = new javax.swing.JLabel();
+        jlSenalInternet = new javax.swing.JLabel();
+        jpPendiente = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        lblRecordar = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jbSalir = new javax.swing.JButton();
+        jbMenu = new javax.swing.JButton();
+        jbBuscarClienteNombre = new javax.swing.JButton();
+        jbPendientes = new javax.swing.JButton();
+        lblFecha = new javax.swing.JLabel();
+        lblSenal = new javax.swing.JLabel();
+        lblAlarmaPendiente = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jsVehiculos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsVehiculos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jsVehiculos.setAutoscrolls(true);
+        jsVehiculos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jtVehiculos.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jtVehiculos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jtVehiculos.setCellSelectionEnabled(true);
+        jtVehiculos.getTableHeader().setReorderingAllowed(false);
+        jtVehiculos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtVehiculosMousePressed(evt);
+            }
+        });
+        jsVehiculos.setViewportView(jtVehiculos);
+        jtVehiculos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
+        jtPorDespachar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Hora", "Télefono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, false, true, true, true, true, true, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtPorDespachar.getTableHeader().setReorderingAllowed(false);
+        jtPorDespachar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtPorDespacharMousePressed(evt);
+            }
+        });
+        jtPorDespachar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtPorDespacharFocusLost(evt);
+            }
+        });
+        jtPorDespachar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jtPorDespacharPropertyChange(evt);
+            }
+        });
+        jtPorDespachar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtPorDespacharKeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtPorDespachar);
+        jtPorDespachar.getColumnModel().getColumn(0).setMinWidth(62);
+        jtPorDespachar.getColumnModel().getColumn(0).setMaxWidth(62);
+        jtPorDespachar.getColumnModel().getColumn(1).setMinWidth(80);
+        jtPorDespachar.getColumnModel().getColumn(1).setMaxWidth(80);
+        jtPorDespachar.getColumnModel().getColumn(2).setMinWidth(50);
+        jtPorDespachar.getColumnModel().getColumn(2).setMaxWidth(50);
+        jtPorDespachar.getColumnModel().getColumn(3).setPreferredWidth(150);
+        jtPorDespachar.getColumnModel().getColumn(4).setPreferredWidth(150);
+        jtPorDespachar.getColumnModel().getColumn(5).setPreferredWidth(250);
+        jtPorDespachar.getColumnModel().getColumn(6).setMinWidth(30);
+        jtPorDespachar.getColumnModel().getColumn(6).setMaxWidth(30);
+        jtPorDespachar.getColumnModel().getColumn(7).setMinWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(7).setMaxWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(8).setMinWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(8).setMaxWidth(28);
+        jtPorDespachar.getColumnModel().getColumn(9).setMinWidth(100);
+        jtPorDespachar.getColumnModel().getColumn(9).setMaxWidth(100);
+
+        jtDespachados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Hora", "Teléfono", "Código", "Nombre", "Barrio", "Dirección", "UNI", "MIN", "ATR", "NOTA"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtDespachados.getTableHeader().setReorderingAllowed(false);
+        jtDespachados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtDespachadosMousePressed(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jtDespachados);
+        jtDespachados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jtDespachados.getColumnModel().getColumn(0).setMinWidth(62);
+        jtDespachados.getColumnModel().getColumn(0).setMaxWidth(62);
+        jtDespachados.getColumnModel().getColumn(1).setMinWidth(80);
+        jtDespachados.getColumnModel().getColumn(1).setMaxWidth(80);
+        jtDespachados.getColumnModel().getColumn(2).setMinWidth(50);
+        jtDespachados.getColumnModel().getColumn(2).setMaxWidth(50);
+        jtDespachados.getColumnModel().getColumn(3).setPreferredWidth(150);
+        jtDespachados.getColumnModel().getColumn(4).setPreferredWidth(150);
+        jtDespachados.getColumnModel().getColumn(5).setPreferredWidth(250);
+        jtDespachados.getColumnModel().getColumn(6).setMinWidth(30);
+        jtDespachados.getColumnModel().getColumn(6).setMaxWidth(30);
+        jtDespachados.getColumnModel().getColumn(7).setMinWidth(28);
+        jtDespachados.getColumnModel().getColumn(7).setMaxWidth(28);
+        jtDespachados.getColumnModel().getColumn(8).setMinWidth(28);
+        jtDespachados.getColumnModel().getColumn(8).setMaxWidth(28);
+        jtDespachados.getColumnModel().getColumn(9).setMinWidth(100);
+        jtDespachados.getColumnModel().getColumn(9).setMaxWidth(100);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setText("Teléfono:");
+
+        jtTelefono.setFont(new java.awt.Font("Arial", 1, 20));
+        jtTelefono.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtTelefono.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtTelefonoActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setText("Código:");
+
+        jtCodigo.setFont(new java.awt.Font("Arial", 1, 20));
+        jtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtCodigoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setText("Cambiar Estado:");
+
+        btnColor.setText("Cambiar");
+        btnColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColorActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnColor)
+                        .addContainerGap())
+                    .addComponent(jLabel3)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnColor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstadosTaxi, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jbEliminarFila.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/eliminar.png"))); // NOI18N
+        jbEliminarFila.setToolTipText("Eliminar Filas Seleccionada (F8)");
+        jbEliminarFila.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEliminarFilaActionPerformed(evt);
+            }
+        });
+
+        jbLimpiarCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/limpiar.png"))); // NOI18N
+        jbLimpiarCampos.setToolTipText("Limpia los campos de texto para hacer un cambio y despacho temporal (F7)");
+        jbLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbLimpiarCamposActionPerformed(evt);
+            }
+        });
+
+        jbNuevoDespacho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/mas.png"))); // NOI18N
+        jbNuevoDespacho.setToolTipText("Añade una fila para despachar... (Insert)");
+        jbNuevoDespacho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNuevoDespachoActionPerformed(evt);
+            }
+        });
+
+        jbDespachar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/enviar.png"))); // NOI18N
+        jbDespachar.setToolTipText("Despachar (F12)");
+        jbDespachar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDespacharActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbEliminarFila, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbDespachar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbNuevoDespacho, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbDespachar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbLimpiarCampos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbEliminarFila, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        lblReloj.setFont(new java.awt.Font("Arial", 1, 36));
+        lblReloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblReloj.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/reloj.png"))); // NOI18N
+        lblReloj.setText("Hora");
+        lblReloj.setFocusable(false);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setText("Nombre:");
+
+        jtBuscarPorNombre.setColumns(15);
+        jtBuscarPorNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtBuscarPorNombreActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setText("Teléfono:");
+
+        jtBuscarPorTelefono.setColumns(15);
+        jtBuscarPorTelefono.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtBuscarPorTelefonoActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setText("Código:");
+
+        jtBuscarPorCodigo.setColumns(15);
+        jtBuscarPorCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtBuscarPorCodigoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addGap(1, 1, 1)
+                .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(3, 3, 3)
+                .addComponent(jtBuscarPorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addGap(6, 6, 6)
+                .addComponent(jtBuscarPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jtBuscarPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtBuscarPorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jtBuscarPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addContainerGap())
+        );
+
+        jlIndicadorLlamada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"))); // NOI18N
+
+        jLabel7.setText("Se debe despachar el cliente en");
+
+        lblRecordar.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblRecordar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRecordar.setText("min");
+
+        jLabel8.setText("min");
+
+        lblCliente.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblCliente.setText("cliente");
+
+        javax.swing.GroupLayout jpPendienteLayout = new javax.swing.GroupLayout(jpPendiente);
+        jpPendiente.setLayout(jpPendienteLayout);
+        jpPendienteLayout.setHorizontalGroup(
+            jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPendienteLayout.createSequentialGroup()
+                .addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpPendienteLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblRecordar)
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel8))
+                    .addComponent(lblCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jpPendienteLayout.setVerticalGroup(
+            jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPendienteLayout.createSequentialGroup()
+                .addGroup(jpPendienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(lblRecordar, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13))
+        );
+
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/salir.png"))); // NOI18N
+        jbSalir.setText("Salir");
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
+
+        jbMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/menu.jpg"))); // NOI18N
+        jbMenu.setText("Menú");
+        jbMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMenuActionPerformed(evt);
+            }
+        });
+
+        jbBuscarClienteNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/buscar.png"))); // NOI18N
+        jbBuscarClienteNombre.setText("Clientes");
+        jbBuscarClienteNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClienteNombreActionPerformed(evt);
+            }
+        });
+
+        jbPendientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/pendientes.png"))); // NOI18N
+        jbPendientes.setText("Pendientes");
+        jbPendientes.setActionCommand("jbPendientes");
+        jbPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPendientesActionPerformed(evt);
+            }
+        });
+
+        lblFecha.setFont(new java.awt.Font("Arial", 1, 20));
+        lblFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calendario.png"))); // NOI18N
+        lblFecha.setText("Fecha");
+
+        lblSenal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nosenal.png"))); // NOI18N
+
+        lblAlarmaPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/alarma.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jbSalir)
+                .addGap(18, 18, 18)
+                .addComponent(jbMenu)
+                .addGap(18, 18, 18)
+                .addComponent(jbBuscarClienteNombre)
+                .addGap(18, 18, 18)
+                .addComponent(jbPendientes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
+                .addComponent(lblAlarmaPendiente)
+                .addGap(18, 18, 18)
+                .addComponent(lblSenal)
+                .addGap(18, 18, 18)
+                .addComponent(lblFecha))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblAlarmaPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+            .addComponent(lblSenal, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jbSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbBuscarClienteNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addComponent(jbPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jsVehiculos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlIndicadorLlamada)
+                        .addGap(18, 18, 18)
+                        .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(lblReloj)
+                        .addGap(41, 41, 41)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlSenalInternet)
+                        .addGap(111, 111, 111))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jsVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblReloj)
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jpPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jlIndicadorLlamada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(11, 11, 11)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, 0, 46, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlSenalInternet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width-1037)/2, (screenSize.height-793)/2, 1037, 793);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        salirVentanaPrincipal();
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jtPorDespacharKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPorDespacharKeyPressed
+        cod = evt.getKeyCode();
+        AccionesBorrado(cod, jtPorDespachar);
+    }//GEN-LAST:event_jtPorDespacharKeyPressed
+
+    private void jtPorDespacharMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPorDespacharMousePressed
+        int intClicks = evt.getClickCount();
+        int intBoton = evt.getButton();
+
+        //System.out.println("C:" + intClicks + " B:" + intBoton);
+
+        try {
+            jtPorDespachar.getCellEditor().stopCellEditing();
+        } catch (NullPointerException ex) {
+        }
+
+        if (intClicks == 1 && intBoton == 3) {
+            try {
+                ventanaDatos.CerrarPuertoCoordenadas();
+            } catch (NullPointerException ex) {
+            }
+            try {
+                /*
+                 * Con telefono y codigo en la tabla por despachar abrir la
+                 * ventana de datos normalmente
+                 */
+                if (!esNullFechaTablaPorDespachar()
+                        && !esNullTelefonoTablaPorDespachar()
+                        && !esNullCodigoTablaPorDespachar()) {
+                    abrirVentanaDatosCliente(1);
+                } else {
+                    /*
+                     * Sin telefono, Con Codigo y Con Hora abrir la ventana
+                     * habilitado el campo telefono para actualizar el telefono
+                     * a ese codigo
+                     */
+                    if (!esNullFechaTablaPorDespachar()
+                            && !esNullCodigoTablaPorDespachar()
+                            && esNullTelefonoTablaPorDespachar()) {
+                        abrirVentanaDatosCliente(2);
+                    } else {
+                        /**
+                         * Tiene fecha pero es nulo el codigo y el telefono
+                         * muestra la ventana para hacer una nueva insersion
+                         * si se le asigna un codigo, caso contrario es despacho
+                         * temporal
+                         */
+                        if (!esNullFechaTablaPorDespachar()
+                                && esNullCodigoTablaPorDespachar()
+                                && esNullTelefonoTablaPorDespachar()) {
+                            abrirVentanaDatosCliente(3);
+                        } else {
+                            /**
+                             * Despacho temporal sin codigo mostrar la ventana
+                             * por defecto si se quiere guardar se debe
+                             * generar un codigo en la ventana
+                             */
+                            if (!esNullFechaTablaPorDespachar()
+                                    && esNullCodigoTablaPorDespachar()
+                                    && !esNullTelefonoTablaPorDespachar()) {
+                                abrirVentanaDatosCliente(1);
+                            }
+                        }
+                    }
+                }
+
+            } catch (ArrayIndexOutOfBoundsException aex) {
+            }
+        }
+        if (intClicks == 1 && intBoton == 1) {
+            despacho = getDatosPorDespachar();
+            PonerHoraParaDespachar();
+            int filaAcc = getIntFilaSeleccionada();
+            try {
+                if (filaAcc != filaAnt) {
+                    if (filaAnt != -1) {
+                        actualizarFilaCampoTelefono(filaAnt, 1);
+                    }
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+            }
+        }
+    }//GEN-LAST:event_jtPorDespacharMousePressed
+
+    private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefonoActionPerformed
+        desPorTabla_Campo = false;
+        getBuscarPorTelefono();
+        InicializarVariables();
+    }//GEN-LAST:event_jtTelefonoActionPerformed
+
+    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                getBuscarPorCodigo();
+                InicializarVariables();
+            }
+        });
+    }//GEN-LAST:event_jtCodigoActionPerformed
+
+    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+        int[] numCol = jtVehiculos.getSelectedColumns();
+        JButton editor = (JButton) cbEstadosTaxi.getEditor().getEditorComponent();
+        String etiqueta = editor.getText();
+        String codEtiqueta = bd.getCodigoEtiquetaEstadoUnidad(etiqueta);
+
+        if (!codEtiqueta.equals("OCU") && !codEtiqueta.equals("ASI")) {
+            ArrayList<String> codVehiculo = new ArrayList();
+            if (numCol.length > 0) {
+                for (int i = 0; i < numCol.length; i++) {
+                    codVehiculo.add(strCabecerasColumnasVehiculos[numCol[i]]);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una Unidad primero",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
+            cambiarEstadoTaxi(etiqueta, codVehiculo);
+            //insertar estado en el servidor...
+
+            jtVehiculos.setCellSelectionEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Este estado no se puede asignar desde aqui...",
+                    "Error...", 0);
+        }
+        jtTelefono.requestFocus();
+    }//GEN-LAST:event_btnColorActionPerformed
+
+    /************************************************
+    Propiedad de Cambio de la Tabla de Clientes Por Despachar
+     ************************************************/
+    private void jtPorDespacharPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jtPorDespacharPropertyChange
+        if (evt.getPropertyName().equals("tableCellEditor")) {
+            int intFila = jtPorDespachar.getSelectedRow();
+            int intCol = jtPorDespachar.getSelectedColumn();
+
+            if (intCol == 7) { //Cuando cambie la celda de Munitos
+                try {
+                    /**
+                     * Antes de poner los minutos de llegada a recojer el cliente
+                     * se requiere que esté seleccionada una unidad
+                     */
+                    String strCampoUnidad = "";
+                    try {
+                        strCampoUnidad = jtPorDespachar.getValueAt(intFila, 6).toString();
+                    } catch (NullPointerException ex) {
+                    }
+                    if (!strCampoUnidad.equals("") && !strCampoUnidad.equals("0")) {
+                        jtPorDespachar.setValueAt("0", intFila, 8);
+
+                        intMinutos = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 7));
+                        intAtraso = Integer.parseInt((String) jtPorDespachar.getValueAt(intFila, 8));
+
+                        if (intAtraso != 0) {
+                            int res = (intMinutoAnt - intMinutos) + intAtraso;
+                            jtPorDespachar.setValueAt("" + res, intFila, 8);
+                            intMinutoAnt = intMinutos;
+                        } else {
+                            jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
+                            intMinutoAnt = intMinutos;
+                        }
+                    } else {
+                        contador++;
+                        if (contador == 2) {
+                            JOptionPane.showMessageDialog(Principal.gui,
+                                    "Debe seleccionar la unidad que recogerá al pasajero en ese tiempo...",
+                                    "Error...", 0);
+                            try {
+                                jtPorDespachar.getCellEditor().stopCellEditing();
+                            } catch (NullPointerException ex) {
+                            }
+                            jtPorDespachar.setValueAt("", intFila, 7);
+                            contador = 0;
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    jtPorDespachar.setValueAt("", intFila, 7);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                }
+            }
+
+            if (intCol == 1) { //Cuando cambie la celda de telefono
+                try {
+                    if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
+                        actualizarFilaCampoTelefono(intFila, intCol);
+                    }
+                } catch (NullPointerException nex) {
+                    //System.err.println("No hay telefono recuperado de la celda...");
+                }
+                filaAnt = intFila;
+            }
+
+            if (intCol == 3 || intCol == 4 || intCol == 5 || intCol == 9) {
+                /**
+                 * Cuando cambie cualquiera de estas celdas poner la hora en
+                 * el campo de la hora
+                 */
+                String horaAntes = "";
+                try {
+                    try {
+                        horaAntes = jtPorDespachar.getValueAt(intFila, 0).toString();
+                    } catch (NullPointerException ex) {
+                    }
+                    //Poner una nueva hora cuandos edite alguno de estos campos
+                    jtPorDespachar.setValueAt(funciones.getHora(), intFila, 0);
+                    //actualizar la lista de despachos temporales en memoria
+                    //para poder encontrar este cambio por la hora
+                    actualizarListaTMPHoraIngreso(intFila, horaAntes);
+                } catch (NullPointerException ex) {
+                } catch (ArrayIndexOutOfBoundsException aex) {
+                }
+            }
+
+            /**
+             * CAMBIO EN LA CELDA DE UNIDAD
+             */
+            if (intCol == 6) { // cambio de la celda de unidad
+                //Poner el icono de colgar el telefono
+                Icon img = new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/nollamada.png"));
+                jlIndicadorLlamada.setIcon(img);
+                jtTelefono.setText("");
+
+                /**
+                 * Actualiza el tiempo en que se asigna una unidad a un cliente
+                 * para su despacho
+                 */
+                insertarActualizarDespachoTemporalListaTMP();
+
+                try {
+                    String cod_cli = "";
+                    try {
+                        cod_cli = jtPorDespachar.getValueAt(intFila, 2).toString();
+                    } catch (ArrayIndexOutOfBoundsException aex) {
+                        cod_cli = "0";
+                    }
+                    if (jtPorDespachar.isEditing()) {
+                        jtPorDespachar.getCellEditor().cancelCellEditing();
+                    } else {
+                        String nom_cli = "";
+                        String dir_cli = "";
+                        try {
+                            nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
+                            dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+
+                            if (!nom_cli.equals("") && !dir_cli.equals("")) {
+                                if (CampoUnidadCambio) {
+                                    activarUnidadBorrada(cod_cli);
+                                    actualizarAsignacion(intFila, intCol, cod_cli);
+                                } else {
+                                    actualizarAsignacion(intFila, intCol, cod_cli);
+                                }
+                                /**
+                                 * Enviar mensaje de direccion y cliente a la unidad
+                                 * si esta especificado en el archivo de propiedades
+                                 */
+                                try {
+                                    String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
+                                    if (sendSMS.equals("si") || sendSMS.equals("SI")
+                                            && !sendSMS.equals("") && sendSMS != null) {
+                                        /**
+                                         * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                         */
+                                        enviarMensajeUnidadAsignada(intFila, intCol);
+                                    }
+                                } catch (NullPointerException nex) {
+                                    log.trace("No se a especificado la directiva [enviar_mensajes] en el archivo de configuración...");
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Primero ingresar el nombre del cliente y la dirección, antes de asignar una unidad...", "Error", 0);
+                                jtPorDespachar.setValueAt("", intFila, 6);
+                            }
+                        } catch (NullPointerException ex) {
+                            JOptionPane.showMessageDialog(this, "<html>La <b>UNIDAD</b> ingresada no existe...</html>", "Error", 0);
+                            jtPorDespachar.setValueAt("", intFila, 6);
+                        } catch (UnsupportedOperationException ex) {
+                            activarUnidadConDosEstados(intFila);
+                        } catch (ArrayIndexOutOfBoundsException ex) {
+                        }
+                    }
+                } catch (NullPointerException ex) {
+                    jtPorDespachar.setValueAt("", intFila, 2);
+                }
+            }
+            convertirMayuculas(jtPorDespachar, intFila);
+        }
+    }//GEN-LAST:event_jtPorDespacharPropertyChange
+
+    private void jbEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarFilaActionPerformed
+        borrarFilasFormaSegura();
+    }//GEN-LAST:event_jbEliminarFilaActionPerformed
+
+    private void jbLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpiarCamposActionPerformed
+        int intFila = jtPorDespachar.getSelectedRow();
+        borrarCamposFilaSeleccionadaPorDespachar(intFila);
+    }//GEN-LAST:event_jbLimpiarCamposActionPerformed
+
+    private void jbNuevoDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoDespachoActionPerformed
+        nuevaFilaDespacho();
+    }//GEN-LAST:event_jbNuevoDespachoActionPerformed
+
+    private void jbDespacharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDespacharActionPerformed
+        validarDespacharCliente();
+    }//GEN-LAST:event_jbDespacharActionPerformed
+
+    private void jtDespachadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDespachadosMousePressed
+        int intClicks = evt.getClickCount();
+        int intBoton = evt.getButton();
+
+        if (intClicks == 1 && intBoton == 1) {
+            try {
+                if (ventanaDatos == null) {
+                    ventanaDatos = new VentanaDatos(getDatosDespachados(), false, bd);
+                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
+                    ventanaDatos.setVisible(true);
+                } else {
+                    ventanaDatos.setDespachados(getDatosDespachados(), false);
+                    ventanaDatos.setDatosFila(jtDespachados, getIntFilaSeleccionadaDespachados());
+                    ventanaDatos.setVisible(true);
+                    ventanaDatos.setLocationRelativeTo(this);
+                }
+            } catch (ArrayIndexOutOfBoundsException aex) {
+            }
+        }
+    }//GEN-LAST:event_jtDespachadosMousePressed
+
+    private void jtBuscarPorTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorTelefonoActionPerformed
+        String txt = jtBuscarPorTelefono.getText();
+        jtBuscarPorTelefono.setText(txt.toUpperCase());
+        buscarDespachados("telefono", txt.toUpperCase());
+    }//GEN-LAST:event_jtBuscarPorTelefonoActionPerformed
+
+    private void jtBuscarPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorCodigoActionPerformed
+        String txt = jtBuscarPorCodigo.getText();
+        jtBuscarPorCodigo.setText(txt.toUpperCase());
+        buscarDespachados("codigo", txt.toUpperCase());
+    }//GEN-LAST:event_jtBuscarPorCodigoActionPerformed
+
+    private void jtBuscarPorNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarPorNombreActionPerformed
+        String txt = jtBuscarPorNombre.getText();
+        jtBuscarPorNombre.setText(txt.toUpperCase());
+        buscarDespachados("nombre", txt.toUpperCase());
+    }//GEN-LAST:event_jtBuscarPorNombreActionPerformed
+
+    private void jtVehiculosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtVehiculosMousePressed
+        if (evt.getButton() == 1 && evt.getClickCount() == 1) {
+            jtVehiculos.setCellSelectionEnabled(true);
+        } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
+            String unidad = strCabecerasColumnasVehiculos[jtVehiculos.getSelectedColumn()];
+            obtenerHoraDeAsignacionEstado(unidad);
+        }
+    }//GEN-LAST:event_jtVehiculosMousePressed
+
+    private void jbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMenuActionPerformed
+        if ((menu == null) || (!menu.isDisplayable())) {
+            menu = new INICIO(sesion, Principal.bd, arcConfig);
+            menu.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            menu.setResizable(false);
+        }
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jbMenuActionPerformed
+
+    private void jbBuscarClienteNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteNombreActionPerformed
+        if ((cliente == null) || (!cliente.isDisplayable())) {
+            cliente = new ConsultaClientes(Principal.bd);
+            cliente.setLocationRelativeTo(this);
+            cliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            cliente.setResizable(false);
+        }
+    }//GEN-LAST:event_jbBuscarClienteNombreActionPerformed
+
+    private void jbPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPendientesActionPerformed
+        if ((pendientes == null) || (!pendientes.isDisplayable())) {
+            pendientes = new PendientesGUI(Principal.bd);
+            pendientes.setLocationRelativeTo(this);
+            pendientes.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            pendientes.setResizable(false);
+        }
+    }//GEN-LAST:event_jbPendientesActionPerformed
+
+    private void jtPorDespacharFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPorDespacharFocusLost
+        jtCodigo.requestFocus();
+    }//GEN-LAST:event_jtPorDespacharFocusLost
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnColor;
+    private static javax.swing.JComboBox cbEstadosTaxi;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jbBuscarClienteNombre;
+    private javax.swing.JButton jbDespachar;
+    private javax.swing.JButton jbEliminarFila;
+    private javax.swing.JButton jbLimpiarCampos;
+    private javax.swing.JButton jbMenu;
+    private javax.swing.JButton jbNuevoDespacho;
+    private javax.swing.JButton jbPendientes;
+    private javax.swing.JButton jbSalir;
+    private javax.swing.JLabel jlIndicadorLlamada;
+    private javax.swing.JLabel jlSenalInternet;
+    private static javax.swing.JPanel jpPendiente;
+    private javax.swing.JScrollPane jsVehiculos;
+    private javax.swing.JTextField jtBuscarPorCodigo;
+    private javax.swing.JTextField jtBuscarPorNombre;
+    private javax.swing.JTextField jtBuscarPorTelefono;
+    private javax.swing.JTextField jtCodigo;
+    private static javax.swing.JTable jtDespachados;
+    private static javax.swing.JTable jtPorDespachar;
+    private javax.swing.JTextField jtTelefono;
+    private static javax.swing.JTable jtVehiculos;
+    public static javax.swing.JLabel lblAlarmaPendiente;
+    private static javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblFecha;
+    private static javax.swing.JLabel lblRecordar;
+    private javax.swing.JLabel lblReloj;
+    public static javax.swing.JLabel lblSenal;
+    // End of variables declaration//GEN-END:variables
 }

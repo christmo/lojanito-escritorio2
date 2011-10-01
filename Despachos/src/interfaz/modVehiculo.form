@@ -67,7 +67,7 @@
                                   </Group>
                                   <Component id="cmbConductor" alignment="0" pref="355" max="32767" attributes="3"/>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="txtModelo" pref="227" max="32767" attributes="0"/>
+                                      <Component id="txtModelo" pref="261" max="32767" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -425,9 +425,6 @@
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbConductorActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbConductorAux">
       <Properties>
@@ -530,9 +527,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtSOAT">
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtSOATFocusLost"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

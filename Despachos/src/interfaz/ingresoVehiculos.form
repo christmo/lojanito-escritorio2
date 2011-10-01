@@ -60,7 +60,7 @@
                               <Component id="txtModelo" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace min="18" pref="18" max="18" attributes="0"/>
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="45" max="32767" attributes="0"/>
+                              <EmptySpace pref="79" max="32767" attributes="0"/>
                               <Component id="spAño" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="txtRegistroMunicipal" alignment="0" pref="295" max="32767" attributes="1"/>

@@ -222,7 +222,7 @@ public class funcionesUtilidad {
      */
     public String getHora() {
         Calendar calendario = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(calendario.getTime());
     }
 
