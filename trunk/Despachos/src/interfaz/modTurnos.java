@@ -1,5 +1,5 @@
-package interfaz;//GEN-FIRST:event_btnCancelarActionPerformed
-//GEN-LAST:event_btnCancelarActionPerformed
+package interfaz;
+
 import BaseDatos.ConexionBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,121 +41,6 @@ public class modTurnos extends javax.swing.JDialog {
         //cargar turnos existentes
         extraerTurnos(tblTurnos);
     }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
-
-        btnCalcular = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblTurnos = new javax.swing.JTable();
-        cantidad = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        horaTurno = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
-        btnGuardar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnCalcular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calcular.png"))); // NOI18N
-        btnCalcular.setText("Calcular");
-        btnCalcular.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalcularActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, 50));
-
-        tblTurnos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Turno", "H. Inicio", "H. Fin"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblTurnos.setToolTipText("Turnos para Despacho");
-        tblTurnos.getTableHeader().setResizingAllowed(false);
-        tblTurnos.getTableHeader().setReorderingAllowed(false);
-        tblTurnos.setUpdateSelectionOnSort(false);
-        jScrollPane1.setViewportView(tblTurnos);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 170, 120));
-
-        cantidad.setModel(new javax.swing.SpinnerNumberModel(4, 1, 23, 1));
-        getContentPane().add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 40, -1));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel2.setText("Cantidad de Turnos");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 22));
-
-        jLabel3.setText("Primer Turno");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 80, 22));
-
-        horaTurno.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1282603115156L), null, null, java.util.Calendar.HOUR));
-        getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 68, -1));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel1.setText("Hora de Inicio");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
-
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
-
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
-        btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
-    }// </editor-fold>                        
-
-    private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        colocarNuevosTurnos(tblTurnos, calcularTurnos(horaTurno));
-    }                                           
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        try {
-            super.dispose();
-        } catch (Throwable ex) {
-            Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }                                           
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        grabarTurnos(tblTurnos);
-
-}                                          
-    // Variables declaration - do not modify                     
-    private javax.swing.JButton btnCalcular;
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JSpinner cantidad;
-    private javax.swing.JSpinner horaTurno;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblTurnos;
-    // End of variables declaration                   
 
     /**
      * Cambia el formato del Spinner para presentar
@@ -318,4 +203,118 @@ public class modTurnos extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "DEBE CREAR TURNOS ANTES DE GUARDAR");
         }
     }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        btnCalcular = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblTurnos = new javax.swing.JTable();
+        cantidad = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        horaTurno = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        btnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnCalcular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/calcular.png"))); // NOI18N
+        btnCalcular.setText("Calcular");
+        btnCalcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalcularActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCalcular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, 50));
+
+        tblTurnos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Turno", "H. Inicio", "H. Fin"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblTurnos.setToolTipText("Turnos para Despacho");
+        tblTurnos.getTableHeader().setResizingAllowed(false);
+        tblTurnos.getTableHeader().setReorderingAllowed(false);
+        tblTurnos.setUpdateSelectionOnSort(false);
+        jScrollPane1.setViewportView(tblTurnos);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 170, 120));
+
+        cantidad.setModel(new javax.swing.SpinnerNumberModel(4, 1, 23, 1));
+        getContentPane().add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 40, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setText("Cantidad de Turnos");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 22));
+
+        jLabel3.setText("Primer Turno");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 80, 22));
+
+        horaTurno.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1282603115156L), null, null, java.util.Calendar.HOUR));
+        getContentPane().add(horaTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 68, -1));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setText("Hora de Inicio");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 100, -1));
+
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 130, 50));
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 130, 50));
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
+        colocarNuevosTurnos(tblTurnos, calcularTurnos(horaTurno));
+    }//GEN-LAST:event_btnCalcularActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        try {
+            super.dispose();
+        } catch (Throwable ex) {
+            Logger.getLogger(modTurnos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        grabarTurnos(tblTurnos);
+}//GEN-LAST:event_btnGuardarActionPerformed
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCalcular;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JSpinner cantidad;
+    private javax.swing.JSpinner horaTurno;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblTurnos;
+    // End of variables declaration//GEN-END:variables
 }
