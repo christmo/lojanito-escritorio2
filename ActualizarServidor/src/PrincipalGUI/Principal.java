@@ -45,7 +45,6 @@ public class Principal {
             ActualizarServidorKRADAC actualizar = new ActualizarServidorKRADAC(filasRespaldadas, bd);
             actualizar.start();
 
-
         } catch (FileNotFoundException ex) {
             log.trace(ex.getMessage(), ex);
         }
