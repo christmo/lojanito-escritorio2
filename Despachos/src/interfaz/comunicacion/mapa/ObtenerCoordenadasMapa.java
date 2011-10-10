@@ -9,6 +9,7 @@ import interfaz.Principal;
 import interfaz.subVentanas.VentanaDatos;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -74,12 +75,15 @@ public class ObtenerCoordenadasMapa extends Thread {
                     // skip this connection; continue with the next
                 }
             }
-        } catch (IOException ex) {
+        } catch(BindException be){
+            System.out.println("Dirección ya esta en uso...");
+            cerrarConexion();
+        }catch (IOException ex) {
             Logger.getLogger(ObtenerCoordenadasMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void PararDeEscuchar() {
+    public void cerrarConexion() {
         try {
             s.close();
             ss.close();

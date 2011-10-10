@@ -4,14 +4,15 @@
  */
 package sistemaoperativo;
 
+import ch.qos.logback.classic.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingWorker;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Bajar y subir servicios remotamente desde el sistema de despachos
@@ -19,6 +20,7 @@ import javax.swing.SwingWorker;
  */
 public class ComandosSistemaOperativo extends Thread {
 
+    private static final Logger log = (Logger) LoggerFactory.getLogger(ComandosSistemaOperativo.class);
     private String cmd;
 
     /**
@@ -68,31 +70,31 @@ public class ComandosSistemaOperativo extends Thread {
 
             BufferedReader brCleanUp = new BufferedReader(new InputStreamReader(stdout));
             while ((comando = brCleanUp.readLine()) != null) {
-                System.out.println(""+comando);
+                log.trace(""+comando);
                 if (comando.equals("El servicio solicitado ya ha sido iniciado.")) {
-                    System.out.println("El servicio solicitado ya ha sido iniciado:" + line);
+                    log.info("El servicio solicitado ya ha sido iniciado:" + line);
                 } else if (comando.equals("\"net\" no se reconoce como un comando interno o externo,")) {
-                    System.out.println("\"net\" no se reconoce como un comando interno o externo,");
+                    log.info("\"net\" no se reconoce como un comando interno o externo,");
                 } else if (comando.equals("El servicio de wampapache no ha podido iniciarse.")) {
-                    System.out.println("El servicio de wampapache no ha podido iniciarse.");
+                    log.info("El servicio de wampapache no ha podido iniciarse.");
                 } else if (comando.equals("El servicio de wampmysqld no ha podido iniciarse.")) {
-                    System.out.println("El servicio de wampmysqld no ha podido iniciarse.");
+                    log.info("El servicio de wampmysqld no ha podido iniciarse.");
                 }
             }
             brCleanUp = new BufferedReader(new InputStreamReader(stderr));
             while ((comando = brCleanUp.readLine()) != null) {
                 if (comando.equals("El servicio solicitado ya ha sido iniciado.")) {
-                    System.out.println("El servicio solicitado ya ha sido iniciado:" + line);
+                    log.info("El servicio solicitado ya ha sido iniciado:" + line);
                 } else if (comando.equals("\"net\" no se reconoce como un comando interno o externo,")) {
-                    System.out.println("\"net\" no se reconoce como un comando interno o externo,");
+                    log.info("\"net\" no se reconoce como un comando interno o externo,");
                 } else if (comando.equals("El servicio de wampapache no ha podido iniciarse.")) {
-                    System.out.println("El servicio de wampapache no ha podido iniciarse.");
+                    log.info("El servicio de wampapache no ha podido iniciarse.");
                 } else if (comando.equals("El servicio de wampmysqld no ha podido iniciarse.")) {
-                    System.out.println("El servicio de wampmysqld no ha podido iniciarse.");
+                    log.info("El servicio de wampmysqld no ha podido iniciarse.");
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(ComandosSistemaOperativo.class.getName()).log(Level.SEVERE, null, ex);
+            log.trace("{}",ex.getMessage(),ex);
         }
     }
 
@@ -127,7 +129,7 @@ public class ComandosSistemaOperativo extends Thread {
             }
             brCleanUp.close();
         } catch (IOException ex) {
-            Logger.getLogger(ComandosSistemaOperativo.class.getName()).log(Level.SEVERE, null, ex);
+            log.trace("{}",ex.getMessage(),ex);
         }
     }
 }

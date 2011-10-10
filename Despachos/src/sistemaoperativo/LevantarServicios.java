@@ -4,14 +4,12 @@
  */
 package sistemaoperativo;
 
-import BaseDatos.ConexionBase;
 import ch.qos.logback.classic.Logger;
-import java.util.Properties;
 import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author kradac
+ * @author christmo
  */
 public class LevantarServicios {
 

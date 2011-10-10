@@ -61,7 +61,7 @@ public class ConsultaUnidadesBloqueadas extends Thread {
                 log.error("{}", Principal.sesion[1], ex);
             } catch (IOException ex) {
                 if (ex.getMessage().equals("No route to host: connect")) {
-                    log.info("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...", ex);
+                    log.info("Conexion rechasada por el servidor de KRADAC, No se pudo conectar...");
                     cerrarConexionServerKradac();
                     try {
                         Thread.sleep(1000);
