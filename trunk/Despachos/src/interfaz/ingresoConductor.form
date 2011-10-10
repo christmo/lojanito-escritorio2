@@ -265,7 +265,6 @@
         <Property name="toolTipText" type="java.lang.String" value="Cedula (sin gui&#xf3;n)"/>
       </Properties>
       <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtCedulaFocusLost"/>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCedulaKeyPressed"/>
       </Events>
     </Component>

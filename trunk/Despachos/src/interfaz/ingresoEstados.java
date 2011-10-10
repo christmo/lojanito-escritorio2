@@ -57,14 +57,14 @@ public class ingresoEstados extends javax.swing.JDialog {
         btnPaleta = new javax.swing.JButton();
         txtColor = new javax.swing.JTextField();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("CREAR ESTADO DE VEHICULO");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 29, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 29, -1, -1));
 
         lblCod.setText("CODIGO :");
-        add(lblCod, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 67, -1, -1));
+        getContentPane().add(lblCod, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 67, -1, -1));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/guardar.png"))); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -73,7 +73,7 @@ public class ingresoEstados extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 178, 118, 45));
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 118, 45));
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cerrar");
@@ -82,27 +82,27 @@ public class ingresoEstados extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(171, 178, 118, 45));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 118, 45));
 
         txtCodigo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCodigoFocusLost(evt);
             }
         });
-        add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 64, 80, -1));
+        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 64, 80, -1));
 
         lblCod1.setText("ETIQUETA :");
-        add(lblCod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 98, -1, -1));
+        getContentPane().add(lblCod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 98, -1, -1));
 
         txtEtiqueta.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtEtiquetaFocusLost(evt);
             }
         });
-        add(txtEtiqueta, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 95, 160, -1));
+        getContentPane().add(txtEtiqueta, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 95, 160, -1));
 
         lblCod2.setText("COLOR :");
-        add(lblCod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 126, -1, -1));
+        getContentPane().add(lblCod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 126, -1, -1));
 
         btnPaleta.setText("Escoger");
         btnPaleta.addActionListener(new java.awt.event.ActionListener() {
@@ -110,11 +110,11 @@ public class ingresoEstados extends javax.swing.JDialog {
                 btnPaletaActionPerformed(evt);
             }
         });
-        add(btnPaleta, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
+        getContentPane().add(btnPaleta, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
 
         txtColor.setBackground(new java.awt.Color(51, 255, 51));
         txtColor.setEditable(false);
-        add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 40, -1));
+        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 40, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

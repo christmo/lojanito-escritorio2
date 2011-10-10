@@ -383,6 +383,10 @@ public class ConexionBase {
             int code = ex.getErrorCode();
 
             switch (ex.getErrorCode()) {
+                //Incorrect key file
+                case 126:
+                    repararTablaRota(txt);
+                    return false;
                 //tabla rota
                 case 145:
                     repararTablaRota(txt);
@@ -426,7 +430,6 @@ public class ConexionBase {
                     String[] ip_server = ex.getMessage().split("'");
                     log.error("[COD:" + code + "][Empresa: {}]MySQL no tiene permisos para INSERTAR en la tabla FEDERADA del servidor KRADAC -> [" + ip_server[2] + " --> " + ip_server[4] + "]", Principal.sesion[1]);
                     return false;
-
             }
 
             String strMSG113;
@@ -500,7 +503,6 @@ public class ConexionBase {
                 log.error("[COD:" + code + "][" + Principal.sesion[1] + "]", ex);
                 return false;
             }
-
         } catch (NullPointerException ex) {
             return false;
         }
@@ -543,9 +545,7 @@ public class ConexionBase {
                     case 1146:
                         String[] texto = ex.getMessage().split("'");
                         try {
-                            //if (texto[2].equals(" doesn") && texto[3].equals("t exist")) {
                             log.info("[" + Principal.sesion[1] + "][COD:" + ex.getErrorCode() + "] La tabla no esta creada: [" + texto[1] + "]");
-                            //}
                         } catch (ArrayIndexOutOfBoundsException aiob) {
                         }
                         return false;
@@ -668,10 +668,8 @@ public class ConexionBase {
                     System.err.println("****************\n* MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...\n****************");
                     log.error("[COD:" + code + "][Empresa: {}]MySQL no se pudo conectar con la tabla FEDERADA del servidor KRADAC -> " + ip_server[3] + "...", Principal.sesion[1], ex);
                     return false;
-                    //} else if (txt.substring(0, 64).equals("Unable to connect to foreign data source: Access denied for user")) {
                 } else if (code == 1429) {
                     String[] ip_server = ex.getMessage().split("'");
-                    //System.err.println("****************\n* NO hay permiso para insertar en el servidor KRADAC -> " + ip_server[1] + " --> " + ip_server[3] + "\n****************");
                     if (contador == 0) {
                         try {
                             log.error("[COD:" + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ip_server[1] + " --> " + ip_server[3]);
@@ -697,7 +695,6 @@ public class ConexionBase {
                             log.error("[COD:" + code + "]No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
                             contador = 1;
                         } else {
-                            //log.trace("No se puede conectar [" + Principal.sesion[1] + "] a la BD tiene una IP no registrada: {}", ex.getMessage().split("'")[1]);
                             contador++;
                         }
                     }
@@ -2457,5 +2454,20 @@ public class ConexionBase {
         }
 
         return rta;
+    }
+
+    /**
+     * Obtiene la calve de un usuario para saber si cambio la clave
+     * @param user
+     * @return String
+     */
+    public String getClaveUsuario(String user) {
+        String sql = "SELECT CLAVE FROM USUARIOS WHERE USUARIO='" + user + "'";
+        try {
+            return ejecutarConsultaUnDatoAux(sql).getString("CLAVE");
+        } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
+        }
+        return null;
     }
 }
