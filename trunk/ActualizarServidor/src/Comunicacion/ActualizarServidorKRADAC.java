@@ -7,6 +7,11 @@ package Comunicacion;
 import BaseDatos.BaseDatos;
 import PrincipalGUI.Principal;
 import Utilitarios.Utilitarios;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.slf4j.Logger;
@@ -26,6 +31,11 @@ public class ActualizarServidorKRADAC extends Thread {
     private Utilitarios funciones = new Utilitarios();
     private int intFilasRespaldadas;
     private String tablaServidor = "server";
+    private String DIRECCION;
+    private int PUERTO;
+    private Socket mensajeSocket;
+    private BufferedReader entrada;
+    private PrintStream salida;
 
     public ActualizarServidorKRADAC(int filas, BaseDatos cb) {
         this.intFilasRespaldadas = filas;
@@ -103,7 +113,8 @@ public class ActualizarServidorKRADAC extends Thread {
                                 //Unable to connect to foreign data source: Host '186.42.209.202' is not allowed to connect to this MySQL se
                                 if (ex.getMessage().contains("Unable to connect to foreign data source: Host")) {
                                     log.error("IP sin permisos[" + ex.getMessage().split("'")[1] + "][{}]", Principal.EMPRESA);
-                                //Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.121' (10060)
+                                    enviarIPNuevaAlServidor(ex.getMessage().split("'")[1], Principal.EMPRESA);
+                                    //Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.121' (10060)
                                 } else if (ex.getMessage().contains("Unable to connect to foreign data source: Can't")) {
                                     log.error("No se puede guardar los datos en el servidor con IP[" + ex.getMessage().split("'")[2] + "][{}]", Principal.EMPRESA);
                                 } else {
@@ -182,5 +193,72 @@ public class ActualizarServidorKRADAC extends Thread {
         String sql = "DELETE FROM RESPALDO_ASIGNACION_SERVER WHERE HORA_INSERT = " + HoraInsert;
         bd.ejecutarSentencia(sql);
         log.trace("Respaldo borrado correctamente...");
+    }
+
+    /**
+     * Enviar la IP de conexión cuando el ISP cambia la ip publica a los clientes
+     * de la base de datos al enviar al respaldo.
+     * @param strIP
+     * @param strEmpresa 
+     */
+    private void enviarIPNuevaAlServidor(String strIP, String strEmpresa) {
+        DIRECCION = bd.getValorConfiguiracion("ip_kradac");
+        try {
+            PUERTO = Integer.parseInt(bd.getValorConfiguiracion("puerto_kradac"));
+            AbrirPuerto();
+        } catch (NumberFormatException ex) {
+            System.err.println("Revisar el archivo de propiedades la ip y el puerto del servidor de KRADAC...");
+        }
+        try {
+            salida = new PrintStream(mensajeSocket.getOutputStream(), true);
+
+            String cmdMensaje = "$$4##" + strEmpresa + "##" + strIP + "$$\n";
+            salida.print(cmdMensaje);
+            
+            log.trace("Nueva IP enviada:[{}]", strIP);
+
+            cerrarConexionServerKradac();
+
+        } catch (Exception e) {
+            log.trace("Error al enviar un mensaje {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Abre el puerto de comunicación entre el servidor y las centrales
+     */
+    private void AbrirPuerto() {
+        try {
+            try {
+                mensajeSocket = new Socket(DIRECCION, PUERTO);
+                log.trace("Iniciar conexion con el server [{}] para enviar IP:", DIRECCION);
+            } catch (UnknownHostException ex) {
+                cerrarConexionServerKradac();
+            } catch (IOException ex) {
+                if (ex.getMessage().equals("No route to host: connect")) {
+                    cerrarConexionServerKradac();
+                }
+            }
+        } catch (StackOverflowError m) {
+        }
+    }
+
+    /**
+     * Cierra la conexion con el servidor de KRADAC
+     */
+    private void cerrarConexionServerKradac() {
+        try {
+            try {
+                salida.close();
+                entrada.close();
+            } catch (NullPointerException ex) {
+            }
+            try {
+                mensajeSocket.close();
+                log.trace("Cerrar conexion con el server para enviar IP...");
+            } catch (NullPointerException ex) {
+            }
+        } catch (IOException ex) {
+        }
     }
 }
