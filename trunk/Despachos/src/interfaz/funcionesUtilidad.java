@@ -236,7 +236,7 @@ public class funcionesUtilidad {
     }
 
     /**
-     * Trae la fecha actual
+     * Obtiene la fecha actual del equipo este metodo se llama con un objeto
      * @return String
      */
     public String getFecha() {
@@ -245,6 +245,11 @@ public class funcionesUtilidad {
         return sdf.format(calendario.getTime());
     }
 
+     /**
+     * Obtiene la fecha actual del equipo, se lo puede llamar desde cualquier 
+     * lado ya que es un metodo estatico...
+     * @return String
+     */
     public static String fechaActual() {
         Calendar calendario = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

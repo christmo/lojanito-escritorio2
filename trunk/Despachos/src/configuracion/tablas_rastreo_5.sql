@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `asignados`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `asignados` (
-  `ID_ASIGNADOS` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_ASIGNADOS` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `COD_CLIENTE` int(11) DEFAULT NULL,
   `FECHA` date NOT NULL,
   `HORA` time NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `asignados` (
   `ID_TURNO` int(11) DEFAULT NULL,
   `USUARIO` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_ASIGNADOS`)
-) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=301 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,39 +88,90 @@ PARTITIONS 400 */;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER1` BEFORE INSERT
+
     ON rastreosatelital.asignados_local FOR EACH ROW
+
 BEGIN
+
+
+
     DECLARE FECHA DATETIME;
+
     DECLARE LIMITE INT(12);
+
     SET LIMITE = -2;
 
+
+
     IF (STRCMP(NEW.ESTADO, 'ASIGNADO')=0) THEN
-      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
-    
-      SET NEW.FECHA_HORA = FECHA;
-    ELSE
-        IF (LIMITE = NEW.VALOR) THEN
+
  
+
+      SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
+
+      /*SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
+      SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');*/
+
+      SET NEW.FECHA_HORA = FECHA;
+
+
+
+    ELSE
+
+
+
+        IF (LIMITE = NEW.VALOR) THEN
+
+            /*SET NEW.HORA = CURTIME();
+
+            SET NEW.FECHA = CURDATE();*/
+
             SET NEW.FECHA_HORA = NOW();
+
         ELSE
+
             SET FECHA = DATE_SUB(NOW(),INTERVAL NEW.VALOR MINUTE);
-           
+
+            /*SET NEW.HORA = DATE_FORMAT(FECHA,'%H:%i:%s');
+
+            SET NEW.FECHA = DATE_FORMAT(FECHA,'%Y-%m-%d');*/
+
             SET NEW.FECHA_HORA = FECHA;
+
         END IF;
+
+
+
     END IF;
+
+
 
     SET NEW.ID = DATE_FORMAT(CURDATE(),'%Y%m%d');
 
+
+
     CALL SP_INSERTAR_RESPALDAR_SERVER(
+
+
+
       NEW.N_UNIDAD,
+
       NEW.COD_CLIENTE,
+
       NEW.ESTADO,
+
       NEW.FONO,
+
       NEW.VALOR,
+
       NEW.ESTADO_INSERT,
+
       NEW.USUARIO,
+
       NEW.DIRECCION,@x);
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -163,6 +214,21 @@ CREATE TABLE `clientes` (
   `LONGITUD` double DEFAULT NULL,
   `INFOR_ADICIONAL` varchar(225) DEFAULT NULL,
   PRIMARY KEY (`NOMBRE_APELLIDO_CLI`,`DIRECCION_CLI`,`TELEFONO`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cnt_loja`
+--
+
+DROP TABLE IF EXISTS `cnt_loja`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cnt_loja` (
+  `numero` varchar(10) NOT NULL,
+  `nombre` varchar(500) DEFAULT NULL,
+  `direccion` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -232,7 +298,7 @@ CREATE TABLE `configuraciones` (
   `value` varchar(255) NOT NULL,
   `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_config`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 INSERT INTO `configuraciones` VALUES 
@@ -271,6 +337,27 @@ CREATE TABLE `empresas` (
   `MODEM` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID_EMPRESA`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `llamadas`
+--
+
+DROP TABLE IF EXISTS `llamadas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `llamadas` (
+  `COD_CLIENTE` int(11) DEFAULT NULL,
+  `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `TELEFONO` varchar(25) DEFAULT NULL,
+  `NOMBRE_APELLIDO_CLI` varchar(125) DEFAULT NULL,
+  `DIRECCION_CLI` varchar(125) DEFAULT NULL,
+  `SECTOR` varchar(125) DEFAULT NULL,
+  `MINUTOS` int(11) NOT NULL,
+  `N_UNIDAD` int(11) NOT NULL,
+  `USUARIO` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`FECHA_HORA`,`N_UNIDAD`,`MINUTOS`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=257 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -399,27 +486,53 @@ PARTITIONS 400 */;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ACTUALIZAR_ULTIMOS_GPS` BEFORE INSERT
+
     ON rastreosatelital.recorridos FOR EACH ROW
+
 BEGIN
+
     DECLARE UNIDAD INT(10);
+
     SET UNIDAD=0;
+
   
+
     SELECT N_UNIDAD 
+
     INTO UNIDAD
+
     FROM ultimos_gps WHERE N_UNIDAD=NEW.N_UNIDAD;
-	
+
+  
+
     IF (UNIDAD=NEW.N_UNIDAD) THEN
+
       UPDATE ULTIMOS_GPS 
+
       SET LONGITUD=NEW.LONGITUD,
+
       LATITUD=NEW.LATITUD,
+
       VELOCIDAD=NEW.VELOCIDAD,
+
       FECHA_HORA=NEW.FECHA_HORA,
+
       G1=NEW.G1,
+
       G2=NEW.G2
+
       WHERE N_UNIDAD = UNIDAD;
+
     ELSE
+
+    
+
       INSERT INTO ULTIMOS_GPS(N_UNIDAD,LONGITUD,LATITUD,VELOCIDAD,FECHA_HORA,G1,G2)
+
       VALUES(NEW.N_UNIDAD,NEW.LONGITUD,NEW.LATITUD,NEW.VELOCIDAD,NEW.FECHA_HORA,NEW.G1,NEW.G2);
+
+       
+
     END IF;
 
 END */;;

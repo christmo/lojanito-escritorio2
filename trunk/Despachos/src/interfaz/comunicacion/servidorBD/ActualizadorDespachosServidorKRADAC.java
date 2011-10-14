@@ -23,7 +23,7 @@ public class ActualizadorDespachosServidorKRADAC extends Thread {
 
     @Override
     public void run() {
-        SwingWorker hiloIndependiente = new SwingWorker() {
+        /*SwingWorker hiloIndependiente = new SwingWorker() {
 
             @Override
             protected Object doInBackground() throws Exception {
@@ -39,6 +39,16 @@ public class ActualizadorDespachosServidorKRADAC extends Thread {
             }
         };
 
-        hiloIndependiente.execute();
+        hiloIndependiente.execute();*/
+
+        while (true) {
+            try {
+                comando = "java -jar ActualizarServidor.jar " + empresa;
+                ComandosSistemaOperativo cmd = new ComandosSistemaOperativo(comando);
+                ActualizadorDespachosServidorKRADAC.sleep(3600000);//60 minutos
+            } catch (InterruptedException ex) {
+                log.info("{}", ex.getMessage(), ex);
+            }
+        }
     }
 }
