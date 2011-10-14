@@ -313,11 +313,6 @@ public class LoginGUI extends javax.swing.JFrame {
 
             public void run() {
                 try {
-                    /**
-                     * TODO: con el estilo no funciona el redibujado de la tabla
-                     * vehiculos -=revisar=-
-                     * Problema ocurre cuando se cambia de turnos dinamicamente
-                     */
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel");
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel");
 //                    UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel");

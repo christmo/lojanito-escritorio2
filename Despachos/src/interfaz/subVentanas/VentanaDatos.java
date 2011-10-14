@@ -1032,6 +1032,7 @@ public class VentanaDatos extends javax.swing.JFrame {
     private void jtDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtDestinoFocusLost
         jtDestino.setText(Mayusculas(jtDestino.getText()));
         destino = "::" + jtDestino.getText();
+        insertarDatosTabla(jtNota.getText() + destino, 9);
     }//GEN-LAST:event_jtDestinoFocusLost
 
     private void jbSalirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jbSalirKeyPressed

@@ -10,10 +10,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Properties;
 
 import java.util.logging.Level;
@@ -867,10 +867,12 @@ public class ConexionBase {
                 des.setStrNota("");
             }
 
+            des.setStrFecha(verFechaDespacho(des.getStrHora()));
+
             if (estadoUnidad.equals("ASI") || estadoUnidad.equals("C")) {
                 String sql = "CALL SP_INSERTAR_DESPACHOS("
                         + des.getIntCodigo() + ","
-                        + "'" + getFechaActual() + "',"
+                        + "'" + des.getStrFecha() + "',"
                         + "'" + des.getStrHora() + "',"
                         + "'" + des.getStrTelefono() + "',"
                         + "'" + des.getStrNombre() + "',"
@@ -892,12 +894,39 @@ public class ConexionBase {
     }
 
     /**
+     * Se emplea para saber si el despacho ingreso el dia actual o el anterior
+     * para tener una fecha cooerente con la hora del despacho.
+     * Se compra si la hora del despacho es menor a la hora actual, entonces se
+     * tiene que restar en 1 dia a la fecha actual para insertar el despacho en
+     * la base de datos con la fecha coherente, esto es para evitar el null.
+     * @param horaDespacho
+     * @return String
+     */
+    private String verFechaDespacho(String horaDespacho) {
+        String[] arrHoraDes = horaDespacho.split(":");
+        String[] arrHoraAct = funciones.getHora().split(":");
+        String fechaActual = funciones.getFecha();
+        if (Integer.parseInt(arrHoraDes[0]) > Integer.parseInt(arrHoraAct[0])) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(dateFormat.parse(fechaActual));
+                cal.add(Calendar.DATE, -1);
+                return dateFormat.format(cal.getTime());
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(ConexionBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return fechaActual;
+    }
+
+    /**
      * Retorna el estado de la ultima unidad intentada despachar
      * @return String
      */
     public String getEstadoUnidad() {
         try {
-            if (estadoUnidad.equals("")) {
+            if (!estadoUnidad.equals("")) {
                 String sql = "SELECT ETIQUETA FROM CODESTTAXI WHERE ID_CODIGO = '" + estadoUnidad + "'";
                 rs = ejecutarConsultaUnDato(sql);
                 return rs.getString("ETIQUETA");
@@ -939,16 +968,6 @@ public class ConexionBase {
             return "NO HAY CODIGO...";
         }
         return null;
-    }
-
-    /**
-     * Obtiene la fecha actual del sistema
-     * @return String
-     */
-    public String getFechaActual() {
-        Calendar calendario = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(calendario.getTime());
     }
 
     /**
@@ -2469,5 +2488,49 @@ public class ConexionBase {
             log.info("[COD {}]", ex.getErrorCode(), ex);
         }
         return null;
+    }
+
+    /**
+     * Guarda la información del cliente que llama o del que se va a realizar el
+     * despacho
+     * @param despacho
+     */
+    public void guardarInformacionDeLlamada(Despachos des) {
+        String fecha = des.getStrFecha();
+        if (des.getStrFecha().equals("null") || des.getStrFecha() == null) {
+            fecha = funciones.getFecha();
+        }
+
+        String sql = "INSERT INTO LLAMADAS("
+                + "COD_CLIENTE,"
+                + "FECHA_HORA,"
+                + "TELEFONO,"
+                + "NOMBRE_APELLIDO_CLI,"
+                + "DIRECCION_CLI,"
+                + "SECTOR,"
+                + "MINUTOS,"
+                + "N_UNIDAD,"
+                + "USUARIO) "
+                + "VALUES("
+                + des.getIntCodigo()
+                + ",'"
+                + fecha + " " + des.getStrHora()
+                + "','"
+                + des.getStrTelefono()
+                + "','"
+                + des.getStrNombre()
+                + "','"
+                + des.getStrDireccion()
+                + "','"
+                + des.getStrBarrio()
+                + "',"
+                + des.getIntMinutos()
+                + ","
+                + des.getIntUnidad()
+                + ",'"
+                + des.getStrUsuario()
+                + "'"
+                + ")";
+        ejecutarSentencia(sql);
     }
 }
