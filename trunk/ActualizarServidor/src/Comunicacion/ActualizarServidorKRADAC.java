@@ -112,7 +112,7 @@ public class ActualizarServidorKRADAC extends Thread {
                             try {
                                 //Unable to connect to foreign data source: Host '186.42.209.202' is not allowed to connect to this MySQL se
                                 if (ex.getMessage().contains("Unable to connect to foreign data source: Host")) {
-                                    log.error("IP sin permisos[" + ex.getMessage().split("'")[1] + "][{}]", Principal.EMPRESA);
+                                    log.trace("IP sin permisos[" + ex.getMessage().split("'")[1] + "][{}]", Principal.EMPRESA);
                                     enviarIPNuevaAlServidor(ex.getMessage().split("'")[1], Principal.EMPRESA);
                                     //Unable to connect to foreign data source: Can't connect to MySQL server on '200.0.29.121' (10060)
                                 } else if (ex.getMessage().contains("Unable to connect to foreign data source: Can't")) {
@@ -214,8 +214,8 @@ public class ActualizarServidorKRADAC extends Thread {
 
             String cmdMensaje = "$$4##" + strEmpresa + "##" + strIP + "$$\n";
             salida.print(cmdMensaje);
-            
-            log.trace("Nueva IP enviada:[{}]", strIP);
+
+            log.error("IP ENVIADA[{}][" + strEmpresa + "] -> Destino[{}] Puerto[" + PUERTO + "]", strIP, DIRECCION);
 
             cerrarConexionServerKradac();
 
