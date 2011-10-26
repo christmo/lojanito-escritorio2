@@ -690,7 +690,7 @@ CREATE TABLE `usuarios` (
 --
 -- Creacion del usuario KRADAC por defecto
 --
-INSERT INTO `usuarios` VALUES ('KR','KRADAC','47c6330f847f1342c4a306ef20869d7c','KRADAC',NULL,NULL,1,'Activo','Administrador',NULL);
+INSERT INTO `usuarios` VALUES ('KR','KRADAC','47c6330f847f1342c4a306ef20869d7c','KRADAC',NULL,NULL,1,'Activo','Super',NULL);
 
 --
 -- Table structure for table `vehiculos`
