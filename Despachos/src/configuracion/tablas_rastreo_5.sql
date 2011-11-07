@@ -88,7 +88,7 @@ PARTITIONS 400 */;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER1` BEFORE INSERT
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rastreosatelital`.`TGR_ASIGNADOS_LOCAL_SERVER` BEFORE INSERT
 
     ON rastreosatelital.asignados_local FOR EACH ROW
 
@@ -661,6 +661,7 @@ CREATE TABLE `ultimos_gps` (
   `FECHA_HORA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `G1` int(10) unsigned DEFAULT NULL,
   `G2` int(10) unsigned DEFAULT NULL,
+  `ACTIVO` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`N_UNIDAD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
