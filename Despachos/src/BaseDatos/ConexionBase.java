@@ -2503,8 +2503,13 @@ public class ConexionBase {
      * @param despacho
      */
     public void guardarInformacionDeLlamada(Despachos des) {
-        String fecha = des.getStrFecha();
-        if (des.getStrFecha().equals("null") || des.getStrFecha() == null) {
+        String fecha;
+        try {
+            fecha = des.getStrFecha();
+            if (fecha.equals("null") || fecha == null) {
+                fecha = funciones.getFecha();
+            }
+        } catch (NullPointerException ex) {
             fecha = funciones.getFecha();
         }
 

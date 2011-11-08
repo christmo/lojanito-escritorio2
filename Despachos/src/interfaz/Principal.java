@@ -2544,7 +2544,6 @@ public final class Principal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtDespachados.setColumnSelectionAllowed(true);
         jtDespachados.getTableHeader().setReorderingAllowed(false);
         jtDespachados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -3079,7 +3078,7 @@ public final class Principal extends javax.swing.JFrame {
                             jtPorDespachar.setValueAt("" + (intMinutos * -1), intFila, 8);
                             intMinutoAnt = intMinutos;
                         }
-                        
+
                         despacho = getDatosPorDespachar();
                         bd.guardarInformacionDeLlamada(despacho);
                     } else {
@@ -3104,11 +3103,14 @@ public final class Principal extends javax.swing.JFrame {
 
             if (intCol == 1) { //Cuando cambie la celda de telefono
                 try {
-                    if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
-                        actualizarFilaCampoTelefono(intFila, intCol);
+                    jtPorDespachar.getValueAt(intFila, 2).toString();
+                } catch (NullPointerException ex) {
+                    try {
+                        if (cod == 10 || cod >= 37 && cod <= 40 || cod == 9) {
+                            actualizarFilaCampoTelefono(intFila, intCol);
+                        }
+                    } catch (NullPointerException nex) {
                     }
-                } catch (NullPointerException nex) {
-                    //System.err.println("No hay telefono recuperado de la celda...");
                 }
                 filaAnt = intFila;
             }
@@ -3161,47 +3163,71 @@ public final class Principal extends javax.swing.JFrame {
                     } else {
                         String nom_cli = "";
                         String dir_cli = "";
+                        String telefono = "";
                         try {
-                            nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
-                            dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+                            try {
+                                telefono = jtPorDespachar.getValueAt(intFila, 1).toString();
 
-                            if (!nom_cli.equals("") && !dir_cli.equals("")) {
-                                if (CampoUnidadCambio) {
-                                    activarUnidadBorrada(cod_cli);
-                                    actualizarAsignacion(intFila, intCol, cod_cli);
-                                } else {
-                                    actualizarAsignacion(intFila, intCol, cod_cli);
-                                }
-                                /**
-                                 * Enviar mensaje de direccion y cliente a la unidad
-                                 * si esta especificado en el archivo de propiedades
-                                 */
                                 try {
-                                    String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
-                                    if (sendSMS.equals("si") || sendSMS.equals("SI")
-                                            && !sendSMS.equals("") && sendSMS != null) {
-                                        /**
-                                         * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
-                                         */
-                                        enviarMensajeUnidadAsignada(intFila, intCol);
-                                        despacho = getDatosPorDespachar();
-                                        bd.guardarInformacionDeLlamada(despacho);
+                                    nom_cli = jtPorDespachar.getValueAt(intFila, 3).toString();
+
+                                    try {
+                                        dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
+
+                                        if (!nom_cli.equals("")
+                                                && !dir_cli.equals("")
+                                                && !telefono.equals("")) {
+                                            if (CampoUnidadCambio) {
+                                                activarUnidadBorrada(cod_cli);
+                                                actualizarAsignacion(intFila, intCol, cod_cli);
+                                            } else {
+                                                actualizarAsignacion(intFila, intCol, cod_cli);
+                                            }
+                                            /**
+                                             * Enviar mensaje de direccion y cliente a la unidad
+                                             * si esta especificado en el archivo de propiedades
+                                             */
+                                            try {
+                                                String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
+                                                if (sendSMS.equals("si") || sendSMS.equals("SI")
+                                                        && !sendSMS.equals("") && sendSMS != null) {
+                                                    /**
+                                                     * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                                     */
+                                                    enviarMensajeUnidadAsignada(intFila, intCol);
+                                                    despacho = getDatosPorDespachar();
+                                                    bd.guardarInformacionDeLlamada(despacho);
+                                                }
+                                            } catch (NullPointerException nex) {
+                                                log.trace("No se a especificado la directiva [enviar_mensajes] "
+                                                        + "en el archivo de configuración...");
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(this,
+                                                    "Primero ingresar el nombre del cliente y la dirección, "
+                                                    + "antes de asignar una unidad...", "Error", 0);
+                                            jtPorDespachar.setValueAt("", intFila, 6);
+                                        }
+                                    } catch (NullPointerException nex) {
+                                        JOptionPane.showMessageDialog(this,
+                                                "Debe ingresar la dirección del cliente...",
+                                                "Error...", 0);
+                                        jtPorDespachar.setValueAt("", intFila, 6);
                                     }
+
                                 } catch (NullPointerException nex) {
-                                    log.trace("No se a especificado la directiva [enviar_mensajes] "
-                                            + "en el archivo de configuración...");
+                                    JOptionPane.showMessageDialog(this,
+                                            "Debe ingresar el nombre del cliente...",
+                                            "Error...", 0);
+                                    jtPorDespachar.setValueAt("", intFila, 6);
                                 }
-                            } else {
+                            } catch (NullPointerException nex) {
                                 JOptionPane.showMessageDialog(this,
-                                        "Primero ingresar el nombre del cliente y la dirección, "
-                                        + "antes de asignar una unidad...", "Error", 0);
+                                        "Debe ingresar el numero de teléfono del cliente...",
+                                        "Error...", 0);
                                 jtPorDespachar.setValueAt("", intFila, 6);
                             }
-                        } catch (NullPointerException ex) {
-                            JOptionPane.showMessageDialog(this,
-                                    "<html>La <b>UNIDAD</b> ingresada no existe...</html>",
-                                    "Error", 0);
-                            jtPorDespachar.setValueAt("", intFila, 6);
+
                         } catch (UnsupportedOperationException ex) {
                             activarUnidadConDosEstados(intFila);
                         } catch (ArrayIndexOutOfBoundsException ex) {
