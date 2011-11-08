@@ -282,7 +282,8 @@ public class ConexionBase {
             switch (code) {
                 case 1054:
                     String[] datos = ex.getMessage().split("'");
-                    log.info("[COD {}]No se conoce la columna " + datos[1] + " en [" + datos[3] + "] \nSQL:" + sql, code);
+                    log.info("[COD {}]No se conoce la columna " + datos[1] + " en [" + datos[3] + "] al realizar esta consulta:"
+                            + "\nSQL Ejecutado:" + sql, code);
                     break;
             }
             if (ex.getMessage().equals("Result consisted of more than one row")) {
@@ -986,6 +987,7 @@ public class ConexionBase {
             ResultSet r = ejecutarConsultaUnDato(sql);
             return r.getString(1);
         } catch (SQLException ex) {
+        } catch (NullPointerException ex) {
         } catch (UnsupportedOperationException ex) {
         }
         return null;
