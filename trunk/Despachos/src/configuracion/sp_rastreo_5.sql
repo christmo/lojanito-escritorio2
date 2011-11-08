@@ -45,6 +45,45 @@ BEGIN
 
 END */;;
 DELIMITER ;
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `SF_DISTANCIA2PUNTOSKM` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `SF_DISTANCIA2PUNTOSKM`(
+lat_ini double,
+lon_ini double,
+lat_fin double,
+lon_fin double
+) RETURNS double
+    DETERMINISTIC
+BEGIN
+
+DECLARE distancia DOUBLE;
+DECLARE RADIOTIERRA DOUBLE;
+
+SET RADIOTIERRA = 6371;
+
+SET distancia = RADIOTIERRA
+* ((2 * ASIN(SQRT(POW(SIN((RADIANS(lat_ini) - RADIANS(lat_fin)) / 2), 2)
++ COS(RADIANS(lat_ini)) * COS(RADIANS(lat_fin))
+* POW(SIN((RADIANS(lon_ini) - RADIANS(lon_fin)) / 2), 2)))));
+
+RETURN distancia;
+
+END */;;
+DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;

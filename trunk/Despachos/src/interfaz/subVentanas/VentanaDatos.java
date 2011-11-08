@@ -238,7 +238,11 @@ public class VentanaDatos extends javax.swing.JFrame {
         jtDireccion.setText(despacho.getStrDireccion());
         jtBarrio.setText(despacho.getStrBarrio());
 
-        String[] divNota = despacho.getStrNota().split("::");
+        String[] divNota = {};
+        try {
+            divNota = despacho.getStrNota().split("::");
+        } catch (NullPointerException ex) {
+        }
         if (divNota.length == 2) {
             jtNota.setText(divNota[0]);
             jtDestino.setText(divNota[1]);
@@ -1038,7 +1042,6 @@ public class VentanaDatos extends javax.swing.JFrame {
     private void jbSalirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jbSalirKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbSalirKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
