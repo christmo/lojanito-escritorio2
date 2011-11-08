@@ -250,7 +250,12 @@ public class ConexionBase {
             tabla = tablaFull[2];
             tabla = "r" + tabla.split("[.]")[0];
         } else {
-            tabla = tablaFull[0];
+            tablaFull = tablaFull[0].replace("\\", "#").split("#");
+            if (tablaFull.length == 3) {
+                tabla = tablaFull[2].split("[.]")[0];
+            } else {
+                tabla = tablaFull[0];
+            }
         }
         String sqlReparar = "repair table " + tabla;
 
