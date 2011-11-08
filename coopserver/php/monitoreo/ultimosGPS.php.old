@@ -1,0 +1,67 @@
+<?php
+/**
+ * EL ARCHIVO EXTRAE LOS ULTIMOS GPS DE CADA VEHICULO
+ * PARA SER GRAFICADOS EN EL MAPA
+ * qmarqeva@gmail.com
+ */
+require_once('../../dll/conect.php');
+
+extract($_GET);
+
+$consultaSql = " SELECT
+    A.N_UNIDAD, A.LONGITUD, A.LATITUD, A.VELOCIDAD, A.FECHA_HORA, TBL_ESTADO.ID_CODIGO
+FROM
+  RECORRIDOS A,
+  (
+    SELECT
+      N_UNIDAD, MAX(FECHA_HORA) AS FH
+    FROM
+      RECORRIDOS
+    WHERE
+    	ID BETWEEN DATE_FORMAT(ADDDATE(CURDATE(),-1),'%Y%m%d') AND DATE_FORMAT(CURDATE(),'%Y%m%d')
+    GROUP BY N_UNIDAD
+  ) AS B,
+  (
+    SELECT
+      YY.N_UNIDAD, YY.ID_CODIGO
+    FROM
+      REGCODESTTAXI YY,
+      (
+        SELECT
+          AUX.N_UNIDAD, MAX(AUX.FECHA_HORA) AS TMP
+        FROM
+          REGCODESTTAXI AUX GROUP BY AUX.N_UNIDAD
+      ) AS XXX
+
+    WHERE
+      YY.N_UNIDAD = XXX.N_UNIDAD AND YY.FECHA_HORA = XXX.TMP
+   ) AS TBL_ESTADO
+WHERE ID BETWEEN DATE_FORMAT(ADDDATE(CURDATE(),-1),'%Y%m%d') AND DATE_FORMAT(CURDATE(),'%Y%m%d')
+AND A.FECHA_HORA = B.FH
+AND A.N_UNIDAD = B.N_UNIDAD
+AND TBL_ESTADO.N_UNIDAD = A.N_UNIDAD
+GROUP BY A.N_UNIDAD";
+
+consulta($consultaSql);
+$resulset = variasFilas();
+
+$salida = "";
+
+for ($i = 0; $i < count($resulset); $i++) {
+    $fila = $resulset[$i];
+
+    $par =  explode(" ",$fila["FECHA_HORA"]);
+
+    $salida .= $fila["N_UNIDAD"] . "%" .
+            $fila["LONGITUD"] . "%" .
+            $fila["LATITUD"] . "%" .
+            $fila["VELOCIDAD"] . "%" .
+            $par[0] . "%" .
+            $par[1] . "%".
+            $fila["ID_CODIGO"] . "#";
+}
+
+echo $salida;
+
+?>
+
