@@ -3173,39 +3173,44 @@ public final class Principal extends javax.swing.JFrame {
 
                                     try {
                                         dir_cli = jtPorDespachar.getValueAt(intFila, 5).toString();
-
-                                        if (!nom_cli.equals("")
-                                                && !dir_cli.equals("")
-                                                && !telefono.equals("")) {
-                                            if (CampoUnidadCambio) {
-                                                activarUnidadBorrada(cod_cli);
-                                                actualizarAsignacion(intFila, intCol, cod_cli);
-                                            } else {
-                                                actualizarAsignacion(intFila, intCol, cod_cli);
-                                            }
-                                            /**
-                                             * Enviar mensaje de direccion y cliente a la unidad
-                                             * si esta especificado en el archivo de propiedades
-                                             */
-                                            try {
-                                                String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
-                                                if (sendSMS.equals("si") || sendSMS.equals("SI")
-                                                        && !sendSMS.equals("") && sendSMS != null) {
-                                                    /**
-                                                     * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
-                                                     */
-                                                    enviarMensajeUnidadAsignada(intFila, intCol);
-                                                    despacho = getDatosPorDespachar();
-                                                    bd.guardarInformacionDeLlamada(despacho);
+                                        if (!telefono.equals("")) {
+                                            if (!nom_cli.equals("")
+                                                    && !dir_cli.equals("")) {
+                                                if (CampoUnidadCambio) {
+                                                    activarUnidadBorrada(cod_cli);
+                                                    actualizarAsignacion(intFila, intCol, cod_cli);
+                                                } else {
+                                                    actualizarAsignacion(intFila, intCol, cod_cli);
                                                 }
-                                            } catch (NullPointerException nex) {
-                                                log.trace("No se a especificado la directiva [enviar_mensajes] "
-                                                        + "en el archivo de configuración...");
+                                                /**
+                                                 * Enviar mensaje de direccion y cliente a la unidad
+                                                 * si esta especificado en el archivo de propiedades
+                                                 */
+                                                try {
+                                                    String sendSMS = bd.getValorConfiguiracion("enviar_mensajes");
+                                                    if (sendSMS.equals("si") || sendSMS.equals("SI")
+                                                            && !sendSMS.equals("") && sendSMS != null) {
+                                                        /**
+                                                         * ENVIAR MENSAJE A LA UNIDAD ASIGNADA
+                                                         */
+                                                        enviarMensajeUnidadAsignada(intFila, intCol);
+                                                        despacho = getDatosPorDespachar();
+                                                        bd.guardarInformacionDeLlamada(despacho);
+                                                    }
+                                                } catch (NullPointerException nex) {
+                                                    log.trace("No se a especificado la directiva [enviar_mensajes] "
+                                                            + "en el archivo de configuración...");
+                                                }
+                                            } else {
+                                                JOptionPane.showMessageDialog(this,
+                                                        "Primero ingresar el nombre del cliente y la dirección, "
+                                                        + "antes de asignar una unidad...", "Error", 0);
+                                                jtPorDespachar.setValueAt("", intFila, 6);
                                             }
                                         } else {
                                             JOptionPane.showMessageDialog(this,
-                                                    "Primero ingresar el nombre del cliente y la dirección, "
-                                                    + "antes de asignar una unidad...", "Error", 0);
+                                                    "Debe ingresar el numero de teléfono del cliente...",
+                                                    "Error...", 0);
                                             jtPorDespachar.setValueAt("", intFila, 6);
                                         }
                                     } catch (NullPointerException nex) {
