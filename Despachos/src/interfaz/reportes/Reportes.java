@@ -9,6 +9,7 @@ package interfaz.reportes;
 import BaseDatos.ConexionBase;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
@@ -42,6 +43,7 @@ public class Reportes extends javax.swing.JDialog {
         jcMeses.setEnabled(false);
         jcMesesClientes.setEnabled(false);
         jcMesesUnidades.setEnabled(false);
+        cbAnio.setEnabled(false);
         jcMultasMes.setEnabled(false);
         cargarComboUsuarios();
         cargarComboTurnos();
@@ -55,8 +57,27 @@ public class Reportes extends javax.swing.JDialog {
 
         CambiarEnfoqueEstadosTaxi(false);
         CambiarEnfoqueEstadosTiempo();
+        cargarAniosCombo();
+    }
+    
+    /**
+     * Carga con datos el combo de los años
+     */
+    private void cargarAniosCombo(){
+        ArrayList<String> anios = bd.getAniosBaseDatos();
+        cbAnio.removeAllItems();
+        for(String anio: anios){
+            cbAnio.addItem(anio);
+        }
     }
 
+    /**
+     * Habilitar años
+     */
+    private void habilitarAnio(boolean activar){
+        cbAnio.setEnabled(activar);
+    }
+    
     /**
      * Carga el combo de usuarios con los datos de la base
      */
@@ -107,6 +128,7 @@ public class Reportes extends javax.swing.JDialog {
         jcMeses.setEnabled(false);
         jcMesesClientes.setEnabled(false);
         jcMesesUnidades.setEnabled(false);
+        habilitarAnio(false);
     }
 
     /** This method is called from within the constructor to
@@ -163,6 +185,8 @@ public class Reportes extends javax.swing.JDialog {
         jrTotalCarrerasUnidad = new javax.swing.JRadioButton();
         jrTotalCarrerasUnidadMes = new javax.swing.JRadioButton();
         jcMesesUnidades = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        cbAnio = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         jrMultasAsignadas = new javax.swing.JRadioButton();
         jrMultasPagadas = new javax.swing.JRadioButton();
@@ -473,7 +497,7 @@ public class Reportes extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpFechasDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Despachos", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/vehiculo.png")), jPanel2); // NOI18N
@@ -534,6 +558,8 @@ public class Reportes extends javax.swing.JDialog {
 
         jcMesesUnidades.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
+        jLabel8.setText("Año:");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -556,8 +582,12 @@ public class Reportes extends javax.swing.JDialog {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jrTotalCarrerasUnidadMes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(311, Short.MAX_VALUE))
+                        .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(307, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -580,7 +610,11 @@ public class Reportes extends javax.swing.JDialog {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrTotalCarrerasUnidadMes)
                     .addComponent(jcMesesUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(cbAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Carreras", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/carreras.png")), jPanel5); // NOI18N
@@ -837,7 +871,7 @@ public class Reportes extends javax.swing.JDialog {
                     .addComponent(jtEstadosTaxiUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jTabReportes.addTab("Estados Taxi", new javax.swing.ImageIcon(getClass().getResource("/interfaz/iconos/estados.png")), jPanel7); // NOI18N
@@ -1027,6 +1061,7 @@ public class Reportes extends javax.swing.JDialog {
     private void jrTotalCarrerasEmpresaMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTotalCarrerasEmpresaMesActionPerformed
         LimpiarCarreras();
         jcMeses.setEnabled(true);
+        habilitarAnio(true);
     }//GEN-LAST:event_jrTotalCarrerasEmpresaMesActionPerformed
 
     private void jrTotalCarrerasPorClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTotalCarrerasPorClienteActionPerformed
@@ -1036,6 +1071,7 @@ public class Reportes extends javax.swing.JDialog {
     private void jrTotalCarrerasClientesMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTotalCarrerasClientesMesActionPerformed
         LimpiarCarreras();
         jcMesesClientes.setEnabled(true);
+        habilitarAnio(true);
     }//GEN-LAST:event_jrTotalCarrerasClientesMesActionPerformed
 
     private void jrTotalCarrerasUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTotalCarrerasUnidadActionPerformed
@@ -1045,6 +1081,7 @@ public class Reportes extends javax.swing.JDialog {
     private void jrTotalCarrerasUnidadMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrTotalCarrerasUnidadMesActionPerformed
         LimpiarCarreras();
         jcMesesUnidades.setEnabled(true);
+        habilitarAnio(true);
     }//GEN-LAST:event_jrTotalCarrerasUnidadMesActionPerformed
 
     private void jrMultasMensualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrMultasMensualesActionPerformed
@@ -1243,6 +1280,10 @@ public class Reportes extends javax.swing.JDialog {
             map.put("todo", true);
         } else {
             map.put("todo", false);
+            String anio = cbAnio.getSelectedItem().toString();
+            
+            System.out.println(""+anio);
+            map.put("anio",anio);
             /**
              * Datos de la empresa
              */
@@ -1352,6 +1393,7 @@ public class Reportes extends javax.swing.JDialog {
         return map;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbAnio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1359,6 +1401,7 @@ public class Reportes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -107,6 +107,8 @@ public class GenerarReporteCarreras {
                 + "ASIGNADOS.`ESTADO`='F' "
                 + "AND "
                 + "MONTH(ASIGNADOS.`FECHA`) = '$P!{mes}' "
+                + "AND "
+                + "YEAR(ASIGNADOS.`FECHA`) = '$P!{anio}' "
                 + "GROUP BY ASIGNADOS_FECHA";
 
         System.out.println(sql);
@@ -115,6 +117,7 @@ public class GenerarReporteCarreras {
         parametro.put("sql", sql);
 
         parametro.put("mes", campos.get("mes"));
+        parametro.put("anio", campos.get("anio"));
         parametro.put("NombreMes", campos.get("NombreMes"));
 
         parametro.put("empresa", empresa);
@@ -156,6 +159,8 @@ public class GenerarReporteCarreras {
                 + "WHERE ASIGNADOS.`ESTADO`='F' "
                 + "AND ASIGNADOS.`COD_CLIENTE` = CLIENTES.`CODIGO` "
                 + "AND MONTH(ASIGNADOS.`FECHA`) = '$P!{mesCli}' "
+                + "AND "
+                + "YEAR(ASIGNADOS.`FECHA`) = '$P!{anio}' "
                 + "GROUP BY CLIENTES.`NOMBRE_APELLIDO_CLI` "
                 + "ORDER BY TOTAL DESC";
 
@@ -165,6 +170,7 @@ public class GenerarReporteCarreras {
         parametro.put("sql", sql);
 
         parametro.put("mesCli", campos.get("mesCli"));
+        parametro.put("anio", campos.get("anio"));
         parametro.put("NombreMesCli", campos.get("NombreMesCli"));
 
         parametro.put("empresa", empresa);
@@ -205,6 +211,8 @@ public class GenerarReporteCarreras {
                 + "`ASIGNADOS` ASIGNADOS, `VEHICULOS` VEH, `CONDUCTORES` COND "
                 + "WHERE ASIGNADOS.`ESTADO`='F' "
                 + "AND MONTH(ASIGNADOS.`FECHA`) = '$P!{mesUni}' "
+                + "AND "
+                + "YEAR(ASIGNADOS.`FECHA`) = '$P!{anio}' "
                 + "AND ASIGNADOS.`N_UNIDAD` = VEH.`N_UNIDAD` "
                 + "AND VEH.`ID_CON`=COND.`ID_CON` "
                 + "GROUP BY ASIGNADOS.`N_UNIDAD` "
@@ -216,6 +224,7 @@ public class GenerarReporteCarreras {
         parametro.put("sql", sql);
 
         parametro.put("mesUni", campos.get("mesUni"));
+        parametro.put("anio", campos.get("anio"));
         parametro.put("NombreMesUni", campos.get("NombreMesUni"));
 
         parametro.put("empresa", empresa);

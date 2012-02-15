@@ -432,7 +432,7 @@ public class CommMonitoreo extends Thread {
         OutputStream os = null;
         try {
             os = sPuerto.getOutputStream();
-            log.info("Enviar:["+mensaje+"]");
+            log.info("Enviar:[" + mensaje + "]");
             os.write(mensaje.getBytes());
         } catch (IOException ex) {
             log.trace("Error al enviar datos por el puerto serial...", ex);

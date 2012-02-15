@@ -369,6 +369,9 @@ public final class Principal extends javax.swing.JFrame {
 
         if (!puerto.equals("0")) {
             comm = new CommMonitoreo(puerto, bd);
+            comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
+            comm.start();
+            System.out.println("Start ID");
 
             comm.enviarDatos("AT" + separador);
 
@@ -381,9 +384,27 @@ public final class Principal extends javax.swing.JFrame {
             String comando = bd.getComandoActivarModem(sesion[1]);
             log.trace("Comando MODEM: {}", comando);
             comm.enviarDatos(comando + separador);
-
-            comm.setIndicadorLlamada(jtTelefono, jlIndicadorLlamada, jtPorDespachar);
-            comm.start();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            log.trace("Comando MODEM: {}", comando);
+            comm.enviarDatos(comando + "\n\r");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            log.trace("Comando MODEM: {}", comando);
+            comm.enviarDatos(comando + "\n");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            log.trace("Comando MODEM: {}", comando);
+            comm.enviarDatos(comando + "\r");
         }
     }
 
@@ -1314,7 +1335,7 @@ public final class Principal extends javax.swing.JFrame {
         } else {
             mensaje = "" + nombreCliente + "%" + barrioCliente + " | " + dirCliente;
         }
-        System.err.println("Mensaje: " + mensaje);
+        System.err.println("[1338][PRINCIPAL]Mensaje: " + mensaje);
 
         EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
         enviarMensajeUnidad.start();

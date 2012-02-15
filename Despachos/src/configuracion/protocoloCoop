@@ -1,0 +1,86 @@
+
+   :: LA CONEXION SIGUE SIENDO MEDIANTE SOCKETS
+
+$$ :: inicio y fin
+## :: separador de campos
+\n :: todo paquete termina en un salto de linea
+
+El primer campo determina el tipo de mensaje recibido de acuerdo a:
+
+1 :: Indica que se recuperan posiciones de los vehiculos
+
+     $$1##xx$$
+
+  :: Donde xx será el identificativo de la cooperativa [ CV ]
+  :: El paquete contendrá exactamente dos campos (incluido el
+     indicador de mensaje)
+
+  :: Por cada recepción de una petición el servidor devolverá un
+     OK o || FAIL
+
+2 :: Indica que se enviara un  mensaje al equipo
+
+       $$2##camp1##camp2##camp3$$
+
+  Donde:
+  :: camp1 es el identificativo de la cooperativa
+  :: camp2 es el numero de unidad a la que se dirije el mensaje
+  :: camp3 es el mensaje que será enviado
+
+3 :: Indica que se recupera la lista de vehículos bloqueados
+
+     $$3##xx$$
+
+  :: Donde xx será el identificativo de la cooperativa [ CV ]
+  :: El paquete contendrá exactamente dos campos (incluido el
+     indicador de mensaje)
+
+     Los datos enviados tendrán el siguiente formato:
+
+        XXX,XXX,XXX,\r\n
+
+    Donde XXX hace referencia al número de la unidad bloqueada.
+    por ejemplo:
+
+        34,45,11,\r\n
+
+    En caso de no existir ningún dato se enviará -1.
+
+        -1,\r\n
+
+4 :: Activación de dirección IP para inserción de datos
+     provenientes desde un callCenter.
+
+     $$4##XX##dirIP$$\n
+
+     Donde:
+           - XX : identifica a una cooperativa existente en el sistema
+           - dirIP : es una dirección IP válida
+
+    Devolverá:
+           '0' si todo está correcto
+           'x' en caso de error ::  12   La dirección IP no es válida
+                                    13   Identificador de Coop no válido
+                                    14   Permisos denegados
+
+************************************************************************
+************************************************************************
+ENVIO DE DATOS DESDE SERVIDOR HASTA COOPERATIVA
+
+Las tramas enviadas hasta la cooperativa tendran el siguiente orden:
+
+    ID, N_UNIDAD, ID_EMPRESA, LATITUD, LONGITUD, FECHA, HORA, VELOCIDAD, G1, G2
+
+    Donde :
+
+    :: G1 es el estado del TAXIMETRO  pudiendo ser 1 (ON) || 0 (OFF)
+    :: G2 es el estado del TAXI  pudiendo ser 1 (LIBRE) || 0 (OCUPADO)
+
+************************************************************************
+************************************************************************
+TRAMA DEL TAXIMETRO AL SERVIDOR
+
+Este es el formato de la trama enviada desde el taximetro al servidor y que será
+enviada a los callcenters:
+
+    SERIAL,#TIKET;FECHA;HORA_INI;HORA_FIN;DISTANCIA;VALOR;PAGO
