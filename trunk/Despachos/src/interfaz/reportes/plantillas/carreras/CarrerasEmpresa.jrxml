@@ -17,6 +17,7 @@
 	</parameter>
 	<parameter name="usuario" class="java.lang.String"/>
 	<parameter name="mes" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
 	<parameter name="NombreMes" class="java.lang.String">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>

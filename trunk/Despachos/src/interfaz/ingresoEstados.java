@@ -42,7 +42,7 @@ public class ingresoEstados extends javax.swing.JDialog {
         initComponents();
     }
 
-     @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -161,9 +161,13 @@ public class ingresoEstados extends javax.swing.JDialog {
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnPaletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaletaActionPerformed
-        color = JColorChooser.showDialog(this, "Seleccione un color", col);
-        if (color != null) {
-            txtColor.setBackground(new Color(color.getRGB()));
+        try {
+            color = JColorChooser.showDialog(this, "Seleccione un color", col);
+            if (color != null) {
+                txtColor.setBackground(new Color(color.getRGB()));
+            }
+        } catch (NullPointerException ex) {
+            System.out.println("Null");
         }
     }//GEN-LAST:event_btnPaletaActionPerformed
 

@@ -2545,4 +2545,22 @@ public class ConexionBase {
                 + ")";
         ejecutarSentencia(sql);
     }
+
+    /**
+     * Busca en la base de datos todos los años de carreras para presentar
+     * @return ArrayList<String>
+     */
+    public ArrayList<String> getAniosBaseDatos() {
+        ArrayList<String> anios = new ArrayList<String>();
+        String sql = "SELECT DISTINCT YEAR(FECHA) AS ANIO FROM ASIGNADOS ORDER BY ANIO DESC";
+        try {
+            ResultSet rsConsult = ejecutarConsulta(sql);
+            while (rsConsult.next()) {
+                anios.add(rsConsult.getString(1));
+            }
+        } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
+        }
+        return anios;
+    }
 }
