@@ -2563,4 +2563,28 @@ public class ConexionBase {
         }
         return anios;
     }
+
+    /**
+     * Obtine la coordenada del cliente si la tiene
+     * @param codigo
+     * @return String[] -> (0 -> lat) y (1 -> lon)
+     */
+    public String[] getCoordenadasCliente(int codigo) {
+        /**
+         * Coordenadas 0 -> lat
+         * Coordenadas 1 -> lon
+         */
+        String[] coord = new String[2];
+        String sql = "SELECT LATITUD,LONGITUD FROM CLIENTES WHERE CODIGO = " + codigo;
+        ResultSet rsCoordenadas = ejecutarConsultaUnDato(sql);
+        try {
+            coord[0] = rsCoordenadas.getString("LATITUD");
+            coord[1] = rsCoordenadas.getString("LONGITUD");
+        } catch (SQLException ex) {
+            log.info("[COD {}]", ex.getErrorCode(), ex);
+            return null;
+        }
+
+        return coord;
+    }
 }

@@ -21,11 +21,13 @@ El primer campo determina el tipo de mensaje recibido de acuerdo a:
 2 :: Indica que se enviara un  mensaje al equipo
 
        $$2##camp1##camp2##camp3$$
+       $$2##camp1##camp2##camp3##camp4$$
 
   Donde:
   :: camp1 es el identificativo de la cooperativa
   :: camp2 es el numero de unidad a la que se dirije el mensaje
   :: camp3 es el mensaje que será enviado
+  :: camp4 trama de lat&&lon del cliente
 
 3 :: Indica que se recupera la lista de vehículos bloqueados
 
