@@ -5,6 +5,7 @@
  * Principal.java
  *
  * Created on 03/08/2010, 06:28:35 PM
+ * @autor christmo
  */
 package interfaz;
 
