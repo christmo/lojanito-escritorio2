@@ -1123,8 +1123,8 @@ public final class Principal extends javax.swing.JFrame {
      * Obtener el código del usuario dependiendo del telefono ingresado
      * @return String
      */
-    private String getBuscarPorTelefono() {
-        strTelefono = funciones.validarTelefono(jtTelefono.getText());
+    private String getBuscarPorTelefono(String tel) {
+        strTelefono = funciones.validarTelefono(tel);
         try {
             if (!strTelefono.equals("")) {
                 rs = bd.getClientePorTelefono(strTelefono);
@@ -1319,13 +1319,13 @@ public final class Principal extends javax.swing.JFrame {
         String nombreCliente = "";
         String dirCliente = "";
         String barrioCliente = "";
-        int cod = 0;
+        int codCliente = 0;
         try {
             unidad = jtPorDespachar.getValueAt(intFila, intCol).toString();
             nombreCliente = jtPorDespachar.getValueAt(intFila, 3).toString();
             dirCliente = jtPorDespachar.getValueAt(intFila, 5).toString();
             barrioCliente = jtPorDespachar.getValueAt(intFila, 4).toString();
-            cod = Integer.parseInt(jtPorDespachar.getValueAt(intFila, 2).toString());
+            codCliente = Integer.parseInt(jtPorDespachar.getValueAt(intFila, 2).toString());
         } catch (NullPointerException ex) {
         } catch (NumberFormatException ex) {
         }
@@ -1340,14 +1340,12 @@ public final class Principal extends javax.swing.JFrame {
             mensaje = "" + nombreCliente + "%" + barrioCliente + " | " + dirCliente;
         }
         
-        String smsCoord;
-        if (cod != 0) {
-            String[] coordenadas = bd.getCoordenadasCliente(cod);
+        if (codCliente != 0) {
+            String[] coordenadas = bd.getCoordenadasCliente(codCliente);
             mensaje += coordenadas[0] + "&&" + coordenadas[1];
-            
         }
 
-        System.err.println("[1338][PRINCIPAL]Mensaje: " + mensaje);
+        System.err.println("[1348][PRINCIPAL]Mensaje: " + mensaje);
 
         EnvioMensajesUnidades enviarMensajeUnidad = new EnvioMensajesUnidades(sesion[1], unidad, mensaje, bd);
         enviarMensajeUnidad.start();
@@ -1507,12 +1505,10 @@ public final class Principal extends javax.swing.JFrame {
     private void actualizarFilaCampoTelefono(int intFila, int intCol) {
         try {
             String tel = jtPorDespachar.getValueAt(intFila, 1).toString();
-
             if (!tel.equals("")) {
                 if (funciones.isNumeric(tel)) {
-                    jtTelefono.setText(tel);
                     desPorTabla_Campo = true; //despachar por la tabla de despachos
-                    getBuscarPorTelefono();
+                    getBuscarPorTelefono(tel);
                 } else {
                     JOptionPane.showMessageDialog(this, "Número no válido...", "Error...", 0);
                     jtPorDespachar.setValueAt("", intFila, intCol);
@@ -3034,7 +3030,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefonoActionPerformed
         desPorTabla_Campo = false;
-        getBuscarPorTelefono();
+        getBuscarPorTelefono(jtTelefono.getText());
         InicializarVariables();
     }//GEN-LAST:event_jtTelefonoActionPerformed
 
